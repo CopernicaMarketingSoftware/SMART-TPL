@@ -152,8 +152,8 @@ ${PARSER}:
 	${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.c}
 
 install:
-	${MKDIR} ${INSTALL_HEADERS}/phpcpp
-	${CP} phpcpp.h ${INSTALL_HEADERS}
-	${CP} include/*.h ${INSTALL_HEADERS}/phpcpp
+	${MKDIR} ${INSTALL_HEADERS}/smarttpl
+	${CP} smarttpl.h ${INSTALL_HEADERS}
+	${CP} include/*.h ${INSTALL_HEADERS}/smarttpl
 	${CP} ${RESULT} ${INSTALL_LIB}
 
