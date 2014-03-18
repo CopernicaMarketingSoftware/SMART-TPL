@@ -11,6 +11,7 @@
  *  Dependencies
  */
 #include <string>
+#include <iostream>
 
 /**
  *  All public header files of the SmartTpl library
