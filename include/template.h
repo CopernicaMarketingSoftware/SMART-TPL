@@ -2,7 +2,7 @@
  *  Template.h
  * 
  *  This class represents a template file. A template can be constructed
- *  with a filename, or with a binary buffer
+ *  with a filename, or with a binary buffer. 
  * 
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -26,12 +26,23 @@ public:
     Template(const char *filename);
     
     /**
+     *  Deleted copy constructor
+     *  @param  that
+     */
+    Template(const Template &template) = delete;
+    
+    /**
      *  Destructor
      */
     virtual ~Template();
     
     /**
      *  Process the template, given a certain data source
+     * 
+     *  The data object that needs to be passed to this method is an object 
+     *  that contains the values of all variables that can be user inside the
+     *  template.
+     * 
      *  @param  data        Data source
      *  @return std::string
      */

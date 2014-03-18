@@ -22,6 +22,12 @@
 /**
  *  Dependencies
  */
+#include <string>
+
+/**
+ *  All header files of the SmartTpl library
+ */
+#include <smarttpl/data.h>
 #include <smarttpl/template.h>
 
 /**
