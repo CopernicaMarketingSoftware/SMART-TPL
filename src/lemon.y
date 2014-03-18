@@ -10,7 +10,7 @@
    
 %include 
 {   
-    #include "Token.h"
+    #include "token.h"
     #include <iostream>
     #include <assert.h>
 }  

@@ -8,10 +8,10 @@
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
-#include "Token.h"
-#include "Tokenizer.h"
-#include "Parser.h"
-#include "Lemon.h"
+#include "token.h"
+#include "tokenizer.h"
+#include "parser.h"
+#include "lemon.h"
 
 /**
  *  We keep track of the linenumber to ease error messages
@@ -45,9 +45,9 @@
 %option extra-type="SmartTpl::Token *"
 
 /**
- *  Output to Tokenizer.cpp please
+ *  Output to tokenizer.cpp please
  */
-%option outfile="src/Tokenizer.cpp"
+%option outfile="src/tokenizer.cpp"
 
 /**
  *  Exclusive parser mode "EXPRESSION". This is exclusive, because other

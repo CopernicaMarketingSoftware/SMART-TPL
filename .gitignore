@@ -1,7 +1,7 @@
 *.o
 *.so
 *.txt
-Lemon.cpp
-Lemon.h
-Lemon.out
-Tokenizer.cpp
+lemon.cpp
+lemon.h
+lemon.out
+tokenizer.cpp

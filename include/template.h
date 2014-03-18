@@ -29,7 +29,7 @@ public:
      *  Deleted copy constructor
      *  @param  that
      */
-    Template(const Template &template) = delete;
+    Template(const Template &that) = delete;
     
     /**
      *  Destructor

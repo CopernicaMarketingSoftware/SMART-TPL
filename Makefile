@@ -92,7 +92,7 @@ MV              =   mv -f
 #   The Tokenizer.yy file should be fed to the "flex" program
 #
 
-TOKENIZER       =    src/Tokenizer.cpp
+TOKENIZER       =    src/tokenizer.cpp
 
 
 #
@@ -101,7 +101,7 @@ TOKENIZER       =    src/Tokenizer.cpp
 #    The Lemon.y file is processed by the "lemon" program
 #
 
-PARSER          =    src/Lemon.cpp
+PARSER          =    src/lemon.cpp
 
 
 #
