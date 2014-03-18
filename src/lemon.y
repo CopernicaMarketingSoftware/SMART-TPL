@@ -10,13 +10,14 @@
    
 %include 
 {   
-    #include "token.h"
+    #include "includes.h"
     #include <iostream>
     #include <assert.h>
 }  
    
 %syntax_error 
 {  
+    // @todo    this should probably become an exception
     std::cout << "Syntax error!" << std::endl;  
 }   
 

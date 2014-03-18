@@ -15,23 +15,21 @@
 namespace SmartTpl {
 
 /**
+ *  Forward declarations
+ */
+class Tokenizer;
+class Token;
+
+/**
  *  Class definition
  */
 class Parser
 {
-private:
-    /**
-     *  The tokenizer that is being used for finding tokens in the input stream
-     *  @var    Tokenizer
-     */
-    Tokenizer *_tokenizer;
-
 protected:
     /**
      *  Constructor
-     *  @param  tokenizer       Tokenizer object to use
      */
-    Parser(Tokenizer *tokenizer) : _tokenizer(tokenizer) {}
+    Parser() {}
 
 public:        
     /**

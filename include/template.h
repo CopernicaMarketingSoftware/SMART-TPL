@@ -34,7 +34,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Template();
+    virtual ~Template() {}
     
     /**
      *  Process the template, given a certain data source

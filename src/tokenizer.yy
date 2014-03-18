@@ -8,10 +8,7 @@
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
-#include "token.h"
-#include "tokenizer.h"
-#include "parser.h"
-#include "lemon.h"
+#include "includes.h"
 
 /**
  *  We keep track of the linenumber to ease error messages
@@ -114,17 +111,12 @@ Tokenizer::~Tokenizer()
 /**
  *  Run the tokenizer on an input buffer
  *  @param  parent
- *  @param  buffer
- *  @param  size
  *  @return bool
  */
-bool Tokenizer::process(Parser *parent, const char *buffer, size_t size)
+bool Tokenizer::process(Parser *parent)
 {
     // ID of the current token
     int id;
-    
-    // set the input buffer
-    auto *state = yy_scan_bytes(buffer, size, _scanner);
     
     // keep fetching tokens
     while ((id = yylex(_scanner)) != 0)
@@ -136,11 +128,58 @@ bool Tokenizer::process(Parser *parent, const char *buffer, size_t size)
         _token.reset();
     }
     
+    // done
+    return true;
+}
+
+/**
+ *  Run the tokenizer on an input buffer
+ *  @param  parent
+ *  @param  buffer
+ *  @param  size
+ *  @return bool
+ */
+bool Tokenizer::process(Parser *parent, const char *buffer, size_t size)
+{
+    // set the input buffer
+    auto *state = yy_scan_bytes(buffer, size, _scanner);
+    
+    // run the algorithm
+    bool result = process(parent);
+    
     // delete the buffer
     yy_delete_buffer(state, _scanner);
     
     // done
-    return true;
+    return result;
+}
+
+/**
+ *  Process a file, and feed all the elements to the parser
+ *  @param  parent      Parser object that is notified about tokens
+ *  @param  filename    The file to process
+ *  @return bool
+ *
+ *  @todo   check memory leaks if called multiple times in a row
+ *
+ */
+bool Tokenizer::process(Parser *parent, const char *filename)
+{
+    // open the file
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) return false;
+    
+    // restart the buffer
+    yyrestart(fp, _scanner);
+
+    // run the algorithm
+    bool result = process(parent);
+    
+    // close the file
+    fclose(fp);
+    
+    // done
+    return result;
 }
 
 /**

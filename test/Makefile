@@ -9,7 +9,7 @@
 COMPILER = g++
 LINKER = g++
 COMPILER_FLAGS = -Wall -c -O2 -std=c++11 -fpic -o
-LINKER_DEPENDENCIES = -lphpcpp
+LINKER_DEPENDENCIES = -lsmarttpl
 LINKER_FLAGS = 
 
 #

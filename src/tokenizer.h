@@ -36,6 +36,13 @@ private:
      */
     void *_scanner;
 
+    /**
+     *  Process the buffer
+     *  @param  parent      Parser object that is notified about tokens
+     *  @return bool
+     */
+    bool process(Parser *parent);
+
 public:
     /**
      *  Constructor
@@ -55,6 +62,14 @@ public:
      *  @return bool
      */
     bool process(Parser *parent, const char *buffer, size_t size);
+    
+    /**
+     *  Process a file, and feed all the elements to the parser
+     *  @param  parent      Parser object that is notified about tokens
+     *  @param  filename    The file to process
+     *  @return bool
+     */
+    bool process(Parser *parent, const char *filename);
 };
     
 /**
