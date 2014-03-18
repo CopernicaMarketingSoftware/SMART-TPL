@@ -1,0 +1,192 @@
+State 0:
+          start ::= * statements
+          statements ::= * statement statements
+          statement ::= * expression
+          statement ::= * ifStatement
+          ifStatement ::= * IF expression statements elseStatement
+          expression ::= * VARIABLE
+
+                            IF shift  8
+                      VARIABLE shift  12
+                         start accept
+                    statements shift  10
+                     statement shift  4
+                    expression shift  17
+                   ifStatement shift  16
+
+State 1:
+          statements ::= * statement statements
+          statement ::= * expression
+          statement ::= * ifStatement
+          ifStatement ::= * IF expression statements elseStatement
+          elseStatement ::= ELSEIF expression * statements elseStatement
+          expression ::= * VARIABLE
+
+                            IF shift  8
+                      VARIABLE shift  12
+                    statements shift  5
+                     statement shift  4
+                    expression shift  17
+                   ifStatement shift  16
+
+State 2:
+          statements ::= * statement statements
+          statement ::= * expression
+          statement ::= * ifStatement
+          ifStatement ::= * IF expression statements elseStatement
+          elseStatement ::= ELSE * statements ENDIF
+          expression ::= * VARIABLE
+
+                            IF shift  8
+                      VARIABLE shift  12
+                    statements shift  9
+                     statement shift  4
+                    expression shift  17
+                   ifStatement shift  16
+
+State 3:
+          statements ::= * statement statements
+          statement ::= * expression
+          statement ::= * ifStatement
+          ifStatement ::= * IF expression statements elseStatement
+          ifStatement ::= IF expression * statements elseStatement
+          expression ::= * VARIABLE
+
+                            IF shift  8
+                      VARIABLE shift  12
+                    statements shift  6
+                     statement shift  4
+                    expression shift  17
+                   ifStatement shift  16
+
+State 4:
+          statements ::= * statement statements
+          statements ::= statement * statements
+          statement ::= * expression
+          statement ::= * ifStatement
+          ifStatement ::= * IF expression statements elseStatement
+          expression ::= * VARIABLE
+
+                            IF shift  8
+                      VARIABLE shift  12
+                    statements shift  18
+                     statement shift  4
+                    expression shift  17
+                   ifStatement shift  16
+
+State 5:
+          elseStatement ::= * ENDIF
+          elseStatement ::= * ELSE statements ENDIF
+          elseStatement ::= * ELSEIF expression statements elseStatement
+          elseStatement ::= ELSEIF expression statements * elseStatement
+
+                         ENDIF shift  14
+                          ELSE shift  2
+                        ELSEIF shift  7
+                 elseStatement shift  11
+
+State 6:
+          ifStatement ::= IF expression statements * elseStatement
+          elseStatement ::= * ENDIF
+          elseStatement ::= * ELSE statements ENDIF
+          elseStatement ::= * ELSEIF expression statements elseStatement
+
+                         ENDIF shift  14
+                          ELSE shift  2
+                        ELSEIF shift  7
+                 elseStatement shift  15
+
+State 7:
+          elseStatement ::= ELSEIF * expression statements elseStatement
+          expression ::= * VARIABLE
+
+                      VARIABLE shift  12
+                    expression shift  1
+
+State 8:
+          ifStatement ::= IF * expression statements elseStatement
+          expression ::= * VARIABLE
+
+                      VARIABLE shift  12
+                    expression shift  3
+
+State 9:
+          elseStatement ::= ELSE statements * ENDIF
+
+                         ENDIF shift  13
+
+State 10:
+      (0) start ::= statements *
+
+                             $ reduce 0
+
+State 11:
+      (7) elseStatement ::= ELSEIF expression statements elseStatement *
+
+                     {default} reduce 7
+
+State 12:
+      (8) expression ::= VARIABLE *
+
+                     {default} reduce 8
+
+State 13:
+      (6) elseStatement ::= ELSE statements ENDIF *
+
+                     {default} reduce 6
+
+State 14:
+      (5) elseStatement ::= ENDIF *
+
+                     {default} reduce 5
+
+State 15:
+      (4) ifStatement ::= IF expression statements elseStatement *
+
+                     {default} reduce 4
+
+State 16:
+      (3) statement ::= ifStatement *
+
+                     {default} reduce 3
+
+State 17:
+      (2) statement ::= expression *
+
+                     {default} reduce 2
+
+State 18:
+      (1) statements ::= statement statements *
+
+                     {default} reduce 1
+
+----------------------------------------------------
+Symbols:
+    0: $:
+    1: AND
+    2: OR
+    3: EQ
+    4: NE
+    5: GT
+    6: GE
+    7: LT
+    8: LE
+    9: PLUS
+   10: MINUS
+   11: TIMES
+   12: DIVIDE
+   13: MOD
+   14: EXP
+   15: NOT
+   16: IF
+   17: ENDIF
+   18: ELSE
+   19: ELSEIF
+   20: VARIABLE
+   21: error:
+   22: start: IF VARIABLE
+   23: statements: IF VARIABLE
+   24: statement: IF VARIABLE
+   25: expression: VARIABLE
+   26: ifStatement: IF
+   27: elseStatement: ENDIF ELSE ELSEIF
