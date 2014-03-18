@@ -1,7 +1,9 @@
 /**
  *  Parser.h
  *
- *  Class that is used internally to parse a template file
+ *  Class that is used internally to parse a template file. The constructor
+ *  is protected - you should create an instance of SyntaxTree to get the 
+ *  syntax tree of a template.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -17,12 +19,21 @@ namespace SmartTpl {
  */
 class Parser
 {
-public:
+private:
+    /**
+     *  The tokenizer that is being used for finding tokens in the input stream
+     *  @var    Tokenizer
+     */
+    Tokenizer *_tokenizer;
+
+protected:
     /**
      *  Constructor
+     *  @param  tokenizer       Tokenizer object to use
      */
-    Parser() {}
-    
+    Parser(Tokenizer *tokenizer) : _tokenizer(tokenizer) {}
+
+public:        
     /**
      *  Destructor
      */
@@ -33,8 +44,7 @@ public:
      *  @param  id      Token identifier (see lemon.h)
      *  @param  token   Additional token information
      */
-    void process(int id, const Token &token) {}
-    
+    virtual void process(int id, const Token &token) = 0;
 };
  
 /**

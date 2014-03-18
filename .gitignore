@@ -1,0 +1,7 @@
+*.o
+*.so
+*.txt
+Lemon.cpp
+Lemon.h
+Lemon.out
+Tokenizer.cpp

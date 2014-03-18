@@ -94,40 +94,50 @@
 namespace SmartTpl {
 
 /**
+ *  Constructor
+ */
+Tokenizer::Tokenizer()
+{
+    // initialize the scanner, and set the token as the user defined data
+    yylex_init_extra(&_token, &_scanner);
+}
+
+/**
+ *  Destructor
+ */
+Tokenizer::~Tokenizer() 
+{
+    // destruct scannerl
+    yylex_destroy(_scanner);
+}
+
+/**
  *  Run the tokenizer on an input buffer
+ *  @param  parent
  *  @param  buffer
  *  @param  size
  *  @return bool
  */
-bool Tokenizer::process(const char *buffer, size_t size)
+bool Tokenizer::process(Parser *parent, const char *buffer, size_t size)
 {
-    // object holding current tokenizer state
-    yyscan_t scanner;
-    
-    // initialize scanner
-    yylex_init(&scanner);
-
-    // store current token
-    Token token;
-    
-    // the token should be accessible as global data
-    yylex_init_extra(&token, &scanner);
-
     // ID of the current token
     int id;
     
+    // set the input buffer
+    auto *state = yy_scan_bytes(buffer, size, _scanner);
+    
     // keep fetching tokens
-    while ((id = yylex(scanner)) != 0)
+    while ((id = yylex(_scanner)) != 0)
     {
         // pass token to the parser
-        _parser->process(id, token);
+        parent->process(id, _token);
         
         // reset current token for next iteration
-        token.reset();
+        _token.reset();
     }
     
-    // destruct scannerl
-    yylex_destroy(scanner);
+    // delete the buffer
+    yy_delete_buffer(state, _scanner);
     
     // done
     return true;

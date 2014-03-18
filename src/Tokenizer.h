@@ -25,30 +25,36 @@ class Tokenizer
 {
 private:
     /**
-     *  Pointer to the parser
-     *  @var    Parser
+     *  The active token
+     *  @var    Token
      */
-    Parser *_parser;
+    Token _token;
+    
+    /**
+     *  The scanner object
+     *  @var    void*
+     */
+    void *_scanner;
 
 public:
     /**
      *  Constructor
-     *  @param  parser      Pointer to the parser that wants to be fed with tokens
      */
-    Tokenizer(Parser *parser) : _parser(parser) {}
+    Tokenizer();
     
     /**
      *  Destructor
      */
-    virtual ~Tokenizer() {}
+    virtual ~Tokenizer();
     
     /**
      *  Process a string, and feed all elements to the parser
+     *  @param  parent      Parser object that is notified about tokens
      *  @param  buffer      The buffer to process
      *  @param  size        Size of the buffer
      *  @return bool
      */
-    bool process(const char *buffer, size_t size);
+    bool process(Parser *parent, const char *buffer, size_t size);
 };
     
 /**
