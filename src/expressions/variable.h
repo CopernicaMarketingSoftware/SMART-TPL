@@ -28,6 +28,13 @@ public:
      *  Destructor
      */
     virtual ~Variable() {}
+    
+    /**
+     *  Generate the variable as statement
+     *  @param  str
+     */
+    virtual void generate(std::ostream &str) const = 0;
+    
 };
 
 /**

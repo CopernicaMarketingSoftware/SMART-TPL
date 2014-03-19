@@ -48,16 +48,14 @@ start               ::= statements(A) .                                         
 statements(A)       ::= statements(B) statement(C) .                            { A = B; A->add(C); }
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Statements(B); }
 statement(A)        ::= ifStatement(B) .                                        { A = B; }
-statement(A)        ::= RAW(B) .                                                { A = new SmartTpl::EchoStatement(B); }
-statement(A)        ::= EXPRESSION expression(B) .                              { A = B; }
+statement(A)        ::= RAW(B) .                                                { A = new SmartTpl::RawStatement(B); }
+statement(A)        ::= EXPRESSION variable(B) .                                { A = new SmartTpl::VarStatement(B); }
 ifStatement(A)      ::= IF expression(B) statements(C) elseStatement(D) .       { A = new SmartTpl::IfStatement(B,C,D); }
 ifStatement(A)      ::= IF expression(B) statements(C) ENDIF.                   { A = new SmartTpl::IfStatement(B, C); }
 elseStatement(A)    ::= ELSE statements(B) ENDIF .                              { A = B; }
 elseStatement(A)    ::= ELSEIF expression(B) statements(C) elseStatement(D) .   { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B,C,D)); }
-                    
-
 expression(A)       ::= variable(B) .                                           { A = B; }
-expression(A)       ::= literal(B) .                                           { A = B; }
+expression(A)       ::= literal(B) .                                            { A = B; }
 expression(A)       ::= LPAREN expression(B) RPAREN .                           { A = B; }
 expression(A)       ::= expression(B) PLUS expression(C) .                      { A = new SmartTpl::BinaryOperatorPlus(B, C); }
 expression(A)       ::= expression(B) MINUS expression(C) .                     { A = new SmartTpl::BinaryOperatorMinus(B, C); }

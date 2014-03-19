@@ -31,6 +31,13 @@ public:
      *  Destructor
      */
     virtual ~Statement() {}
+    
+    /**
+     *  Generate source code
+     *  @param  str     output stream
+     */
+    virtual void generate(std::ostream &stream) const = 0;
+    
 };
     
 /**

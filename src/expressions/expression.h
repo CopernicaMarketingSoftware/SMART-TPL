@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Expression : public Statement
+class Expression
 {
 protected:
     /**

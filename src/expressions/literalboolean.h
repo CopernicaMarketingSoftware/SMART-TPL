@@ -35,6 +35,8 @@ public:
      *  Destructor
      */
     virtual ~LiteralBoolean() {}
+
+
 };
 
 /**

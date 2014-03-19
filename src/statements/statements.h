@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Statements
+class Statements : public Statement
 {
 private:
     /**
@@ -48,6 +48,16 @@ public:
     {
         // add first statement
         _statements.push_back(std::unique_ptr<Statement>(statement));
+    }
+
+    /**
+     *  Generate source code
+     *  @param  str     output stream
+     */
+    virtual void generate(std::ostream &stream) const override
+    {
+        // loop through the statements, and output each one of them
+        for (auto &statement : _statements) statement->generate(stream);
     }
 };
 
