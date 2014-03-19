@@ -17,20 +17,13 @@ namespace SmartTpl {
  */
 class Variable : public Expression
 {
-private:
-    /**
-     *  Name of the variable
-     *  @var    std::string
-     */
-    std::string _name;
-    
-public:
+protected:
     /**
      *  Constructor
-     *  @param  token
      */
-    Variable(const Token *token) : _name(token->value, token->size) {}
-    
+    Variable() {}
+
+public:    
     /**
      *  Destructor
      */

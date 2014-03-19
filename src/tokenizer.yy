@@ -47,10 +47,11 @@
 %option outfile="src/tokenizer.cpp"
 
 /**
- *  Exclusive parser mode "EXPRESSION". This is exclusive, because other
- *  tokens are disabled when in expression mode.
+ *  Exclusive parser mode "EXPRESSION" and "IDENTIFIER". This is exclusive, 
+ *  because other tokens are disabled when in one of these modes
  */
 %x EXPRESSION
+%x IDENTIFIER
 
 /**
  *  The rules start here
@@ -65,13 +66,13 @@
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
 
-[^f{\n]+        { yyextra->value = yytext; yyextra->size = yyleng; return TOKEN_RAW; }
-\n+             { yyextra->value = yytext; yyextra->size = yyleng; return TOKEN_RAW; }
-"{if"           { BEGIN(EXPRESSION); return TOKEN_IF; }
-"{elseif"       { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
-"{else}"        { return TOKEN_ELSE; }
-"{$"            { BEGIN(EXPRESSION); yyless(1); return TOKEN_EXPRESSION; }
-"{/if}"         { return TOKEN_ENDIF; }
+[^f{\n]+            { yyextra->value = yytext; yyextra->size = yyleng; return TOKEN_RAW; }
+\n+                 { yyextra->value = yytext; yyextra->size = yyleng; return TOKEN_RAW; }
+"{if"[ \t]+         { BEGIN(EXPRESSION); return TOKEN_IF; }
+"{elseif"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
+"{else}"            { return TOKEN_ELSE; }
+"{$"                { BEGIN(EXPRESSION); yyless(1); return TOKEN_EXPRESSION; }
+"{/if}"             { return TOKEN_ENDIF; }
 
     /**
      *  When in expression mode, we are tokenizing an expression inside an {if}
@@ -79,8 +80,37 @@
      */
 
 <EXPRESSION>{
+    [ \t]
+    [\n]                        { /* @todo increment linenumber */ }
     "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra->value = yytext+1; yyextra->size = yyleng-1; return TOKEN_VARIABLE; }
+    "true"                      { return TOKEN_TRUE; }
+    "false"                     { return TOKEN_FALSE; }
+    "and"                       { return TOKEN_AND; }
+    "or"                        { return TOKEN_OR; }
+    \d+                         { yyextra->value = yytext, yyextra->size = yyleng; return TOKEN_INTEGER; }
+    "("                         { return TOKEN_LPAREN; }
+    ")"                         { return TOKEN_RPAREN; }
+    "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
+    "["                         { return TOKEN_LBRACK; }
+    "]"                         { return TOKEN_RBRACK; }
+    "+"                         { return TOKEN_PLUS; }
+    "-"                         { return TOKEN_MINUS; }
+    "*"                         { return TOKEN_MULTIPLY; }
+    "/"                         { return TOKEN_DIVIDE; }
+    "=="                        { return TOKEN_EQ; }
+    "!="                        { return TOKEN_NE; }
+    "<>"                        { return TOKEN_NE; }
+    ">"                         { return TOKEN_GT; }
+    "<"                         { return TOKEN_LT; }
+    ">="                        { return TOKEN_GE; }
+    "<="                        { return TOKEN_LE; }
+    "&&"                        { return TOKEN_AND; }
+    "||"                        { return TOKEN_OR; }
     "}"                         { BEGIN(INITIAL); }
+}
+
+<IDENTIFIER>{
+    [a-zA-Z][a-zA-Z0-9]*        { BEGIN(EXPRESSION); yyextra->value = yytext, yyextra->size = yyleng; return TOKEN_IDENTIFIER; }
 }
 
 %%
@@ -121,12 +151,17 @@ bool Tokenizer::process(Parser *parent)
     // keep fetching tokens
     while ((id = yylex(_scanner)) != 0)
     {
+        std::cout << "token " << id << std::endl;
+    
         // pass token to the parser
         parent->process(id, &_token);
         
         // reset current token for next iteration
         _token.reset();
     }
+    
+    // pass the end-of-file to the parser
+    parent->process(0, &_token);
     
     // done
     return true;

@@ -19,7 +19,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class SyntaxTree : private Parser
+class SyntaxTree : protected Parser
 {
 public:
     /**

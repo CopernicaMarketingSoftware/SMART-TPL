@@ -35,6 +35,12 @@ private:
     
 protected:
     /**
+     *  A set of statements that make up the template
+     *  @var    std::unique_ptr
+     */
+    std::unique_ptr<Statements> _statements;
+
+    /**
      *  Constructor
      */
     Parser();
@@ -56,7 +62,11 @@ public:
      *  Called when the statements were found that make up the program
      *  @param  statements
      */
-    void add(Statements *statements);
+    void add(Statements *statements)
+    {
+        // store in unique ptr
+        _statements = std::unique_ptr<Statements>(statements);
+    }
 };
  
 /**
