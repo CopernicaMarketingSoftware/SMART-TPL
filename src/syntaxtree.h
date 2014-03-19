@@ -21,14 +21,6 @@ namespace SmartTpl {
  */
 class SyntaxTree : private Parser
 {
-private:
-    /**
-     *  Called by the tokenizer when a token is detected
-     *  @param  id      Token identifier (see lemon.h)
-     *  @param  token   Additional token information
-     */
-    virtual void process(int id, const Token &token) override;
-
 public:
     /**
      *  Constructor

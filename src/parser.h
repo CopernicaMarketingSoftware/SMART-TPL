@@ -19,30 +19,44 @@ namespace SmartTpl {
  */
 class Tokenizer;
 class Token;
+class Statements;
 
 /**
  *  Class definition
  */
 class Parser
 {
+private:
+    /**
+     *  Parser resource
+     *  @var    void*
+     */
+    void *_resource;
+    
 protected:
     /**
      *  Constructor
      */
-    Parser() {}
+    Parser();
 
 public:        
     /**
      *  Destructor
      */
-    virtual ~Parser() {}
+    virtual ~Parser();
     
     /**
      *  Called by the tokenizer when a token is detected
      *  @param  id      Token identifier (see lemon.h)
      *  @param  token   Additional token information
      */
-    virtual void process(int id, const Token &token) = 0;
+    void process(int id, const Token *token);
+    
+    /**
+     *  Called when the statements were found that make up the program
+     *  @param  statements
+     */
+    void add(Statements *statements);
 };
  
 /**

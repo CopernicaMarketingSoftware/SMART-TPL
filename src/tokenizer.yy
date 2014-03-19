@@ -122,7 +122,7 @@ bool Tokenizer::process(Parser *parent)
     while ((id = yylex(_scanner)) != 0)
     {
         // pass token to the parser
-        parent->process(id, _token);
+        parent->process(id, &_token);
         
         // reset current token for next iteration
         _token.reset();

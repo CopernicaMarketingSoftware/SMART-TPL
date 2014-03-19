@@ -12,6 +12,8 @@
  */
 #include <string>
 #include <iostream>
+#include <memory>
+#include <list>
 
 /**
  *  All public header files of the SmartTpl library
@@ -27,3 +29,9 @@
 #include "tokenizer.h"
 #include "syntaxtree.h"
 #include "lemon.h"
+#include "statement.h"
+#include "statements.h"
+#include "expression.h"
+#include "variable.h"
+#include "echostatement.h"
+#include "ifstatement.h"
