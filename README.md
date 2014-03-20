@@ -33,6 +33,6 @@ the template.tpl file, but can use the already-compiled code from the shared lib
 
 
 Work in progress
-~~~~~~~~~~~~~~~~
+----------------
 
 The project is a work in progress. At this moment, it is not yet in a usable state.
