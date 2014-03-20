@@ -36,7 +36,25 @@ public:
      */
     virtual ~LiteralBoolean() {}
 
-
+    /**
+     *  Generate the code to get the const char * to the expression
+     *  @param  str
+     */
+    virtual void generateString(std::ostream &str) const override
+    {
+        // create an empty string, booleans have no output
+        str << "\"\"";
+    }
+    
+    /**
+     *  Generate the code to get the boolean value of the expression
+     *  @param  str
+     */
+    virtual void generateNumeric(std::ostream &str) const override
+    {
+        // turn the value into 1 or 0 (in C there are no booleans)
+        str << (_value ? "1" : "0");
+    }
 };
 
 /**

@@ -35,6 +35,16 @@ public:
      *  Destructor
      */
     virtual ~LiteralVariable() {}
+    
+    /**
+     *  Generate the output that leaves a pointer to the variable
+     *  @param  str
+     */
+    virtual void generateVariable(std::ostream &str) const override
+    {
+        // call the callback to get the variable
+        str << "callbacks->get(\"" << _name << "\")";
+    }
 };
 
 /**

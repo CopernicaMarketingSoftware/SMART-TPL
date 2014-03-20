@@ -57,18 +57,18 @@ elseStatement(A)    ::= ELSEIF expression(B) statements(C) elseStatement(D) .   
 expression(A)       ::= variable(B) .                                           { A = B; }
 expression(A)       ::= literal(B) .                                            { A = B; }
 expression(A)       ::= LPAREN expression(B) RPAREN .                           { A = B; }
-expression(A)       ::= expression(B) PLUS expression(C) .                      { A = new SmartTpl::BinaryOperatorPlus(B, C); }
-expression(A)       ::= expression(B) MINUS expression(C) .                     { A = new SmartTpl::BinaryOperatorMinus(B, C); }
-expression(A)       ::= expression(B) MULTIPLY expression(C) .                  { A = new SmartTpl::BinaryOperatorMultiply(B, C); }
-expression(A)       ::= expression(B) DIVIDE expression(C) .                    { A = new SmartTpl::BinaryOperatorDivide(B, C); }
-expression(A)       ::= expression(B) EQ expression(C) .                        { A = new SmartTpl::BinaryOperatorEquals(B, C); }
-expression(A)       ::= expression(B) NE expression(C) .                        { A = new SmartTpl::BinaryOperatorNotEquals(B, C); }
-expression(A)       ::= expression(B) GT expression(C) .                        { A = new SmartTpl::BinaryOperatorGreater(B, C); }
-expression(A)       ::= expression(B) GE expression(C) .                        { A = new SmartTpl::BinaryOperatorGreaterEquals(B, C); }
-expression(A)       ::= expression(B) LT expression(C) .                        { A = new SmartTpl::BinaryOperatorLesser(B, C); }
-expression(A)       ::= expression(B) LE expression(C) .                        { A = new SmartTpl::BinaryOperatorLesserEquals(B, C); }
-expression(A)       ::= expression(B) AND expression(C) .                       { A = new SmartTpl::BinaryOperatorAnd(B, C); }
-expression(A)       ::= expression(B) OR expression(C) .                        { A = new SmartTpl::BinaryOperatorOr(B, C); }
+expression(A)       ::= expression(B) PLUS expression(C) .                      { A = new SmartTpl::BinaryPlusOperator(B, C); }
+expression(A)       ::= expression(B) MINUS expression(C) .                     { A = new SmartTpl::BinaryMinusOperator(B, C); }
+expression(A)       ::= expression(B) MULTIPLY expression(C) .                  { A = new SmartTpl::BinaryMultiplyOperator(B, C); }
+expression(A)       ::= expression(B) DIVIDE expression(C) .                    { A = new SmartTpl::BinaryDivideOperator(B, C); }
+expression(A)       ::= expression(B) EQ expression(C) .                        { A = new SmartTpl::BinaryEqualsOperator(B, C); }
+expression(A)       ::= expression(B) NE expression(C) .                        { A = new SmartTpl::BinaryNotEqualsOperator(B, C); }
+expression(A)       ::= expression(B) GT expression(C) .                        { A = new SmartTpl::BinaryGreaterOperator(B, C); }
+expression(A)       ::= expression(B) GE expression(C) .                        { A = new SmartTpl::BinaryGreaterEqualsOperator(B, C); }
+expression(A)       ::= expression(B) LT expression(C) .                        { A = new SmartTpl::BinaryLesserOperator(B, C); }
+expression(A)       ::= expression(B) LE expression(C) .                        { A = new SmartTpl::BinaryLesserEqualsOperator(B, C); }
+expression(A)       ::= expression(B) AND expression(C) .                       { A = new SmartTpl::BinaryAndOperator(B, C); }
+expression(A)       ::= expression(B) OR expression(C) .                        { A = new SmartTpl::BinaryOrOperator(B, C); }
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::LiteralBoolean(false); }
 literal(A)          ::= INTEGER(B) .                                            { A = new SmartTpl::LiteralInteger(B); }

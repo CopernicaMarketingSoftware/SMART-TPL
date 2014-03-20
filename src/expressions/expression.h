@@ -32,6 +32,18 @@ public:
      */
     virtual ~Expression() {}
     
+    /**
+     *  Generate the code to get the const char * to the expression
+     *  @param  str
+     */
+    virtual void generateString(std::ostream &str) const = 0;
+    
+    /**
+     *  Generate the code to get the numeric value of the expression
+     *  @param  str
+     */
+    virtual void generateNumeric(std::ostream &str) const = 0;
+    
 };
 
 /**

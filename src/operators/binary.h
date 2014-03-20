@@ -47,19 +47,6 @@ public:
     virtual ~BinaryOperator() {}
 };
 
-using BinaryOperatorPlus            =   BinaryOperator;
-using BinaryOperatorMinus           =   BinaryOperator;
-using BinaryOperatorMultiply        =   BinaryOperator;
-using BinaryOperatorDivide          =   BinaryOperator;
-using BinaryOperatorOr              =   BinaryOperator;
-using BinaryOperatorAnd             =   BinaryOperator;
-using BinaryOperatorEquals          =   BinaryOperator;
-using BinaryOperatorNotEquals       =   BinaryOperator;
-using BinaryOperatorGreater         =   BinaryOperator;
-using BinaryOperatorGreaterEquals   =   BinaryOperator;
-using BinaryOperatorLesser          =   BinaryOperator;
-using BinaryOperatorLesserEquals    =   BinaryOperator;
-
 /**
  *  End namespace
  */

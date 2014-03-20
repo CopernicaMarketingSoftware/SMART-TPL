@@ -39,6 +39,26 @@ public:
      *  Destructor
      */
     virtual ~VariableArrayAccess() {}
+
+    /**
+     *  Generate a call that creates a pointer to a variable
+     *  @param  str
+     */
+    virtual void generateVariable(std::ostream &str) const override
+    {
+        // generate a pointer to the underlying variable
+        _var->generateVariable(str);
+        
+        // append call to the member function to get the index
+        str << "->member(";
+        
+        // generate the code to convert a expression into a "const char *"
+        _key->generateString(str);
+        
+        // close the member() call
+        str << ")";
+    }
+
 };
 
 /**
