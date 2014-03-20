@@ -25,12 +25,6 @@ class Tokenizer
 {
 private:
     /**
-     *  The active token
-     *  @var    Token
-     */
-    Token _token;
-    
-    /**
      *  The scanner object
      *  @var    void*
      */

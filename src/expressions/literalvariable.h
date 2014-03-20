@@ -20,16 +20,17 @@ class LiteralVariable : public Variable
 private:
     /**
      *  Name of the variable
-     *  @var    std::string
+     *  @var    std::unique_ptr
      */
-    std::string _name;
+    std::unique_ptr<Token> _name;
     
 public:
     /**
      *  Constructor
      *  @param  token
      */
-    LiteralVariable(const Token *token) : _name(token->value, token->size) {}
+    LiteralVariable(Token *token) : 
+        _name(token) {}
     
     /**
      *  Destructor
@@ -43,7 +44,7 @@ public:
     virtual void generateVariable(std::ostream &str) const override
     {
         // call the callback to get the variable
-        str << "callbacks->get(\"" << _name << "\")";
+        str << "callbacks->variable(\"" << *_name << "\"," << _name->size() << ")";
     }
 };
 

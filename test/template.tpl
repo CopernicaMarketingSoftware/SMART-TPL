@@ -3,7 +3,9 @@
         This is an example template.
         With a {$variable}!
         
-        {if $condition}
+        {$x[$y]};
+        
+        {if $condition || $x.member[$y]}
         
             And a conditional text
             

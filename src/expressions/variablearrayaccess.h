@@ -46,16 +46,19 @@ public:
      */
     virtual void generateVariable(std::ostream &str) const override
     {
+        // call the member function
+        str << "callbacks->member(";
+        
         // generate a pointer to the underlying variable
         _var->generateVariable(str);
-        
-        // append call to the member function to get the index
-        str << "->member(";
-        
+
+        // split parameters
+        str << ",";
+
         // generate the code to convert a expression into a "const char *"
         _key->generateString(str);
         
-        // close the member() call
+        // end of the member method
         str << ")";
     }
 

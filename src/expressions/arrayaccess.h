@@ -31,7 +31,7 @@ protected:
      *  @param  variable
      */
     ArrayAccess(Variable *variable) :
-        _var(std::unique_ptr<Variable>(variable)) {}
+        _var(variable) {}
 
 public:
     /**

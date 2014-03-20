@@ -25,10 +25,7 @@
  *  Implementation-only header files
  */
 #include "token.h"
-#include "parser.h"
-#include "tokenizer.h"
-#include "syntaxtree.h"
-#include "lemon.h"
+#include "quotedstring.h"
 #include "expressions/expression.h"
 #include "expressions/variable.h"
 #include "expressions/literalvariable.h"
@@ -60,4 +57,8 @@
 #include "operators/binaryboolean.h"
 #include "operators/binaryand.h"
 #include "operators/binaryor.h"
+#include "parser.h"
+#include "tokenizer.h"
+#include "syntaxtree.h"
+#include "lemon.h"
 

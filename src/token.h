@@ -16,29 +16,20 @@ namespace SmartTpl {
 /**
  *  The current parsed token
  */
-class Token
+class Token : public std::string
 {
 public:
     /**
-     *  The value of the token
-     *  @var    const char *
+     *  Constructor
+     *  @param  buffer
+     *  @param  size
      */
-    const char *value = nullptr;
+    Token(const char *buffer, size_t size) : std::string(buffer, size) {}
     
     /**
-     *  Size of the current token
-     *  @var    size_t
+     *  Destructor
      */
-    size_t size = 0;
-    
-    /**
-     *  Reset the object
-     */
-    void reset() 
-    { 
-        value = nullptr; 
-        size = 0; 
-    }
+    virtual ~Token() {}
 };
 
 /**

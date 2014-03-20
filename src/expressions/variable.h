@@ -41,11 +41,14 @@ public:
      */
     virtual void generateString(std::ostream &str) const override
     {
+        // call the to_string method
+        str << "callbacks->to_string(";
+
         // first generate a pointer to the variable
         generateVariable(str);
         
         // and then call the function to cast to a string
-        str << "->to_string()";
+        str << ")";
     }
     
     /**
@@ -54,11 +57,14 @@ public:
      */
     virtual void generateNumeric(std::ostream &str) const override
     {
-        // first generate a pointer to the variable
+        // call the to_numeric method
+        str << "callbacks->to_numeric(";
+        
+        // generate a pointer to the variable
         generateVariable(str);
         
-        // and then call the function to cast to a string
-        str << "->to_numeric()";
+        // and the call
+        str << ")";
     }
 };
 

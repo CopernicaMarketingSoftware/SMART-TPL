@@ -50,11 +50,51 @@ public:
         
         // @todo    error handling
     }
+
+    /**
+     *  Constructor
+     *  @param  tokenizer       The tokenizer that can find tokens in a file
+     *  @param  filename        Filename to parse
+     */
+    SyntaxTree(const char *filename) : Parser()
+    {
+        // we create our own tokenizer
+        Tokenizer tokenizer;
+
+        // ask the tokenizer to process the file, and tell that this object
+        // is the parser that can be fed with the tokens found in the file
+        tokenizer.process(this, filename);
+        
+        // @todo    error handling
+    }
+
+    /**
+     *  Constructor
+     *  @param  buffer          The buffer to parse
+     *  @param  size            Size of the buffer
+     */
+    SyntaxTree(const char *buffer, size_t size) 
+    {
+        // we create our own tokenizer
+        Tokenizer tokenizer;
+        
+        // ask the tokenizer to process the buffer, and tell that this object
+        // is the parser that can be fed with the tokens found in the buffer
+        tokenizer.process(this, buffer, size);
+        
+        // @todo    error handling
+    }
         
     /**
      *  Destructor
      */
     virtual ~SyntaxTree() {}
+    
+    /**
+     *  Generate the source code
+     *  @param  out     output stream
+     */
+    void generate(std::ostream &out) const;
 };
 
 /**

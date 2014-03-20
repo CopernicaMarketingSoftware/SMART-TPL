@@ -66,8 +66,8 @@
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
 
-[^f{\n]+            { yyextra->value = yytext; yyextra->size = yyleng; return TOKEN_RAW; }
-\n+                 { yyextra->value = yytext; yyextra->size = yyleng; return TOKEN_RAW; }
+[^f{\n]+            { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
+\n+                 { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
 "{if"[ \t]+         { BEGIN(EXPRESSION); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
@@ -82,12 +82,12 @@
 <EXPRESSION>{
     [ \t]
     [\n]                        { /* @todo increment linenumber */ }
-    "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra->value = yytext+1; yyextra->size = yyleng-1; return TOKEN_VARIABLE; }
+    "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra = new SmartTpl::Token(yytext+1, yyleng-1); return TOKEN_VARIABLE; }
     "true"                      { return TOKEN_TRUE; }
     "false"                     { return TOKEN_FALSE; }
     "and"                       { return TOKEN_AND; }
     "or"                        { return TOKEN_OR; }
-    \d+                         { yyextra->value = yytext, yyextra->size = yyleng; return TOKEN_INTEGER; }
+    \d+                         { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_INTEGER; }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
@@ -110,7 +110,7 @@
 }
 
 <IDENTIFIER>{
-    [a-zA-Z][a-zA-Z0-9]*        { BEGIN(EXPRESSION); yyextra->value = yytext, yyextra->size = yyleng; return TOKEN_IDENTIFIER; }
+    [a-zA-Z][a-zA-Z0-9]*        { BEGIN(EXPRESSION); yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_IDENTIFIER; }
 }
 
 %%
@@ -126,7 +126,7 @@ namespace SmartTpl {
 Tokenizer::Tokenizer()
 {
     // initialize the scanner, and set the token as the user defined data
-    yylex_init_extra(&_token, &_scanner);
+    yylex_init(&_scanner);
 }
 
 /**
@@ -151,17 +151,15 @@ bool Tokenizer::process(Parser *parent)
     // keep fetching tokens
     while ((id = yylex(_scanner)) != 0)
     {
-        std::cout << "token " << id << std::endl;
-    
         // pass token to the parser
-        parent->process(id, &_token);
+        parent->process(id, yyget_extra(_scanner));
         
         // reset current token for next iteration
-        _token.reset();
+        yyset_extra(nullptr, _scanner);
     }
     
     // pass the end-of-file to the parser
-    parent->process(0, &_token);
+    parent->process(0, nullptr);
     
     // done
     return true;

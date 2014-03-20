@@ -42,12 +42,14 @@ public:
      */
     virtual void generate(std::ostream &str) const override
     {
-        // we are going to generate the code that first get a pointer to the 
-        // variable, and that then calls the write method on it
+        // we're going to call the output function
+        str << "callbacks->output(";
+        
+        // generate the code to get a pointer to the variable
         _var->generateVariable(str);
         
-        // call the write method on the generated pointer
-        str << "->write();" << std::endl;
+        // end of the function
+        str << ");" << std::endl;
     }
 };
 

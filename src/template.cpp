@@ -25,6 +25,9 @@ Template::Template(const char *filename)
     // compilation process)
     Tokenizer tokenizer;
     SyntaxTree tree(&tokenizer, filename);
+    
+    // generate the source code
+    tree.generate(std::cout);
 }
 
 /**

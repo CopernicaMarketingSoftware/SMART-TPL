@@ -31,7 +31,14 @@ public:
      * 
      *  @todo run atoi()
      */
-    LiteralInteger(const Token *token) : _value(1234) {}
+    LiteralInteger(Token *token)
+    {
+        // store the value
+        _value = atoi(token->c_str());
+        
+        // we no longer need the token
+        delete token;
+    }
     
     /**
      *  Destructor

@@ -14,7 +14,7 @@
  */
 extern void *ParseAlloc(void *(*mallocProc)(size_t));
 extern void  ParseFree(void *p, void (*freeProc)(void*));
-extern void  Parse(void *yyp, int yymajor, const SmartTpl::Token *token, SmartTpl::Parser *parser);
+extern void  Parse(void *yyp, int yymajor, SmartTpl::Token *token, SmartTpl::Parser *parser);
 
 /**
  *  Set up namespace
@@ -44,7 +44,7 @@ Parser::~Parser()
  *  @param  id      Token identifier (see lemon.h)
  *  @param  token   Additional token information
  */
-void Parser::process(int id, const Token *token)
+void Parser::process(int id, Token *token)
 {
     // call the global Parse() function
     Parse(_resource, id, token, this);

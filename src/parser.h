@@ -56,7 +56,7 @@ public:
      *  @param  id      Token identifier (see lemon.h)
      *  @param  token   Additional token information
      */
-    void process(int id, const Token *token);
+    void process(int id, Token *token);
     
     /**
      *  Called when the statements were found that make up the program

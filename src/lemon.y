@@ -1,5 +1,5 @@
 %extra_argument { SmartTpl::Parser *pParser }
-%token_type { const SmartTpl::Token* }
+%token_type { SmartTpl::Token* }
 %token_prefix TOKEN_
 
 %type   statement       {SmartTpl::Statement*}
@@ -10,7 +10,8 @@
 %type   literal         {SmartTpl::Literal*}
 %type   variable        {SmartTpl::Variable*}
 
-%default_destructor { delete $$; }
+%default_destructor { if ($$) delete $$; }
+%token_destructor { if ($$) delete $$; }
 
 %left OR.
 %left AND.

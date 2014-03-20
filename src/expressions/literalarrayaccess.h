@@ -21,9 +21,9 @@ class LiteralArrayAccess : public ArrayAccess
 protected:
     /**
      *  The key that is accessed
-     *  @var    Expression
+     *  @var    std::unique_ptr
      */
-    std::string _key;
+    std::unique_ptr<Token> _key;
 
 public:
     /**
@@ -31,9 +31,9 @@ public:
      *  @param  variable
      *  @param  key
      */
-    LiteralArrayAccess(Variable *variable, const Token *token) : 
+    LiteralArrayAccess(Variable *variable, Token *token) : 
         ArrayAccess(variable),
-        _key(token->value, token->size) {}
+        _key(token) {}
 
     /**
      *  Destructor
@@ -46,11 +46,14 @@ public:
      */
     virtual void generateVariable(std::ostream &str) const override
     {
+        // call the member function
+        str << "callbacks->member(";
+        
         // generate a pointer to the underlying variable
         _var->generateVariable(str);
         
-        // append pointer to get array access
-        str << "->member(\"" << _key << "\")";
+        // end of the member method
+        str << ",\"" << *_key << "\")";
     }
 };
 
