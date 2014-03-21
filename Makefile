@@ -126,6 +126,17 @@ OBJECTS         =   $(SOURCES:%.cpp=%.o)
 
 
 #
+#   Auto-generated files
+#
+#   Some of the source files are not part of the project, but are generated
+#   on fly by programs like 'flex' and 'lemon'. For 'make clean' we need an
+#   explicit list of the generated files.
+#
+
+GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.out}
+
+
+#
 #   End of the variables section. Here starts the list of instructions and
 #   dependencies that are used by the compiler.
 #
@@ -136,7 +147,7 @@ ${RESULT}: ${PARSER} ${TOKENIZER} ${OBJECTS}
 	${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS}
 
 clean:
-	${RM} ${PARSER} ${TOKENIZER} ${OBJECTS} ${RESULT}
+	${RM} ${GENERATED} ${OBJECTS} ${RESULT}
 
 ${TOKENIZER}:
 	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
