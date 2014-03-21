@@ -1,4 +1,4 @@
-%extra_argument { SmartTpl::Parser *pParser }
+%extra_argument { SmartTpl::TokenProcessor *parent }
 %token_type { SmartTpl::Token* }
 %token_prefix TOKEN_
 
@@ -45,7 +45,7 @@
     std::cout << "Syntax error!" << std::endl;  
 }   
 
-start               ::= statements(A) .                                         { pParser->add(A); }
+start               ::= statements(A) .                                         { parent->add(A); }
 statements(A)       ::= statements(B) statement(C) .                            { A = B; A->add(C); }
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Statements(B); }
 statement(A)        ::= ifStatement(B) .                                        { A = B; }

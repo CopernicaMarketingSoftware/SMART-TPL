@@ -35,7 +35,7 @@ private:
      *  @param  parent      Parser object that is notified about tokens
      *  @return bool
      */
-    bool process(Parser *parent);
+    bool process(TokenProcessor *parent) const;
 
 public:
     /**
@@ -55,7 +55,7 @@ public:
      *  @param  size        Size of the buffer
      *  @return bool
      */
-    bool process(Parser *parent, const char *buffer, size_t size);
+    bool process(TokenProcessor *parent, const char *buffer, size_t size) const;
     
     /**
      *  Process a file, and feed all the elements to the parser
@@ -63,7 +63,7 @@ public:
      *  @param  filename    The file to process
      *  @return bool
      */
-    bool process(Parser *parent, const char *filename);
+    bool process(TokenProcessor *parent, const char *filename) const;
 };
     
 /**

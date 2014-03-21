@@ -143,7 +143,7 @@ Tokenizer::~Tokenizer()
  *  @param  parent
  *  @return bool
  */
-bool Tokenizer::process(Parser *parent)
+bool Tokenizer::process(TokenProcessor *parent) const
 {
     // ID of the current token
     int id;
@@ -172,7 +172,7 @@ bool Tokenizer::process(Parser *parent)
  *  @param  size
  *  @return bool
  */
-bool Tokenizer::process(Parser *parent, const char *buffer, size_t size)
+bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size) const
 {
     // set the input buffer
     auto *state = yy_scan_bytes(buffer, size, _scanner);
@@ -189,14 +189,14 @@ bool Tokenizer::process(Parser *parent, const char *buffer, size_t size)
 
 /**
  *  Process a file, and feed all the elements to the parser
- *  @param  parent      Parser object that is notified about tokens
+ *  @param  parent      Object that is notified about tokens
  *  @param  filename    The file to process
  *  @return bool
  *
  *  @todo   check memory leaks if called multiple times in a row
  *
  */
-bool Tokenizer::process(Parser *parent, const char *filename)
+bool Tokenizer::process(TokenProcessor *parent, const char *filename) const
 {
     // open the file
     FILE *fp = fopen(filename, "r");

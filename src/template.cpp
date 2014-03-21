@@ -23,8 +23,7 @@ Template::Template(const char *filename)
     // of the template, if we do not have it, we should compile it first. For
     // now we just create the syntax tree (which is the first step in the
     // compilation process)
-    Tokenizer tokenizer;
-    SyntaxTree tree(&tokenizer, filename);
+    SyntaxTree tree(filename);
     
     // generate the source code
     tree.generate(std::cout);

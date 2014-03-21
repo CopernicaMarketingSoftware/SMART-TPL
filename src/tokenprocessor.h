@@ -1,9 +1,9 @@
 /**
- *  Parser.h
+ *  TokenProcessor.h
  *
- *  Class that is used internally to parse a template file. The constructor
- *  is protected - you should create an instance of SyntaxTree to get the 
- *  syntax tree of a template.
+ *  Class that is used internally to process token found in a template file. 
+ *  The constructor is protected - you should create an instance of SyntaxTree 
+ *  to get the syntax tree of a template.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -24,7 +24,7 @@ class Statements;
 /**
  *  Class definition
  */
-class Parser
+class TokenProcessor
 {
 private:
     /**
@@ -43,13 +43,13 @@ protected:
     /**
      *  Constructor
      */
-    Parser();
+    TokenProcessor();
 
 public:        
     /**
      *  Destructor
      */
-    virtual ~Parser();
+    virtual ~TokenProcessor();
     
     /**
      *  Called by the tokenizer when a token is detected

@@ -1,8 +1,8 @@
 *.o
 *.so
 *.txt
-lemon.cpp
-lemon.h
-lemon.out
+parser.cpp
+parser.h
+parser.out
 tokenizer.cpp
 a.out

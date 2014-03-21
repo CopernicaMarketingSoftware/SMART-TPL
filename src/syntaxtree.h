@@ -4,8 +4,9 @@
  *  Class representing the abstract syntax tree that describes the entire
  *  template.tpl file.
  *
- *  The private base class of the SyntaxTree is the Parser class, so that it
- *  is possible to pass an instance of the syntax tree class to the tokenizer
+ *  The private base class of the SyntaxTree is the TokenProcessor class, so 
+ *  that it is possible to pass an instance of the syntax tree class to the 
+ *  tokenizer.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -19,7 +20,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class SyntaxTree : protected Parser
+class SyntaxTree : protected TokenProcessor
 {
 public:
     /**
@@ -27,11 +28,11 @@ public:
      *  @param  tokenizer       The tokenizer that can find tokens in a file
      *  @param  filename        Filename to parse
      */
-    SyntaxTree(Tokenizer *tokenizer, const char *filename) : Parser()
+    SyntaxTree(const Tokenizer &tokenizer, const char *filename) : TokenProcessor()
     {
         // ask the tokenizer to process the file, and tell that this object
         // is the parser that can be fed with the tokens found in the file
-        tokenizer->process(this, filename);
+        tokenizer.process(this, filename);
         
         // @todo    error handling
     }
@@ -42,11 +43,11 @@ public:
      *  @param  buffer          The buffer to parse
      *  @param  size            Size of the buffer
      */
-    SyntaxTree(Tokenizer *tokenizer, const char *buffer, size_t size) : Parser()
+    SyntaxTree(const Tokenizer &tokenizer, const char *buffer, size_t size) : TokenProcessor()
     {
         // ask the tokenizer to process the buffer, and tell that this object
         // is the parser that can be fed with the tokens found in the buffer
-        tokenizer->process(this, buffer, size);
+        tokenizer.process(this, buffer, size);
         
         // @todo    error handling
     }
@@ -56,34 +57,14 @@ public:
      *  @param  tokenizer       The tokenizer that can find tokens in a file
      *  @param  filename        Filename to parse
      */
-    SyntaxTree(const char *filename) : Parser()
-    {
-        // we create our own tokenizer
-        Tokenizer tokenizer;
-
-        // ask the tokenizer to process the file, and tell that this object
-        // is the parser that can be fed with the tokens found in the file
-        tokenizer.process(this, filename);
-        
-        // @todo    error handling
-    }
+    SyntaxTree(const char *filename) : SyntaxTree(Tokenizer(), filename) {}
 
     /**
      *  Constructor
      *  @param  buffer          The buffer to parse
      *  @param  size            Size of the buffer
      */
-    SyntaxTree(const char *buffer, size_t size) 
-    {
-        // we create our own tokenizer
-        Tokenizer tokenizer;
-        
-        // ask the tokenizer to process the buffer, and tell that this object
-        // is the parser that can be fed with the tokens found in the buffer
-        tokenizer.process(this, buffer, size);
-        
-        // @todo    error handling
-    }
+    SyntaxTree(const char *buffer, size_t size) : SyntaxTree(Tokenizer(), buffer, size) {}
         
     /**
      *  Destructor

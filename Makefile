@@ -97,11 +97,11 @@ TOKENIZER       =    src/tokenizer.cpp
 
 #
 #    The lemon input file
-#
-#    The Lemon.y file is processed by the "lemon" program
+
+#    The Parser.lemon file is processed by the "lemon" program
 #
 
-PARSER          =    src/lemon.cpp
+PARSER          =    src/parser.cpp
 
 
 #
@@ -139,10 +139,10 @@ clean:
 	${RM} ${PARSER} ${TOKENIZER} ${OBJECTS} ${RESULT}
 
 ${TOKENIZER}:
-	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.yy}
+	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
 
 ${PARSER}:
-	${LEMON} ${LEMON_FLAGS} ${@:%.cpp=%.y}
+	${LEMON} ${LEMON_FLAGS} ${@:%.cpp=%.lemon}
 	${MV} ${PARSER:%.cpp=%.c} $@
 
 .cpp.o: 

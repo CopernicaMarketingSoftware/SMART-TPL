@@ -57,8 +57,8 @@
 #include "operators/binaryboolean.h"
 #include "operators/binaryand.h"
 #include "operators/binaryor.h"
-#include "parser.h"
+#include "tokenprocessor.h"
 #include "tokenizer.h"
 #include "syntaxtree.h"
-#include "lemon.h"
+#include "parser.h"
 
