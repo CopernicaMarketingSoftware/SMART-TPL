@@ -98,10 +98,10 @@ void example1()
     SmartTpl::File source("mytemplate.tpl");
 
     // create the template object
-    SmartTpl::Template template(source);
+    SmartTpl::Template tpl(source);
     
     // output the template to stdout
-    std::cout << template;
+    std::cout << tpl;
 }
 
 // example function that displays a template that is already stored in memory
@@ -111,10 +111,10 @@ void example2()
     SmartTpl::Memory source("<html>....</html>", 12345);
     
     // create the template object
-    SmartTpl::Template template(source);
+    SmartTpl::Template tpl(source);
     
     // output the template to stdout
-    std::cout << template;
+    std::cout << tpl;
 }
 
 // use an already-compiled template
@@ -124,10 +124,10 @@ void example3()
     SmartTpl::File source("mytemplate.so");
 
     // create the template object
-    SmartTpl::Template template(source);
+    SmartTpl::Template tpl(source);
     
     // output the template to stdout
-    std::cout << template;
+    std::cout << tpl;
 }
 ````
 
@@ -149,7 +149,7 @@ You can assign integers and strings to a data object.
 void example()
 {
     // create a template
-    SmartTpl::Template template(SmartTpl::File("mytemplate.tpl"));
+    SmartTpl::Template tpl(SmartTpl::File("mytemplate.tpl"));
     
     // create a data object
     SmartTpl::Data data;
@@ -159,7 +159,7 @@ void example()
     data.assign("age", 32);
     
     // show the template
-    std::cout << template.process(data);
+    std::cout << tpl.process(data);
 }
 ````
 
@@ -178,7 +178,7 @@ template, and you do not want to fetch all information in advance.
 void example()
 {
     // create a template
-    SmartTpl::Template template(SmartTpl::File("mytemplate.tpl"));
+    SmartTpl::Template tpl(SmartTpl::File("mytemplate.tpl"));
     
     // create a data object
     SmartTpl::Data data;
@@ -194,7 +194,7 @@ void example()
     });
     
     // show the template
-    std::cout << template.process(data);
+    std::cout << tpl.process(data);
 }
 
 In the example above the {$name} variable is assigned to the template, but 
@@ -275,7 +275,7 @@ public:
 void example()
 {
     // create a template
-    SmartTpl::Template template(SmartTpl::File("mytemplate.tpl"));
+    SmartTpl::Template tpl(SmartTpl::File("mytemplate.tpl"));
     
     // create a data object
     SmartTpl::Data data;
@@ -284,7 +284,7 @@ void example()
     data.assign("name", MyVariable());
     
     // show the template
-    std::cout << template.process(data);
+    std::cout << tpl.process(data);
 }
 
 ````
