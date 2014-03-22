@@ -21,6 +21,8 @@ namespace SmartTpl {
  *  Forwards
  */
 class Variable;
+class Expression;
+class Statements;
 
 /**
  *  Class definition
@@ -53,6 +55,13 @@ public:
      */
     virtual void output(const Variable *variable) = 0;
 
+    /**
+     *  Generate a conditional statement
+     *  @param  expression          the expression to evaluate
+     *  @param  ifstatements        the statements in the 'if' part
+     *  @param  elsestatements      the statements in the 'else' part
+     */
+    virtual void conditional(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) = 0;
 };
 
 /**

@@ -74,6 +74,7 @@ public:
     /**
      *  Generate the source code
      *  @param  generator
+     *  @return bool
      */
     bool generate(Generator *generator) const
     {
@@ -81,7 +82,10 @@ public:
         if (!_statements) return false;
         
         // generate the statements
-        return _statements->generate(generator);
+        _statements->generate(generator);
+        
+        // done
+        return true;
     }
 };
 

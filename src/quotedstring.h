@@ -23,21 +23,21 @@ public:
      *  Constructor
      *  @param  input       Input string
      */
-    QuotedString(const std::string &input)
+    QuotedString(const char *input, size_t size)
     {
         // we reserve plenty of space (normally not more that two or three 
         // extra characters are necessary
-        reserve(input.size() + 20);
+        reserve(size + 20);
         
         // loop through the input
-        for (char c : input)
+        for (size_t i=0; i<size; i++)
         {
-            switch (c) {
+            switch (input[i]) {
             case '\n':  append("\\n"); break;
             case '\0':  append("\\0"); break;
             case '\t':  append("\\t"); break;
             case '"' :  append("\\\""); break;
-            default:    append(&c, 1); break;
+            default:    append(&input[i], 1); break;
             }
         }
     }

@@ -61,35 +61,12 @@ public:
     
     /**
      *  Generate the output of this statement
-     *  @param  str     output stream
+     *  @param  generator
      */
-    virtual void generate(std::ostream &str) const override
+    virtual void generate(Generator *generator) const override
     {
-        // this is going to be a regular C "if" statement
-        str << "if (";
-        
-        // and now we generate the code that turns the expression into a boolean
-        // (and because in C there are no boolean, we use a numeric value)
-        _expression->generateNumeric(str);
-        
-        // close the if condition and open a curly brace to start a new code block
-        str << "){" << std::endl;
-        
-        // now we generate all statements
-        _trueStatements->generate(str);
-        
-        // do we have an else block?
-        if (_falseStatements)
-        {
-            // close the if block and open the else block
-            str << "}else{" << std::endl;
-            
-            // generate the else statements
-            _falseStatements->generate(str);
-        }
-        
-        // and of the block
-        str << "}" << std::endl;
+        // generate a condition statement
+        generator->conditional(_expression.get(), _trueStatements.get(), _falseStatements.get());
     }
 };
 

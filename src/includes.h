@@ -14,6 +14,7 @@
 #include <iostream>
 #include <memory>
 #include <list>
+#include <sstream>
 
 /**
  *  All public header files of the SmartTpl library
@@ -62,4 +63,4 @@
 #include "tokenizer.h"
 #include "syntaxtree.h"
 #include "parser.h"
-
+#include "ccode.h"

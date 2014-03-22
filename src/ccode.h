@@ -53,6 +53,13 @@ public:
      */
     virtual void output(const Variable *variable) override;
 
+    /**
+     *  Generate a conditional statement
+     *  @param  expression          the expression to evaluate
+     *  @param  ifstatements        the statements in the 'if' part
+     *  @param  elsestatements      the statements in the 'else' part
+     */
+    virtual void conditional(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) override;
 
 };
 
