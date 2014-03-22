@@ -47,6 +47,11 @@ public:
      */
     virtual void raw(const char *data, size_t size) override;
         
+    /**
+     *  Generate the code to output a variable
+     *  @param  variable    the variable to output
+     */
+    virtual void output(const Variable *variable) override;
 
 
 };

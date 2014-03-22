@@ -33,7 +33,7 @@ CCode::CCode(const SyntaxTree &tree)
 }
 
 /**
- *  Output raw data
+ *  Generate the code to output raw data
  *  @param  buffer      buffer to output
  *  @param  size        buffer size
  */
@@ -45,6 +45,22 @@ void CCode::raw(const char *data, size_t size)
     
     // output the data
     _out << "callbacks->write(\"" << quoted << "\", " << size << ");" << std::endl;
+}
+
+/**
+ *  Generate the code to output a variable
+ *  @param  variable    the variable to output
+ */
+void CCode::output(const Variable *variable)
+{
+    // we're going to call the output function
+    _out << "callbacks->output(";
+        
+    // generate the code to get a pointer to the variable
+    variable->generate(this);
+        
+    // end of the function
+    _out << ");" << std::endl;
 }
 
 /**

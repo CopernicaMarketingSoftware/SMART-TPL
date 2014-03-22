@@ -38,18 +38,12 @@ public:
 
     /**
      *  Generate the output of this statement
-     *  @param  str     output stream
+     *  @param  generator
      */
-    virtual void generate(std::ostream &str) const override
+    virtual void generate(Generator *generator) const override
     {
-        // we're going to call the output function
-        str << "callbacks->output(";
-        
-        // generate the code to get a pointer to the variable
-        _var->generateVariable(str);
-        
-        // end of the function
-        str << ");" << std::endl;
+        // tell the generator to evaluate an expression, and output it
+        generator->output(_var.get());
     }
 };
 

@@ -18,6 +18,11 @@
 namespace SmartTpl {
 
 /**
+ *  Forwards
+ */
+class Variable;
+
+/**
  *  Class definition
  */
 class Generator
@@ -36,11 +41,17 @@ public:
     virtual ~Generator() {}
 
     /**
-     *  Output raw data
+     *  Generate code to output raw data
      *  @param  buffer      buffer to output
      *  @param  size        buffer size
      */
     virtual void raw(const char *data, size_t size) = 0;
+    
+    /**
+     *  Generate the code to output a variable
+     *  @param  variable    the variable to output
+     */
+    virtual void output(const Variable *variable) = 0;
 
 };
 
