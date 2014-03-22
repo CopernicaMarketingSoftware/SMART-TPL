@@ -71,15 +71,15 @@ public:
      *  @param  name                name of the variable
      *  @param  expression          Expression that evaluates to a var name
      */
-    virtual void varPointer(const Variable *variable, const std::string &name) = 0;
-    virtual void varPointer(const Variable *variable, const Expression *expression) = 0;
+    virtual void varPointer(const Variable *parent, const std::string &name) = 0;
+    virtual void varPointer(const Variable *parent, const Expression *expression) = 0;
     virtual void varPointer(const std::string &name) = 0;
     
     /**
      *  Create a string or numeric literal
      *  @param  value
      */
-    virtual void string(const std::string &string) = 0;
+    virtual void string(const std::string &value) = 0;
     virtual void numeric(int value) = 0;
     
     /**

@@ -27,6 +27,9 @@ Template::Template(const char *filename)
     
     // generate the source code
 //    tree.generate(std::cout);
+
+
+    CCode code(tree);
 }
 
 /**
