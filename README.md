@@ -196,6 +196,7 @@ void example()
     // show the template
     std::cout << tpl.process(data);
 }
+````
 
 In the example above the {$name} variable is assigned to the template, but 
 the value is a callback function. Only when the {$name} variable is actually 
