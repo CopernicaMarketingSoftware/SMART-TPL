@@ -42,10 +42,9 @@ public:
 
     /**
      *  Output raw data
-     *  @param  buffer      buffer to output
-     *  @param  size        buffer size
+     *  @param  data        buffer to output
      */
-    virtual void raw(const char *data, size_t size) override;
+    virtual void raw(const std::string &data) override;
         
     /**
      *  Generate the code to output a variable
@@ -59,7 +58,13 @@ public:
      *  @param  ifstatements        the statements in the 'if' part
      *  @param  elsestatements      the statements in the 'else' part
      */
-    virtual void conditional(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) override;
+    virtual void condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) override;
+
+    /**
+     *  Generate the code to get a pointer to a variable
+     *  @param  name                name of the variable
+     */
+    virtual void varPointer(const std::string &name) override;
 
 };
 

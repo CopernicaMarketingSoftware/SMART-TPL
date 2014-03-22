@@ -42,18 +42,12 @@ public:
     
     /**
      *  Generate a call that creates a pointer to a variable
-     *  @param  str
+     *  @param  generator
      */
-    virtual void generateVariable(std::ostream &str) const override
+    virtual void pointer(Generator *generator) const override
     {
-        // call the member function
-        str << "callbacks->member(";
-        
-        // generate a pointer to the underlying variable
-        _var->generateVariable(str);
-        
-        // end of the member method
-        str << ",\"" << *_key << "\")";
+        // generate the code to access a member
+        generator->varPointer(_var.get(), *_key);
     }
 };
 

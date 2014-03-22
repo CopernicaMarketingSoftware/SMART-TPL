@@ -31,43 +31,14 @@ public:
     virtual ~BinaryArithmetricOperator() {}
 
     /**
-     *  Virtual method to generate the operator
-     *  @param  str
-     */
-    virtual void generateOperator(std::ostream &str) const = 0;
-
-    /**
      *  Generate the code to get the const char * to the expression
-     *  @param  str
+     *  @param  generator
      */
-    virtual void generateString(std::ostream &str) const override
+    virtual void string(Generator *generator) const override
     {
-        // call a function to convert integers to numbers
-        str << "number_to_string(";
-        
-        // generate the numeric code
-        generateNumeric(str);
-        
-        // and of the conversion function
-        str << ")";
+        // this needs to be casted to a string
+        generator->numericToString(this);
     }
-
-    /**
-     *  Generate the code to get the numeric value of the expression
-     *  @param  str
-     */
-    virtual void generateNumeric(std::ostream &str) const override
-    {
-        // generate the code that turns the left expression into a numeric value
-        _left->generateNumeric(str);
-        
-        // generate the operator
-        generateOperator(str);
-        
-        // generate the function that turns the right expression into a numberic value
-        _right->generateNumeric(str);
-    }
-
 };
 
 /**

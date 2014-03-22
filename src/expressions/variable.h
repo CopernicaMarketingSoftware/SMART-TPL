@@ -30,41 +30,27 @@ public:
     virtual ~Variable() {}
     
     /**
-     *  Generate the output that leaves a pointer to the variable
-     *  @param  str
+     *  Generate the code to get a pointer address to the variable
+     *  @param  generator
      */
-    virtual void generateVariable(std::ostream &str) const = 0;
-    
-    /**
-     *  Generate the code to get the const char * to the expression
-     *  @param  str
-     */
-    virtual void generateString(std::ostream &str) const override
-    {
-        // call the to_string method
-        str << "callbacks->to_string(";
+    virtual void pointer(Generator *generator) const = 0;
 
-        // first generate a pointer to the variable
-        generateVariable(str);
-        
-        // and then call the function to cast to a string
-        str << ")";
+    /**
+     *  Generate a numeric code for the variable
+     *  @param  generator
+     */
+    virtual void numeric(Generator *generator) const override
+    {
+        generator->numeric(this);
     }
     
     /**
-     *  Generate the code to get the numeric value of the expression
-     *  @param  str
+     *  Generate a string for the variable
+     *  @param  generator
      */
-    virtual void generateNumeric(std::ostream &str) const override
+    virtual void string(Generator *generator) const override
     {
-        // call the to_numeric method
-        str << "callbacks->to_numeric(";
-        
-        // generate a pointer to the variable
-        generateVariable(str);
-        
-        // and the call
-        str << ")";
+        generator->string(this);
     }
 };
 

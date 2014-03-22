@@ -39,12 +39,12 @@ public:
     
     /**
      *  Generate the output that leaves a pointer to the variable
-     *  @param  str
+     *  @param  generator
      */
-    virtual void generateVariable(std::ostream &str) const override
+    virtual void pointer(Generator *generator) const override
     {
-        // call the callback to get the variable
-        str << "callbacks->variable(\"" << *_name << "\"," << _name->size() << ")";
+        // generate the code to get a variable pointer
+        generator->varPointer(*_name);
     }
 };
 

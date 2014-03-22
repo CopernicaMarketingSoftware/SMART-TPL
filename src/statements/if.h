@@ -66,7 +66,7 @@ public:
     virtual void generate(Generator *generator) const override
     {
         // generate a condition statement
-        generator->conditional(_expression.get(), _trueStatements.get(), _falseStatements.get());
+        generator->condition(_expression.get(), _trueStatements.get(), _falseStatements.get());
     }
 };
 

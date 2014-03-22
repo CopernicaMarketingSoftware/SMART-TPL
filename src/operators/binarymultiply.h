@@ -32,12 +32,12 @@ public:
     virtual ~BinaryMultiplyOperator() {}
 
     /**
-     *  Virtual method to generate the operator
-     *  @param  str
+     *  Generate the operations
+     *  @param  generator
      */
-    virtual void generateOperator(std::ostream &str) const override
+    virtual void numeric(Generator *generator) const override
     {
-        str << "*";
+        generator->multiply(_left.get(), _right.get());
     }
 };
 

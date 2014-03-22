@@ -31,37 +31,14 @@ public:
     virtual ~BinaryBooleanOperator() {}
 
     /**
-     *  Virtual method to generate the operator
-     *  @param  str
-     */
-    virtual void generateOperator(std::ostream &str) const = 0;
-
-    /**
      *  Generate the code to get the const char * to the expression
-     *  @param  str
+     *  @param  generator
      */
-    virtual void generateString(std::ostream &str) const override
+    virtual void string(Generator *generator) const override
     {
         // booleans have no output, generate a string right away
-        str << "\"\"";
+        generator->string("");
     }
-        
-    /**
-     *  Generate the code to get the numeric value of the expression
-     *  @param  str
-     */
-    virtual void generateNumeric(std::ostream &str) const override
-    {
-        // generate the code that turns the left expression into a numeric value
-        _left->generateNumeric(str);
-        
-        // generate the operator
-        generateOperator(str);
-        
-        // generate the function that turns the right expression into a boolean value
-        _right->generateNumeric(str);
-    }
-
 };
 
 /**

@@ -32,12 +32,12 @@ public:
     virtual ~BinaryNotEqualsOperator() {}
 
     /**
-     *  Virtual method to generate the operator
-     *  @param  str
+     *  Generate the instruction
+     *  @param  generator
      */
-    virtual void generateOperator(std::ostream &str) const override
+    virtual void numeric(Generator *generator) const override
     {
-        str << "!=";
+        generator->notEquals(_left.get(), _right.get());
     }
 };
 

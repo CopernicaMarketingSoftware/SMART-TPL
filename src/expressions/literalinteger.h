@@ -47,22 +47,22 @@ public:
 
     /**
      *  Generate the code to get the const char * to the expression
-     *  @param  str
+     *  @param  generator
      */
-    virtual void generateString(std::ostream &str) const override
+    virtual void string(Generator *generator) const override
     {
-        // put the value between quotes
-        str << "\"" << _value << "\"";
+        // create string literal
+        generator->string(std::to_string(_value));
     }
     
     /**
      *  Generate the code to get the numeric value of the expression
-     *  @param  str
+     *  @param  generator
      */
-    virtual void generateNumeric(std::ostream &str) const override
+    virtual void numeric(Generator *generator) const override
     {
-        // just output the value
-        str << _value;
+        // create numeric literal
+        generator->numeric(_value);
     }
 };
 

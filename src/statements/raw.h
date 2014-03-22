@@ -44,7 +44,7 @@ public:
     virtual void generate(Generator *generator) const override
     {
         // add write instruction of raw data
-        generator->raw(_data->c_str(), _data->size());
+        generator->raw(*_data);
     }
 };
 

@@ -44,14 +44,13 @@ public:
 
     /**
      *  Generate code to output raw data
-     *  @param  buffer      buffer to output
-     *  @param  size        buffer size
+     *  @param  data                data to output
      */
-    virtual void raw(const char *data, size_t size) = 0;
+    virtual void raw(const std::string &data) = 0;
     
     /**
      *  Generate the code to output a variable
-     *  @param  variable    the variable to output
+     *  @param  variable            the variable to output
      */
     virtual void output(const Variable *variable) = 0;
 
@@ -61,7 +60,73 @@ public:
      *  @param  ifstatements        the statements in the 'if' part
      *  @param  elsestatements      the statements in the 'else' part
      */
-    virtual void conditional(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) = 0;
+    virtual void condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) = 0;
+    
+    /**
+     *  Generate the code to get a pointer to a variable
+     *  There are three formats, to get a pointer to a literal variable by name,
+     *  to get a pointer to a variable inside a table with a literal name, and
+     *  to get a pointer to a variable with variable name
+     *  @param  parent              parent variable from which the var is retrieved
+     *  @param  name                name of the variable
+     *  @param  expression          Expression that evaluates to a var name
+     */
+    virtual void varPointer(const Variable *variable, const std::string &name) = 0;
+    virtual void varPointer(const Variable *variable, const Expression *expression) = 0;
+    virtual void varPointer(const std::string &name) = 0;
+    
+    /**
+     *  Create a string or numeric literal
+     *  @param  value
+     */
+    virtual void string(const std::string &string) = 0;
+    virtual void numeric(int value) = 0;
+    
+    /**
+     *  Create a string or numeric constant for a variable
+     *  @param  variable
+     */
+    virtual void string(const Variable *variable) = 0;
+    virtual void numeric(const Variable *variable) = 0;
+    
+    /**
+     *  Create a string literal from an expression that is known to return a numeric value,
+     *  and a method to do this in the other direction
+     *  @param  expression
+     */
+    virtual void numericToString(const Expression *expression) = 0;
+    virtual void stringToNumeric(const Expression *expression) = 0;
+    
+    /**
+     *  Arithmetric operations
+     *  @param  left
+     *  @param  right
+     */
+    virtual void plus(const Expression *left, const Expression *right) = 0;
+    virtual void minus(const Expression *left, const Expression *right) = 0;
+    virtual void divide(const Expression *left, const Expression *right) = 0;
+    virtual void multiply(const Expression *left, const Expression *right) = 0;
+  
+    /**
+     *  Comparison operators
+     *  @param  left
+     *  @param  right
+     */
+    virtual void equals(const Expression *left, const Expression *right) = 0;
+    virtual void notEquals(const Expression *left, const Expression *right) = 0;
+    virtual void greater(const Expression *left, const Expression *right) = 0;
+    virtual void greaterEquals(const Expression *left, const Expression *right) = 0;
+    virtual void lesser(const Expression *left, const Expression *right) = 0;
+    virtual void lesserEquals(const Expression *left, const Expression *right) = 0;
+    
+    /**
+     *  Boolean operators
+     *  @param  left
+     *  @param  right
+     */
+    virtual void booleanAnd(const Expression *left, const Expression *right) = 0;
+    virtual void booleanOr(const Expression *left, const Expression *right) = 0;
+    
 };
 
 /**

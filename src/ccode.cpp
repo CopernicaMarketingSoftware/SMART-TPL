@@ -34,17 +34,16 @@ CCode::CCode(const SyntaxTree &tree)
 
 /**
  *  Generate the code to output raw data
- *  @param  buffer      buffer to output
- *  @param  size        buffer size
+ *  @param  data        buffer to output
  */
-void CCode::raw(const char *data, size_t size) 
+void CCode::raw(const std::string &data) 
 {
     // quote newlines, null characters, etc in the string so that it can
     // be picked up by the compiler
-    QuotedString quoted(data, size);
+    QuotedString quoted(data);
     
     // output the data
-    _out << "callbacks->write(\"" << quoted << "\", " << size << ");" << std::endl;
+    _out << "callbacks->write(\"" << quoted << "\", " << data.size() << ");" << std::endl;
 }
 
 /**
@@ -57,7 +56,7 @@ void CCode::output(const Variable *variable)
     _out << "callbacks->output(";
         
     // generate the code to get a pointer to the variable
-    variable->generate(this);
+    variable->pointer(this);
         
     // end of the function
     _out << ");" << std::endl;
@@ -69,14 +68,14 @@ void CCode::output(const Variable *variable)
  *  @param  ifstatements        the statements in the 'if' part
  *  @param  elsestatements      the statements in the 'else' part
  */
-void CCode::conditional(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements)
+void CCode::condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements)
 {
     // this is going to be a regular C "if" statement
     _out << "if (";
     
     // and now we generate the code that turns the expression into a boolean
     // (and because in C there are no boolean, we use a numeric value)
-    numeric(expression);
+    expression->numeric(this);
     
     // close the if condition and open a curly brace to start a new code block
     _out << "){" << std::endl;
@@ -85,18 +84,61 @@ void CCode::conditional(const Expression *expression, const Statements *ifstatem
     ifstatements->generate(this);
     
     // do we have an else block?
-    if (elsetatements)
+    if (elsestatements)
     {
         // close the if block and open the else block
         _out << "}else{" << std::endl;
         
         // generate the else statements
-        _elsestatements->generate(this);
+        elsestatements->generate(this);
     }
     
     // and of the block
     _out << "}" << std::endl;
 }
+
+/**
+ *  Generate the code to get a pointer to a variable
+ *  @param  name                name of the variable
+ */
+void CCode::varPointer(const std::string &name)
+{
+    // call the callback to get the variable
+    _out << "callbacks->variable(\"" << name << "\"," << name.size() << ")";
+}
+
+    /**
+     *  Generate the code to get the const char * to the expression
+     *  @param  str
+     */
+//    virtual void generateString(std::ostream &str) const override
+//    {
+//        // call the to_string method
+//        str << "callbacks->to_string(";
+//
+//        // first generate a pointer to the variable
+//        generateVariable(str);
+//        
+//        // and then call the function to cast to a string
+//        str << ")";
+//    }
+    
+    /**
+     *  Generate the code to get the numeric value of the expression
+     *  @param  str
+     */
+//    virtual void generateNumeric(std::ostream &str) const override
+//    {
+//        // call the to_numeric method
+//        str << "callbacks->to_numeric(";
+//        
+//        // generate a pointer to the variable
+//        generateVariable(str);
+//        
+//        // and the call
+//        str << ")";
+//    }
+
 
 /**
  *  End of namespace

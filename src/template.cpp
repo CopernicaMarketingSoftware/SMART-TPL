@@ -26,7 +26,7 @@ Template::Template(const char *filename)
     SyntaxTree tree(filename);
     
     // generate the source code
-    tree.generate(std::cout);
+//    tree.generate(std::cout);
 }
 
 /**
