@@ -39,16 +39,12 @@ public:
     
     /**
      *  Generate the output of this statement
-     *  @param  str     output stream
+     *  @param  generator
      */
-    virtual void generate(std::ostream &str) const override
+    virtual void generate(Generator *generator) const override
     {
-        // quote newlines, null characters, etc in the string so that it can
-        // be picked up by the compiler
-        QuotedString data(*_data);
-        
-        // output the data
-        str << "callbacks->write(\"" << data << "\", " << _data->size() << ");" << std::endl;
+        // add write instruction of raw data
+        generator->raw(_data->c_str(), _data->size());
     }
 };
 

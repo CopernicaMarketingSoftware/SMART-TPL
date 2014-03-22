@@ -73,9 +73,16 @@ public:
     
     /**
      *  Generate the source code
-     *  @param  out     output stream
+     *  @param  generator
      */
-    void generate(std::ostream &out) const;
+    bool generate(Generator *generator) const
+    {
+        // skip if there are no statements
+        if (!_statements) return false;
+        
+        // generate the statements
+        return _statements->generate(generator);
+    }
 };
 
 /**

@@ -24,18 +24,18 @@ public:
      *  @param  filename        Name of the template to load
      */
     Template(const char *filename);
-    
+
     /**
      *  Deleted copy constructor
      *  @param  that
      */
     Template(const Template &that) = delete;
-    
+
     /**
      *  Destructor
      */
     virtual ~Template() {}
-    
+
     /**
      *  Process the template, given a certain data source
      * 

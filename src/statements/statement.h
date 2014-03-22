@@ -34,9 +34,14 @@ public:
     
     /**
      *  Generate source code
-     *  @param  str     output stream
+     * 
+     *  This method is passed a generator object that will be fed with all
+     *  input elements, and that will generate either the shared library or
+     *  the JIT representation.
+     * 
+     *  @param  generator
      */
-    virtual void generate(std::ostream &stream) const = 0;
+    virtual void generate(Generator *generator) const = 0;
     
 };
     

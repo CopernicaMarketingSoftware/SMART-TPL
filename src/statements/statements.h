@@ -52,12 +52,12 @@ public:
 
     /**
      *  Generate source code
-     *  @param  str     output stream
+     *  @param  generator
      */
-    virtual void generate(std::ostream &stream) const override
+    virtual void generate(Generator *generator) const override
     {
         // loop through the statements, and output each one of them
-        for (auto &statement : _statements) statement->generate(stream);
+        for (auto &statement : _statements) statement->generate(generator);
     }
 };
 

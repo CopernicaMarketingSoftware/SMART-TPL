@@ -26,6 +26,7 @@
  */
 #include "token.h"
 #include "quotedstring.h"
+#include "generator.h"
 #include "expressions/expression.h"
 #include "expressions/variable.h"
 #include "expressions/literalvariable.h"
