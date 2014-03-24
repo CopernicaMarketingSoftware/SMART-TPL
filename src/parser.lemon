@@ -31,7 +31,6 @@
 
 %parse_accept {
     // code that is executed when the file was accepted
-    std::cout << "File accepted" << std::endl;
 }
 
 %parse_failure {

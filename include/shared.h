@@ -29,7 +29,7 @@ typedef struct smarttpl_callbacks
     void (*write)(const char *data, size_t size);
     
     /**
-     *  Pointer to a function to retrieve a variable.
+     *  Pointer to a function to retrieve a variable by name.
      *
      *  This function gets the variable name + size of the name, and should
      *  return a pointer to a variable. This pointer will be passed to other
@@ -78,6 +78,15 @@ typedef struct smarttpl_callbacks
      *  and should return a pointer to a null terminated string.
      */
     const char *(*to_string)(void *variable);
+    
+    /**
+     *  Retrieve the length of the string representation of a variable
+     * 
+     *  This function should do the same as strlen(to_string(variable)), but
+     *  could be more efficient if the string length is already known.
+     */
+    size_t (*size)(void *variable);
+    
     
 } smarttpl_callbacks_t;
 

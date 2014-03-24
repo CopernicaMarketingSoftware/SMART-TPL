@@ -30,6 +30,8 @@ Template::Template(const char *filename)
 
 
     CCode code(tree);
+    
+    std::cout << code;
 }
 
 /**

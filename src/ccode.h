@@ -27,18 +27,6 @@ private:
      *  @var    std::ostream
      */
     std::ostringstream _out;
-    
-public:
-    /**
-     *  Constructor
-     *  @param  tree        The abstract syntax tree of the template
-     */
-    CCode(const SyntaxTree &tree);
-    
-    /**
-     *  Destructor
-     */
-    virtual ~CCode() {}
 
     /**
      *  Output raw data
@@ -124,8 +112,39 @@ public:
      */
     virtual void booleanAnd(const Expression *left, const Expression *right) override;
     virtual void booleanOr(const Expression *left, const Expression *right) override;
+    
+public:
+    /**
+     *  Constructor
+     *  @param  tree        The abstract syntax tree of the template
+     */
+    CCode(const SyntaxTree &tree);
+    
+    /**
+     *  Destructor
+     */
+    virtual ~CCode() {}
 
+    /**
+     *  Retrieve the C source as string
+     *  @return std::string
+     */
+    std::string asString() const
+    {
+        return _out.str();
+    }
 };
+
+/**
+ *  Custom output stream operator
+ *  @param  stream
+ *  @param  value
+ *  @return ostream
+ */
+inline std::ostream &operator<<(std::ostream &stream, const CCode &value)
+{
+    return stream << value.asString();
+}
 
 /**
  *  End namespace

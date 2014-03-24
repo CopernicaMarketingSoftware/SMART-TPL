@@ -143,8 +143,6 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
     // and now we should generate a string value for the expression
     expression->string(this);
     
-    // todo: string size is missing!!
-    
     // end expression
     _out << ")";
 }
@@ -160,7 +158,7 @@ void CCode::string(const std::string &value)
     QuotedString quoted(value);
 
     // output string
-    _out << "\"" << quoted << "\"";
+    _out << "\"" << quoted << "\"," << value.size();
 }
 
 /**
@@ -185,8 +183,17 @@ void CCode::string(const Variable *variable)
     // generate pointer to the variable
     variable->pointer(this);
     
+    // ask the size of the variable
+    // @todo store the entire variable in a temporary variable
+    _out << "), callbacks->size(";
+    
+    // generate another pointer to the variable
+    variable->pointer(this);
+    
     // that was it
     _out << ")";
+    
+    
 }
 
 /**
@@ -200,7 +207,7 @@ void CCode::numeric(const Variable *variable)
     
     // generate pointer to the variable
     variable->pointer(this);
-    
+
     // that was it
     _out << ")";
 }
