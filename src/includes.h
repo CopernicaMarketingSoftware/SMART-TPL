@@ -17,6 +17,12 @@
 #include <sstream>
 
 /**
+ *  LLVM library dependencies
+ */
+#include <llvm/LLVMContext.h>
+#include <llvm/Module.h>
+
+/**
  *  All public header files of the SmartTpl library
  */
 #include "../include/data.h"
@@ -64,3 +70,4 @@
 #include "syntaxtree.h"
 #include "parser.h"
 #include "ccode.h"
+#include "bytecode.h"

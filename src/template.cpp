@@ -29,9 +29,11 @@ Template::Template(const char *filename)
 //    tree.generate(std::cout);
 
 
-    CCode code(tree);
+//    CCode code(tree);
+
+    Bytecode bytes(filename, tree);
     
-    std::cout << code;
+//    std::cout << code;
 }
 
 /**
