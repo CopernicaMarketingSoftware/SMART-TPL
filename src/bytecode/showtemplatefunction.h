@@ -25,6 +25,18 @@ private:
      */
     llvm::Function *_function;
 
+    /**
+     *  Get the type of the function
+     *  @return FunctionType*
+     */
+    FunctionType *type()
+    {
+        
+        
+        
+        
+    }
+
 public:
     /**
      *  Constructor
