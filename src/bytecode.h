@@ -33,6 +33,18 @@ private:
      */
     llvm::Module *_module;
 
+    /**
+     *  External functions for the module (which are implemented by the
+     *  SmartTpl library
+     *  @var    ExternalFunctions
+     */
+    ExternalFunctions *_externalFunctions;
+
+    /**
+     *  The one and only startup function
+     *  @var    ShowTemplateFunction
+     */
+    ShowTemplateFunction *_showTemplate;
 
     /**
      *  Generate code to output raw data

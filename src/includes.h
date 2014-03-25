@@ -21,6 +21,9 @@
  */
 #include <llvm/LLVMContext.h>
 #include <llvm/Module.h>
+#include <llvm/Type.h>
+#include <llvm/DerivedTypes.h>
+#include <llvm/Attributes.h>
 
 /**
  *  All public header files of the SmartTpl library
@@ -70,4 +73,7 @@
 #include "syntaxtree.h"
 #include "parser.h"
 #include "ccode.h"
+#include "bytecode/writefunction.h"
+#include "bytecode/showtemplatefunction.h"
+#include "bytecode/externalfunctions.h"
 #include "bytecode.h"

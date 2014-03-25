@@ -23,6 +23,12 @@ Bytecode::Bytecode(const char *name, const SyntaxTree &tree)
     // construct a LLVM module
     _module = new llvm::Module(name, _context);
 
+    // create the external function definitions
+    _externalFunctions = new ExternalFunctions(_module);
+    
+    // create the startup function
+    _showTemplate = new ShowTemplateFunction(_module);
+    
     // generate the LLVM code
     tree.generate(this);
 }
@@ -32,6 +38,12 @@ Bytecode::Bytecode(const char *name, const SyntaxTree &tree)
  */
 Bytecode::~Bytecode()
 {
+    // destruct the startup function
+    delete _showTemplate;
+    
+    // destruct the external functions
+    delete _externalFunctions;
+    
     // get rid of the module
     delete _module;
 }
