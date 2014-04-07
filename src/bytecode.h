@@ -22,36 +22,35 @@ class Bytecode : private Generator
 {
 private:
     /**
-     *  The LLVM context
-     *  @var    llvm::LLVMContext
+     *  The jit context
+     *  @var    jit_context
      */
-    llvm::LLVMContext _context;
+    jit_context _context;
 
     /**
-     *  The LLVM module
-     *  @var    llvm::Module
+     *  The function to generate the template
+     *  @var    Function
      */
-    llvm::Module *_module;
+    jit_function _function;
 
     /**
-     *  External functions for the module (which are implemented by the
-     *  SmartTpl library
-     *  @var    ExternalFunctions
+     *  Signature of all callbacks methods
+     *  @var    Callbacks
      */
-    ExternalFunctions *_externalFunctions;
-
+    Callbacks _callbacks;
+    
     /**
-     *  The one and only startup function
-     *  @var    ShowTemplateFunction
+     *  The user-data that is passed to the function
+     *  @var    jit_value_t
      */
-    ShowTemplateFunction *_showTemplate;
+    jit_value _userdata;
 
     /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */
     virtual void raw(const std::string &data) override;
-    
+   
     /**
      *  Generate the code to output a variable
      *  @param  variable            the variable to output
@@ -64,7 +63,7 @@ private:
      *  @param  ifstatements        the statements in the 'if' part
      *  @param  elsestatements      the statements in the 'else' part
      */
-    virtual void condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) override;
+    virtual void condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements) override;
     
     /**
      *  Generate the code to get a pointer to a variable

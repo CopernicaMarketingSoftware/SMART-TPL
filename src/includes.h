@@ -15,15 +15,7 @@
 #include <memory>
 #include <list>
 #include <sstream>
-
-/**
- *  LLVM library dependencies
- */
-#include <llvm/LLVMContext.h>
-#include <llvm/Module.h>
-#include <llvm/Type.h>
-#include <llvm/DerivedTypes.h>
-#include <llvm/Attributes.h>
+#include <jit/jit-plus.h>
 
 /**
  *  All public header files of the SmartTpl library
@@ -68,12 +60,11 @@
 #include "operators/binaryboolean.h"
 #include "operators/binaryand.h"
 #include "operators/binaryor.h"
+#include "callbacks/write.h"
 #include "tokenprocessor.h"
+#include "parser.h"
 #include "tokenizer.h"
 #include "syntaxtree.h"
-#include "parser.h"
 #include "ccode.h"
-#include "bytecode/writefunction.h"
-#include "bytecode/showtemplatefunction.h"
-#include "bytecode/externalfunctions.h"
+#include "callbacks.h"
 #include "bytecode.h"

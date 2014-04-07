@@ -46,7 +46,7 @@ RESULT          =   libsmarttpl.so
 #   and "lemon" are being used. You may override them here
 #
 
-COMPILER        =   g++
+COMPILER        =   clang
 LINKER          =   g++
 FLEX            =   flex
 LEMON           =   lemon
