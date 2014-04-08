@@ -36,7 +36,7 @@ public:
             jit_type_void_ptr,
             jit_type_void_ptr,
             jit_type_void_ptr,
-            jit_type_int,
+            jit_type_sys_int,
         };
     
         // create the signature

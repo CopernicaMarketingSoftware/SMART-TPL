@@ -77,7 +77,7 @@ void Bytecode::raw(const std::string &data)
 {
     // we need a constant of the buffer, and the buffer size
     jit_value buffer = _function.new_constant((void *)data.c_str(), jit_type_void_ptr);
-    jit_value size = _function.new_constant(data.size(), jit_type_int);
+    jit_value size = _function.new_constant(data.size(), jit_type_sys_int);
     
     // call the write function
     _callbacks.write(_userdata, buffer, size);
@@ -162,7 +162,7 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
 {
     // we need a constant of the name, and the name size
     jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
-    jit_value namesize = _function.new_constant(name.size(), jit_type_int);
+    jit_value namesize = _function.new_constant(name.size(), jit_type_sys_int);
     
     // call the native function to retrieve the member of a variable, and store the pointer
     // to the variable on the stack
@@ -196,7 +196,7 @@ void Bytecode::varPointer(const std::string &name)
 {
     // we need a constant of the name, and the name size
     jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
-    jit_value namesize = _function.new_constant(name.size(), jit_type_int);
+    jit_value namesize = _function.new_constant(name.size(), jit_type_sys_int);
 
     // push the variable on the stack
     _stack.push(_callbacks.variable(_userdata, namevalue, namesize));
@@ -210,7 +210,7 @@ void Bytecode::string(const std::string &value)
 {
     // push buffer and size
     _stack.push(_function.new_constant((void *)value.c_str(), jit_type_void_ptr));
-    _stack.push(_function.new_constant(value.size(), jit_type_int));
+    _stack.push(_function.new_constant(value.size(), jit_type_sys_int));
 }
 
 /**
@@ -220,7 +220,7 @@ void Bytecode::string(const std::string &value)
 void Bytecode::numeric(int value)
 {
     // push value
-    _stack.push(_function.new_constant(value, jit_type_int));
+    _stack.push(_function.new_constant(value, jit_type_sys_int));
 }
 
 /**
@@ -229,6 +229,12 @@ void Bytecode::numeric(int value)
  */
 void Bytecode::string(const Variable *variable)
 {
+    // first we need a pointer to the variable
+    jit_value var = pointer(variable);
+    
+    // call the functions to retrieve the string value
+    _stack.push(_callbacks.to_string(_userdata, var));
+    _stack.push(_callbacks.size(_userdata, var));
 }
 
 /**
@@ -237,6 +243,8 @@ void Bytecode::string(const Variable *variable)
  */
 void Bytecode::numeric(const Variable *variable)
 {
+    // call the function to convert a variable to a numeric value
+    _stack.push(_callbacks.to_numeric(_userdata, pointer(variable)));
 }
 
 /**

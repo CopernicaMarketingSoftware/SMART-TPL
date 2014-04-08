@@ -17,10 +17,13 @@ namespace SmartTpl {
 /**
  *  Signatures of the global callback functions
  */
-extern void  smart_tpl_write(void *userdata, const char *data, uint64_t size);
+extern void  smart_tpl_write(void *userdata, const char *data, int size);
 extern void  smart_tpl_output(void *userdata, void *variable);
-extern void *smart_tpl_member(void *userdata, const char *name, uint64_t size);
-extern void *smart_tpl_variable(void *userdata, const char *name, uint64_t size);
+extern void *smart_tpl_member(void *userdata, const char *name, int size);
+extern void *smart_tpl_variable(void *userdata, const char *name, int size);
+extern void *smart_tpl_to_string(void *userdata, void *variable);
+extern int   smart_tpl_to_numeric(void *userdata, void *variable);
+extern int   smart_tpl_size(void *userdata, void *variable);
 
 /**
  *  Class definition
@@ -58,6 +61,23 @@ private:
      */
     VariableCallback _variable;
     
+    /**
+     *  Signature of the function to convert a variable to a string
+     *  @var    ToStringCallback
+     */
+    ToStringCallback _toString;
+    
+    /**
+     *  Signature of the function to convert a variable to a numeric value
+     *  @var    ToNumericCallback
+     */
+    ToNumericCallback _toNumeric;
+    
+    /**
+     *  Signature of the function to retrieve the size/strlen of a variable
+     *  @var    SizeCallback
+     */
+    SizeCallback _size;
     
 public:
     /**
@@ -146,6 +166,60 @@ public:
         
         // create the instruction
         return _function->insn_call_native("smart_tpl_variable", (void *)smart_tpl_variable, _variable.signature(), args, 3, 0);
+    }
+    
+    /**
+     *  Call the to_numeric function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     *  @return jit_value       Numeric representation
+     */
+    jit_value to_numeric(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[3] = { 
+            userdata.raw(), 
+            variable.raw()
+        };
+        
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_to_numeric", (void *)smart_tpl_to_numeric, _toNumeric.signature(), args, 2, 0);
+    }
+
+    /**
+     *  Call the to_string function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     *  @return jit_value       String representation
+     */
+    jit_value to_string(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[3] = { 
+            userdata.raw(), 
+            variable.raw()
+        };
+        
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_to_string", (void *)smart_tpl_to_string, _toString.signature(), args, 2, 0);
+    }
+
+    /**
+     *  Call the size function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     *  @return jit_value       String length
+     */
+    jit_value size(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[3] = { 
+            userdata.raw(), 
+            variable.raw()
+        };
+        
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_size", (void *)smart_tpl_size, _size.signature(), args, 2, 0);
     }
 };
     
