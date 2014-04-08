@@ -23,6 +23,8 @@
  *  Dependencies
  */
 #include <string>
+#include <map>
+#include <memory>
 
 /**
  *  All header files of the SmartTpl library

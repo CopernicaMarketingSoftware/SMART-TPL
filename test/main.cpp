@@ -18,8 +18,14 @@ int main()
     // create a template object
     SmartTpl::Template tpl("template.tpl");
     
+    // construct data object
+    SmartTpl::Data data;
+    
+    // assign variables
+    data.assign("variable", "bla");
+    
     // output the template
-    std::cout << tpl.process() << std::endl;
+    std::cout << tpl.process(data) << std::endl;
     
     // done
     return 0;

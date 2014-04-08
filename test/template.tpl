@@ -3,12 +3,18 @@
         This is an example template.
         With a {$variable}!
         
-        {$x[$y]};
-        
-        {if $condition || $x.member[$y]}
+        {if true}
         
             And a conditional text
             
         {/if}
+        
+        {if $variable}
+        
+            sdfsdf
+        
+        
+        {/if}
+        
     </body>
 </html>

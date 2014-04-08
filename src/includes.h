@@ -18,6 +18,8 @@
 #include <stack>
 #include <jit/jit-plus.h>
 #include <string.h>
+#include <map>
+#include <stdexcept>
 
 /**
  *  All public header files of the SmartTpl library
@@ -80,3 +82,5 @@
 #include "executor.h"
 #include "bytecode.h"
 #include "values/empty.h"
+#include "values/string.h"
+#include "values/numeric.h"

@@ -21,32 +21,20 @@ Bytecode::Bytecode(const char *filename) : _tree(filename),
     _function(_context, jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params)),
     _callbacks(&_function)
 {
-    std::cout << "context build start" << std::endl;
-    
     // start building the function
     _context.build_start();
-    
-    std::cout << "context build busy" << std::endl;
     
     // read in the one and only parameter into _userdata
     _userdata = _function.get_param(0);
     
-    std::cout << "generate" << std::endl;
-    
     // generate the LLVM code
     _tree.generate(this);
-    
-    std::cout << "compile" << std::endl;
     
     // compile the function
     _function.compile();
     
-    std::cout << "build end" << std::endl;
-    
     // done building
     _context.build_end();
-    
-    std::cout << "build ready" << std::endl;
 }
 
 /**
@@ -60,8 +48,6 @@ Bytecode::~Bytecode() {}
  */
 jit_value Bytecode::pop()
 {
-    std::cout << "pop of size " << _stack.size() << std::endl;
-    
     // get the value from the stack
     jit_value value = _stack.top();
     
