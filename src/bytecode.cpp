@@ -54,6 +54,22 @@ Bytecode::~Bytecode()
 }
 
 /**
+ *  Helper method to pop a value from the stack
+ *  @return jit_value
+ */
+jit_value Bytecode::pop()
+{
+    // get the value from the stack
+    jit_value value = _stack.top();
+    
+    // remove the value from the stack
+    _stack.pop();
+    
+    // done
+    return value;
+}
+
+/**
  *  Generate code to output raw data
  *  @param  data                data to output
  */
@@ -68,22 +84,41 @@ void Bytecode::raw(const std::string &data)
 }
 
 /**
+ *  Construct a poiner to a variable
+ *  @param  variable
+ *  @return jit_value
+ */
+jit_value Bytecode::pointer(const Variable *variable)
+{
+    // we first have to create a pointer to the variable on the stack
+    variable->pointer(this);
+    
+    // return it from the stack
+    return pop();
+}
+
+/**
+ *  Retrieve the numeric representation of an expression
+ *  @param  expression
+ *  @return jit_value
+ */
+jit_value Bytecode::numeric(const Expression *expression)
+{
+    // create on the stack
+    expression->numeric(this);
+    
+    // remove it from the stack
+    return pop();
+}
+
+/**
  *  Generate the code to output a variable
  *  @param  variable            the variable to output
  */
 void Bytecode::output(const Variable *variable)
 {
-    // we first have to create a pointer to the variable on the stack
-    variable->pointer(this);
-    
-    // get the pointer from the stack
-    jit_value pointer = _stack.top();
-    
-    // remove the pointer from the stack
-    _stack.pop();
-    
     // call the output function
-    _callbacks.output(_userdata, pointer);
+    _callbacks.output(_userdata, pointer(variable));
 }
 
 /**
@@ -94,22 +129,13 @@ void Bytecode::output(const Variable *variable)
  */
 void Bytecode::condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements)
 {
-    // convert the expression into a numeric variable
-    expression->numeric(this);
-    
-    // get the numeric value from the stack
-    jit_value value = _stack.top();
-    
-    // remove the value from the stack
-    _stack.pop();
-    
     // we need a label for the 'else' part that we're going to create, and for the
     // part after the entire condition
     jit_label elselabel = _function.new_label();
     jit_label endlabel = _function.new_label();
     
     // branche to the label if the expression is not valid
-    _function.insn_branch_if_not(value, elselabel);
+    _function.insn_branch_if_not(numeric(expression), elselabel);
     
     // now we should create the if statements
     ifstatements->generate(this);
@@ -128,38 +154,52 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
 }
 
 /**
- *  Generate the code to get a pointer to a variable
- *  There are three formats, to get a pointer to a literal variable by name,
- *  to get a pointer to a variable inside a table with a literal name, and
- *  to get a pointer to a variable with variable name
+ *  Generate the code to get a pointer to a variable, given a index by name
  *  @param  parent              parent variable from which the var is retrieved
  *  @param  name                name of the variable
  */
 void Bytecode::varPointer(const Variable *parent, const std::string &name)
 {
+    // we need a constant of the name, and the name size
+    jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
+    jit_value namesize = _function.new_constant(name.size(), jit_type_int);
+    
+    // call the native function to retrieve the member of a variable, and store the pointer
+    // to the variable on the stack
+    _stack.push(_callbacks.member(_userdata, pointer(parent), namevalue, namesize));
 }
 
 /**
- *  Generate the code to get a pointer to a variable
- *  There are three formats, to get a pointer to a literal variable by name,
- *  to get a pointer to a variable inside a table with a literal name, and
- *  to get a pointer to a variable with variable name
+ *  Generate the code to get a pointer to a variable, given by an expression
  *  @param  parent              parent variable from which the var is retrieved
  *  @param  expression          Expression that evaluates to a var name
  */
 void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 {
+    // convert the expression to a string (this pushes two values on the stack
+    expression->string(this);
+    
+    // pop the buffer and size from the stack (in reverse order)
+    auto size = pop();
+    auto buffer = pop();
+    
+    // call the native function to retrieve the member of a variable, and store the pointer
+    // to the variable on the stack
+    _stack.push(_callbacks.member(_userdata, pointer(parent), buffer, size));
 }
 
 /**
- *  Generate the code to get a pointer to a variable
- *  There are three formats, to get a pointer to a literal variable by name,
- *  to get a pointer to a variable inside a table with a literal name, and
- *  to get a pointer to a variable with variable name
+ *  Generate the code to get a pointer to a variable given a literal name
  *  @param  name                name of the variable
  */
 void Bytecode::varPointer(const std::string &name)
 {
+    // we need a constant of the name, and the name size
+    jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
+    jit_value namesize = _function.new_constant(name.size(), jit_type_int);
+
+    // push the variable on the stack
+    _stack.push(_callbacks.variable(_userdata, namevalue, namesize));
 }
 
 /**
@@ -168,6 +208,9 @@ void Bytecode::varPointer(const std::string &name)
  */
 void Bytecode::string(const std::string &value)
 {
+    // push buffer and size
+    _stack.push(_function.new_constant((void *)value.c_str(), jit_type_void_ptr));
+    _stack.push(_function.new_constant(value.size(), jit_type_int));
 }
 
 /**
@@ -176,6 +219,8 @@ void Bytecode::string(const std::string &value)
  */
 void Bytecode::numeric(int value)
 {
+    // push value
+    _stack.push(_function.new_constant(value, jit_type_int));
 }
 
 /**

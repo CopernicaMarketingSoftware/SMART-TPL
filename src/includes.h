@@ -63,6 +63,8 @@
 #include "operators/binaryor.h"
 #include "callbacks/write.h"
 #include "callbacks/output.h"
+#include "callbacks/member.h"
+#include "callbacks/variable.h"
 #include "tokenprocessor.h"
 #include "parser.h"
 #include "tokenizer.h"

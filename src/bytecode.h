@@ -52,6 +52,26 @@ private:
     std::stack<jit_value> _stack;
 
     /**
+     *  Helper method to pop a value from the stack
+     *  @return jit_value
+     */
+    jit_value pop();
+
+    /**
+     *  Construct a poiner to a variable
+     *  @param  variable
+     *  @return jit_value
+     */
+    jit_value pointer(const Variable *variable);
+
+    /**
+     *  Retrieve the numeric representation of an expression
+     *  @param  expression
+     *  @return jit_value
+     */
+    jit_value numeric(const Expression *expression);
+
+    /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */
