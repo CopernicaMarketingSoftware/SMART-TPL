@@ -68,7 +68,8 @@ LEMON           =   lemon
 #
 
 COMPILER_FLAGS  =   -Wall -c -I. -g -std=c++11 -fpic -o
-LINKER_FLAGS    =   -shared
+LINKER_FLAGS    =   -shared 
+DEPENDENCIES    =   -ljitplus -ljit
 FLEX_FLAGS      =   
 LEMON_FLAGS     =   
 
@@ -144,7 +145,7 @@ GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.
 all: ${RESULT}
 
 ${RESULT}: ${PARSER} ${TOKENIZER} ${OBJECTS}
-	${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS}
+	${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${DEPENDENCIES}
 
 clean:
 	${RM} ${GENERATED} ${OBJECTS} ${RESULT}

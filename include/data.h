@@ -40,9 +40,10 @@ public:
      *  @param  size        size of the name
      *  @return Value*
      */
-    Value *value(const char *name, size_t size) const;
-
-    
+    Value *value(const char *name, size_t size) const
+    {
+        return nullptr;
+    }
 };
 
 /**

@@ -9,6 +9,16 @@
 #include "includes.h"
 
 /**
+ *  Set up namespace
+ */
+namespace SmartTpl {
+
+/**
+ *  We always have a empty variable in place
+ */
+static EmptyValue empty;
+
+/**
  *  Function to write raw data
  *  @param  userdata        pointer user-supplied data
  *  @param  data            pointer to the buffer
@@ -17,7 +27,7 @@
 void smart_tpl_write(void *userdata, const char *data, int size)
 {
     // convert the userdata to a handler object
-    auto *handler = (SmartTpl::Handler *)userdata;
+    auto *handler = (Handler *)userdata;
     
     // call the handler
     handler->write(data, size);
@@ -31,10 +41,10 @@ void smart_tpl_write(void *userdata, const char *data, int size)
 void smart_tpl_output(void *userdata, void *variable)
 {
     // convert the userdata to a handler object
-    auto *handler = (SmartTpl::Handler *)userdata;
+    auto *handler = (Handler *)userdata;
 
     // convert the variable to a variable object
-    auto *var = (SmartTpl::Value *)variable;
+    auto *var = (Value *)variable;
     
     // output the variable
     handler->write(var->toString(), var->size());
@@ -51,10 +61,13 @@ void smart_tpl_output(void *userdata, void *variable)
 void *smart_tpl_member(void *userdata, void *variable, const char *name, int size)
 {
     // convert the variable to a variable object
-    auto *var = (SmartTpl::Value *)variable;
+    auto *var = (Value *)variable;
     
-    // output the variable
-    return var->member(name, size);
+    // fetch the member
+    auto *result = var->member(name, size);
+    
+    // ensure that we always return an object
+    return result ? result : &empty;
 }
     
 /**
@@ -67,10 +80,13 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, int siz
 void *smart_tpl_variable(void *userdata, const char *name, int size)
 {
     // convert the userdata to a handler object
-    auto *handler = (SmartTpl::Handler *)userdata;
+    auto *handler = (Handler *)userdata;
     
     // convert to a variable
-    return handler->variable(name, size);
+    auto *result = handler->variable(name, size);
+
+    // ensure that we always return an object
+    return result ? result : &empty;
 }
 
 /**
@@ -82,10 +98,13 @@ void *smart_tpl_variable(void *userdata, const char *name, int size)
 const char *smart_tpl_to_string(void *userdata, void *variable)
 {
     // convert the variable to a variable object
-    auto *var = (SmartTpl::Value *)variable;
+    auto *var = (Value *)variable;
     
     // convert to string
-    return var->toString();
+    auto *result = var->toString();
+    
+    // ensure that a string is always returned
+    return result ? result : empty.toString();
 }
 
 /**
@@ -97,7 +116,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
 int smart_tpl_to_numeric(void *userdata, void *variable)
 {
     // convert the variable to a variable object
-    auto *var = (SmartTpl::Value *)variable;
+    auto *var = (Value *)variable;
     
     // convert to numeric
     return var->toNumeric();
@@ -112,9 +131,14 @@ int smart_tpl_to_numeric(void *userdata, void *variable)
 int smart_tpl_size(void *userdata, void *variable)
 {
     // convert the variable to a variable object
-    auto *var = (SmartTpl::Value *)variable;
+    auto *var = (Value *)variable;
     
     // convert to numeric
     return var->size();
+}
+
+/**
+ *  End namespace
+ */
 }
 

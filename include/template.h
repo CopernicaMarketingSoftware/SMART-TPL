@@ -63,6 +63,17 @@ public:
      *  @return std::string
      */
     std::string process(const Data &data) const;
+    
+    /**
+     *  Process the template, without any input
+     * 
+     *  @return std::string
+     */
+    std::string process() const
+    {
+        // start with an empty data object
+        return process(Data());
+    }
 };
 
 /**
