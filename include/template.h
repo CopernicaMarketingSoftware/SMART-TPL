@@ -14,10 +14,26 @@
 namespace SmartTpl {
 
 /**
+ *  Forward declarations
+ */
+class Executor;
+
+/**
  *  Class definition
  */
 class Template
 {
+private:
+    /**
+     *  The template 'executor'
+     * 
+     *  This is a different object depending whether you constructed the template
+     *  with a shared object (*.so file) or with a template source file (*.tpl)
+     * 
+     *  @var    Executor
+     */
+    Executor *_executor;
+    
 public:
     /**
      *  Constructor
@@ -34,7 +50,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Template() {}
+    virtual ~Template();
 
     /**
      *  Process the template, given a certain data source

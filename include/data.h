@@ -16,6 +16,8 @@
  */
 namespace SmartTpl {
 
+
+
 /**
  *  Class definition
  */
@@ -31,6 +33,16 @@ public:
      *  Destructor
      */
     virtual ~Data() {}
+
+    /**
+     *  Retrieve a variable pointer by name
+     *  @param  name        the name
+     *  @param  size        size of the name
+     *  @return Value*
+     */
+    Value *value(const char *name, size_t size) const;
+
+    
 };
 
 /**

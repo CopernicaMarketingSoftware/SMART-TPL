@@ -17,10 +17,12 @@
 #include <sstream>
 #include <stack>
 #include <jit/jit-plus.h>
+#include <string.h>
 
 /**
  *  All public header files of the SmartTpl library
  */
+#include "../include/value.h"
 #include "../include/data.h"
 #include "../include/template.h"
 
@@ -74,4 +76,6 @@
 #include "syntaxtree.h"
 #include "ccode.h"
 #include "callbacks.h"
+#include "handler.h"
+#include "executor.h"
 #include "bytecode.h"

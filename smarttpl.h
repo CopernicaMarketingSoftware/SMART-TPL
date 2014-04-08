@@ -27,6 +27,7 @@
 /**
  *  All header files of the SmartTpl library
  */
+#include <smarttpl/value.h>
 #include <smarttpl/data.h>
 #include <smarttpl/template.h>
 

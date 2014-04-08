@@ -15,10 +15,9 @@ namespace SmartTpl {
 
 /**
  *  Constructor
- *  @param  name        Name of the template (this will also be the module identifier)
- *  @param  tree        The syntax tree that is turned into LLVM
+ *  @param  filename    Name of the file that holds the template
  */
-Bytecode::Bytecode(const char *name, const SyntaxTree &tree) : _function(_context), _callbacks(&_function)
+Bytecode::Bytecode(const char *filename) : _tree(filename), _function(_context), _callbacks(&_function)
 {
     // start building the function
     _function.build_start();
@@ -37,7 +36,7 @@ Bytecode::Bytecode(const char *name, const SyntaxTree &tree) : _function(_contex
     _userdata = _function.get_param(0);
     
     // generate the LLVM code
-    tree.generate(this);
+    _tree.generate(this);
     
     // compile the function
     _function.compile();
@@ -294,6 +293,25 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right) {}
  */
 void Bytecode::booleanAnd(const Expression *left, const Expression *right) {}
 void Bytecode::booleanOr(const Expression *left, const Expression *right) {}
+
+/**
+ *  Execute the template given a certain data source
+ *  @param  data
+ */
+void Bytecode::process(Handler &handler)
+{
+    // the is one argument, a pointer to the handler
+    void *arg = &handler;
+    
+    // arguments should be passed as pointers
+    void *args[1] = { &arg };
+    
+    // result variable (not used)
+    int result;
+
+    // call the function
+    _function.apply(args, &result);
+}
 
 /**
  *  End namespace

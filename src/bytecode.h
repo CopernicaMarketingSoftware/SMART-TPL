@@ -18,9 +18,15 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Bytecode : private Generator
+class Bytecode : private Generator, public Executor
 {
 private:
+    /**
+     *  The syntax tree
+     *  @var    SyntaxTree
+     */
+    SyntaxTree _tree;
+
     /**
      *  The jit context
      *  @var    jit_context
@@ -160,15 +166,20 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  name        Name of the template (this will be the module ID)
-     *  @param  tree        The syntax tree
+     *  @param  filename        The filename that holds the template
      */
-    Bytecode(const char *name, const SyntaxTree &tree);
+    Bytecode(const char *filename);
     
     /**
      *  Destructor
      */
     virtual ~Bytecode();
+
+    /**
+     *  Execute the template given a certain data source
+     *  @param  data
+     */
+    virtual void process(Handler &handler) override;
     
 };
     

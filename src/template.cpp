@@ -19,21 +19,27 @@ namespace SmartTpl {
  */
 Template::Template(const char *filename)
 {
-    // we should first check the cache if we already have a compiled version
-    // of the template, if we do not have it, we should compile it first. For
-    // now we just create the syntax tree (which is the first step in the
-    // compilation process)
-    SyntaxTree tree(filename);
-    
-    // generate the source code
-//    tree.generate(std::cout);
+    // is this a *.so file?
+    char *extension = strrchr(filename, '.');
+    if (extension && strcasecmp(extension, ".so") == 0)
+    {
+        // this is a shared library
+        // @todo implementation
+    }
+    else
+    {
+        // this is a raw template file, convert it into byte-code
+        _executor = new Bytecode(filename);
+    }
+}
 
-
-//    CCode code(tree);
-
-    Bytecode bytes(filename, tree);
-    
-//    std::cout << code;
+/**
+ *  Destructor
+ */
+Template::~Template()
+{
+    // we no longer need the executor
+    delete _executor;
 }
 
 /**
@@ -48,10 +54,15 @@ Template::Template(const char *filename)
  */
 std::string Template::process(const Data &data) const
 {
-    // @todo this implementation could be better
-    return "";
-}
+    // we need a handler object
+    Handler handler(&data);
     
+    // ask the executor to display the template
+    _executor->process(handler);
+    
+    // return the generated output string
+    return handler.output();
+}
     
 /**
  *  End namespace
