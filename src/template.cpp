@@ -19,6 +19,8 @@ namespace SmartTpl {
  */
 Template::Template(const char *filename)
 {
+    jit_init();
+    
     // is this a *.so file?
     char *extension = strrchr(filename, '.');
     if (extension && strcasecmp(extension, ".so") == 0)

@@ -7,9 +7,7 @@
  *  @copyright 2014 Copernica BV
  */
 #include <smarttpl.h>
-
-
-
+#include <iostream>
 
 /**
  *  Main function
@@ -19,6 +17,9 @@ int main()
 {
     // create a template object
     SmartTpl::Template tpl("template.tpl");
+    
+    // output the template
+    std::cout << tpl.process() << std::endl;
     
     // done
     return 0;

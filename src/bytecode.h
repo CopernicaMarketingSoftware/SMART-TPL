@@ -78,6 +78,13 @@ private:
     jit_value numeric(const Expression *expression);
 
     /**
+     *  Retrieve the boolean representation of an expression
+     *  @param  expression
+     *  @return jit_value
+     */
+    jit_value boolean(const Expression *expression);
+
+    /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */

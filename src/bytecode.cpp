@@ -17,40 +17,42 @@ namespace SmartTpl {
  *  Constructor
  *  @param  filename    Name of the file that holds the template
  */
-Bytecode::Bytecode(const char *filename) : _tree(filename), _function(_context), _callbacks(&_function)
+Bytecode::Bytecode(const char *filename) : _tree(filename), 
+    _function(_context, jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params)),
+    _callbacks(&_function)
 {
+    std::cout << "context build start" << std::endl;
+    
     // start building the function
-    _function.build_start();
+    _context.build_start();
     
-    // the function gets one parameter, a non-specified void* that will also be
-    // passed to all callbacks
-    jit_type_t params[1];
-    
-    // set the parameter
-    params[0] = jit_type_void_ptr;
-    
-    // create the function with the appropriate signature
-    _function.create(jit_type_create_signature(jit_abi_cdecl, jit_type_void, params, 1, 1));
+    std::cout << "context build busy" << std::endl;
     
     // read in the one and only parameter into _userdata
     _userdata = _function.get_param(0);
     
+    std::cout << "generate" << std::endl;
+    
     // generate the LLVM code
     _tree.generate(this);
+    
+    std::cout << "compile" << std::endl;
     
     // compile the function
     _function.compile();
     
+    std::cout << "build end" << std::endl;
+    
     // done building
-    _function.build_end();
+    _context.build_end();
+    
+    std::cout << "build ready" << std::endl;
 }
 
 /**
  *  Destructor
  */
-Bytecode::~Bytecode()
-{
-}
+Bytecode::~Bytecode() {}
 
 /**
  *  Helper method to pop a value from the stack
@@ -58,6 +60,8 @@ Bytecode::~Bytecode()
  */
 jit_value Bytecode::pop()
 {
+    std::cout << "pop of size " << _stack.size() << std::endl;
+    
     // get the value from the stack
     jit_value value = _stack.top();
     
@@ -108,6 +112,46 @@ jit_value Bytecode::numeric(const Expression *expression)
     
     // remove it from the stack
     return pop();
+}
+
+/**
+ *  Retrieve the boolean representation (1 or 0) of an expression
+ *  @param  expression
+ *  @return jit_value
+ */
+jit_value Bytecode::boolean(const Expression *expression)
+{
+    // first we calculate the numeric representation
+    jit_value n = numeric(expression);
+    
+    // construct the result value
+    jit_value result = _function.new_value(jit_type_sys_int);
+    
+    // we need a label for the right part that only has to be evaluated if
+    // the expression is false, and a label to the end of this block
+    jit_label falselabel = _function.new_label();
+    jit_label endlabel = _function.new_label();
+    
+    // branche to the false label if the expression is not true
+    _function.insn_branch_if_not(n, falselabel);
+    
+    // expression evaluates to true, store a 1 in the result
+    _function.store(result, _function.new_constant(1, jit_type_sys_int));
+    
+    // go to the end label
+    _function.insn_branch(endlabel);
+    
+    // the false label starts here
+    _function.insn_label(falselabel);
+    
+    // expression evaluates to true, store a 0 in the result
+    _function.store(result, _function.new_constant(0, jit_type_sys_int));
+    
+    // the end-label starts here
+    _function.insn_label(endlabel);
+
+    // done
+    return result;
 }
 
 /**
@@ -253,6 +297,7 @@ void Bytecode::numeric(const Variable *variable)
  */
 void Bytecode::numericToString(const Expression *expression)
 {
+    // @todo implementation
 }
 
 /**
@@ -262,37 +307,244 @@ void Bytecode::numericToString(const Expression *expression)
  */
 void Bytecode::stringToNumeric(const Expression *expression)
 {
+    // @todo implementation
 }
 
 /**
- *  Arithmetric operations
+ *  Arithmetric operation
  *  @param  left
  *  @param  right
  */
-void Bytecode::plus(const Expression *left, const Expression *right) {}
-void Bytecode::minus(const Expression *left, const Expression *right) {}
-void Bytecode::divide(const Expression *left, const Expression *right) {}
-void Bytecode::multiply(const Expression *left, const Expression *right) {}
+void Bytecode::plus(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l + r);
+}
 
 /**
- *  Comparison operators
+ *  Arithmetric operation
  *  @param  left
  *  @param  right
  */
-void Bytecode::equals(const Expression *left, const Expression *right) {}
-void Bytecode::notEquals(const Expression *left, const Expression *right) {}
-void Bytecode::greater(const Expression *left, const Expression *right) {}
-void Bytecode::greaterEquals(const Expression *left, const Expression *right) {}
-void Bytecode::lesser(const Expression *left, const Expression *right) {}
-void Bytecode::lesserEquals(const Expression *left, const Expression *right) {}
+void Bytecode::minus(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l - r);
+}
 
 /**
- *  Boolean operators
+ *  Arithmetric operation
  *  @param  left
  *  @param  right
  */
-void Bytecode::booleanAnd(const Expression *left, const Expression *right) {}
-void Bytecode::booleanOr(const Expression *left, const Expression *right) {}
+void Bytecode::divide(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l / r);
+}
+
+/**
+ *  Arithmetric operation
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::multiply(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l * r);
+}
+
+/**
+ *  Comparison operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::equals(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l == r);
+}
+
+/**
+ *  Comparison operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::notEquals(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l != r);
+}
+
+/**
+ *  Comparison operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::greater(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l > r);
+}
+
+/**
+ *  Comparison operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::greaterEquals(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l >= r);
+}
+
+/**
+ *  Comparison operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::lesser(const Expression *left, const Expression *right) 
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l < r);
+}
+
+/**
+ *  Comparison operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::lesserEquals(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = numeric(left);
+    jit_value r = numeric(right);
+    
+    // calculate them, and push to stack
+    _stack.push(l <= r);
+}
+
+/**
+ *  Boolean operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::booleanAnd(const Expression *left, const Expression *right) 
+{
+    // construct the result value
+    jit_value result = _function.new_value(jit_type_sys_int);
+    
+    // we need a label for the right part that only has to be evaluated if
+    // the left part is true (otherwise the result is false anyway)
+    jit_label rightlabel = _function.new_label();
+    jit_label endlabel = _function.new_label();
+    
+    // calculate the left value
+    jit_value l = boolean(left);
+    
+    // branche to the right label if the expression is true
+    _function.insn_branch_if(l, rightlabel);
+    
+    // left part already evaluates to false, store false in the result
+    _function.store(result, l);
+    
+    // go to the end label
+    _function.insn_branch(endlabel);
+    
+    // the right label starts here
+    _function.insn_label(rightlabel);
+    
+    // calculate the right value
+    jit_value r = boolean(right);
+    
+    // left part already evaluates to true, store r result in the result
+    _function.store(result, r);
+    
+    // the end-label starts here
+    _function.insn_label(endlabel);
+
+    // push the result on the stack
+    _stack.push(result);
+}
+
+/**
+ *  Boolean operator
+ *  @param  left
+ *  @param  right
+ */
+void Bytecode::booleanOr(const Expression *left, const Expression *right) 
+{
+    // construct the result value
+    jit_value result = _function.new_value(jit_type_sys_int);
+    
+    // we need a label for the right part that only has to be evaluated if
+    // the left part is false (otherwise the result is true anyway)
+    jit_label rightlabel = _function.new_label();
+    jit_label endlabel = _function.new_label();
+    
+    // calculate the left value
+    jit_value l = boolean(left);
+    
+    // branche to the right label if the expression is not valid
+    _function.insn_branch_if_not(l, rightlabel);
+    
+    // left part already evaluates to true, store a 1 in the result
+    _function.store(result, l);
+    
+    // go to the end label
+    _function.insn_branch(endlabel);
+    
+    // the right label starts here
+    _function.insn_label(rightlabel);
+    
+    // calculate the right value
+    jit_value r = boolean(right);
+    
+    // left part evaluated to false, store right result in the result
+    _function.store(result, r);
+    
+    // the end-label starts here
+    _function.insn_label(endlabel);
+
+    // push the result on the stack
+    _stack.push(result);
+}
 
 /**
  *  Execute the template given a certain data source
