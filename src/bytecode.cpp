@@ -73,11 +73,17 @@ void Bytecode::raw(const std::string &data)
  */
 void Bytecode::output(const Variable *variable)
 {
-//    // we need a temporary constant for the variable pointer
-//    jit_value pointer = _function.new_constant(variable, jit_type_pointer);
-//    
-//    // call the output function
-//    _callbacks.output(_function, _userdata, pointer);
+    // we first have to create a pointer to the variable on the stack
+    variable->pointer(this);
+    
+    // get the pointer from the stack
+    jit_value pointer = _stack.top();
+    
+    // remove the pointer from the stack
+    _stack.pop();
+    
+    // call the output function
+    _callbacks.output(_userdata, pointer);
 }
 
 /**
@@ -88,6 +94,37 @@ void Bytecode::output(const Variable *variable)
  */
 void Bytecode::condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements)
 {
+    // convert the expression into a numeric variable
+    expression->numeric(this);
+    
+    // get the numeric value from the stack
+    jit_value value = _stack.top();
+    
+    // remove the value from the stack
+    _stack.pop();
+    
+    // we need a label for the 'else' part that we're going to create, and for the
+    // part after the entire condition
+    jit_label elselabel = _function.new_label();
+    jit_label endlabel = _function.new_label();
+    
+    // branche to the label if the expression is not valid
+    _function.insn_branch_if_not(value, elselabel);
+    
+    // now we should create the if statements
+    ifstatements->generate(this);
+    
+    // branche to the end-position
+    _function.insn_branch(endlabel);
+    
+    // the else label starts here
+    _function.insn_label(elselabel);
+    
+    // generate the else instructions
+    if (elsestatements) elsestatements->generate(this);
+    
+    // the end-label starts here
+    _function.insn_label(endlabel);
 }
 
 /**

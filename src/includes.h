@@ -15,6 +15,7 @@
 #include <memory>
 #include <list>
 #include <sstream>
+#include <stack>
 #include <jit/jit-plus.h>
 
 /**
@@ -61,6 +62,7 @@
 #include "operators/binaryand.h"
 #include "operators/binaryor.h"
 #include "callbacks/write.h"
+#include "callbacks/output.h"
 #include "tokenprocessor.h"
 #include "parser.h"
 #include "tokenizer.h"

@@ -46,6 +46,12 @@ private:
     jit_value _userdata;
 
     /**
+     *  Stack with temporary values
+     *  @var    std::stack
+     */
+    std::stack<jit_value> _stack;
+
+    /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */

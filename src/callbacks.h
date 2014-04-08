@@ -18,6 +18,7 @@ namespace SmartTpl {
  *  Signatures of the global callback functions
  */
 extern void smart_tpl_write(void *userdata, const char *data, uint64_t size);
+extern void smart_tpl_output(void *userdata, void *variable);
 
 /**
  *  Class definition
@@ -36,6 +37,13 @@ private:
      *  @var    WriteCallback
      */
     WriteCallback _write;
+    
+    /**
+     *  Signature of the output variable callback
+     *  @var    OutputCallback
+     */
+    OutputCallback _output;
+    
     
 public:
     /**
@@ -65,6 +73,23 @@ public:
         
         // create the instruction
         _function->insn_call_native("smart_tpl_write", (void *)smart_tpl_write, _write.signature(), args, 3, 0);
+    }
+    
+    /**
+     *  Call the output function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     */
+    void output(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[2] = { 
+            userdata.raw(), 
+            variable.raw()
+        };
+        
+        // create the instruction
+        _function->insn_call_native("smart_tpl_output", (void *)smart_tpl_output, _output.signature(), args, 2, 0);
     }
 };
     
