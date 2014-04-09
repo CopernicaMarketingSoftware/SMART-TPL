@@ -72,7 +72,7 @@ LEMON           =   lemon
 
 COMPILER_FLAGS  =   -Wall -c -I. -g -fpic -std=c++11
 LINKER_FLAGS    =   -L.
-DEPENDENCIES    =   -ljitplus -ljit
+DEPENDENCIES    =   -ljitplus -ljit -ldl
 FLEX_FLAGS      =   
 LEMON_FLAGS     =   
 

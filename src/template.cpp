@@ -24,7 +24,7 @@ Template::Template(const char *filename)
     if (extension && strcasecmp(extension, ".so") == 0)
     {
         // this is a shared library
-        // @todo implementation
+        _executor = new Library(filename);
     }
     else
     {

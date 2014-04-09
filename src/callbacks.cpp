@@ -38,7 +38,7 @@ void smart_tpl_write(void *userdata, const char *data, int size)
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to the variable
  */
-void smart_tpl_output(void *userdata, void *variable)
+ void smart_tpl_output(void *userdata, void *variable)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
@@ -58,7 +58,7 @@ void smart_tpl_output(void *userdata, void *variable)
  *  @param  size            size of the variable
  *  @return                 pointer to a new variable
  */
-void *smart_tpl_member(void *userdata, void *variable, const char *name, int size)
+ void *smart_tpl_member(void *userdata, void *variable, const char *name, int size)
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;

@@ -13,21 +13,25 @@
  *  Main function
  *  @return int
  */
-int main()
+int main(int argc, const char *argv[])
 {
-    // create a template object
-    SmartTpl::Template tpl("template.tpl");
-    
     // construct data object
     SmartTpl::Data data;
     
     // assign variables
     data.assign("variable", "bla");
-    
-    // output the template
-    std::cout << tpl.process(data) << std::endl;
-    
-    // done
-    return 0;
+
+    // loop through the arguments
+    for (int i=1; i<argc; i++)
+    {
+        // create a template object
+        SmartTpl::Template tpl(argv[i]);
+        
+        // output the template
+        std::cout << tpl.process(data) << std::endl;
+        
+        // done
+        return 0;
+    }
 }
 

@@ -20,6 +20,7 @@
 #include <string.h>
 #include <map>
 #include <stdexcept>
+#include <dlfcn.h>
 
 /**
  *  All public header files of the SmartTpl library
@@ -27,6 +28,7 @@
 #include "../include/value.h"
 #include "../include/data.h"
 #include "../include/template.h"
+#include "../include/callbacks.h"
 
 /**
  *  Implementation-only header files
@@ -81,6 +83,7 @@
 #include "handler.h"
 #include "executor.h"
 #include "bytecode.h"
+#include "library.h"
 #include "values/empty.h"
 #include "values/string.h"
 #include "values/numeric.h"
