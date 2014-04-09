@@ -25,10 +25,28 @@ class Data
 {
 private:
     /**
+     *  Compare functor necessary for the map
+     */
+    struct cmp_str
+    {
+        /** 
+         *  Invoke operator
+         *  @param  a
+         *  @param  b
+         *  @return bool
+         */
+        bool operator()(char const *a, char const *b) const
+        {
+            return strcmp(a, b) < 0;
+        }
+    };    
+
+    /**
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<std::string,std::shared_ptr<Value>> _variables;
+    std::map<const char *,std::unique_ptr<Value>, cmp_str> _variables;
+    
     
 public:
     /**
@@ -47,8 +65,8 @@ public:
      *  @param  value       Value of the variable
      *  @return Data        Same object for chaining
      */
-    Data &assign(const std::string &name, const std::string &value);
-    Data &assign(const std::string &name, int value);
+    Data &assign(const char *name, const std::string &value);
+    Data &assign(const char *name, int value);
 
     /**
      *  Retrieve a variable pointer by name
@@ -64,5 +82,3 @@ public:
  */
 }
 
-
- 

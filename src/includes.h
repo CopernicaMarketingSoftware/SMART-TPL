@@ -21,6 +21,7 @@
 #include <map>
 #include <stdexcept>
 #include <dlfcn.h>
+#include <cstring>
 
 /**
  *  All public header files of the SmartTpl library

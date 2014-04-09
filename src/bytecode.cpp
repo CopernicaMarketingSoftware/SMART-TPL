@@ -35,6 +35,9 @@ Bytecode::Bytecode(const char *filename) : _tree(filename),
     
     // done building
     _context.build_end();
+    
+    // get the closure
+    _closure = (ShowTemplate *)_function.closure();
 }
 
 /**
@@ -538,17 +541,26 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  */
 void Bytecode::process(Handler &handler)
 {
-    // the is one argument, a pointer to the handler
-    void *arg = &handler;
-    
-    // arguments should be passed as pointers
-    void *args[1] = { &arg };
-    
-    // result variable (not used)
-    int result;
+    // do we have a C function?
+    if (_closure)
+    {
+        // call the C function directly
+        _closure(&handler);
+    }
+    else
+    {
+        // the is one argument, a pointer to the handler
+        void *arg = &handler;
+        
+        // arguments should be passed as pointers
+        void *args[1] = { &arg };
+        
+        // result variable (not used)
+        int result;
 
-    // call the function
-    _function.apply(args, &result);
+        // call the function
+        _function.apply(args, &result);
+    }
 }
 
 /**

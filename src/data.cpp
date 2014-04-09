@@ -19,10 +19,10 @@ namespace SmartTpl {
  *  @param  value       Value of the variable
  *  @return Data        Same object for chaining
  */
-Data &Data::assign(const std::string &name, const std::string &value)
+Data &Data::assign(const char *name, const std::string &value)
 {
     // append variable
-    _variables[name] = std::make_shared<StringValue>(value);
+    _variables[name] = std::unique_ptr<Value>(new StringValue(value));
     
     // allow chaining
     return *this;
@@ -34,10 +34,10 @@ Data &Data::assign(const std::string &name, const std::string &value)
  *  @param  value       Value of the variable
  *  @return Data        Same object for chaining
  */
-Data &Data::assign(const std::string &name, int value)
+Data &Data::assign(const char *name, int value)
 {
     // append variable
-    _variables[name] = std::make_shared<NumericValue>(value);
+    _variables[name] = std::unique_ptr<Value>(new NumericValue(value));
 
     // allow chaining
     return *this;

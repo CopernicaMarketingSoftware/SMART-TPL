@@ -15,23 +15,25 @@
  */
 int main(int argc, const char *argv[])
 {
-    // construct data object
-    SmartTpl::Data data;
-    
-    // assign variables
-    data.assign("variable", "bla");
-
     // loop through the arguments
-    for (int i=1; i<argc; i++)
+    for (int arg = 1; arg < argc; arg++)
     {
-        // create a template object
-        SmartTpl::Template tpl(argv[i]);
-        
-        // output the template
-        std::cout << tpl.process(data) << std::endl;
-        
-        // done
-        return 0;
+        // do a number of attempts
+        for (int x=0; x<1; x++)
+        {
+            // create a template object
+            SmartTpl::Template tpl(argv[arg]);
+
+            // construct data object
+            SmartTpl::Data data;
+            
+            // assign variables
+            data.assign("variable", "bla");
+
+            // output the template
+            std::cout << tpl.process(data) << std::endl;
+            //tpl.process(data);
+        }
     }
 }
 

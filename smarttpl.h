@@ -25,6 +25,7 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <cstring>
 
 /**
  *  All header files of the SmartTpl library

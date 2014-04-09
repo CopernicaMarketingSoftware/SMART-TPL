@@ -13,11 +13,6 @@
 namespace SmartTpl {
 
 /**
- *  Signature of the ShowTemplate function
- */
-using ShowTemplate = void(struct smart_tpl_callbacks *callbacks, const void *userdata);
-
-/**
  *  Class definition
  */
 class Library : public Executor
@@ -28,6 +23,11 @@ private:
      *  @var    void*
      */
     void *_handle = nullptr;
+
+    /**
+     *  Signature of the ShowTemplate function
+     */
+    using ShowTemplate = void(struct smart_tpl_callbacks *callbacks, const void *userdata);
     
     /**
      *  The 'show_template' function

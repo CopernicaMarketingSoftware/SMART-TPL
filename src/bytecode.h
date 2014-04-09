@@ -40,6 +40,17 @@ private:
     jit_function _function;
 
     /**
+     *  Signature of the ShowTemplate function
+     */
+    using ShowTemplate = void(const void *userdata);
+
+    /**
+     *  Jit closure function that is directly callable from C
+     *  @var    ShowTemplate
+     */
+    ShowTemplate *_closure = nullptr;
+
+    /**
      *  Signature of all callbacks methods
      *  @var    Callbacks
      */

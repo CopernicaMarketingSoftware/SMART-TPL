@@ -41,43 +41,43 @@ private:
      *  Signature of the write callback
      *  @var    WriteCallback
      */
-    WriteCallback _write;
+    static WriteCallback _write;
     
     /**
      *  Signature of the output callback
      *  @var    OutputCallback
      */
-    OutputCallback _output;
+    static OutputCallback _output;
     
     /**
      *  Signature of the member callback
      *  @var    MemberCallback
      */
-    MemberCallback _member;
+    static MemberCallback _member;
 
     /**
      *  Signature of the variable callback
      *  @var    MemberCallback
      */
-    VariableCallback _variable;
+    static VariableCallback _variable;
     
     /**
      *  Signature of the function to convert a variable to a string
      *  @var    ToStringCallback
      */
-    ToStringCallback _toString;
+    static ToStringCallback _toString;
     
     /**
      *  Signature of the function to convert a variable to a numeric value
      *  @var    ToNumericCallback
      */
-    ToNumericCallback _toNumeric;
+    static ToNumericCallback _toNumeric;
     
     /**
      *  Signature of the function to retrieve the size/strlen of a variable
      *  @var    SizeCallback
      */
-    SizeCallback _size;
+    static SizeCallback _size;
     
 public:
     /**

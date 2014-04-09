@@ -21,9 +21,9 @@ class Handler
 private:
     /**
      *  Output buffer
-     *  @var    std::ostringstream
+     *  @var    std::string
      */
-    std::ostringstream _buffer;
+    std::string _buffer;
     
     /**
      *  The underlying data
@@ -36,7 +36,10 @@ public:
      *  Constructor
      *  @param  data        pointer to the data
      */
-    Handler(const Data *data) : _data(data) {}
+    Handler(const Data *data) : _data(data) 
+    {
+        _buffer.reserve(4096);
+    }
     
     /**
      *  Destructor
@@ -50,8 +53,7 @@ public:
      */
     void write(const char *buffer, size_t size)
     {
-        // write to the output stream
-        _buffer.write(buffer,size);
+        _buffer.append(buffer, size);
     }
     
     /**
@@ -70,9 +72,9 @@ public:
      *  Return the generated output
      *  @return std::string
      */
-    std::string output() const
+    const std::string &output() const
     {
-        return _buffer.str();
+        return _buffer;
     }
 };
 

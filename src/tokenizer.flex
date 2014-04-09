@@ -66,8 +66,7 @@
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
 
-[^{\n]+             { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
-\n+                 { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
+[^{]+               { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
 "{if"[ \t]+         { BEGIN(EXPRESSION); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }

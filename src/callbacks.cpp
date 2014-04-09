@@ -19,6 +19,49 @@ namespace SmartTpl {
 static EmptyValue empty;
 
 /**
+ *  Signature of the write callback
+ *  @var    WriteCallback
+ */
+WriteCallback Callbacks::_write;
+
+/**
+ *  Signature of the output callback
+ *  @var    OutputCallback
+ */
+OutputCallback Callbacks::_output;
+
+/**
+ *  Signature of the member callback
+ *  @var    MemberCallback
+ */
+MemberCallback Callbacks::_member;
+
+/**
+ *  Signature of the variable callback
+ *  @var    MemberCallback
+ */
+VariableCallback Callbacks::_variable;
+
+/**
+ *  Signature of the function to convert a variable to a string
+ *  @var    ToStringCallback
+ */
+ToStringCallback Callbacks::_toString;
+
+/**
+ *  Signature of the function to convert a variable to a numeric value
+ *  @var    ToNumericCallback
+ */
+ToNumericCallback Callbacks::_toNumeric;
+
+/**
+ *  Signature of the function to retrieve the size/strlen of a variable
+ *  @var    SizeCallback
+ */
+SizeCallback Callbacks::_size;
+
+
+/**
  *  Function to write raw data
  *  @param  userdata        pointer user-supplied data
  *  @param  data            pointer to the buffer

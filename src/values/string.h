@@ -53,17 +53,7 @@ public:
      */
     virtual int toNumeric() override
     {
-        // prevent exception
-        try
-        {
-            // convert to numeric
-            return std::stoi(_value);
-        }
-        catch (const std::invalid_argument &exception)
-        {
-            // invalid number are converted to zero
-            return 0;
-        }
+        return std::atoi(_value.c_str());
     }
     
     /**

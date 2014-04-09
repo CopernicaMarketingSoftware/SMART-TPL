@@ -9,6 +9,8 @@
             
         {/if}
         
+        {$variable.member}
+        
         {if $variable}
         
             sdfsdf
