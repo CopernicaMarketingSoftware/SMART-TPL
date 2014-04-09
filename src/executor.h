@@ -37,6 +37,12 @@ public:
      */
     virtual void process(Handler &handler) = 0;
     
+    /**
+     *  Compile the template into C code
+     *  @return std::string
+     */
+    virtual std::string compile() = 0;
+    
 };
     
 /**

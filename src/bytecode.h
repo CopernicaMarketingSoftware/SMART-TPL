@@ -187,7 +187,16 @@ public:
      *  @param  data
      */
     virtual void process(Handler &handler) override;
-    
+
+    /**
+     *  Compile the template into C code
+     *  @return std::string
+     */
+    virtual std::string compile() override
+    {
+        // convert the syntax tree into C code
+        return CCode(_tree).asString();
+    }
 };
     
 /**

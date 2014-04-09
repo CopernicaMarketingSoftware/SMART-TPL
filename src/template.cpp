@@ -19,8 +19,6 @@ namespace SmartTpl {
  */
 Template::Template(const char *filename)
 {
-    jit_init();
-    
     // is this a *.so file?
     char *extension = strrchr(filename, '.');
     if (extension && strcasecmp(extension, ".so") == 0)
@@ -42,6 +40,18 @@ Template::~Template()
 {
     // we no longer need the executor
     delete _executor;
+}
+
+/**
+ *  Get the template representation in C that can be compiled into a shared 
+ *  object. This method only works for templates that were not already a 
+ *  shared library.
+ * 
+ *  @return std::string
+ */
+std::string Template::compile() const
+{
+    return _executor->compile();
 }
 
 /**

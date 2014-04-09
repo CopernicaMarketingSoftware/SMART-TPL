@@ -42,6 +42,12 @@ public:
     Template(const char *filename);
 
     /**
+     *  Constructor
+     *  @param  filename        Name of the template to load
+     */
+    Template(const std::string &filename) : Template(filename.c_str()) {}
+
+    /**
      *  Deleted copy constructor
      *  @param  that
      */
@@ -51,6 +57,15 @@ public:
      *  Destructor
      */
     virtual ~Template();
+
+    /**
+     *  Get the template representation in C that can be compiled into a shared 
+     *  object. This method only works for templates that were not already a 
+     *  shared library.
+     * 
+     *  @return std::string
+     */
+    std::string compile() const;
 
     /**
      *  Process the template, given a certain data source

@@ -20,17 +20,20 @@
 INSTALL_PREFIX  =   /usr
 INSTALL_HEADERS =   ${INSTALL_PREFIX}/include
 INSTALL_LIB     =   ${INSTALL_PREFIX}/lib
+INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 
 
 #
-#   Name of the target library name
+#   Name of the target library and target program
 #
 #   The SMART-TPL library will be installed on your system as libsmarttpl.so.
 #   This is a brilliant name. If you want to use a different name for it,
-#   you can change that here
+#   you can change that here. The SMART-TPL command line compiler will be 
+#   named 'smarttpl'
 #
 
-RESULT          =   libsmarttpl.so
+LIBRARY         =   libsmarttpl.so
+PROGRAM         =   smarttpl
 
 
 #
@@ -67,8 +70,8 @@ LEMON           =   lemon
 #   "-undefined dynamic_lookup" to the linker flags
 #
 
-COMPILER_FLAGS  =   -Wall -c -I. -g -std=c++11 -fpic -o
-LINKER_FLAGS    =   -shared 
+COMPILER_FLAGS  =   -Wall -c -I. -g -fpic -std=c++11
+LINKER_FLAGS    =   -L.
 DEPENDENCIES    =   -ljitplus -ljit
 FLEX_FLAGS      =   
 LEMON_FLAGS     =   
@@ -112,8 +115,8 @@ PARSER          =    src/parser.cpp
 #   src/ directory for all *.cpp files. No changes are probably necessary here
 #
 
-SOURCES         =   $(wildcard src/*.cpp) ${TOKENIZER} ${PARSER}
-
+LIBRARY_SOURCES =   $(wildcard src/*.cpp) ${TOKENIZER} ${PARSER}
+PROGRAM_SOURCES =   $(wildcard program/*.cpp)
 
 #
 #   The object files
@@ -123,8 +126,8 @@ SOURCES         =   $(wildcard src/*.cpp) ${TOKENIZER} ${PARSER}
 #   We also use a Makefile function here that takes all source files.
 #
 
-OBJECTS         =   $(sort $(SOURCES:%.cpp=%.o))
-
+LIBRARY_OBJECTS =   $(sort $(LIBRARY_SOURCES:%.cpp=%.o))
+PROGRAM_OBJECTS =   $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
 
 #
 #   Auto-generated files
@@ -142,13 +145,16 @@ GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.
 #   dependencies that are used by the compiler.
 #
 
-all: ${RESULT}
+all: ${LIBRARY} ${PROGRAM}
 
-${RESULT}: ${PARSER} ${TOKENIZER} ${OBJECTS}
-	${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${DEPENDENCIES}
+${LIBRARY}: ${PARSER} ${TOKENIZER} ${LIBRARY_OBJECTS}
+	${LINKER} ${LINKER_FLAGS} -shared -o $@ ${LIBRARY_OBJECTS} ${DEPENDENCIES}
+
+${PROGRAM}: ${PROGRAM_OBJECTS}
+	${LINKER} ${LINKER_FLAGS} -o $@ ${PROGRAM_OBJECTS} -lsmarttpl
 
 clean:
-	${RM} ${GENERATED} ${OBJECTS} ${RESULT}
+	${RM} ${GENERATED} ${LIBRARY_OBJECTS} ${PROGRAM_OBJECTS} ${LIBRARY} ${PROGRAM}
 
 ${TOKENIZER}:
 	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
@@ -158,14 +164,15 @@ ${PARSER}:
 	${MV} ${PARSER:%.cpp=%.c} $@
 
 .cpp.o: 
-	${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
+	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.cpp}
 
 .c.o: 
-	${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.c}
+	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.c}
 
 install:
 	${MKDIR} ${INSTALL_HEADERS}/smarttpl
 	${CP} smarttpl.h ${INSTALL_HEADERS}
 	${CP} include/*.h ${INSTALL_HEADERS}/smarttpl
-	${CP} ${RESULT} ${INSTALL_LIB}
+	${CP} ${LIBRARY} ${INSTALL_LIB}
+	${CP} ${PROGRAM} ${INSTALL_BIN}
 

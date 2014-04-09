@@ -20,10 +20,16 @@ namespace SmartTpl {
 CCode::CCode(const SyntaxTree &tree)
 {
     // include headers
-    _out << "#include <smarttpl/shared.h>" << std::endl;
-    
+    _out << "extern void        smart_tpl_write(void *userdata, const char *data, int size);" << std::endl;
+    _out << "extern void        smart_tpl_output(void *userdata, void *variable);" << std::endl;
+    _out << "extern void       *smart_tpl_member(void *userdata, void *variable, const char *name, int size);" << std::endl;
+    _out << "extern void       *smart_tpl_variable(void *userdata, const char *name, int size);" << std::endl;
+    _out << "extern const char *smart_tpl_to_string(void *userdata, void *variable);" << std::endl;
+    _out << "extern int         smart_tpl_to_numeric(void *userdata, void *variable);" << std::endl;
+    _out << "extern int         smart_tpl_size(void *userdata, void *variable);" << std::endl;
+
     // create function header
-    _out << "void show_template(smarttpl_callbacks_t *callbacks) {" << std::endl;
+    _out << "void show_template(void *userdata) {" << std::endl;
     
     // generate the statements
     tree.generate(this);
@@ -43,7 +49,7 @@ void CCode::raw(const std::string &data)
     QuotedString quoted(data);
     
     // output the data
-    _out << "callbacks->write(\"" << quoted << "\", " << data.size() << ");" << std::endl;
+    _out << "smart_tpl_write(userdata,\"" << quoted << "\"," << data.size() << ");" << std::endl;
 }
 
 /**
@@ -53,7 +59,7 @@ void CCode::raw(const std::string &data)
 void CCode::output(const Variable *variable)
 {
     // we're going to call the output function
-    _out << "callbacks->output(";
+    _out << "smart_tpl_output(userdata,";
         
     // generate the code to get a pointer to the variable
     variable->pointer(this);
@@ -104,7 +110,7 @@ void CCode::condition(const Expression *expression, const Statements *ifstatemen
 void CCode::varPointer(const std::string &name)
 {
     // call the callback to get the variable
-    _out << "callbacks->variable(\"" << name << "\"," << name.size() << ")";
+    _out << "smart_tpl_variable(userdata,\"" << name << "\"," << name.size() << ")";
 }
 
 /**
@@ -115,7 +121,7 @@ void CCode::varPointer(const std::string &name)
 void CCode::varPointer(const Variable *parent, const std::string &name)
 {
     // call the member() function
-    _out << "callbacks->member(";
+    _out << "smart_tpl_member(userdata,";
     
     // generate a var pointer for the variable
     parent->pointer(this);
@@ -132,7 +138,7 @@ void CCode::varPointer(const Variable *parent, const std::string &name)
 void CCode::varPointer(const Variable *parent, const Expression *expression)
 {
     // call the member() function
-    _out << "callbacks->member(";
+    _out << "smart_tpl_member(userdata,";
 
     // generate a var pointer for the variable
     parent->pointer(this);
@@ -178,14 +184,14 @@ void CCode::numeric(int value)
 void CCode::string(const Variable *variable)
 {
     // call the to_string method
-    _out << "callbacks->to_string(";
+    _out << "smart_tpl_to_string(userdata,";
     
     // generate pointer to the variable
     variable->pointer(this);
     
     // ask the size of the variable
     // @todo store the entire variable in a temporary variable
-    _out << "), callbacks->size(";
+    _out << "), smart_tpl_size(userdata,";
     
     // generate another pointer to the variable
     variable->pointer(this);
@@ -203,7 +209,7 @@ void CCode::string(const Variable *variable)
 void CCode::numeric(const Variable *variable)
 {
     // call the to_numeric method
-    _out << "callbacks->to_numeric(";
+    _out << "smart_tpl_to_numeric(userdata,";
     
     // generate pointer to the variable
     variable->pointer(this);

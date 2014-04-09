@@ -24,9 +24,6 @@ Data &Data::assign(const std::string &name, const std::string &value)
     // append variable
     _variables[name] = std::make_shared<StringValue>(value);
     
-    std::cout << "assign " << name << std::endl;
-    std::cout << this << std::endl;
-    
     // allow chaining
     return *this;
 }
@@ -54,15 +51,9 @@ Data &Data::assign(const std::string &name, int value)
  */
 Value *Data::value(const char *name, size_t size) const
 {
-    std::cout << "look up " << std::string(name, size) << std::endl;
-    std::cout << _variables.size() << " " << size << std::endl;
-    std::cout << this << std::endl;
-    
     // look up variable
     auto iter = _variables.find(name);
     if (iter == _variables.end()) return nullptr;
-    
-    std::cout << "found!" << std::endl;
     
     // get the pointer
     return iter->second.get();

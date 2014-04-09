@@ -40,8 +40,6 @@ void smart_tpl_write(void *userdata, const char *data, int size)
  */
 void smart_tpl_output(void *userdata, void *variable)
 {
-    std::cout << "output" << std::endl;
-    
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
 
@@ -81,8 +79,6 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, int siz
  */
 void *smart_tpl_variable(void *userdata, const char *name, int size)
 {
-    std::cout << "variable " << std::string(name, size) << std::endl;
-    
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
     
