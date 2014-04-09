@@ -23,6 +23,7 @@ void       *smart_tpl_member(void *userdata, void *variable, const char *name, i
 void       *smart_tpl_variable(void *userdata, const char *name, int size);
 const char *smart_tpl_to_string(void *userdata, void *variable);
 int         smart_tpl_to_numeric(void *userdata, void *variable);
+int         smart_tpl_to_boolean(void *userdata, void *variable);
 int         smart_tpl_size(void *userdata, void *variable);
 
 /**
@@ -72,6 +73,12 @@ private:
      *  @var    ToNumericCallback
      */
     static ToNumericCallback _toNumeric;
+
+    /**
+     *  Signature of the function to convert a variable to a boolean value
+     *  @var    ToBooleanCallback
+     */
+    static ToBooleanCallback _toBoolean;
     
     /**
      *  Signature of the function to retrieve the size/strlen of a variable
@@ -184,6 +191,24 @@ public:
         
         // create the instruction
         return _function->insn_call_native("smart_tpl_to_numeric", (void *)smart_tpl_to_numeric, _toNumeric.signature(), args, 2, 0);
+    }
+
+    /**
+     *  Call the to_boolean function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     *  @return jit_value       Boolean representation
+     */
+    jit_value to_boolean(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[3] = { 
+            userdata.raw(), 
+            variable.raw()
+        };
+        
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_to_boolean", (void *)smart_tpl_to_boolean, _toBoolean.signature(), args, 2, 0);
     }
 
     /**

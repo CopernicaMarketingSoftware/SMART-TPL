@@ -110,37 +110,11 @@ jit_value Bytecode::numeric(const Expression *expression)
  */
 jit_value Bytecode::boolean(const Expression *expression)
 {
-    // first we calculate the numeric representation
-    jit_value n = numeric(expression);
+    // create on the stack
+    expression->boolean(this);
     
-    // construct the result value
-    jit_value result = _function.new_value(jit_type_sys_int);
-    
-    // we need a label for the right part that only has to be evaluated if
-    // the expression is false, and a label to the end of this block
-    jit_label falselabel = _function.new_label();
-    jit_label endlabel = _function.new_label();
-    
-    // branche to the false label if the expression is not true
-    _function.insn_branch_if_not(n, falselabel);
-    
-    // expression evaluates to true, store a 1 in the result
-    _function.store(result, _function.new_constant(1, jit_type_sys_int));
-    
-    // go to the end label
-    _function.insn_branch(endlabel);
-    
-    // the false label starts here
-    _function.insn_label(falselabel);
-    
-    // expression evaluates to true, store a 0 in the result
-    _function.store(result, _function.new_constant(0, jit_type_sys_int));
-    
-    // the end-label starts here
-    _function.insn_label(endlabel);
-
-    // done
-    return result;
+    // remove from the stack
+    return pop();
 }
 
 /**
@@ -167,7 +141,7 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
     jit_label endlabel = _function.new_label();
     
     // branche to the label if the expression is not valid
-    _function.insn_branch_if_not(numeric(expression), elselabel);
+    _function.insn_branch_if_not(boolean(expression), elselabel);
     
     // now we should create the if statements
     ifstatements->generate(this);
@@ -280,6 +254,16 @@ void Bytecode::numeric(const Variable *variable)
 }
 
 /**
+ *  Create a boolean constant for a variable
+ *  @param  variable
+ */
+void Bytecode::boolean(const Variable *variable)
+{
+    // call the function to convert a variable to a numeric value
+    _stack.push(_callbacks.to_boolean(_userdata, pointer(variable)));
+}
+
+/**
  *  Create a string literal from an expression that is known to return a numeric value,
  *  and a method to do this in the other direction
  *  @param  expression
@@ -366,6 +350,8 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
  */
 void Bytecode::equals(const Expression *left, const Expression *right) 
 {
+    // @todo alternative for string comparison
+    
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
@@ -381,6 +367,8 @@ void Bytecode::equals(const Expression *left, const Expression *right)
  */
 void Bytecode::notEquals(const Expression *left, const Expression *right) 
 {
+    // @todo alternative for string comparison
+    
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);

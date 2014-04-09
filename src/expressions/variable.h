@@ -43,6 +43,15 @@ public:
     {
         generator->numeric(this);
     }
+
+    /**
+     *  Generate a boolean code for the variable
+     *  @param  generator
+     */
+    virtual void boolean(Generator *generator) const override
+    {
+        generator->boolean(this);
+    }
     
     /**
      *  Generate a string for the variable

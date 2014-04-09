@@ -74,7 +74,7 @@ static bool compile(const std::string &base)
     
     // the command to compile the C file into a *.so file
     std::ostringstream command;
-    command << "gcc " << c_output << " -fpic -shared -o " << so_output;
+    command << "gcc " << c_output << " -fpic -shared -O3 -o " << so_output;
     
     // run the command
     int status = system(command.str().c_str());

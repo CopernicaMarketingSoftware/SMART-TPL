@@ -32,6 +32,12 @@ public:
     virtual int toNumeric() = 0;
     
     /**
+     *  Convert the variable to a boolean value
+     *  @return bool
+     */
+    virtual bool toBoolean() = 0;
+    
+    /**
      *  Get access to a member variable
      * 
      *  @param  name        name of the member

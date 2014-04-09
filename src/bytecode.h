@@ -141,6 +141,7 @@ private:
      */
     virtual void string(const Variable *variable) override;
     virtual void numeric(const Variable *variable) override;
+    virtual void boolean(const Variable *variable) override;
     
     /**
      *  Create a string literal from an expression that is known to return a numeric value,

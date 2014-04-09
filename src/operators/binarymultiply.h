@@ -39,6 +39,15 @@ public:
     {
         generator->multiply(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate the instruction
+     *  @param  generator
+     */
+    virtual void boolean(Generator *generator) const override
+    {
+        generator->multiply(_left.get(), _right.get());
+    }
 };
 
 /**

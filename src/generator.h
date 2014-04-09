@@ -76,18 +76,20 @@ public:
     virtual void varPointer(const std::string &name) = 0;
     
     /**
-     *  Create a string or numeric literal
+     *  Create a string, numeric or boolean literal
      *  @param  value
      */
     virtual void string(const std::string &value) = 0;
     virtual void numeric(int value) = 0;
+    //virtual void boolean(bool value) = 0;
     
     /**
-     *  Create a string or numeric constant for a variable
+     *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
     virtual void string(const Variable *variable) = 0;
     virtual void numeric(const Variable *variable) = 0;
+    virtual void boolean(const Variable *variable) = 0;
     
     /**
      *  Create a string literal from an expression that is known to return a numeric value,

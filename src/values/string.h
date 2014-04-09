@@ -55,6 +55,15 @@ public:
     {
         return std::atoi(_value.c_str());
     }
+
+    /**
+     *  Convert the variable to a boolean value
+     *  @return bool
+     */
+    virtual bool toBoolean() override
+    {
+        return _value.size() > 0;
+    }
     
     /**
      *  Get access to a member variable

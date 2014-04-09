@@ -39,6 +39,15 @@ public:
     {
         generator->plus(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate the instruction
+     *  @param  generator
+     */
+    virtual void boolean(Generator *generator) const override
+    {
+        generator->plus(_left.get(), _right.get());
+    }
 };
 
 /**

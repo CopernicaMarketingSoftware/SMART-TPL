@@ -20,6 +20,7 @@ struct smart_tpl_callbacks {
     void *(*variable)(void *userdata, const char *name, int size);
     const char *(*to_string)(void *userdata, void *variable);
     int (*to_numeric)(void *userdata, void *variable);
+    int (*to_boolean)(void *userdata, void *variable);
     int (*size)(void *userdata, void *variable);
 };
 

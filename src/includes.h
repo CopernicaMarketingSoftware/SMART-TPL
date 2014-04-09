@@ -74,6 +74,7 @@
 #include "callbacks/variable.h"
 #include "callbacks/tostring.h"
 #include "callbacks/tonumeric.h"
+#include "callbacks/toboolean.h"
 #include "callbacks/size.h"
 #include "tokenprocessor.h"
 #include "parser.h"

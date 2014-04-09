@@ -74,8 +74,7 @@ void CCode::condition(const Expression *expression, const Statements *ifstatemen
     _out << "if (";
     
     // and now we generate the code that turns the expression into a boolean
-    // (and because in C there are no boolean, we use a numeric value)
-    expression->numeric(this);
+    expression->boolean(this);
     
     // close the if condition and open a curly brace to start a new code block
     _out << "){" << std::endl;
@@ -184,7 +183,6 @@ void CCode::string(const Variable *variable)
     variable->pointer(this);
     
     // ask the size of the variable
-    // @todo store the entire variable in a temporary variable
     _out << "), callbacks->size(userdata,";
     
     // generate another pointer to the variable
@@ -204,6 +202,22 @@ void CCode::numeric(const Variable *variable)
 {
     // call the to_numeric method
     _out << "callbacks->to_numeric(userdata,";
+    
+    // generate pointer to the variable
+    variable->pointer(this);
+
+    // that was it
+    _out << ")";
+}
+
+/**
+ *  Create a boolean constant for a variable
+ *  @param  variable
+ */
+void CCode::boolean(const Variable *variable)
+{
+    // call the to_numeric method
+    _out << "callbacks->to_boolean(userdata,";
     
     // generate pointer to the variable
     variable->pointer(this);
@@ -271,8 +285,8 @@ void CCode::lesserEquals(const Expression *left, const Expression *right)   { le
  *  @param  left
  *  @param  right
  */
-void CCode::booleanAnd(const Expression *left, const Expression *right) { left->numeric(this); _out << "&&"; right->numeric(this); }
-void CCode::booleanOr(const Expression *left, const Expression *right)  { left->numeric(this); _out << "||"; right->numeric(this); }
+void CCode::booleanAnd(const Expression *left, const Expression *right) { left->boolean(this); _out << "&&"; right->boolean(this); }
+void CCode::booleanOr(const Expression *left, const Expression *right)  { left->boolean(this); _out << "||"; right->boolean(this); }
 
 /**
  *  End of namespace

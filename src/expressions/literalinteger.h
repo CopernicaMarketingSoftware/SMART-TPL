@@ -54,6 +54,16 @@ public:
         // create string literal
         generator->string(std::to_string(_value));
     }
+
+    /**
+     *  Generate the code to get the boolean value of the expression
+     *  @param  generator
+     */
+    virtual void boolean(Generator *generator) const override
+    {
+        // create numeric literal
+        generator->numeric(_value ? 1 : 0);
+    }
     
     /**
      *  Generate the code to get the numeric value of the expression

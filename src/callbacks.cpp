@@ -55,6 +55,12 @@ ToStringCallback Callbacks::_toString;
 ToNumericCallback Callbacks::_toNumeric;
 
 /**
+ *  Signature of the function to convert a variable to a boolean value
+ *  @var    ToBooleanCallback
+ */
+ToBooleanCallback Callbacks::_toBoolean;
+
+/**
  *  Signature of the function to retrieve the size/strlen of a variable
  *  @var    SizeCallback
  */
@@ -163,6 +169,21 @@ int smart_tpl_to_numeric(void *userdata, void *variable)
     
     // convert to numeric
     return var->toNumeric();
+}
+
+/**
+ *  Retrieve the boolean representation of a variable
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  variable        pointer to variable
+ *  @return                 numeric value
+ */
+int smart_tpl_to_boolean(void *userdata, void *variable)
+{
+    // convert the variable to a variable object
+    auto *var = (Value *)variable;
+    
+    // convert to numeric
+    return var->toBoolean();
 }
     
 /**

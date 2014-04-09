@@ -39,6 +39,15 @@ public:
     {
         generator->notEquals(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate the instruction
+     *  @param  generator
+     */
+    virtual void boolean(Generator *generator) const override
+    {
+        generator->notEquals(_left.get(), _right.get());
+    }
 };
 
 /**

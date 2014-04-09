@@ -64,6 +64,15 @@ public:
     {
         return _value;
     }
+
+    /**
+     *  Convert the variable to a boolean value
+     *  @return bool
+     */
+    virtual bool toBoolean() override
+    {
+        return _value != 0;
+    }
     
     /**
      *  Get access to a member variable

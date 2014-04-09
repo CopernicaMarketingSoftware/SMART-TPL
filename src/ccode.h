@@ -69,11 +69,12 @@ private:
     virtual void numeric(int value) override;
     
     /**
-     *  Create a string or numeric constant for a variable
+     *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
     virtual void string(const Variable *variable) override;
     virtual void numeric(const Variable *variable) override;
+    virtual void boolean(const Variable *variable) override;
 
     /**
      *  Create a string literal from an expression that is known to return a numeric value,

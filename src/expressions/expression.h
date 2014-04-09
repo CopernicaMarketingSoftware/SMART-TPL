@@ -39,6 +39,12 @@ public:
     virtual void numeric(Generator *generator) const = 0;
     
     /**
+     *  Generate the expression as a boolean value
+     *  @param  generator
+     */
+    virtual void boolean(Generator *generator) const = 0;
+    
+    /**
      *  Generate the expression as string value
      *  @param  generator
      */
