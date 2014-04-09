@@ -123,7 +123,7 @@ SOURCES         =   $(wildcard src/*.cpp) ${TOKENIZER} ${PARSER}
 #   We also use a Makefile function here that takes all source files.
 #
 
-OBJECTS         =   $(SOURCES:%.cpp=%.o)
+OBJECTS         =   $(sort $(SOURCES:%.cpp=%.o))
 
 
 #
