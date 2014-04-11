@@ -24,6 +24,7 @@
 #include <include/value.h>
 #include <include/data.h>
 #include <include/template.h>
+#include <unistd.h>
 
 /**
  *  Helper function to compile a template
