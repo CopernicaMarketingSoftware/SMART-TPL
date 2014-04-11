@@ -47,16 +47,16 @@ void CCode::raw(const std::string &data)
 }
 
 /**
- *  Generate the code to output a variable
- *  @param  variable    the variable to output
+ *  Generate the code to output an expression
+ *  @param  expression  expression to output
  */
-void CCode::output(const Variable *variable)
+void CCode::output(const Expression *expression)
 {
-    // we're going to call the output function
-    _out << "callbacks->output(userdata,";
+    // we're going to call the write function
+    _out << "callbacks->write(userdata,";
         
-    // generate the code to get a pointer to the variable
-    variable->pointer(this);
+    // convert the expression to a string
+    expression->string(this);
         
     // end of the function
     _out << ");" << std::endl;

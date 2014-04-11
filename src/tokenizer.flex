@@ -67,11 +67,14 @@
      */
 
 [^{]+               { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
+"{ldelim}"          { yyextra = new SmartTpl::Token("{", 1); return TOKEN_RAW; }
+"{rdelim}"          { yyextra = new SmartTpl::Token("}", 1); return TOKEN_RAW; }
 "{if"[ \t]+         { BEGIN(EXPRESSION); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
 "{$"                { BEGIN(EXPRESSION); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
+"{"                 { yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_RAW; }
 
     /**
      *  When in expression mode, we are tokenizing an expression inside an {if}
@@ -105,11 +108,13 @@
     "<="                        { return TOKEN_LE; }
     "&&"                        { return TOKEN_AND; }
     "||"                        { return TOKEN_OR; }
+    "|"                         { BEGIN(IDENTIFIER); return TOKEN_PIPE; }
+    ":"                         { return TOKEN_COLON; }
     "}"                         { BEGIN(INITIAL); }
 }
 
 <IDENTIFIER>{
-    [a-zA-Z][a-zA-Z0-9]*        { BEGIN(EXPRESSION); yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_IDENTIFIER; }
+    [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(EXPRESSION); yyextra = new SmartTpl::Token(yytext, yyleng); return TOKEN_IDENTIFIER; }
 }
 
 %%

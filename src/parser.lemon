@@ -6,9 +6,15 @@
 %type   statements      {SmartTpl::Statements*}
 %type   ifStatement     {SmartTpl::IfStatement*}
 %type   elseStatement   {SmartTpl::Statements*}
-%type   expression      {SmartTpl::Expression*}
+%type   expr            {SmartTpl::Expression*}
+%type   boolexpr        {SmartTpl::Expression*}
+%type   outexpr         {SmartTpl::Expression*}
 %type   literal         {SmartTpl::Literal*}
 %type   variable        {SmartTpl::Variable*}
+%type   filter          {SmartTpl::Filter*}
+%type   parameters      {SmartTpl::Parameters*}
+%type   modifiers       {SmartTpl::Modifiers*}
+%type   modifier        {SmartTpl::Modifier*}
 
 %default_destructor { if ($$) delete $$; }
 %token_destructor { if ($$) delete $$; }
@@ -20,7 +26,9 @@
 %left PLUS MINUS.
 %left MULTIPLY DIVIDE MOD.
 %right EXP NOT.
-%left DOT LBRACKET RBRACKET.
+%left COLON.
+%left PIPE.
+%left DOT LBRACK RBRACK.
    
 %include 
 {   
@@ -49,30 +57,39 @@ statements(A)       ::= statements(B) statement(C) .                            
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Statements(B); }
 statement(A)        ::= ifStatement(B) .                                        { A = B; }
 statement(A)        ::= RAW(B) .                                                { A = new SmartTpl::RawStatement(B); }
-statement(A)        ::= EXPRESSION variable(B) .                                { A = new SmartTpl::VarStatement(B); }
-ifStatement(A)      ::= IF expression(B) statements(C) elseStatement(D) .       { A = new SmartTpl::IfStatement(B,C,D); }
-ifStatement(A)      ::= IF expression(B) statements(C) ENDIF.                   { A = new SmartTpl::IfStatement(B, C); }
+statement(A)        ::= EXPRESSION outexpr(B) .                                 { A = new SmartTpl::VarStatement(B); }
+ifStatement(A)      ::= IF boolexpr(B) statements(C) elseStatement(D) .         { A = new SmartTpl::IfStatement(B,C,D); }
+ifStatement(A)      ::= IF boolexpr(B) statements(C) ENDIF.                     { A = new SmartTpl::IfStatement(B, C); }
 elseStatement(A)    ::= ELSE statements(B) ENDIF .                              { A = B; }
-elseStatement(A)    ::= ELSEIF expression(B) statements(C) elseStatement(D) .   { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B,C,D)); }
-expression(A)       ::= variable(B) .                                           { A = B; }
-expression(A)       ::= literal(B) .                                            { A = B; }
-expression(A)       ::= LPAREN expression(B) RPAREN .                           { A = B; }
-expression(A)       ::= expression(B) PLUS expression(C) .                      { A = new SmartTpl::BinaryPlusOperator(B, C); }
-expression(A)       ::= expression(B) MINUS expression(C) .                     { A = new SmartTpl::BinaryMinusOperator(B, C); }
-expression(A)       ::= expression(B) MULTIPLY expression(C) .                  { A = new SmartTpl::BinaryMultiplyOperator(B, C); }
-expression(A)       ::= expression(B) DIVIDE expression(C) .                    { A = new SmartTpl::BinaryDivideOperator(B, C); }
-expression(A)       ::= expression(B) EQ expression(C) .                        { A = new SmartTpl::BinaryEqualsOperator(B, C); }
-expression(A)       ::= expression(B) NE expression(C) .                        { A = new SmartTpl::BinaryNotEqualsOperator(B, C); }
-expression(A)       ::= expression(B) GT expression(C) .                        { A = new SmartTpl::BinaryGreaterOperator(B, C); }
-expression(A)       ::= expression(B) GE expression(C) .                        { A = new SmartTpl::BinaryGreaterEqualsOperator(B, C); }
-expression(A)       ::= expression(B) LT expression(C) .                        { A = new SmartTpl::BinaryLesserOperator(B, C); }
-expression(A)       ::= expression(B) LE expression(C) .                        { A = new SmartTpl::BinaryLesserEqualsOperator(B, C); }
-expression(A)       ::= expression(B) AND expression(C) .                       { A = new SmartTpl::BinaryAndOperator(B, C); }
-expression(A)       ::= expression(B) OR expression(C) .                        { A = new SmartTpl::BinaryOrOperator(B, C); }
+elseStatement(A)    ::= ELSEIF boolexpr(B) statements(C) elseStatement(D) .     { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B,C,D)); }
+boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
+boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::BinaryEqualsOperator(B, C); }
+boolexpr(A)         ::= outexpr(B) NE outexpr(C) .                              { A = new SmartTpl::BinaryNotEqualsOperator(B, C); }
+boolexpr(A)         ::= outexpr(B) GT outexpr(C) .                              { A = new SmartTpl::BinaryGreaterOperator(B, C); }
+boolexpr(A)         ::= outexpr(B) GE outexpr(C) .                              { A = new SmartTpl::BinaryGreaterEqualsOperator(B, C); }
+boolexpr(A)         ::= outexpr(B) LT outexpr(C) .                              { A = new SmartTpl::BinaryLesserOperator(B, C); }
+boolexpr(A)         ::= outexpr(B) LE outexpr(C) .                              { A = new SmartTpl::BinaryLesserEqualsOperator(B, C); }
+boolexpr(A)         ::= boolexpr(B) AND boolexpr(C) .                           { A = new SmartTpl::BinaryAndOperator(B, C); }
+boolexpr(A)         ::= boolexpr(B) OR boolexpr(C) .                            { A = new SmartTpl::BinaryOrOperator(B, C); }
+outexpr(A)          ::= expr(B) .                                               { A = B; }
+outexpr(A)          ::= expr(B) PIPE modifiers(C) .                             { A = new SmartTpl::Filter(B, C); }
+expr(A)             ::= variable(B) .                                           { A = B; }
+expr(A)             ::= literal(B) .                                            { A = B; }
+expr(A)             ::= LPAREN expr(B) RPAREN .                                 { A = B; }
+expr(A)             ::= expr(B) PLUS expr(C) .                                  { A = new SmartTpl::BinaryPlusOperator(B, C); }
+expr(A)             ::= expr(B) MINUS expr(C) .                                 { A = new SmartTpl::BinaryMinusOperator(B, C); }
+expr(A)             ::= expr(B) MULTIPLY expr(C) .                              { A = new SmartTpl::BinaryMultiplyOperator(B, C); }
+expr(A)             ::= expr(B) DIVIDE expr(C) .                                { A = new SmartTpl::BinaryDivideOperator(B, C); }
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::LiteralBoolean(false); }
 literal(A)          ::= INTEGER(B) .                                            { A = new SmartTpl::LiteralInteger(B); }
 variable(A)         ::= VARIABLE(B) .                                           { A = new SmartTpl::LiteralVariable(B); }
-variable(A)         ::= variable(B) LBRACK expression(C) RBRACK .               { A = new SmartTpl::VariableArrayAccess(B,C); }
+variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { A = new SmartTpl::VariableArrayAccess(B,C); }
 variable(A)         ::= variable(B) DOT IDENTIFIER(C) .                         { A = new SmartTpl::LiteralArrayAccess(B,C); }
+modifiers(A)        ::= modifiers(B) PIPE modifier(C) .                         { A = B; A->add(C); }
+modifiers(A)        ::= modifier(B) .                                           { A = new SmartTpl::Modifiers(B); }
+modifier(A)         ::= IDENTIFIER(B) COLON parameters(C) .                     { A = new SmartTpl::Modifier(B, C); }
+modifier(A)         ::= IDENTIFIER(B) .                                         { A = new SmartTpl::Modifier(B); }
+parameters(A)       ::= parameters(B) COLON expr(C) .                           { A = B; A->add(C); }
+parameters(A)       ::= expr(B) .                                               { A = new SmartTpl::Parameters(B); }
 
