@@ -20,7 +20,7 @@ class Value
 {
 public:
     /**
-     *  Convert the variable to a string
+     *  Convert the value to a string
      *  @return const char *
      */
     virtual const char *toString() = 0;
@@ -38,13 +38,18 @@ public:
     virtual bool toBoolean() = 0;
     
     /**
-     *  Get access to a member variable
+     *  Get access to a member value
      * 
      *  @param  name        name of the member
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, int size) = 0;
+    virtual Value *member(const char *name, size_t size) = 0;
+
+    /**
+     *  Get access to the amount of members this value has
+     */
+    virtual size_t memberCount() = 0;
     
     /**
      *  String length of the variable

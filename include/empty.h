@@ -52,9 +52,17 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, int size) override
+    virtual Value *member(const char *name, size_t size) override
     {
         return this;
+    }
+
+    /**
+     *  Get access to the amount of members this value has
+     */
+    virtual size_t memberCount() override
+    {
+        return 0;
     }
     
     /**
