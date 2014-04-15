@@ -8,31 +8,14 @@
  */
 
 /**
- *  Dependencies
+ *  Public includes
  */
-#include <string>
-#include <iostream>
-#include <memory>
-#include <list>
-#include <sstream>
-#include <stack>
-#include <jit/jit-plus.h>
-#include <string.h>
-#include <map>
-#include <stdexcept>
-#include <dlfcn.h>
-#include <cstring>
+#include "../include/smarttpl.h"
 
 /**
- *  All public header files of the SmartTpl library
+ *  Library only dependencies
  */
-#include "../include/value.h"
-#include "../include/data.h"
-#include "../include/template.h"
-#include "../include/callbacks.h"
-#include "../include/empty.h"
-#include "../include/string.h"
-#include "../include/numeric.h"
+#include <jit/jit-plus.h>
 
 /**
  *  Implementation-only header files

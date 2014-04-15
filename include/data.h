@@ -37,7 +37,7 @@ private:
          */
         bool operator()(char const *a, char const *b) const
         {
-            return strcmp(a, b) < 0;
+            return std::strcmp(a, b) < 0;
         }
     };    
 

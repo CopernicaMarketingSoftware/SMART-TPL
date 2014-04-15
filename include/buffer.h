@@ -50,13 +50,13 @@ public:
      *  @param  buffer      Pointer to the buffer
      *  @param  size        Size of the buffer
      */
-    File(const char *buffer, size_t size) : 
+    Buffer(const char *buffer, size_t size) :
         _buffer(buffer), _size(size) {}
     
     /**
      *  Destructor
      */
-    virtual ~File() {}
+    virtual ~Buffer() {}
 };
     
 /**
