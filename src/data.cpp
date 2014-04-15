@@ -44,6 +44,21 @@ Data &Data::assign(const char *name, int value)
 }
 
 /**
+ * Assign data
+ * @param  name         Name of the variable
+ * @param  value        Value of the variable
+ * @return Data         Same object for chaining
+ */
+Data &Data::assign(const char *name, Value* value)
+{
+    // append variable
+    _variables[name] = std::unique_ptr<Value>(value);
+
+    // allow chaining
+    return *this;
+}
+
+/**
  *  Retrieve a variable pointer by name
  *  @param  name        the name
  *  @param  size        size of the name

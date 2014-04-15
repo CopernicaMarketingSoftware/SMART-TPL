@@ -1,7 +1,7 @@
 /**
- *  String.h
+ *  Numeric.h
  *
- *  Class that represents a string variable
+ *  Class that represents a numeric variable
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -15,28 +15,35 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class StringValue : public Value
+class NumericValue : public Value
 {
 private:
     /**
-     *  Actual string value
-     *  @var    std::string
+     *  Underlying value
+     *  @var int
      */
-    std::string _value;
+    int _value;
+    
+    /**
+     *  String representation
+     *  @var std::string
+     */
+    std::string *_str = nullptr;
 
 public:
     /**
      *  Constructor
      *  @param  value
      */
-    StringValue(const std::string &value) : _value(value) {}
-    StringValue(std::string &&value) : _value(std::move(value)) {}
-    StringValue(const char *value, size_t size = std::string::npos) : _value(value, size) {}
+    NumericValue(int value) : _value(value) {}
     
     /**
      *  Destructor
      */
-    virtual ~StringValue() {}
+    virtual ~NumericValue() 
+    {
+        if (_str) delete _str;
+    }
 
     /**
      *  Convert the variable to a string
@@ -44,7 +51,9 @@ public:
      */
     virtual const char *toString() override
     {
-        return _value.c_str();
+        if (_str) return _str->c_str();
+        _str = new std::string(std::to_string(_value));
+        return _str->c_str();
     }
     
     /**
@@ -53,7 +62,7 @@ public:
      */
     virtual int toNumeric() override
     {
-        return std::atoi(_value.c_str());
+        return _value;
     }
 
     /**
@@ -62,7 +71,7 @@ public:
      */
     virtual bool toBoolean() override
     {
-        return _value.size() > 0;
+        return _value != 0;
     }
     
     /**
@@ -82,9 +91,11 @@ public:
      * 
      *  @return int
      */
-    virtual int size() override
+    virtual size_t size() override
     {
-        return _value.size();
+        if (_str) return _str->size();
+        _str = new std::string(std::to_string(_value));
+        return _str->size();
     }
 };
 

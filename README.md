@@ -198,24 +198,24 @@ void example()
 }
 ````
 
-In the example above the {$name} variable is assigned to the template, but 
-the value is a callback function. Only when the {$name} variable is actually 
+In the example above the {$name} value is assigned to the template, but
+the value is a callback function. Only when the {$name} value is actually
 _used_, this callback gets called, and your application has to run the
 algorithm to retrieve the name.
 
-The SmartTpl template language allows you to use nested variables. You can
-use variables like {$name.member.submember[$index].member}. To make this 
-fully flexible, you can override the SmartTpl::Variable class to create
-your own variable.
+The SmartTpl template language allows you to use nested values. You can
+use values like {$name.member.submember[$index].member}. To make this
+fully flexible, you can override the SmartTpl::Value class to create
+your own value.
 
 ````c++
 // required code
 #include <smarttpl.h>
 
 /**
- *  our own variable class
+ *  our own value class
  */
-class MyVariable : public SmartTpl::Variable
+class MyValue : public SmartTpl::Value
 {
 public:
     /**
@@ -245,9 +245,9 @@ public:
      *  Method that gets called when the variable is used in a numeric 
      *  context, to turn the variable into an integer
      *
-     *  @return int64_t
+     *  @return int
      */
-    virtual int64_t toNumeric() override
+    virtual int toNumeric() override
     {
         return 0;
     }
@@ -256,15 +256,15 @@ public:
      *  Method that gets called when a member is accessed. This is called
      *  when the variable is accessed in the template as {$var.x} or {$var[$x]}
      *
-     *  This method should return a SmartTpl::Variable object.
+     *  This method should return a SmartTpl::Value object.
      *
      *  @param  name        name of the member
-     *  @return Variable    Pointer to a new variable
+     *  @return Value       Pointer to a new value
      */
-    virtual SmartTpl::Variable member(const char *name) override
+    virtual SmartTpl::Value member(const char *name) override
     {
         // check the name
-        if (strcmp(name, "x") == 0) return SomeOtherVariable();
+        if (strcmp(name, "x") == 0) return SomeOtherValue();
         if (strcmp(name, "self") == 0) return this;
         
         // not found
@@ -282,7 +282,7 @@ void example()
     SmartTpl::Data data;
     
     // assign data
-    data.assign("name", MyVariable());
+    data.assign("name", new MyValue());
     
     // show the template
     std::cout << tpl.process(data);
@@ -290,8 +290,9 @@ void example()
 
 ````
 
-By overriding from SmartTpl::Variable, you can create all sorts of variables
+By overriding from SmartTpl::Value, you can create all sorts of variables
 that behave like arrays or objects. The SmartTpl library already has built-in
-types for a number of types, like SmartTpl::Numeric and SmartTpl::String.
+types for a number of types, like SmartTpl::NumericValue and SmartTpl::StringValue
+and SmartTpl::EmptyValue.
 
 

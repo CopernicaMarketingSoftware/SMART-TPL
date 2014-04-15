@@ -62,7 +62,7 @@ public:
      * 
      *  @return int
      */
-    virtual int size() override
+    virtual size_t size() override
     {
         return 0;
     }

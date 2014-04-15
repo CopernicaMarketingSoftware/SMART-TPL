@@ -67,6 +67,7 @@ public:
      */
     Data &assign(const char *name, const std::string &value);
     Data &assign(const char *name, int value);
+    Data &assign(const char *name, Value *value);
 
     /**
      *  Retrieve a variable pointer by name

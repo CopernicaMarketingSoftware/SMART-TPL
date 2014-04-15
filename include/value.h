@@ -49,9 +49,9 @@ public:
     /**
      *  String length of the variable
      * 
-     *  @return int
+     *  @return size_t
      */
-    virtual int size() = 0;
+    virtual size_t size() = 0;
 };
     
 /**

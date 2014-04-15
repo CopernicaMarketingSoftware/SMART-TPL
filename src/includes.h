@@ -30,6 +30,9 @@
 #include "../include/data.h"
 #include "../include/template.h"
 #include "../include/callbacks.h"
+#include "../include/empty.h"
+#include "../include/string.h"
+#include "../include/numeric.h"
 
 /**
  *  Implementation-only header files
@@ -90,6 +93,3 @@
 #include "executor.h"
 #include "bytecode.h"
 #include "library.h"
-#include "values/empty.h"
-#include "values/string.h"
-#include "values/numeric.h"
