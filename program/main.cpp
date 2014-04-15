@@ -45,7 +45,7 @@ static bool compile(const std::string &base)
     if (!cstream.is_open())
     {
         // report error
-        std::cout << "Failure: " << input << "(" << c_output << " can not be opened for writing)" << std::endl;
+        std::cerr << "Failure: " << input << " (" << c_output << " " << strerror(errno) << ")" << std::endl;
         
         // report error
         return false;
@@ -67,7 +67,10 @@ static bool compile(const std::string &base)
     catch (const std::runtime_error &error)
     {
         // report error
-        std::cout << "Failure: " << input << "(" << error.what() << ")" << std::endl;
+        std::cerr << "Failure: " << input << " (" << error.what() << ")" << std::endl;
+
+        // unlink our failed C file
+        unlink(c_output.c_str());
         
         // report error
         return false;
@@ -75,8 +78,11 @@ static bool compile(const std::string &base)
     
     // the command to compile the C file into a *.so file
     std::ostringstream command;
-    command << "gcc " << c_output << " -fpic -shared -O3 -o " << so_output;
-    
+    const char* compiler = getenv("CC");
+    const char* cflags = getenv("CFLAGS");
+    command << (compiler ? compiler : "gcc") << " " << c_output << " -fPIC -shared "
+            << (cflags ? cflags : "-O3") << " -o " << so_output;
+
     // run the command
     int status = system(command.str().c_str());
     
@@ -129,5 +135,5 @@ int main(int argc, const char *argv[])
     }
     
     // done
-    return success > 0 ? 0 : -1;
+    return success == (argc - 1) ? 0 : -1;
 }
