@@ -25,20 +25,6 @@ class SyntaxTree : protected TokenProcessor
 public:
     /**
      *  Constructor
-     *  @param  tokenizer       The tokenizer that can find tokens in a file
-     *  @param  filename        Filename to parse
-     */
-    SyntaxTree(const Tokenizer &tokenizer, const char *filename) : TokenProcessor()
-    {
-        // ask the tokenizer to process the file, and tell that this object
-        // is the parser that can be fed with the tokens found in the file
-        tokenizer.process(this, filename);
-        
-        // @todo    error handling
-    }
-
-    /**
-     *  Constructor
      *  @param  tokenizer       The tokenizer that can find tokens in the buffer
      *  @param  buffer          The buffer to parse
      *  @param  size            Size of the buffer
@@ -51,13 +37,6 @@ public:
         
         // @todo    error handling
     }
-
-    /**
-     *  Constructor
-     *  @param  tokenizer       The tokenizer that can find tokens in a file
-     *  @param  filename        Filename to parse
-     */
-    SyntaxTree(const char *filename) : SyntaxTree(Tokenizer(), filename) {}
 
     /**
      *  Constructor

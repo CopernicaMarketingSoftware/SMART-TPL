@@ -28,21 +28,39 @@ private:
      *  Name of the file
      *  @var    std::string
      */
-    std::string _name;
+    const std::string _name;
     
 public:
     /**
      *  Constructor
-     *  @param  name        Name of the file
+     *  @param  name               Name of the file
+     *  @throws std::runtime_error If the file doesn't seem to exist
      */
-    File(const char *name) : _name(name) {}
+    File(const std::string& name) : File(name.c_str()) {};
+    File(const char *name) : _name(name) {
+        std::ifstream file(_name);
+        if (!file)
+            throw std::runtime_error("File doesn't exist");
+        file.seekg(0, std::ios_base::end);
+        size_t len = file.tellg();
+        file.seekg(0, std::ios_base::beg);
+        file.clear();
+        char buf[len];
+        file.read(buf, len);
+        _buffer.append(buf, len);
+    }
     
     /**
      *  Destructor
      */
     virtual ~File() {}
-    
-    
+
+    /**
+     *  Returns the filename of the file that was read into memory.
+     *
+     *  @return std::string
+     */
+    const std::string GetFilename() const { return _name; };
 };
     
 /**

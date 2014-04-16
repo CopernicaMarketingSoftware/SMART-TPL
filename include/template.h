@@ -37,15 +37,9 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  filename        Name of the template to load
+     *  @param  source        Source of your template
      */
-    Template(const char *filename);
-
-    /**
-     *  Constructor
-     *  @param  filename        Name of the template to load
-     */
-    Template(const std::string &filename) : Template(filename.c_str()) {}
+    Template(const Source& source);
 
     /**
      *  Deleted copy constructor

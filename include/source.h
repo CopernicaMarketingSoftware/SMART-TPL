@@ -32,12 +32,32 @@ protected:
      *  Buffer or an implementation of the Source class that you create yourself.
      */
     Source() {}
+
+    /**
+     *  Underlying buffer, if you're implementing the Source class put your data in here.
+     */
+    std::string _buffer;
     
 public:
     /**
      *  Destructor
      */
     virtual ~Source() {}
+
+    /**
+     *  Returns a const char* to the start of the buffer, use size() to get the length
+     *  of this buffer.
+     *
+     *  @return const char*
+     */
+    const char* data() const { return _buffer.data(); };
+
+    /**
+     *  Returns the size of the buffer.
+     *
+     *  @return size_t
+     */
+    size_t size() const { return _buffer.size(); };
     
 
 };

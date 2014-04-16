@@ -41,10 +41,10 @@ public:
      *  Constructor
      *  @param  name        Filename of the *.so file
      */
-    Library(const char *filename)
+    Library(const std::string &filename)
     {
         // load the library
-        _handle = dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
+        _handle = dlopen(filename.c_str(), RTLD_LAZY | RTLD_LOCAL);
         
         // must be open
         if (!_handle) throw std::runtime_error(dlerror());

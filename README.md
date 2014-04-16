@@ -79,10 +79,10 @@ Displaying a template
 
 A template object first need to be loaded from a certain source. The SmartTpl
 library has two classes that can be used for this: The SmartTpl::File class
-for templates that are loaded from the filesystem, and the SmartTpl::Memory
+for templates that are loaded from the filesystem, and the SmartTpl::Buffer
 class for templates that are "loaded" from an in-memory buffer.
 
-Both the SmartTpl::Memory and SmartTpl::File class are derived from the
+Both the SmartTpl::Buffer and SmartTpl::File class are derived from the
 SmartTpl::Source class. If you want to add an alternative template source 
 (for example for templates that are loaded from a database) you can create your 
 own class that also extends from SmartTpl::Source.
@@ -108,7 +108,7 @@ void example1()
 void example2()
 {
     // use a template available in mempory
-    SmartTpl::Memory source("<html>....</html>", 12345);
+    SmartTpl::Buffer source("<html>....</html>", 12345);
     
     // create the template object
     SmartTpl::Template tpl(source);

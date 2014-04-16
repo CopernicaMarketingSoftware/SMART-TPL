@@ -185,9 +185,9 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  filename        The filename that holds the template
+     *  @param  source The source that holds the template
      */
-    Bytecode(const char *filename);
+    Bytecode(const Source& source);
     
     /**
      *  Destructor

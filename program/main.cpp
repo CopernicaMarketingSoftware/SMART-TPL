@@ -22,9 +22,7 @@
 #include <cstring>
 #include <memory>
 #include <map>
-#include <include/value.h>
-#include <include/data.h>
-#include <include/template.h>
+#include <include/smarttpl.h>
 #include <unistd.h>
 
 /**
@@ -56,8 +54,9 @@ static bool compile(const std::string &base)
     // syntax error or other problems
     try
     {
+        SmartTpl::File file(input);
         // create template
-        SmartTpl::Template tpl(input);
+        SmartTpl::Template tpl(file);
         
         // convert into C code
         cstream << tpl.compile();

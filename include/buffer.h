@@ -26,32 +26,23 @@ namespace SmartTpl {
  */
 class Buffer : public Source
 {
-private:
-    /**
-     *  Pointer to the buffer
-     *  @var    const char *
-     */
-    const char *_buffer;
-    
-    /**
-     *  Size of the buffer
-     *  @var    size_t
-     */
-    size_t _size;
-    
 public:
     /**
      *  Constructor
-     * 
-     *  The buffer is not copied, you must make sure that the buffer parameter
-     *  points to a valid memory buffer for the entire lifetime of the Buffer
-     *  object.
      *  
      *  @param  buffer      Pointer to the buffer
      *  @param  size        Size of the buffer
      */
-    Buffer(const char *buffer, size_t size) :
-        _buffer(buffer), _size(size) {}
+    Buffer(const char *buffer, size_t size) {
+        _buffer.append(buffer, size);
+    }
+
+    /**
+     *  Constructor
+     *
+     *  @param  buffer      Create buffer from a std::string
+     */
+    Buffer(const std::string& buffer) : Buffer(buffer.data(), buffer.size()) {};
     
     /**
      *  Destructor

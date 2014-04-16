@@ -15,9 +15,9 @@ namespace SmartTpl {
 
 /**
  *  Constructor
- *  @param  filename    Name of the file that holds the template
+ *  @param  source The source that holds the template
  */
-Bytecode::Bytecode(const char *filename) : _tree(filename), 
+Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params)),
     _callbacks(&_function)
 {

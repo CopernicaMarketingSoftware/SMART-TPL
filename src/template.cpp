@@ -15,21 +15,23 @@ namespace SmartTpl {
 
 /**
  *  Constructor
- *  @param  filename        Name of the template to load
+ *  @param  source        Source of the template to load
  */
-Template::Template(const char *filename)
+Template::Template(const Source& source)
 {
-    // is this a *.so file?
-    char *extension = strrchr(filename, '.');
-    if (extension && strcasecmp(extension, ".so") == 0)
-    {
-        // this is a shared library
-        _executor = new Library(filename);
+    _executor = nullptr;
+    if (typeid(source) == typeid(File)) {
+        const File& file = dynamic_cast<const File&>(source);
+        const std::string filename = file.GetFilename();
+        char *extension = strrchr(filename.c_str(), '.');
+        if (extension && strcasecmp(extension, ".so") == 0) {
+            // this is a shared library
+            _executor = new Library(filename);
+        }
     }
-    else
-    {
+    if (_executor == nullptr) {
         // this is a raw template file, convert it into byte-code
-        _executor = new Bytecode(filename);
+        _executor = new Bytecode(source);
     }
 }
 
