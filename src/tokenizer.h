@@ -31,11 +31,15 @@ private:
     void *_scanner;
 
     /**
-     *  Process the buffer
-     *  @param  parent      Parser object that is notified about tokens
-     *  @return bool
+     *  The line currently being processed
      */
-    bool process(TokenProcessor *parent) const;
+    int line;
+
+    /**
+     *  The current token
+     *  Mutable as it has to be modified in process, which is const
+     */
+    mutable Token* token;
 
 public:
     /**
@@ -56,6 +60,16 @@ public:
      *  @return bool
      */
     bool process(TokenProcessor *parent, const char *buffer, size_t size) const;
+
+    /**
+     *  Increase the line counter
+     */
+    void increaseLine() { line++; };
+
+    /**
+     *  Change the current token to newToken
+     */
+    void setCurrentToken(Token* newToken) { token = newToken; };
 };
     
 /**
