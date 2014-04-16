@@ -42,14 +42,12 @@
 }
 
 %parse_failure {
-    // code that is execute when a parse error occured
-    std::cout << "Parse failure" << std::endl;
+    throw std::runtime_error("Parse failure");
 }
 
 %syntax_error 
 {  
-    // @todo    this should probably become an exception
-    std::cout << "Syntax error!" << std::endl;  
+    throw std::runtime_error("Syntax error!");
 }   
 
 start               ::= statements(A) .                                         { parent->add(A); }
