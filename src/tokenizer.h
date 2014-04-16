@@ -56,14 +56,6 @@ public:
      *  @return bool
      */
     bool process(TokenProcessor *parent, const char *buffer, size_t size) const;
-    
-    /**
-     *  Process a file, and feed all the elements to the parser
-     *  @param  parent      Parser object that is notified about tokens
-     *  @param  filename    The file to process
-     *  @return bool
-     */
-    bool process(TokenProcessor *parent, const char *filename) const;
 };
     
 /**

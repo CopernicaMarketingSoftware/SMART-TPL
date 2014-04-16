@@ -192,34 +192,6 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 }
 
 /**
- *  Process a file, and feed all the elements to the parser
- *  @param  parent      Object that is notified about tokens
- *  @param  filename    The file to process
- *  @return bool
- *
- *  @todo   check memory leaks if called multiple times in a row
- *
- */
-bool Tokenizer::process(TokenProcessor *parent, const char *filename) const
-{
-    // open the file
-    FILE *fp = fopen(filename, "r");
-    if (fp == NULL) return false;
-    
-    // restart the buffer
-    yyrestart(fp, _scanner);
-
-    // run the algorithm
-    bool result = process(parent);
-    
-    // close the file
-    fclose(fp);
-    
-    // done
-    return result;
-}
-
-/**
  *  End namespace
  */
 }

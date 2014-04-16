@@ -2,7 +2,9 @@
  *  Template.h
  * 
  *  This class represents a template file. A template can be constructed
- *  with a filename, or with a binary buffer. 
+ *  with a filename, or with a binary buffer.
+ *  @see SmartTpl::File
+ *  @see SmartTpl::Buffer
  * 
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
