@@ -19,17 +19,17 @@ class VarStatement : public Statement
 {
 private:
     /**
-     *  The variable
-     *  @var    Variable
+     *  The expression that should be executed
+     *  @var    Expression
      */
-    std::unique_ptr<Variable> _variable;
+    std::unique_ptr<Expression> _expression;
 
 public:
     /**
      *  Constructor
      *  @param  expression
      */
-    VarStatement(Variable *variable) : _variable(std::unique_ptr<Variable>(variable)) {}
+    VarStatement(Expression *expression) : _expression(std::unique_ptr<Expression>(expression)) {}
     
     /**
      *  Destructor
@@ -43,7 +43,7 @@ public:
     virtual void generate(Generator *generator) const override
     {
         // tell the generator to evaluate an expression, and output it
-        generator->output(_variable.get());
+        generator->output(_expression.get());
     }
 };
 

@@ -49,10 +49,10 @@ public:
     virtual void raw(const std::string &data) = 0;
     
     /**
-     *  Generate the code to output a variable
-     *  @param  variable  The variable to output
+     *  Generate the code to output an expression
+     *  @param  expression          the expression to output
      */
-    virtual void output(const Variable *variable) = 0;
+    virtual void output(const Expression *expression) = 0;
 
     /**
      *  Generate a conditional statement
