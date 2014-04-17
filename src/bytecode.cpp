@@ -118,13 +118,13 @@ jit_value Bytecode::boolean(const Expression *expression)
 }
 
 /**
- *  Generate the code to output an expression
- *  @param  expression          the expression to output
+ *  Generate the code to output a variable
+ *  @param  variable  The variable to output
  */
-void Bytecode::output(const Expression *expression)
+void Bytecode::output(const Variable* variable)
 {
-    // convert the expression to a string (this pushes two values on the stack
-    expression->string(this);
+    // convert the variable to a string (this pushes two values on the stack
+    variable->string(this);
     
     // pop the buffer and size from the stack (in reverse order)
     auto size = pop();

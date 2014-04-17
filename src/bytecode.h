@@ -102,10 +102,10 @@ private:
     virtual void raw(const std::string &data) override;
    
     /**
-     *  Generate the code to output an expression
-     *  @param  expression          the expression to output
+     *  Generate the code to output a variable
+     *  @param  variable  The variable to output
      */
-    virtual void output(const Expression *expression) override;
+    virtual void output(const Variable* variable) override;
 
     /**
      *  Generate a conditional statement

@@ -55,7 +55,7 @@ statements(A)       ::= statements(B) statement(C) .                            
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Statements(B); }
 statement(A)        ::= ifStatement(B) .                                        { A = B; }
 statement(A)        ::= RAW(B) .                                                { A = new SmartTpl::RawStatement(B); }
-statement(A)        ::= EXPRESSION outexpr(B) .                                 { A = new SmartTpl::VarStatement(B); }
+statement(A)        ::= EXPRESSION outexpr(B) .                                 { A = new SmartTpl::VarStatement((SmartTpl::Variable*) B); }
 ifStatement(A)      ::= IF boolexpr(B) statements(C) elseStatement(D) .         { A = new SmartTpl::IfStatement(B,C,D); }
 ifStatement(A)      ::= IF boolexpr(B) statements(C) ENDIF.                     { A = new SmartTpl::IfStatement(B, C); }
 elseStatement(A)    ::= ELSE statements(B) ENDIF .                              { A = B; }
