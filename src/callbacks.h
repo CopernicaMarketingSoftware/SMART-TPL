@@ -17,14 +17,14 @@ namespace SmartTpl {
 /**
  *  Signatures of the global callback functions
  */
-void        smart_tpl_write(void *userdata, const char *data, int size);
+void        smart_tpl_write(void *userdata, const char *data, size_t size);
 void        smart_tpl_output(void *userdata, void *variable);
-void       *smart_tpl_member(void *userdata, void *variable, const char *name, int size);
-void       *smart_tpl_variable(void *userdata, const char *name, int size);
+void       *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size);
+void       *smart_tpl_variable(void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string(void *userdata, void *variable);
-int         smart_tpl_to_numeric(void *userdata, void *variable);
-int         smart_tpl_to_boolean(void *userdata, void *variable);
-int         smart_tpl_size(void *userdata, void *variable);
+size_t      smart_tpl_to_numeric(void *userdata, void *variable);
+size_t      smart_tpl_to_boolean(void *userdata, void *variable);
+size_t      smart_tpl_size(void *userdata, void *variable);
 
 /**
  *  Class definition

@@ -73,7 +73,7 @@ SizeCallback Callbacks::_size;
  *  @param  data            pointer to the buffer
  *  @param  size            size of the data to write
  */
-void smart_tpl_write(void *userdata, const char *data, int size)
+void smart_tpl_write(void *userdata, const char *data, size_t size)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
@@ -107,7 +107,7 @@ void smart_tpl_write(void *userdata, const char *data, int size)
  *  @param  size            size of the variable
  *  @return                 pointer to a new variable
  */
- void *smart_tpl_member(void *userdata, void *variable, const char *name, int size)
+ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size)
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;
@@ -126,7 +126,7 @@ void smart_tpl_write(void *userdata, const char *data, int size)
  *  @param  size            size of the variable
  *  @return                 pointer to a new variable
  */
-void *smart_tpl_variable(void *userdata, const char *name, int size)
+void *smart_tpl_variable(void *userdata, const char *name, size_t size)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
@@ -162,7 +162,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-int smart_tpl_to_numeric(void *userdata, void *variable)
+size_t smart_tpl_to_numeric(void *userdata, void *variable)
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;
@@ -177,7 +177,7 @@ int smart_tpl_to_numeric(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-int smart_tpl_to_boolean(void *userdata, void *variable)
+size_t smart_tpl_to_boolean(void *userdata, void *variable)
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;
@@ -192,7 +192,7 @@ int smart_tpl_to_boolean(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 string length
  */
-int smart_tpl_size(void *userdata, void *variable)
+size_t smart_tpl_size(void *userdata, void *variable)
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;

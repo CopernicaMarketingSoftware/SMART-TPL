@@ -14,13 +14,13 @@
  *  Structure with all the callbacks
  */
 struct smart_tpl_callbacks {
-    void (*write)(void *userdata, const char *data, int size);
+    void (*write)(void *userdata, const char *data, size_t size);
     void (*output)(void *userdata, void *variable);
-    void *(*member)(void *userdata, void *variable, const char *name, int size);
-    void *(*variable)(void *userdata, const char *name, int size);
+    void *(*member)(void *userdata, void *variable, const char *name, size_t size);
+    void *(*variable)(void *userdata, const char *name, size_t size);
     const char *(*to_string)(void *userdata, void *variable);
-    int (*to_numeric)(void *userdata, void *variable);
-    int (*to_boolean)(void *userdata, void *variable);
-    int (*size)(void *userdata, void *variable);
+    size_t (*to_numeric)(void *userdata, void *variable);
+    size_t (*to_boolean)(void *userdata, void *variable);
+    size_t (*size)(void *userdata, void *variable);
 };
 
