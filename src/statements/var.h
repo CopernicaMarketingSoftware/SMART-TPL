@@ -43,7 +43,15 @@ public:
     virtual void generate(Generator *generator) const override
     {
         // tell the generator to evaluate an expression, and output it
-        generator->output(_expression.get());
+        Variable* variable = dynamic_cast<Variable*>(_expression.get());
+        if (variable)
+        {
+            generator->outputVariable(variable);
+        }
+        else
+        {
+            generator->output(_expression.get());
+        }
     }
 };
 

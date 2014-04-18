@@ -53,6 +53,7 @@ public:
      *  @param  expression          the expression to output
      */
     virtual void output(const Expression *expression) = 0;
+    virtual void outputVariable(const Variable *variable) = 0;
 
     /**
      *  Generate a conditional statement

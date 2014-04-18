@@ -106,6 +106,7 @@ private:
      *  @param  expression          the expression to output
      */
     virtual void output(const Expression *expression) override;
+    virtual void outputVariable(const Variable *variable) override;
 
     /**
      *  Generate a conditional statement

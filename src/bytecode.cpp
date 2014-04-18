@@ -134,6 +134,11 @@ void Bytecode::output(const Expression *expression)
     _callbacks.write(_userdata, buffer, size);
 }
 
+void Bytecode::outputVariable(const Variable* variable)
+{
+    output(variable);
+}
+
 /**
  *  Generate a conditional statement
  *  @param  expression          the expression to evaluate
