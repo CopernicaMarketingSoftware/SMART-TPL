@@ -123,8 +123,11 @@ jit_value Bytecode::boolean(const Expression *expression)
  */
 void Bytecode::output(const Variable *variable)
 {
-    // @todo Don't call write here directly.
-    write(variable);
+    variable->pointer(this);
+
+    auto var = pop();
+
+    _callbacks.output(_userdata, var);
 }
 
 /**
