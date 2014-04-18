@@ -48,6 +48,7 @@ Bytecode::~Bytecode() {}
 /**
  *  Helper method to pop a value from the stack
  *  @return jit_value
+ *  @note The process WILL crash if you call this while the stack is empty
  */
 jit_value Bytecode::pop()
 {
@@ -183,6 +184,7 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
  *  Generate the code to get a pointer to a variable, given a index by name
  *  @param  parent              parent variable from which the var is retrieved
  *  @param  name                name of the variable
+ *  @note   +1 on the stack
  */
 void Bytecode::varPointer(const Variable *parent, const std::string &name)
 {
@@ -199,6 +201,7 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
  *  Generate the code to get a pointer to a variable, given by an expression
  *  @param  parent              parent variable from which the var is retrieved
  *  @param  expression          Expression that evaluates to a var name
+ *  @note   +1 on the stack
  */
 void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 {
@@ -217,6 +220,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 /**
  *  Generate the code to get a pointer to a variable given a literal name
  *  @param  name                name of the variable
+ *  @note   +1 on the stack
  */
 void Bytecode::varPointer(const std::string &name)
 {
@@ -231,6 +235,7 @@ void Bytecode::varPointer(const std::string &name)
 /**
  *  Create a string or numeric literal
  *  @param  value
+ *  @note   +2 on the stack
  */
 void Bytecode::string(const std::string &value)
 {
@@ -242,6 +247,7 @@ void Bytecode::string(const std::string &value)
 /**
  *  Create a string or numeric literal
  *  @param  value
+ *  @note   +1 on the stack
  */
 void Bytecode::numeric(int value)
 {
@@ -252,6 +258,7 @@ void Bytecode::numeric(int value)
 /**
  *  Create a string or numeric constant for a variable
  *  @param  variable
+ *  @note   +2 on the stack
  */
 void Bytecode::string(const Variable *variable)
 {
@@ -266,6 +273,7 @@ void Bytecode::string(const Variable *variable)
 /**
  *  Create a string or numeric constant for a variable
  *  @param  variable
+ *  @note   +1 on the stack
  */
 void Bytecode::numeric(const Variable *variable)
 {
@@ -276,6 +284,7 @@ void Bytecode::numeric(const Variable *variable)
 /**
  *  Create a boolean constant for a variable
  *  @param  variable
+ *  @note   +1 on the stack
  */
 void Bytecode::boolean(const Variable *variable)
 {
@@ -313,6 +322,7 @@ void Bytecode::stringToNumeric(const Expression *expression)
  *  Arithmetric operation
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::plus(const Expression *left, const Expression *right) 
 {
@@ -328,6 +338,7 @@ void Bytecode::plus(const Expression *left, const Expression *right)
  *  Arithmetric operation
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::minus(const Expression *left, const Expression *right) 
 {
@@ -343,6 +354,7 @@ void Bytecode::minus(const Expression *left, const Expression *right)
  *  Arithmetric operation
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::divide(const Expression *left, const Expression *right) 
 {
@@ -358,6 +370,7 @@ void Bytecode::divide(const Expression *left, const Expression *right)
  *  Arithmetric operation
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::multiply(const Expression *left, const Expression *right) 
 {
@@ -373,6 +386,7 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
  *  Comparison operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::equals(const Expression *left, const Expression *right) 
 {
@@ -390,6 +404,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
  *  Comparison operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::notEquals(const Expression *left, const Expression *right) 
 {
@@ -407,6 +422,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
  *  Comparison operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::greater(const Expression *left, const Expression *right) 
 {
@@ -422,6 +438,7 @@ void Bytecode::greater(const Expression *left, const Expression *right)
  *  Comparison operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::greaterEquals(const Expression *left, const Expression *right) 
 {
@@ -437,6 +454,7 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
  *  Comparison operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::lesser(const Expression *left, const Expression *right) 
 {
@@ -452,6 +470,7 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
  *  Comparison operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 {
@@ -467,6 +486,7 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
  *  Boolean operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::booleanAnd(const Expression *left, const Expression *right) 
 {
@@ -510,6 +530,7 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
  *  Boolean operator
  *  @param  left
  *  @param  right
+ *  @note   +1 on the stack
  */
 void Bytecode::booleanOr(const Expression *left, const Expression *right) 
 {
@@ -553,10 +574,31 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  *  Generate the code to apply a set of modifiers on an expression
  *  @param  modifiers          The set of modifiers to apply
  *  @param  expression         The expression to apply to modifiers on
+ *  @note   +1 on the stack
  */
 void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expression)
 {
-    // @todo Implementation
+    expression->variable(this);
+    for (auto &modifier : *modifiers)
+    {
+
+        string(*modifier.get()->token());
+
+        // pop the buffer and size from the stack (in reverse order) to get the modifier name
+        auto size = pop();
+        auto buffer = pop();
+
+        // call the native function to save the modifier
+        // to the variable on the stack
+        _stack.push(_callbacks.modifier(_userdata, buffer, size));
+
+        // pop the modifier
+        auto mod = pop();
+        // pop the latest variable from the stack
+        auto var = pop();
+        // let's apply the modifier and push the new result of it to the stack
+        _stack.push(_callbacks.apply(_userdata, var, mod));
+    }
 }
 
 /**

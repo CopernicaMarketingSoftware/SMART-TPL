@@ -87,6 +87,18 @@ private:
      *  @var    SizeCallback
      */
     static SizeCallback _size;
+
+    /**
+     *  Signature of the function to retrieve the modifier
+     *  @var    ModifierCallback
+     */
+    static ModifierCallback _modifier;
+
+    /**
+     *  Signature of the function to apply a modifier
+     *  @var    ApplyCallback
+     */
+    static ApplyCallback _apply;
     
 public:
     /**
@@ -247,6 +259,33 @@ public:
         
         // create the instruction
         return _function->insn_call_native("smart_tpl_size", (void *)smart_tpl_size, _size.signature(), args, 2, 0);
+    }
+
+    jit_value modifier(const jit_value &userdata, const jit_value &name, const jit_value &size)
+    {
+        // construct the arguments
+        jit_value_t args[3] = {
+            userdata.raw(),
+            name.raw(),
+            size.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_modifier", (void *)smart_tpl_modifier, _modifier.signature(), args, 3, 0);
+    }
+    //void *(*apply)(void *userdata, void *variable, void *modifier);
+
+    jit_value apply(const jit_value &userdata, const jit_value &variable, const jit_value &modifier)
+    {
+        // construct the arguments
+        jit_value_t args[3] = {
+            userdata.raw(),
+            variable.raw(),
+            modifier.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_apply", (void *) smart_tpl_apply, _apply.signature(), args, 3, 0);
     }
 };
     

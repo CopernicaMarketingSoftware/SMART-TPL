@@ -66,6 +66,18 @@ ToBooleanCallback Callbacks::_toBoolean;
  */
 SizeCallback Callbacks::_size;
 
+/**
+ *  Signature of the function to retrieve the modifier
+ *  @var    ModifierCallback
+ */
+ModifierCallback Callbacks::_modifier;
+
+/**
+ *  Signature of the function to apply a modifier
+ *  @var    ApplyCallback
+ */
+ApplyCallback Callbacks::_apply;
+
 
 /**
  *  Function to write raw data
@@ -203,13 +215,11 @@ size_t smart_tpl_size(void *userdata, void *variable)
 
 void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 {
-    std::cout << "smart_tpl_modifier(" << userdata << "," << name << ");" << std::endl;
     return nullptr;
 }
 
 void* smart_tpl_apply(void *userdata, void *variable, void *modifier)
 {
-    std::cout << "smart_tpl_apply(" << userdata << "," << variable << "," << modifier << ");" << std::endl;
     return variable;
 }
 

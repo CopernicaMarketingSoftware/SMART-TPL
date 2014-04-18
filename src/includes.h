@@ -65,6 +65,8 @@
 #include "callbacks/tostring.h"
 #include "callbacks/tonumeric.h"
 #include "callbacks/toboolean.h"
+#include "callbacks/modifier.h"
+#include "callbacks/apply.h"
 #include "callbacks/size.h"
 #include "tokenprocessor.h"
 #include "parser.h"
