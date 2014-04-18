@@ -1,7 +1,7 @@
 <html>
     <body>
         This is an example template.
-        With a {$variable}!
+        With a {$name|toupper|tolower}!
         {if true}
             And a conditional text
         {/if}

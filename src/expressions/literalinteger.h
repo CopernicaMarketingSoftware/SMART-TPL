@@ -74,6 +74,11 @@ public:
         // create numeric literal
         generator->numeric(_value);
     }
+
+    virtual void variable(Generator *generator) const override
+    {
+        numeric(generator);
+    }
 };
 
 /**

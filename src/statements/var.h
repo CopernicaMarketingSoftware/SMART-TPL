@@ -42,15 +42,15 @@ public:
      */
     virtual void generate(Generator *generator) const override
     {
-        // tell the generator to evaluate an expression, and output it
+        // Check if the expression is a variable, if it is just output it, write it otherwise
         Variable* variable = dynamic_cast<Variable*>(_expression.get());
         if (variable)
         {
-            generator->outputVariable(variable);
+            generator->output(variable);
         }
         else
         {
-            generator->output(_expression.get());
+            generator->write(_expression.get());
         }
     }
 };

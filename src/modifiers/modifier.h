@@ -48,6 +48,8 @@ public:
      *  Destructor
      */
     virtual ~Modifier() {}
+
+    const Token* token() const { return _name.get(); };
     
 };
 

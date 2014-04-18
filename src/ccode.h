@@ -35,11 +35,16 @@ private:
     virtual void raw(const std::string &data) override;
         
     /**
-     *  Generate the code to output an expression
-     *  @param  expression  The expression to output
+     *  Generate the code to output a variable
+     *  @param  variable           The variable to output
      */
-    virtual void output(const Expression *expression) override;
-    virtual void outputVariable(const Variable *variable) override;
+    virtual void output(const Variable *variable) override;
+
+    /**
+     *  Generate the code to write an expression as a string
+     *  @param  expression          the expression to write as a string
+     */
+    virtual void write(const Expression *expression) override;
 
     /**
      *  Generate a conditional statement
@@ -76,6 +81,7 @@ private:
     virtual void string(const Variable *variable) override;
     virtual void numeric(const Variable *variable) override;
     virtual void boolean(const Variable *variable) override;
+    virtual void variable(const Variable *variable) override;
 
     /**
      *  Create a string literal from an expression that is known to return a numeric value,
@@ -114,6 +120,13 @@ private:
      */
     virtual void booleanAnd(const Expression *left, const Expression *right) override;
     virtual void booleanOr(const Expression *left, const Expression *right) override;
+
+    /**
+     *  Generate the code to apply a set of modifiers on an expression
+     *  @param  modifiers          The set of modifiers to apply
+     *  @param  expression         The expression to apply to modifiers on
+     */
+    virtual void modifiers(const Modifiers* modifiers, const Expression *expression) override;
     
 public:
     /**

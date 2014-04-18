@@ -65,6 +65,11 @@ public:
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->numeric(_value ? 1 : 0);
     }
+
+    virtual void variable(Generator *generator) const override
+    {
+        boolean(generator);
+    }
 };
 
 /**

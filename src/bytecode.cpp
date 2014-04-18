@@ -118,10 +118,20 @@ jit_value Bytecode::boolean(const Expression *expression)
 }
 
 /**
- *  Generate the code to output an expression
- *  @param  expression          the expression to output
+ *  Generate the code to output a variable
+ *  @param  variable           The variable to output
  */
-void Bytecode::output(const Expression *expression)
+void Bytecode::output(const Variable *variable)
+{
+    // @todo Don't call write here directly.
+    write(variable);
+}
+
+/**
+ *  Generate the code to write an expression as a string
+ *  @param  expression          the expression to write as a string
+ */
+void Bytecode::write(const Expression *expression)
 {
     // convert the expression to a string (this pushes two values on the stack
     expression->string(this);
@@ -132,11 +142,6 @@ void Bytecode::output(const Expression *expression)
 
     // call the write function
     _callbacks.write(_userdata, buffer, size);
-}
-
-void Bytecode::outputVariable(const Variable* variable)
-{
-    output(variable);
 }
 
 /**
@@ -273,6 +278,12 @@ void Bytecode::boolean(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
     _stack.push(_callbacks.to_boolean(_userdata, pointer(variable)));
+}
+
+void Bytecode::variable(const Variable* variable)
+{
+    // @todo
+    string(variable);
 }
 
 /**
@@ -533,6 +544,16 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
 
     // push the result on the stack
     _stack.push(result);
+}
+
+/**
+ *  Generate the code to apply a set of modifiers on an expression
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  expression         The expression to apply to modifiers on
+ */
+void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expression)
+{
+    // @todo Implementation
 }
 
 /**

@@ -25,7 +25,9 @@ static struct smart_tpl_callbacks callbacks = {
     .to_string  =   smart_tpl_to_string,
     .to_numeric =   smart_tpl_to_numeric,
     .to_boolean =   smart_tpl_to_boolean,
-    .size       =   smart_tpl_size
+    .size       =   smart_tpl_size,
+    .modifier   =   smart_tpl_modifier,
+    .apply      =   smart_tpl_apply,
 };
     
 /**

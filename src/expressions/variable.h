@@ -61,6 +61,11 @@ public:
     {
         generator->string(this);
     }
+
+    virtual void variable(Generator *generator) const override
+    {
+        pointer(generator);
+    }
 };
 
 /**

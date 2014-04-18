@@ -49,6 +49,8 @@ public:
      *  @param  generator
      */
     virtual void string(Generator *generator) const = 0;
+
+    virtual void variable(Generator *generator) const = 0;
     
 };
 

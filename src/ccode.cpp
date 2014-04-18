@@ -47,10 +47,26 @@ void CCode::raw(const std::string &data)
 }
 
 /**
- *  Generate the code to output an expression
- *  @param  expression  expression to output
+ *  Generate the code to output a variable
+ *  @param  variable           The variable to output
  */
-void CCode::output(const Expression *expression)
+void CCode::output(const Variable* variable)
+{
+    // we're going to call the output function
+    _out << "callbacks->output(userdata,";
+
+    // convert the variable to the pointer of it
+    variable->pointer(this);
+
+    // end of the function
+    _out << ");" << std::endl;
+}
+
+/**
+ *  Generate the code to write an expression as a string
+ *  @param  expression          the expression to write as a string
+ */
+void CCode::write(const Expression *expression)
 {
     // we're going to call the write function
     _out << "callbacks->write(userdata,";
@@ -59,13 +75,6 @@ void CCode::output(const Expression *expression)
     expression->string(this);
 
     // end of the function
-    _out << ");" << std::endl;
-}
-
-void CCode::outputVariable(const Variable *variable)
-{
-    _out << "callbacks->output(userdata,";
-    variable->pointer(this);
     _out << ");" << std::endl;
 }
 
@@ -234,6 +243,22 @@ void CCode::boolean(const Variable *variable)
 }
 
 /**
+ *  Get a variable
+ *  @param variable
+ */
+void CCode::variable(const Variable* variable)
+{
+    // call the variable callback
+    _out << "callbacks->variable(userdata,";
+
+    // generate pointer to the variable
+    variable->pointer(this);
+
+    // that was it
+    _out << ")";
+}
+
+/**
  *  Create a string value from an expression that is known to return a numeric value
  *  @param  expression
  */
@@ -294,6 +319,24 @@ void CCode::lesserEquals(const Expression *left, const Expression *right)   { le
  */
 void CCode::booleanAnd(const Expression *left, const Expression *right) { left->boolean(this); _out << "&&"; right->boolean(this); }
 void CCode::booleanOr(const Expression *left, const Expression *right)  { left->boolean(this); _out << "||"; right->boolean(this); }
+
+/**
+ *  Generate the code to apply a set of modifiers on an expression
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  expression         The expression to apply to modifiers on
+ */
+void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
+{
+    for (auto &modifier : *modifiers)
+        _out << "callbacks->apply(userdata,";
+    expression->variable(this);
+    for (auto &modifier : *modifiers)
+    {
+        _out << ",callbacks->modifier(userdata,";
+        string(*modifier.get()->token());
+        _out << "))";
+    }
+}
 
 /**
  *  End of namespace

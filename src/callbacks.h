@@ -25,6 +25,8 @@ const char *smart_tpl_to_string(void *userdata, void *variable);
 size_t      smart_tpl_to_numeric(void *userdata, void *variable);
 size_t      smart_tpl_to_boolean(void *userdata, void *variable);
 size_t      smart_tpl_size(void *userdata, void *variable);
+void*       smart_tpl_modifier(void *userdata, const char *name, size_t size);
+void*       smart_tpl_apply(void *userdata, void *variable, void *modifier);
 
 /**
  *  Class definition

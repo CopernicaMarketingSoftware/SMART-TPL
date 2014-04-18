@@ -48,6 +48,11 @@ public:
     {
         generator->minus(_left.get(), _right.get());
     }
+
+    virtual void variable(Generator *generator) const override
+    {
+        boolean(generator);
+    }
 };
 
 /**

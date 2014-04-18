@@ -23,6 +23,7 @@ namespace SmartTpl {
 class Variable;
 class Expression;
 class Statements;
+class Modifiers;
 
 /**
  *  Class definition
@@ -49,11 +50,16 @@ public:
     virtual void raw(const std::string &data) = 0;
     
     /**
-     *  Generate the code to output an expression
-     *  @param  expression          the expression to output
+     *  Generate the code to output a variable
+     *  @param  variable           The variable to output
      */
-    virtual void output(const Expression *expression) = 0;
-    virtual void outputVariable(const Variable *variable) = 0;
+    virtual void output(const Variable *variable) = 0;
+
+    /**
+     *  Generate the code to write an expression as a string
+     *  @param  expression          the expression to write as a string
+     */
+    virtual void write(const Expression *expression) = 0;
 
     /**
      *  Generate a conditional statement
@@ -91,6 +97,7 @@ public:
     virtual void string(const Variable *variable) = 0;
     virtual void numeric(const Variable *variable) = 0;
     virtual void boolean(const Variable *variable) = 0;
+    virtual void variable(const Variable *variable) = 0;
     
     /**
      *  Create a string literal from an expression that is known to return a numeric value,
@@ -129,6 +136,13 @@ public:
      */
     virtual void booleanAnd(const Expression *left, const Expression *right) = 0;
     virtual void booleanOr(const Expression *left, const Expression *right) = 0;
+
+    /**
+     *  Generate the code to apply a set of modifiers on an expression
+     *  @param  modifiers          The set of modifiers to apply
+     *  @param  expression         The expression to apply to modifiers on
+     */
+    virtual void modifiers(const Modifiers* modifiers, const Expression *expression) = 0;
     
 };
 
