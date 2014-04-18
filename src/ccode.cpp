@@ -52,14 +52,24 @@ void CCode::raw(const std::string &data)
  */
 void CCode::output(const Expression *expression)
 {
-    // we're going to call the write function
-    _out << "callbacks->write(userdata,";
-        
-    // convert the expression to a string
-    expression->string(this);
-        
-    // end of the function
-    _out << ");" << std::endl;
+    const Variable* variable = dynamic_cast<const Variable*>(expression);
+    if (variable)
+    {
+        _out << "callbacks->output(userdata,";
+        variable->pointer(this);
+        _out << ");" << std::endl;
+    }
+    else
+    {
+        // we're going to call the write function
+        _out << "callbacks->write(userdata,";
+
+        // convert the expression to a string
+        expression->string(this);
+
+        // end of the function
+        _out << ");" << std::endl;
+    }
 }
 
 /**
