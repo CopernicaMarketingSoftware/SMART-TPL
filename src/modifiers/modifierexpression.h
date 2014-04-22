@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Modifier
+class ModifierExpression
 {
 private:
     /**
@@ -35,21 +35,25 @@ public:
      *  Constructor
      *  @param  name
      */
-    Modifier(const Token *name) : _name(name) {}
+    ModifierExpression(const Token *name) : _name(name) {}
 
     /**
      *  Constructor
      *  @param  name
      *  @param  parameters
      */
-    Modifier(const Token *name, const Parameters *parameters) : _name(name), _parameters(parameters) {}
+    ModifierExpression(const Token *name, const Parameters *parameters) : _name(name), _parameters(parameters) {}
     
     /** 
      *  Destructor
      */
-    virtual ~Modifier() {}
+    virtual ~ModifierExpression() {}
 
-    const Token* token() const { return _name.get(); };
+    /**
+     *  The name of the modifier
+     *  @return const std::string
+     */
+    const std::string token() const { return *_name.get(); };
     
 };
 

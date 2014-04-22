@@ -16,6 +16,7 @@ namespace SmartTpl {
 /**
  *  Constructor
  *  @param  source The source that holds the template
+ *  @throws std::runtime_error If something went wrong while compiling the jit code
  */
 Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params)),
@@ -48,10 +49,13 @@ Bytecode::~Bytecode() {}
 /**
  *  Helper method to pop a value from the stack
  *  @return jit_value
- *  @note The process WILL crash if you call this while the stack is empty
+ *  @throws std::runtime_error if the internal stack is empty
  */
 jit_value Bytecode::pop()
 {
+    // let's check if the stack is empty and throw an error if it is instead of crashing
+    if (_stack.empty())
+        throw std::runtime_error("_stack is empty");
     // get the value from the stack
     jit_value value = _stack.top();
     
@@ -129,6 +133,15 @@ void Bytecode::output(const Variable *variable)
     auto var = pop();
 
     _callbacks.output(_userdata, var);
+}
+
+/**
+ *  Generate the code to output the output of a filter
+ *  @param  filter             The filter to eventually output
+ */
+void Bytecode::output(const Filter *filter)
+{
+    write(filter);
 }
 
 /**
@@ -578,11 +591,11 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  */
 void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expression)
 {
-    expression->variable(this);
+    expression->string(this);
     for (auto &modifier : *modifiers)
     {
 
-        string(*modifier.get()->token());
+        string(modifier.get()->token());
 
         // pop the buffer and size from the stack (in reverse order) to get the modifier name
         auto size = pop();

@@ -12,6 +12,35 @@
  *  Namespace
  */
 namespace SmartTpl {
+
+/**
+ *  @todo These classes should probably be put elsewhere
+ */
+class ToUpperModifier : public Modifier {
+public:
+    virtual ~ToUpperModifier() {};
+    Value* modify(Value* input) override {
+        std::string output(input->toString(), input->size());
+        for (auto & c : output) c = toupper(c);
+        return new StringValue(output);
+    };
+};
+
+class ToLowerModifier : public Modifier {
+public:
+    virtual ~ToLowerModifier() {};
+    Value* modify(Value* input) override {
+        std::string output(input->toString(), input->size());
+        for (auto & c : output) c = tolower(c);
+        return new StringValue(output);
+    };
+};
+
+Data::Data()
+{
+    modifier("toupper", new ToUpperModifier);
+    modifier("tolower", new ToLowerModifier);
+}
     
 /**
  *  Assign data
@@ -58,6 +87,12 @@ Data &Data::assign(const char *name, Value* value)
     return *this;
 }
 
+Data &Data::modifier(const char *name, Modifier* modifier)
+{
+    _modifiers[name] = std::unique_ptr<Modifier>(modifier);
+    return *this;
+}
+
 /**
  *  Retrieve a variable pointer by name
  *  @param  name        the name
@@ -71,6 +106,14 @@ Value *Data::value(const char *name, size_t size) const
     if (iter == _variables.end()) return nullptr;
     
     // get the pointer
+    return iter->second.get();
+}
+
+Modifier* Data::modifier(const char* name, size_t size) const
+{
+    auto iter = _modifiers.find(name);
+    if (iter == _modifiers.end())
+        return nullptr;
     return iter->second.get();
 }
 

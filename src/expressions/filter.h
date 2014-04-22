@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Filter : public Variable
+class Filter : public Expression
 {
 private:
     /**
@@ -44,28 +44,11 @@ public:
      */
     virtual ~Filter() {}
 
-    virtual void pointer(Generator *generator) const override
-    {
-        _modifiers.get()->generate(generator, _expression.get());
-    }
-
     /**
-     *  Generate the expression as a numeric value
-     *  @param  generator
+     *  The return type of the expression
+     *  @return Type
      */
-    virtual void numeric(Generator *generator) const override
-    {
-        // @todo implementation
-    }
-    
-    /**
-     *  Generate the expression as a boolean value
-     *  @param  generator
-     */
-    virtual void boolean(Generator *generator) const override
-    {
-        // @todo implementation
-    }
+    virtual Type type() const { return Type::Value; };
     
     /**
      *  Generate the expression as string value
@@ -73,14 +56,7 @@ public:
      */
     virtual void string(Generator *generator) const override
     {
-        std::cout << "Filter::string(" << generator << ");" << std::endl;
         _modifiers.get()->generate(generator, _expression.get());
-        // @todo implementation
-    }
-
-    virtual void variable(Generator *generator) const override
-    {
-        _expression.get()->variable(generator);
     }
 };
 

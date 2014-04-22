@@ -46,13 +46,19 @@ private:
      *  @var    std::map
      */
     std::map<const char *,std::unique_ptr<Value>, cmp_str> _variables;
+
+    /**
+     *  All modifiers
+     *  @var std::map
+     */
+    std::map<const char *,std::unique_ptr<Modifier>, cmp_str> _modifiers;
     
     
 public:
     /**
      *  Constructor
      */
-    Data() {}
+    Data();
     
     /**
      *  Destructor
@@ -69,13 +75,23 @@ public:
     Data &assign(const char *name, int value);
     Data &assign(const char *name, Value *value);
 
+    Data &modifier(const char *name, Modifier* modifier);
+
     /**
      *  Retrieve a variable pointer by name
      *  @param  name        the name
      *  @param  size        size of the name
-     *  @return Value*
+     *  @return Value*      nullptr in case it isn't found
      */
     Value *value(const char *name, size_t size) const;
+
+    /**
+     *  Retrieve a modifier by name
+     *  @param  name        the name of the modifier
+     *  @param  size        size of the name
+     *  @return Modifier*   nullptr in case it isn't found
+     */
+    Modifier* modifier(const char* name, size_t) const;
 };
 
 /**

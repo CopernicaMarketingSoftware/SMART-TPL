@@ -37,6 +37,12 @@ public:
     virtual ~LiteralBoolean() {}
 
     /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const { return Type::Boolean; }
+
+    /**
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
@@ -64,11 +70,6 @@ public:
     {
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->numeric(_value ? 1 : 0);
-    }
-
-    virtual void variable(Generator *generator) const override
-    {
-        boolean(generator);
     }
 };
 

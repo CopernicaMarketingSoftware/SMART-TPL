@@ -17,6 +17,18 @@ namespace SmartTpl {
  */
 class Expression
 {
+public:
+    /**
+     *  The supported expression types
+     *  @todo Start actually properly using these values
+     */
+    enum class Type : std::int8_t {
+        Numeric = 0,            // numeric type
+        String = 1,             // string type
+        Boolean = 2,            // boolean type
+        Value = 3               // variable that was modified by a modifier / type may be unknown
+    };
+
 protected:
     /**
      *  Constructor
@@ -31,27 +43,30 @@ public:
      *  Destructor
      */
     virtual ~Expression() {}
+
+    /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const = 0;
     
     /**
      *  Generate the expression as a numeric value
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const = 0;
+    virtual void numeric(Generator *generator) const {};
     
     /**
      *  Generate the expression as a boolean value
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const = 0;
+    virtual void boolean(Generator *generator) const {};
     
     /**
      *  Generate the expression as string value
      *  @param  generator
      */
-    virtual void string(Generator *generator) const = 0;
-
-    virtual void variable(Generator *generator) const = 0;
-    
+    virtual void string(Generator *generator) const {};
 };
 
 /**

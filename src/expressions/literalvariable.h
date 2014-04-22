@@ -36,6 +36,12 @@ public:
      *  Destructor
      */
     virtual ~LiteralVariable() {}
+
+    /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const { return Type::Value; }
     
     /**
      *  Generate the output that leaves a pointer to the variable

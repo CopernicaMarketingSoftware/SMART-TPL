@@ -45,6 +45,12 @@ public:
      *  Destructor
      */
     virtual ~BinaryOperator() {}
+
+    /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const { return Type::Boolean; }
 };
 
 /**

@@ -10,10 +10,12 @@
 #include <stdexcept>
 #include <dlfcn.h>
 #include <cstring>
+#include <algorithm>
 
 #include "source.h"
 #include "value.h"
 #include "callbacks.h"
+#include "modifier.h"
 #include "data.h"
 #include "template.h"
 

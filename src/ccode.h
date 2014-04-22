@@ -41,6 +41,12 @@ private:
     virtual void output(const Variable *variable) override;
 
     /**
+     *  Generate the code to output the output of a filter
+     *  @param  filter             The filter to eventually output
+     */
+    virtual void output(const Filter *filter) override;
+
+    /**
      *  Generate the code to write an expression as a string
      *  @param  expression          the expression to write as a string
      */

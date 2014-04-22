@@ -76,6 +76,11 @@ public:
     {
         return _buffer;
     }
+
+    Modifier* modifier(const char* key, size_t size)
+    {
+        return _data->modifier(key, size);
+    }
 };
 
 /**

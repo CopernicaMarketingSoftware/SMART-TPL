@@ -46,6 +46,12 @@ public:
     virtual ~LiteralInteger() {}
 
     /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const { return Type::Numeric; }
+
+    /**
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
@@ -73,11 +79,6 @@ public:
     {
         // create numeric literal
         generator->numeric(_value);
-    }
-
-    virtual void variable(Generator *generator) const override
-    {
-        numeric(generator);
     }
 };
 

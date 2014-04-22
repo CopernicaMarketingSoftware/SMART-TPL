@@ -99,7 +99,7 @@ void smart_tpl_write(void *userdata, const char *data, size_t size)
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to the variable
  */
- void smart_tpl_output(void *userdata, void *variable)
+void smart_tpl_output(void *userdata, void *variable)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
@@ -119,7 +119,7 @@ void smart_tpl_write(void *userdata, const char *data, size_t size)
  *  @param  size            size of the variable
  *  @return                 pointer to a new variable
  */
- void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size)
+void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size)
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;
@@ -158,7 +158,7 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
  */
 const char *smart_tpl_to_string(void *userdata, void *variable)
 {
-    // convert the variable to a variable object
+    // convert the variable to a value object
     auto *var = (Value *)variable;
     
     // convert to string
@@ -176,7 +176,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
  */
 size_t smart_tpl_to_numeric(void *userdata, void *variable)
 {
-    // convert the variable to a variable object
+    // convert the variable to a value object
     auto *var = (Value *)variable;
     
     // convert to numeric
@@ -191,10 +191,10 @@ size_t smart_tpl_to_numeric(void *userdata, void *variable)
  */
 size_t smart_tpl_to_boolean(void *userdata, void *variable)
 {
-    // convert the variable to a variable object
+    // convert the variable to a value object
     auto *var = (Value *)variable;
     
-    // convert to numeric
+    // convert to bool
     return var->toBoolean();
 }
     
@@ -206,21 +206,26 @@ size_t smart_tpl_to_boolean(void *userdata, void *variable)
  */
 size_t smart_tpl_size(void *userdata, void *variable)
 {
-    // convert the variable to a variable object
+    // convert the variable to a value object
     auto *var = (Value *)variable;
     
-    // convert to numeric
+    // return the size
     return var->size();
 }
 
 void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 {
-    return nullptr;
+    auto *handler = (Handler *)userdata;
+    return handler->modifier(name, size);
 }
 
-void* smart_tpl_apply(void *userdata, void *variable, void *modifier)
+void* smart_tpl_apply(void *userdata, void *variable, void *modifier_ptr)
 {
-    return variable;
+    if (modifier_ptr == nullptr)
+        return variable;
+    auto *modifier = (Modifier*) modifier_ptr;
+    auto *value = (Value*) variable;
+    return modifier->modify(value);
 }
 
 /**

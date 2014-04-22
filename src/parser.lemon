@@ -14,7 +14,7 @@
 %type   filter          {SmartTpl::Filter*}
 %type   parameters      {SmartTpl::Parameters*}
 %type   modifiers       {SmartTpl::Modifiers*}
-%type   modifier        {SmartTpl::Modifier*}
+%type   modifier        {SmartTpl::ModifierExpression*}
 
 %default_destructor { if ($$) delete $$; }
 %token_destructor { if ($$) delete $$; }
@@ -86,8 +86,8 @@ variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     
 variable(A)         ::= variable(B) DOT IDENTIFIER(C) .                         { A = new SmartTpl::LiteralArrayAccess(B,C); }
 modifiers(A)        ::= modifiers(B) PIPE modifier(C) .                         { A = B; A->add(C); }
 modifiers(A)        ::= modifier(B) .                                           { A = new SmartTpl::Modifiers(B); }
-modifier(A)         ::= IDENTIFIER(B) COLON parameters(C) .                     { A = new SmartTpl::Modifier(B, C); }
-modifier(A)         ::= IDENTIFIER(B) .                                         { A = new SmartTpl::Modifier(B); }
+modifier(A)         ::= IDENTIFIER(B) COLON parameters(C) .                     { A = new SmartTpl::ModifierExpression(B, C); }
+modifier(A)         ::= IDENTIFIER(B) .                                         { A = new SmartTpl::ModifierExpression(B); }
 parameters(A)       ::= parameters(B) COLON expr(C) .                           { A = B; A->add(C); }
 parameters(A)       ::= expr(B) .                                               { A = new SmartTpl::Parameters(B); }
 

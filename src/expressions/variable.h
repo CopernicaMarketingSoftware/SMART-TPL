@@ -28,9 +28,9 @@ public:
      *  Destructor
      */
     virtual ~Variable() {}
-    
+
     /**
-     *  Generate the code to get a pointer address to the variable
+     *  Generate the output that leaves a pointer to the variable
      *  @param  generator
      */
     virtual void pointer(Generator *generator) const = 0;
@@ -60,11 +60,6 @@ public:
     virtual void string(Generator *generator) const override
     {
         generator->string(this);
-    }
-
-    virtual void variable(Generator *generator) const override
-    {
-        pointer(generator);
     }
 };
 

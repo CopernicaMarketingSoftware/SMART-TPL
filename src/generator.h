@@ -24,6 +24,7 @@ class Variable;
 class Expression;
 class Statements;
 class Modifiers;
+class Filter;
 
 /**
  *  Class definition
@@ -54,6 +55,12 @@ public:
      *  @param  variable           The variable to output
      */
     virtual void output(const Variable *variable) = 0;
+
+    /**
+     *  Generate the code to output the output of a filter
+     *  @param  filter             The filter to eventually output
+     */
+    virtual void output(const Filter *filter) = 0;
 
     /**
      *  Generate the code to write an expression as a string

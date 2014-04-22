@@ -24,7 +24,7 @@
 #include "quotedstring.h"
 #include "generator.h"
 #include "modifiers/parameters.h"
-#include "modifiers/modifier.h"
+#include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"
 #include "expressions/expression.h"
 #include "expressions/variable.h"

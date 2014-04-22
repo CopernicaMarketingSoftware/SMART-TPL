@@ -22,16 +22,16 @@ private:
      *  List of modifiers
      *  @var    std::list
      */
-    std::list<std::unique_ptr<const Modifier>> _modifiers;
+    std::list<std::unique_ptr<const ModifierExpression>> _modifiers;
 
 public:
-    typedef std::list<std::unique_ptr<const Modifier>>::const_iterator const_iterator;
+    typedef std::list<std::unique_ptr<const ModifierExpression>>::const_iterator const_iterator;
 
     /**
      *  Constructor
      *  @param  modifier
      */
-    Modifiers(const Modifier *modifier)
+    Modifiers(const ModifierExpression *modifier)
     {
         add(modifier);
     }
@@ -45,9 +45,9 @@ public:
      *  Add a modifier to the list of modifiers
      *  @param  modifier
      */
-    void add(const Modifier *modifier)
+    void add(const ModifierExpression *modifier)
     {
-        _modifiers.push_back(std::unique_ptr<const Modifier>(modifier));
+        _modifiers.push_back(std::unique_ptr<const ModifierExpression>(modifier));
     }
 
     void generate(Generator *generator, const Expression *expression) const

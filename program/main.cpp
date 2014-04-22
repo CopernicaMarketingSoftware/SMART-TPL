@@ -70,7 +70,7 @@ static bool compile(const std::string &base)
         std::cerr << "Failure: " << input << " (" << error.what() << ")" << std::endl;
 
         // unlink our failed C file
-        unlink(c_output.c_str());
+        //unlink(c_output.c_str());
         
         // report error
         return false;
@@ -90,7 +90,7 @@ static bool compile(const std::string &base)
     if (WEXITSTATUS(status) != 0) return false;
     
     // unlink intermediate C file
-    unlink(c_output.c_str());
+    //unlink(c_output.c_str());
     
     // done
     return true;

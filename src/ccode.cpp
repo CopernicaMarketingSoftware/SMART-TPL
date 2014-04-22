@@ -63,6 +63,22 @@ void CCode::output(const Variable* variable)
 }
 
 /**
+ *  Generate the code to output the output of a filter
+ *  @param  filter             The filter to eventually output
+ */
+void CCode::output(const Filter *filter)
+{
+    // We're going to call the output callback function
+    _out << "callbacks->output(userdata,";
+
+    // call the string method on our filter, which writes all the filtering code for us
+    filter->string(this);
+
+    // and let's properly end the C statement
+    _out << ");" << std::endl;
+}
+
+/**
  *  Generate the code to write an expression as a string
  *  @param  expression          the expression to write as a string
  */
@@ -206,8 +222,6 @@ void CCode::string(const Variable *variable)
     
     // that was it
     _out << ")";
-    
-    
 }
 
 /**
@@ -321,20 +335,53 @@ void CCode::booleanAnd(const Expression *left, const Expression *right) { left->
 void CCode::booleanOr(const Expression *left, const Expression *right)  { left->boolean(this); _out << "||"; right->boolean(this); }
 
 /**
+ *  Apply one modifier to the expression
+ *  @param  expression
+ *  @param  modifier
+ *  @todo Actually implement it using the ideas described in the comments here
+ */
+/*void CCode::modifier(const Expression *expression, const Modifier *modifier)
+{
+    // check the expression type, because we are going to call a different
+    // apply_to_*** function depending on the expression type
+    switch (expression->type()) {
+        case Type::Numeric:
+            // call the apply_to_numeric function
+            _out << "callbacks->apply_to_numeric(userdata,";
+
+            // convert the expression into a literal numeric value
+            expression->numeric(this);
+
+            // fetch the modifier
+            _out << "callbacks->modifier(" << modifier->name() << "," << modifier->size() << ")";
+            break;
+
+}*/
+
+
+/**
  *  Generate the code to apply a set of modifiers on an expression
  *  @param  modifiers          The set of modifiers to apply
  *  @param  expression         The expression to apply to modifiers on
  */
 void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
 {
-    for (auto &modifier : *modifiers)
-        _out << "callbacks->apply(userdata,";
-    expression->variable(this);
-    for (auto &modifier : *modifiers)
+    // @todo This call currently only supports Expressions of the type Variable
+    const Variable* variable = dynamic_cast<const Variable*>(expression);
+    if (variable)
     {
-        _out << ",callbacks->modifier(userdata,";
-        string(*modifier.get()->token());
-        _out << "))";
+        for (auto &modifier : *modifiers)
+        {
+            (void) modifier; // Yeah yeah compiler I get it, I am not using modifier
+            _out << "callbacks->apply(userdata,";
+        }
+        variable->pointer(this);
+        for (auto &modifier : *modifiers)
+        {
+            _out << ",callbacks->modifier(userdata,";
+            string(modifier.get()->token());
+            _out << "))";
+        }
     }
 }
 

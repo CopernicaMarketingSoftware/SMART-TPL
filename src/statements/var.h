@@ -50,7 +50,15 @@ public:
         }
         else
         {
-            generator->write(_expression.get());
+            Filter *filter = dynamic_cast<Filter*>(_expression.get());
+            if (filter)
+            {
+                generator->output(filter);
+            }
+            else
+            {
+                generator->write(_expression.get());
+            }
         }
     }
 };
