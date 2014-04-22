@@ -8,9 +8,40 @@
  */
 
 /**
+ *  C++ dependencies
+ */
+
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <memory>
+#include <list>
+#include <sstream>
+#include <stack>
+#include <string.h>
+#include <map>
+#include <stdexcept>
+#include <dlfcn.h>
+#include <cstring>
+#include <algorithm>
+#include <set>
+
+/**
  *  Public includes
  */
-#include "../include/smarttpl.h"
+#include "include/source.h"
+#include "include/value.h"
+#include "include/callbacks.h"
+#include "include/modifier.h"
+#include "include/data.h"
+#include "include/template.h"
+
+#include "include/file.h"
+#include "include/buffer.h"
+#include "include/empty.h"
+#include "include/string.h"
+#include "include/numeric.h"
+#include "include/map.h"
 
 /**
  *  Library only dependencies

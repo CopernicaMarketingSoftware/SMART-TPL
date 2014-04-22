@@ -19,20 +19,34 @@
 #ifndef __SMART_TPL_H__
 #define __SMART_TPL_H__
 
-/**
- *  Dependencies
- */
 #include <string>
-#include <map>
+#include <iostream>
+#include <fstream>
 #include <memory>
+#include <list>
+#include <sstream>
+#include <stack>
+#include <string.h>
+#include <map>
+#include <stdexcept>
+#include <dlfcn.h>
 #include <cstring>
+#include <algorithm>
+#include <set>
 
-/**
- *  All header files of the SmartTpl library
- */
-#include <smarttpl/value.h>
-#include <smarttpl/data.h>
-#include <smarttpl/template.h>
+#include "smarttpl/source.h"
+#include "smarttpl/value.h"
+#include "smarttpl/callbacks.h"
+#include "smarttpl/modifier.h"
+#include "smarttpl/data.h"
+#include "smarttpl/template.h"
+
+#include "smarttpl/file.h"
+#include "smarttpl/buffer.h"
+#include "smarttpl/empty.h"
+#include "smarttpl/string.h"
+#include "smarttpl/numeric.h"
+#include "smarttpl/map.h"
 
 /**
  *  End of the include guard

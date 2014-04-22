@@ -22,8 +22,15 @@
 #include <cstring>
 #include <memory>
 #include <map>
-#include <include/smarttpl.h>
 #include <unistd.h>
+
+#include "include/source.h"
+#include "include/value.h"
+#include "include/modifier.h"
+#include "include/data.h"
+#include "include/template.h"
+
+#include "include/file.h"
 
 /**
  *  Helper function to compile a template
