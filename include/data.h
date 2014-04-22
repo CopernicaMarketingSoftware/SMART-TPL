@@ -76,9 +76,9 @@ public:
     Data &assign(const char *name, Value *value);
 
     /**
-     *  Assign a modifier
-     *  @param  name        Name for the modifier
-     *  @param  modifier    The modifier itself
+     *  Register a modifier
+     *  @param  name        Name of the modifier
+     *  @param  modifier    Pointer to the modifier object
      *  @return Data        Same object for chaining
      */
     Data &modifier(const char *name, Modifier* modifier);
