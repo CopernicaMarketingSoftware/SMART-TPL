@@ -14,30 +14,13 @@
 namespace SmartTpl {
 
 /**
- *  @todo These classes should probably be put elsewhere
+ *  Constructor
  */
-class ToUpperModifier : public Modifier {
-public:
-    virtual ~ToUpperModifier() {};
-    Value* modify(Value* input) override {
-        std::string output(input->toString(), input->size());
-        for (auto & c : output) c = toupper(c);
-        return new StringValue(output);
-    };
-};
-
-class ToLowerModifier : public Modifier {
-public:
-    virtual ~ToLowerModifier() {};
-    Value* modify(Value* input) override {
-        std::string output(input->toString(), input->size());
-        for (auto & c : output) c = tolower(c);
-        return new StringValue(output);
-    };
-};
-
 Data::Data()
 {
+    // register two built-in modifiers
+    // @todo would be better if these were global or static variables, instead
+    // of objects allocated on the heap
     modifier("toupper", new ToUpperModifier);
     modifier("tolower", new ToLowerModifier);
 }
@@ -81,15 +64,26 @@ Data &Data::assign(const char *name, int value)
 Data &Data::assign(const char *name, Value* value)
 {
     // append variable
+    // @todo the unique_ptr takes over ownership, this is probably now something we want!
     _variables[name] = std::unique_ptr<Value>(value);
 
     // allow chaining
     return *this;
 }
 
+/**
+ *  Assign a modifier
+ *  @param  name        Name of the modifier
+ *  @param  modifier    Pointer to the modifier object
+ *  @return Data
+ */
 Data &Data::modifier(const char *name, Modifier* modifier)
 {
+    // assign variable
+    // @todo the unique_ptr takes over ownership, this is probably now something we want!
     _modifiers[name] = std::unique_ptr<Modifier>(modifier);
+    
+    // allow chaining
     return *this;
 }
 
@@ -109,11 +103,19 @@ Value *Data::value(const char *name, size_t size) const
     return iter->second.get();
 }
 
+/**
+ *  Retrieve a pointer to a modifier
+ *  @param  name        Name of the modifier
+ *  @param  size        Length of the name
+ *  @return Modifier*
+ */
 Modifier* Data::modifier(const char* name, size_t size) const
 {
+    // check if the modifier is listed
     auto iter = _modifiers.find(name);
-    if (iter == _modifiers.end())
-        return nullptr;
+    if (iter == _modifiers.end()) return nullptr;
+    
+    // get the pointer
     return iter->second.get();
 }
 

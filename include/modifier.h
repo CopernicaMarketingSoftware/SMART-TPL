@@ -30,10 +30,12 @@ public:
      * 
      *  This method is called if the initial value object may not be modified!
      * 
+     *  @todo   would it be better to make the 'input' parameter "const" ??
+     * 
      *  @param  input       Initial value
      *  @return Value       Pointer to a new value object
      */
-    virtual Value *modify(const Value *input) = 0;
+    virtual Value *modify(Value *input) = 0;
     
     /**
      *  Modify a numeric value, and convert it into a variable value
@@ -41,7 +43,7 @@ public:
      *  @param  input       Numeric value
      *  @return Value       Pointer to a new value object
      */
-    virtual Value modify(int value) = 0;
+    virtual Value *modify(int value) = 0;
     
     /**
      *  Modify a string value, and convert it into a variable object
@@ -50,7 +52,7 @@ public:
      *  @param  size        Size of the string
      *  @return Value       Pointer to a new value object
      */
-    virtual Value modify(const char *input, size_t size) = 0;
+    virtual Value *modify(const char *input, size_t size) = 0;
     
 };
     

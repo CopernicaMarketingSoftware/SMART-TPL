@@ -35,7 +35,6 @@
 #include "include/modifier.h"
 #include "include/data.h"
 #include "include/template.h"
-
 #include "include/file.h"
 #include "include/buffer.h"
 #include "include/empty.h"
@@ -54,6 +53,8 @@
 #include "token.h"
 #include "quotedstring.h"
 #include "generator.h"
+#include "builtin/tolower.h"
+#include "builtin/toupper.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

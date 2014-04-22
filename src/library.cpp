@@ -18,16 +18,18 @@ namespace SmartTpl {
  *  @var    smart_tpl_callbacks
  */
 static struct smart_tpl_callbacks callbacks = {
-    .write      =   smart_tpl_write,
-    .output     =   smart_tpl_output,
-    .member     =   smart_tpl_member,
-    .variable   =   smart_tpl_variable,
-    .to_string  =   smart_tpl_to_string,
-    .to_numeric =   smart_tpl_to_numeric,
-    .to_boolean =   smart_tpl_to_boolean,
-    .size       =   smart_tpl_size,
-    .modifier   =   smart_tpl_modifier,
-    .apply      =   smart_tpl_apply,
+    .write          =   smart_tpl_write,
+    .output         =   smart_tpl_output,
+    .member         =   smart_tpl_member,
+    .variable       =   smart_tpl_variable,
+    .to_string      =   smart_tpl_to_string,
+    .to_numeric     =   smart_tpl_to_numeric,
+    .to_boolean     =   smart_tpl_to_boolean,
+    .size           =   smart_tpl_size,
+    .modifier       =   smart_tpl_modifier,
+    .modify_variable=   smart_tpl_modify_variable,
+    .modify_numeric =   smart_tpl_modify_numeric,
+    .modify_string  =   smart_tpl_modify_string
 };
     
 /**

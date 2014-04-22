@@ -26,7 +26,9 @@ size_t      smart_tpl_to_numeric(void *userdata, void *variable);
 size_t      smart_tpl_to_boolean(void *userdata, void *variable);
 size_t      smart_tpl_size(void *userdata, void *variable);
 void*       smart_tpl_modifier(void *userdata, const char *name, size_t size);
-void*       smart_tpl_apply(void *userdata, void *variable, void *modifier);
+void*       smart_tpl_modify_variable(void *userdata, void *modifier, void *variable);
+void*       smart_tpl_modify_numeric(void *userdata, void *modifier, long value);
+void*       smart_tpl_modify_string(void *userdata, void *modifier, const char *value, size_t size);
 
 /**
  *  Class definition
@@ -285,7 +287,7 @@ public:
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_apply", (void *) smart_tpl_apply, _apply.signature(), args, 3, 0);
+        return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _apply.signature(), args, 3, 0);
     }
 };
     
