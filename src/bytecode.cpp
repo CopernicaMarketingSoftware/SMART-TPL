@@ -141,7 +141,14 @@ void Bytecode::output(const Variable *variable)
  */
 void Bytecode::output(const Filter *filter)
 {
-    write(filter);
+    // Call the string method on the filter which will call the modifiers() on our generator
+    filter->string(this);
+
+    // Pop the value that modifiers() left us
+    auto var = pop();
+
+    // output this value
+    _callbacks.output(_userdata, var);
 }
 
 /**
@@ -591,26 +598,30 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  */
 void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expression)
 {
-    expression->string(this);
-    for (auto &modifier : *modifiers)
+    // @todo This call currently only supports Expressions of the type Variable
+    const Variable* variable = dynamic_cast<const Variable*>(expression);
+    if (variable)
     {
+        variable->pointer(this);
+        for (auto &modifier : *modifiers)
+        {
+            string(modifier.get()->token());
 
-        string(modifier.get()->token());
+            // pop the buffer and size from the stack (in reverse order) to get the modifier name
+            auto size = pop();
+            auto buffer = pop();
 
-        // pop the buffer and size from the stack (in reverse order) to get the modifier name
-        auto size = pop();
-        auto buffer = pop();
+            // call the native function to save the modifier
+            // to the variable on the stack
+            _stack.push(_callbacks.modifier(_userdata, buffer, size));
 
-        // call the native function to save the modifier
-        // to the variable on the stack
-        _stack.push(_callbacks.modifier(_userdata, buffer, size));
-
-        // pop the modifier
-        auto mod = pop();
-        // pop the latest variable from the stack
-        auto var = pop();
-        // let's apply the modifier and push the new result of it to the stack
-        _stack.push(_callbacks.apply(_userdata, var, mod));
+            // pop the modifier
+            auto mod = pop();
+            // pop the latest value from the stack
+            auto var = pop();
+            // let's apply the modifier and push the new result of it to the stack
+            _stack.push(_callbacks.apply(_userdata, var, mod));
+        }
     }
 }
 
