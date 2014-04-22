@@ -1,5 +1,5 @@
 /**
- *  Modifier.h
+ *  ModifierExpression.h
  *
  *  A single modifier that is applied to an expression ("$a|modifier")
  *

@@ -1,5 +1,5 @@
 /**
- *  VariableModifier.h
+ *  Modifier.h
  *
  *  Interface that describes a variable modifier.
  *
@@ -18,7 +18,16 @@ namespace SmartTpl {
 class Modifier
 {
 public:
+    /**
+     *  Destructor
+     */
     virtual ~Modifier() {};
+
+    /**
+     *  Modify the input value
+     *  @param input The input value
+     *  @return You should return a newly allocated Value
+     */
     virtual Value* modify(Value* input) = 0;
 };
     
