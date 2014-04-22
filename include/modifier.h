@@ -27,10 +27,31 @@ public:
     
     /**
      *  Modify a variable value, and convert it into a different value
+     * 
+     *  This method is called if the initial value object may not be modified!
+     * 
      *  @param  input       Initial value
      *  @return Value       Pointer to a new value object
      */
-    virtual Value* modify(Value* input) = 0;
+    virtual Value *modify(const Value *input) = 0;
+    
+    /**
+     *  Modify a numeric value, and convert it into a variable value
+     * 
+     *  @param  input       Numeric value
+     *  @return Value       Pointer to a new value object
+     */
+    virtual Value modify(int value) = 0;
+    
+    /**
+     *  Modify a string value, and convert it into a variable object
+     * 
+     *  @param  input       String input
+     *  @param  size        Size of the string
+     *  @return Value       Pointer to a new value object
+     */
+    virtual Value modify(const char *input, size_t size) = 0;
+    
 };
     
 /**
