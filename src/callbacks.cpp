@@ -215,17 +215,30 @@ size_t smart_tpl_size(void *userdata, void *variable)
 
 void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 {
+    // convert to Handler
     auto *handler = (Handler *)userdata;
+
+    // Lookup and return the modifier in the Handler
     return handler->modifier(name, size);
 }
 
 void* smart_tpl_apply(void *userdata, void *variable, void *modifier_ptr)
 {
-    if (modifier_ptr == nullptr)
+    // In case the modifier is a nullptr just return the original value
+    if (modifier_ptr == nullptr || variable == nullptr)
         return variable;
+    // convert to the Modifier
     auto *modifier = (Modifier*) modifier_ptr;
+    // convert to the Value object
     auto *value = (Value*) variable;
-    return modifier->modify(value);
+
+    auto *output = modifier->modify(value);
+    if (output != value)
+    {  // As our output value is different from our input value we mark it as destroy later
+        auto *handler = (Handler *)userdata;
+        handler->destroyValue(output);
+    }
+    return output;
 }
 
 /**

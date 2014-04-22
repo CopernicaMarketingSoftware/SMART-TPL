@@ -30,6 +30,11 @@ private:
      *  @var    Data
      */
     const Data *_data;
+
+    /**
+     *  A set of values that should be cleaned up afterwards
+     */
+    std::set<std::unique_ptr<Value>> _destroy_later;
     
 public:
     /**
@@ -77,9 +82,24 @@ public:
         return _buffer;
     }
 
-    Modifier* modifier(const char* key, size_t size)
+    /**
+     *  Return a modifier by name
+     *  @param name
+     *  @param size
+     *  @return Modifier
+     */
+    Modifier* modifier(const char* name, size_t size)
     {
-        return _data->modifier(key, size);
+        return _data->modifier(name, size);
+    }
+
+    /**
+     *  Mark a value as clean up later on
+     *  @param value
+     */
+    void destroyValue(Value* value)
+    {
+        _destroy_later.insert(std::unique_ptr<Value>(value));
     }
 };
 

@@ -22,7 +22,7 @@ private:
      *  Actual string value
      *  @var    std::string
      */
-    std::string _value;
+    const std::string _value;
 
 public:
     /**
@@ -31,7 +31,7 @@ public:
      */
     StringValue(const std::string &value) : _value(value) {}
     StringValue(std::string &&value) : _value(std::move(value)) {}
-    StringValue(const char *value, size_t size = std::string::npos) : _value(value, size) {}
+    StringValue(const char *value, size_t size) : _value(value, size) {}
     
     /**
      *  Destructor
@@ -49,6 +49,7 @@ public:
     
     /**
      *  Convert the variable to a numeric value
+     *  @see std::atoi
      *  @return int
      */
     virtual int toNumeric() override

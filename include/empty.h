@@ -18,6 +18,7 @@ namespace SmartTpl {
 class EmptyValue : public Value
 {
 public:
+    virtual ~EmptyValue() {};
     /**
      *  Convert the variable to a string
      *  @return const char *

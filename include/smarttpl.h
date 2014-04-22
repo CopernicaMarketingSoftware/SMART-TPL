@@ -11,6 +11,7 @@
 #include <dlfcn.h>
 #include <cstring>
 #include <algorithm>
+#include <set>
 
 #include "source.h"
 #include "value.h"

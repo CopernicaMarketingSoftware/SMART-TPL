@@ -19,6 +19,7 @@ namespace SmartTpl {
 class Value
 {
 public:
+    virtual ~Value() {};
     /**
      *  Convert the value to a string
      *  @return const char *

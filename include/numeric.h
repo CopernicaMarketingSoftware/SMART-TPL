@@ -22,7 +22,7 @@ private:
      *  Underlying value
      *  @var int
      */
-    int _value;
+    const int _value;
     
     /**
      *  String representation
