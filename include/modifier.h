@@ -1,5 +1,5 @@
 /**
- *  VariableModifier.h
+ *  Modifier.h
  *
  *  Interface that describes a variable modifier. If you want to create your
  *  own modifiers, you can do so by extending from this modifier base class,
@@ -24,7 +24,7 @@ public:
      *  Destructor
      */
     virtual ~Modifier() {};
-    
+
     /**
      *  Modify a variable value, and convert it into a different value
      * 
