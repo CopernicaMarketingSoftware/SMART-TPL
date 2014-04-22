@@ -28,8 +28,6 @@ public:
     /**
      *  Constructor
      *  @param  bool
-     * 
-     *  @todo run atoi()
      */
     LiteralInteger(Token *token)
     {
