@@ -213,6 +213,13 @@ size_t smart_tpl_size(void *userdata, void *variable)
     return var->size();
 }
 
+/**
+ *  Retrieve the modifier by name
+ *  @param userdata       pointer to user-supplied data
+ *  @param name           name of the modifier the caller wants
+ *  @param size           length of the name that the caller wants
+ *  @return               A pointer to the modifier, or a nullptr if it wasn't found
+ */
 void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 {
     // convert to Handler
@@ -222,6 +229,12 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
     return handler->modifier(name, size);
 }
 
+/**
+ *  Apply a modifier from smart_tpl_modifier on a value
+ *  @param userdata       pointer to user-supplied data
+ *  @param modifier_ptr   pointer to the modifier that should be applied
+ *  @param variable       pointer to a value that we should apply the modifier on
+ */
 void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variable)
 {
     // In case the modifier is a nullptr just return the original value
@@ -239,6 +252,31 @@ void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variab
         handler->destroyValue(output);
     }
     return output;
+}
+
+/**
+ *  Apply a modifier on a numeric type
+ *  @param userdata     pointer to user-supplied data
+ *  @param modifier     pointer to the modifier that should be applied
+ *  @param value        the numeric type that should go through the modifier
+ *  @todo Actually start using this method
+ */
+void* smart_tpl_modify_numeric(void *userdata, void *modifier, long value)
+{
+    return nullptr;
+}
+
+/**
+ *  Apply a modifier on a string
+ *  @param userdata     pointer to user-supplied data
+ *  @param modifier     pointer to the modifier that should be applied
+ *  @param value        the string that should be modified
+ *  @param size         the length of value
+ *  @todo Actually start using this method
+ */
+void* smart_tpl_modify_string(void *userdata, void *modifier, const char *value, size_t size)
+{
+    return nullptr;
 }
 
 /**
