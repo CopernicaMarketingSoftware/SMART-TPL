@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
         // create a template object
         SmartTpl::Template tpl(file);
         // do a number of attempts
-        for (int x=0; x<10; x++)
+        for (int x=0; x<1; x++)
         {
             // construct data object
             SmartTpl::Data data;

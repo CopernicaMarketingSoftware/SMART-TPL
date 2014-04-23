@@ -2,19 +2,20 @@
 %token_type { SmartTpl::Token* }
 %token_prefix TOKEN_
 
-%type   statement       {SmartTpl::Statement*}
-%type   statements      {SmartTpl::Statements*}
-%type   ifStatement     {SmartTpl::IfStatement*}
-%type   elseStatement   {SmartTpl::Statements*}
-%type   expr            {SmartTpl::Expression*}
-%type   boolexpr        {SmartTpl::Expression*}
-%type   outexpr         {SmartTpl::Expression*}
-%type   literal         {SmartTpl::Literal*}
-%type   variable        {SmartTpl::Variable*}
-%type   filter          {SmartTpl::Filter*}
-%type   parameters      {SmartTpl::Parameters*}
-%type   modifiers       {SmartTpl::Modifiers*}
-%type   modifier        {SmartTpl::ModifierExpression*}
+%type   statement        {SmartTpl::Statement*}
+%type   statements       {SmartTpl::Statements*}
+%type   ifStatement      {SmartTpl::IfStatement*}
+%type   elseStatement    {SmartTpl::Statements*}
+%type   foreachStatement {SmartTpl::ForEachStatement*}
+%type   expr             {SmartTpl::Expression*}
+%type   boolexpr         {SmartTpl::Expression*}
+%type   outexpr          {SmartTpl::Expression*}
+%type   literal          {SmartTpl::Literal*}
+%type   variable         {SmartTpl::Variable*}
+%type   filter           {SmartTpl::Filter*}
+%type   parameters       {SmartTpl::Parameters*}
+%type   modifiers        {SmartTpl::Modifiers*}
+%type   modifier         {SmartTpl::ModifierExpression*}
 
 %default_destructor { if ($$) delete $$; }
 %token_destructor { if ($$) delete $$; }
@@ -29,26 +30,28 @@
 %left COLON.
 %left PIPE.
 %left DOT LBRACK RBRACK.
-   
+
 %include 
-{   
+{
     #include "includes.h"
     #include <iostream>
     #include <assert.h>
-}  
+}
 
-%parse_accept {
+%parse_accept
+{
     // code that is executed when the file was accepted
 }
 
-%parse_failure {
+%parse_failure
+{
     throw std::runtime_error("Parse failure");
 }
 
 %syntax_error 
-{  
+{
     throw std::runtime_error("Syntax error!");
-}   
+}
 
 start               ::= statements(A) .                                         { parent->add(A); }
 statements(A)       ::= statements(B) statement(C) .                            { A = B; A->add(C); }
@@ -57,9 +60,11 @@ statement(A)        ::= ifStatement(B) .                                        
 statement(A)        ::= RAW(B) .                                                { A = new SmartTpl::RawStatement(B); }
 statement(A)        ::= EXPRESSION outexpr(B) .                                 { A = new SmartTpl::VarStatement(B); }
 ifStatement(A)      ::= IF boolexpr(B) statements(C) elseStatement(D) .         { A = new SmartTpl::IfStatement(B,C,D); }
-ifStatement(A)      ::= IF boolexpr(B) statements(C) ENDIF.                     { A = new SmartTpl::IfStatement(B, C); }
+ifStatement(A)      ::= IF boolexpr(B) statements(C) ENDIF .                    { A = new SmartTpl::IfStatement(B, C); }
 elseStatement(A)    ::= ELSE statements(B) ENDIF .                              { A = B; }
 elseStatement(A)    ::= ELSEIF boolexpr(B) statements(C) elseStatement(D) .     { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B,C,D)); }
+statement(A)        ::= foreachStatement(B) .                                   { A = B; }
+foreachStatement(A) ::= FOREACH variable(B) IN variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(B, C, D); }
 boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
 boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::BinaryEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) NE outexpr(C) .                              { A = new SmartTpl::BinaryNotEqualsOperator(B, C); }
@@ -90,4 +95,3 @@ modifier(A)         ::= IDENTIFIER(B) COLON parameters(C) .                     
 modifier(A)         ::= IDENTIFIER(B) .                                         { A = new SmartTpl::ModifierExpression(B); }
 parameters(A)       ::= parameters(B) COLON expr(C) .                           { A = B; A->add(C); }
 parameters(A)       ::= expr(B) .                                               { A = new SmartTpl::Parameters(B); }
-

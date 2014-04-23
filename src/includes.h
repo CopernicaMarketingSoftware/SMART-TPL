@@ -73,6 +73,7 @@
 #include "statements/raw.h"
 #include "statements/var.h"
 #include "statements/if.h"
+#include "statements/foreach.h"
 #include "operators/operator.h"
 #include "operators/binary.h"
 #include "operators/binaryarithmetric.h"

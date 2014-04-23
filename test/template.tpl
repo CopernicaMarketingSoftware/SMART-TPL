@@ -9,6 +9,9 @@
             And a conditional text
         {/if}
         {$variable.member}
+        {for $key in $variable}
+            {$key}
+        {/for}
         {if $variable}
             sdfsdf
         {/if}

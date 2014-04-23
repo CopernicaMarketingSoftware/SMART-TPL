@@ -72,6 +72,8 @@
 "{if"[ \t]+         { BEGIN(EXPRESSION); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
+"{foreach"[ \t]+    { BEGIN(EXPRESSION); return TOKEN_FOREACH; }
+"{/foreach}"        { return TOKEN_ENDFOREACH; }
 "{$"                { BEGIN(EXPRESSION); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
 "{"                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_RAW; }
@@ -88,6 +90,7 @@
     "false"                     { return TOKEN_FALSE; }
     "and"                       { return TOKEN_AND; }
     "or"                        { return TOKEN_OR; }
+    "in"                        { return TOKEN_IN; }
     \d+                         { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_INTEGER; }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
