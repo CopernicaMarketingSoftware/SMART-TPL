@@ -632,8 +632,8 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
 }
 
 /**
- *  Execute the template given a certain data source
- *  @param  data
+ *  Execute the template given a certain handler
+ *  @param  handler
  */
 void Bytecode::process(Handler &handler)
 {

@@ -30,8 +30,6 @@ public:
      * 
      *  This method is called if the initial value object may not be modified!
      * 
-     *  @todo   would it be better to make the 'input' parameter "const" ??
-     * 
      *  @param  input       Initial value
      *  @return Value       Pointer to a new value object
      */

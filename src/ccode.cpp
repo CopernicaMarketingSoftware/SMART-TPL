@@ -372,15 +372,15 @@ void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
     {
         for (auto &modifier : *modifiers)
         {
-            (void) modifier; // Yeah yeah compiler I get it, I am not using modifier
-            _out << "callbacks->apply(userdata,";
+            _out << "callbacks->modify_variable(userdata,callbacks->modifier(userdata,";
+            string(modifier.get()->token());
+            _out << "),";
         }
         variable->pointer(this);
         for (auto &modifier : *modifiers)
         {
-            _out << ",callbacks->modifier(userdata,";
-            string(modifier.get()->token());
-            _out << "))";
+            (void) modifier; // Yeah yeah compiler I get it, I'm not using modifier..
+            _out << ")";
         }
     }
 }

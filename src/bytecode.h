@@ -213,8 +213,6 @@ public:
      *  Constructor
      *  @param  source The source that holds the template
      *  @throws std::runtime_error If something went wrong while compiling the jit code
-     *  @todo Do we really want to compile the jit code from the compiler? What if we just
-     *        want to generate C code using compile()?
      */
     Bytecode(const Source& source);
     
@@ -224,8 +222,8 @@ public:
     virtual ~Bytecode();
 
     /**
-     *  Execute the template given a certain data source
-     *  @param  data
+     *  Execute the template given a certain handler
+     *  @param  handler
      */
     virtual void process(Handler &handler) override;
 
