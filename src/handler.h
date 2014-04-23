@@ -32,9 +32,10 @@ private:
     const Data *_data;
 
     /**
-     *  A set of values that should be cleaned up afterwards
+     *  Map values to the modifiers that created them so we know who
+     *  needs to clean them up
      */
-    std::set<std::unique_ptr<Value>> _destroy_later;
+    std::map<Modifier*, std::set<Value*>> _destroy_later;
 
 public:
     /**
@@ -49,7 +50,15 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Handler() {}
+    virtual ~Handler()
+    {
+        // Loop through all the modifiers in the _destroy_later map
+        for (auto & m : _destroy_later)
+        {
+            // For each modifier loop through all the values and clean them up
+            for (auto & v : m.second) m.first->cleanup(v);
+        }
+    }
     
     /**
      *  Write data to the buffer
@@ -95,11 +104,12 @@ public:
 
     /**
      *  Mark a value as clean up later on
+     *  @param modifier
      *  @param value
      */
-    void destroyValue(Value* value)
+    void destroyValue(Modifier *modifier, Value* value)
     {
-        _destroy_later.insert(std::unique_ptr<Value>(value));
+        _destroy_later[modifier].insert(value);
     }
 };
 

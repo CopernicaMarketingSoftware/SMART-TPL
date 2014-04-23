@@ -54,6 +54,11 @@ public:
      */
     virtual Value *modify(const char *input, size_t size) = 0;
 
+    /**
+     *  Clean up the values you created
+     *  @param value        The value to clean up
+     */
+    virtual void cleanup(Value* value) = 0;
 };
     
 /**

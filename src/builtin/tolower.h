@@ -62,6 +62,15 @@ public:
         // return it wrapped into a new StringValue
         return new StringValue(output);
     }
+
+    /**
+     *  Clean up the values you created
+     *  @param value        The value to clean up
+     */
+    virtual void cleanup(Value* value) override
+    {
+        delete value;
+    }
 };
 
 /**

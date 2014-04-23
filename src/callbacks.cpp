@@ -261,7 +261,7 @@ void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variab
     if (output != value)
     {  // As our output value is different from our input value we mark it as destroy later
         auto *handler = (Handler *)userdata;
-        handler->destroyValue(output);
+        handler->destroyValue(modifier, output);
     }
     return output;
 }
