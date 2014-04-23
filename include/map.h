@@ -69,9 +69,9 @@ public:
 
     /**
      *  Convert the variable to a numeric value
-     *  @return int
+     *  @return numeric
      */
-    virtual int toNumeric() override
+    virtual numeric_t toNumeric() override
     {
         return 0;
     }
@@ -113,7 +113,7 @@ public:
      *  @param  value       Value of the variable
      *  @return MapValue    Same object for chaining
      */
-    MapValue& assign(const char *name, int value)
+    MapValue& assign(const char *name, numeric_t value)
     {
         // append variable
         _values[name] = std::unique_ptr<Value>(new NumericValue(value));

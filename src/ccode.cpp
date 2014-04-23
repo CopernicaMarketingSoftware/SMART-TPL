@@ -196,7 +196,7 @@ void CCode::string(const std::string &value)
  *  Create a numeric literal
  *  @param  value
  */
-void CCode::numeric(int value)
+void CCode::numeric(numeric_t value)
 {
     // output number
     _out << value;

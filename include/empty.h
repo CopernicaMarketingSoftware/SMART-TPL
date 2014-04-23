@@ -30,9 +30,9 @@ public:
     
     /**
      *  Convert the variable to a numeric value
-     *  @return int
+     *  @return numeric
      */
-    virtual int toNumeric() override
+    virtual numeric_t toNumeric() override
     {
         return 0;
     }

@@ -49,12 +49,12 @@ public:
     
     /**
      *  Convert the variable to a numeric value
-     *  @see std::atoi
-     *  @return int
+     *  @see std::strtoul
+     *  @return numeric
      */
-    virtual int toNumeric() override
+    virtual numeric_t toNumeric() override
     {
-        return std::atoi(_value.c_str());
+        return std::strtoul(_value.c_str(), (char**) NULL, 10);
     }
 
     /**

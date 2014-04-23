@@ -78,7 +78,7 @@ public:
      *  @return Data        Same object for chaining
      */
     Data &assign(const char *name, const std::string &value);
-    Data &assign(const char *name, int value);
+    Data &assign(const char *name, numeric_t value);
     Data &assign(const char *name, Value *value);
 
     /**

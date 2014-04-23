@@ -12,6 +12,12 @@
  *  Set up namespace
  */
 namespace SmartTpl {
+
+/**
+ *  Typedef for a general numeric type, if we ever decide to change it we'll just
+ *  have to modify this.
+ */
+typedef int numeric_t;
     
 /**
  *  Class definition
@@ -28,9 +34,9 @@ public:
     
     /**
      *  Convert the variable to a numeric value
-     *  @return int
+     *  @return numeric
      */
-    virtual int toNumeric() = 0;
+    virtual numeric_t toNumeric() = 0;
     
     /**
      *  Convert the variable to a boolean value

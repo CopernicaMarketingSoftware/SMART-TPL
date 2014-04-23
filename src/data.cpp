@@ -47,7 +47,7 @@ Data &Data::assign(const char *name, const std::string &value)
  *  @param  value       Value of the variable
  *  @return Data        Same object for chaining
  */
-Data &Data::assign(const char *name, int value)
+Data &Data::assign(const char *name, numeric_t value)
 {
     // append variable
     _variables[name] = std::unique_ptr<Value>(new NumericValue(value));

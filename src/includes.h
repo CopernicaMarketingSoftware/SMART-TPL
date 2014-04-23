@@ -1,7 +1,7 @@
 /**
  *  Includes.h
  * 
- *  Header file that includes all public header files of the SmartTpl library
+ *  Header file that includes all header files of the SmartTpl library
  * 
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV

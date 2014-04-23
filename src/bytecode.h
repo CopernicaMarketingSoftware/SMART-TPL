@@ -151,7 +151,7 @@ private:
      *  @param  value
      */
     virtual void string(const std::string &value) override;
-    virtual void numeric(int value) override;
+    virtual void numeric(numeric_t value) override;
     
     /**
      *  Create a string or numeric constant for a variable

@@ -20,9 +20,9 @@ class NumericValue : public Value
 private:
     /**
      *  Underlying value
-     *  @var int
+     *  @var numeric
      */
-    const int _value;
+    const numeric_t _value;
     
     /**
      *  String representation
@@ -35,7 +35,7 @@ public:
      *  Constructor
      *  @param  value
      */
-    NumericValue(int value) : _value(value) {}
+    NumericValue(numeric_t value) : _value(value) {}
     
     /**
      *  Destructor
@@ -58,9 +58,9 @@ public:
     
     /**
      *  Convert the variable to a numeric value
-     *  @return int
+     *  @return numeric
      */
-    virtual int toNumeric() override
+    virtual numeric_t toNumeric() override
     {
         return _value;
     }
