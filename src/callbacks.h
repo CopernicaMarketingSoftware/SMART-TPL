@@ -134,14 +134,14 @@ public:
     void write(const jit_value &userdata, const jit_value &buffer, const jit_value size)
     {
         // construct the arguments
-        jit_value_t args[3] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             buffer.raw(), 
             size.raw() 
         };
         
         // create the instruction
-        _function->insn_call_native("smart_tpl_write", (void *)smart_tpl_write, _write.signature(), args, 3, 0);
+        _function->insn_call_native("smart_tpl_write", (void *)smart_tpl_write, _write.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
     
     /**
@@ -152,13 +152,13 @@ public:
     void output(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
-        jit_value_t args[2] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             variable.raw()
         };
         
         // create the instruction
-        _function->insn_call_native("smart_tpl_output", (void *)smart_tpl_output, _output.signature(), args, 2, 0);
+        _function->insn_call_native("smart_tpl_output", (void *)smart_tpl_output, _output.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
     
     /**
@@ -172,7 +172,7 @@ public:
     jit_value member(const jit_value &userdata, const jit_value &variable, const jit_value &name, const jit_value &size)
     {
         // construct the arguments
-        jit_value_t args[4] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             variable.raw(),
             name.raw(),
@@ -180,7 +180,7 @@ public:
         };
         
         // create the instruction
-        return _function->insn_call_native("smart_tpl_member", (void *)smart_tpl_member, _member.signature(), args, 4, 0);
+        return _function->insn_call_native("smart_tpl_member", (void *)smart_tpl_member, _member.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -193,14 +193,14 @@ public:
     jit_value variable(const jit_value &userdata, const jit_value &name, const jit_value &size)
     {
         // construct the arguments
-        jit_value_t args[3] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             name.raw(),
             size.raw()
         };
         
         // create the instruction
-        return _function->insn_call_native("smart_tpl_variable", (void *)smart_tpl_variable, _variable.signature(), args, 3, 0);
+        return _function->insn_call_native("smart_tpl_variable", (void *)smart_tpl_variable, _variable.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
     
     /**
@@ -212,13 +212,13 @@ public:
     jit_value to_numeric(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
-        jit_value_t args[3] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             variable.raw()
         };
         
         // create the instruction
-        return _function->insn_call_native("smart_tpl_to_numeric", (void *)smart_tpl_to_numeric, _toNumeric.signature(), args, 2, 0);
+        return _function->insn_call_native("smart_tpl_to_numeric", (void *)smart_tpl_to_numeric, _toNumeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -230,13 +230,13 @@ public:
     jit_value to_boolean(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
-        jit_value_t args[3] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             variable.raw()
         };
         
         // create the instruction
-        return _function->insn_call_native("smart_tpl_to_boolean", (void *)smart_tpl_to_boolean, _toBoolean.signature(), args, 2, 0);
+        return _function->insn_call_native("smart_tpl_to_boolean", (void *)smart_tpl_to_boolean, _toBoolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -248,13 +248,13 @@ public:
     jit_value to_string(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
-        jit_value_t args[3] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             variable.raw()
         };
         
         // create the instruction
-        return _function->insn_call_native("smart_tpl_to_string", (void *)smart_tpl_to_string, _toString.signature(), args, 2, 0);
+        return _function->insn_call_native("smart_tpl_to_string", (void *)smart_tpl_to_string, _toString.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -266,58 +266,58 @@ public:
     jit_value size(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
-        jit_value_t args[3] = { 
+        jit_value_t args[] = {
             userdata.raw(), 
             variable.raw()
         };
         
         // create the instruction
-        return _function->insn_call_native("smart_tpl_size", (void *)smart_tpl_size, _size.signature(), args, 2, 0);
+        return _function->insn_call_native("smart_tpl_size", (void *)smart_tpl_size, _size.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     jit_value modifier(const jit_value &userdata, const jit_value &name, const jit_value &size)
     {
         // construct the arguments
-        jit_value_t args[3] = {
+        jit_value_t args[] = {
             userdata.raw(),
             name.raw(),
             size.raw()
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_modifier", (void *)smart_tpl_modifier, _modifier.signature(), args, 3, 0);
+        return _function->insn_call_native("smart_tpl_modifier", (void *)smart_tpl_modifier, _modifier.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     jit_value modify_variable(const jit_value &userdata, const jit_value &modifier, const jit_value &variable)
     {
         // construct the arguments
-        jit_value_t args[3] = {
+        jit_value_t args[] = {
             userdata.raw(),
             modifier.raw(),
             variable.raw()
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _modify_variable.signature(), args, 3, 0);
+        return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _modify_variable.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     jit_value modify_numeric(const jit_value &userdata, const jit_value &modifier, const jit_value &value)
     {
         // construct the arguments
-        jit_value_t args[3] = {
+        jit_value_t args[] = {
             userdata.raw(),
             modifier.raw(),
             value.raw()
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_modify_numeric", (void *) smart_tpl_modify_numeric, _modify_numeric.signature(), args, 3, 0);
+        return _function->insn_call_native("smart_tpl_modify_numeric", (void *) smart_tpl_modify_numeric, _modify_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     jit_value modify_string(const jit_value &userdata, const jit_value &modifier, const jit_value &data, const jit_value &size)
     {
         // construct the arguments
-        jit_value_t args[4] = {
+        jit_value_t args[] = {
             userdata.raw(),
             modifier.raw(),
             data.raw(),
@@ -325,7 +325,7 @@ public:
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, 4, 0);
+        return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 };
     
