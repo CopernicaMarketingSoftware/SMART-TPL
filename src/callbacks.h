@@ -101,6 +101,18 @@ private:
      *  @var    ModifyVariableCallback
      */
     static ModifyVariableCallback _modify_variable;
+
+    /**
+     *  Signature of the function to modify a numeric variable
+     *  @var ModifyNumericCallback
+     */
+    static ModifyNumericCallback _modify_numeric;
+
+    /**
+     *  Signature of the function to modify a string variable
+     *  @var ModifyStringCallback
+     */
+    static ModifyStringCallback _modify_string;
     
 public:
     /**
@@ -276,17 +288,44 @@ public:
         return _function->insn_call_native("smart_tpl_modifier", (void *)smart_tpl_modifier, _modifier.signature(), args, 3, 0);
     }
 
-    jit_value modify_variable(const jit_value &userdata, const jit_value &variable, const jit_value &modifier)
+    jit_value modify_variable(const jit_value &userdata, const jit_value &modifier, const jit_value &variable)
     {
         // construct the arguments
         jit_value_t args[3] = {
             userdata.raw(),
-            variable.raw(),
-            modifier.raw()
+            modifier.raw(),
+            variable.raw()
         };
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _modify_variable.signature(), args, 3, 0);
+    }
+
+    jit_value modify_numeric(const jit_value &userdata, const jit_value &modifier, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[3] = {
+            userdata.raw(),
+            modifier.raw(),
+            value.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_modify_numeric", (void *) smart_tpl_modify_numeric, _modify_numeric.signature(), args, 3, 0);
+    }
+
+    jit_value modify_string(const jit_value &userdata, const jit_value &modifier, const jit_value &data, const jit_value &size)
+    {
+        // construct the arguments
+        jit_value_t args[4] = {
+            userdata.raw(),
+            modifier.raw(),
+            data.raw(),
+            size.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, 4, 0);
     }
 };
     
