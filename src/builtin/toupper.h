@@ -28,15 +28,9 @@ public:
      */
     virtual Value* modify(Value* input) override 
     {
-        // copy the entire string
-        std::string output(input->toString(), input->size());
-        
-        // convert each character in it to upper case
-        for (auto & c : output) c = toupper(c);
-        
-        // return it, wrapped in a new string object
-        // @todo where is this deallocated?
-        return new StringValue(output);
+        // Simply call the toString() and the related size() method of Value
+        // and pass them to the modify(const char*, size_t);
+        return modify(input->toString(), input->size());
     };
 
     /**
@@ -60,8 +54,14 @@ public:
      */
     virtual Value *modify(const char *input, size_t size) override
     {
-        // @todo implementation
-        return nullptr;
+        // copy the entire string
+        std::string output(input, size);
+
+        // convert each character in it to upper case
+        for (auto & c : output) c = toupper(c);
+
+        // return it wraped in a new StringValue
+        return new StringValue(output);
     }
 };
 

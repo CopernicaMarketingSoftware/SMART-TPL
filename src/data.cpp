@@ -13,16 +13,17 @@
  */
 namespace SmartTpl {
 
+static ToUpperModifier toupper;
+static ToLowerModifier tolower;
+
 /**
  *  Constructor
  */
 Data::Data()
 {
     // register two built-in modifiers
-    // @todo would be better if these were global or static variables, instead
-    // of objects allocated on the heap
-    modifier("toupper", new ToUpperModifier);
-    modifier("tolower", new ToLowerModifier);
+    modifier("toupper", &toupper);
+    modifier("tolower", &tolower);
 }
     
 /**
@@ -64,8 +65,7 @@ Data &Data::assign(const char *name, int value)
 Data &Data::assign(const char *name, Value* value)
 {
     // append variable
-    // @todo the unique_ptr takes over ownership, this is probably now something we want!
-    _variables[name] = std::unique_ptr<Value>(value);
+    _custom_variables[name] = value;
 
     // allow chaining
     return *this;
@@ -80,8 +80,7 @@ Data &Data::assign(const char *name, Value* value)
 Data &Data::modifier(const char *name, Modifier* modifier)
 {
     // assign variable
-    // @todo the unique_ptr takes over ownership, this is probably now something we want!
-    _modifiers[name] = std::unique_ptr<Modifier>(modifier);
+    _modifiers[name] = modifier;
     
     // allow chaining
     return *this;
@@ -95,7 +94,12 @@ Data &Data::modifier(const char *name, Modifier* modifier)
  */
 Value *Data::value(const char *name, size_t size) const
 {
-    // look up variable
+    // first look through the 'custom' variables
+    auto c_iter = _custom_variables.find(name);
+    if (c_iter != _custom_variables.end())
+        return c_iter->second;
+
+    // if we didn't find it yet let's look in _variables
     auto iter = _variables.find(name);
     if (iter == _variables.end()) return nullptr;
     
@@ -116,7 +120,7 @@ Modifier* Data::modifier(const char* name, size_t size) const
     if (iter == _modifiers.end()) return nullptr;
     
     // get the pointer
-    return iter->second.get();
+    return iter->second;
 }
 
 /**

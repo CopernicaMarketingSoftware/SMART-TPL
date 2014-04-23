@@ -97,10 +97,10 @@ private:
     static ModifierCallback _modifier;
 
     /**
-     *  Signature of the function to apply a modifier
-     *  @var    ApplyCallback
+     *  Signature of the function to modify a variable
+     *  @var    ModifyVariableCallback
      */
-    static ApplyCallback _apply;
+    static ModifyVariableCallback _modify_variable;
     
 public:
     /**
@@ -275,9 +275,8 @@ public:
         // create the instruction
         return _function->insn_call_native("smart_tpl_modifier", (void *)smart_tpl_modifier, _modifier.signature(), args, 3, 0);
     }
-    //void *(*apply)(void *userdata, void *variable, void *modifier);
 
-    jit_value apply(const jit_value &userdata, const jit_value &variable, const jit_value &modifier)
+    jit_value modify_variable(const jit_value &userdata, const jit_value &variable, const jit_value &modifier)
     {
         // construct the arguments
         jit_value_t args[3] = {
@@ -287,7 +286,7 @@ public:
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _apply.signature(), args, 3, 0);
+        return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _modify_variable.signature(), args, 3, 0);
     }
 };
     

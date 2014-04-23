@@ -27,15 +27,9 @@ public:
      */
     virtual Value *modify(Value *input) override 
     {
-        // copy the entire string
-        std::string output(input->toString(), input->size());
-        
-        // modify all characters in the string
-        for (auto & c : output) c = tolower(c);
-        
-        // turn it into a new stringvalue object
-        // @todo where is this deallocated?
-        return new StringValue(output);
+        // Simply call the toString() and the related size() method of Value
+        // and pass them to the modify(const char*, size_t);
+        return modify(input->toString(), input->size());
     };
 
     /**
@@ -59,8 +53,14 @@ public:
      */
     virtual Value *modify(const char *input, size_t size) override
     {
-        // @todo implementation
-        return nullptr;
+        // copy the entire string
+        std::string output(input, size);
+
+        // convert all the characters to lowercase
+        for (auto & c : output) c = tolower(c);
+
+        // return it wrapped into a new StringValue
+        return new StringValue(output);
     }
 };
 

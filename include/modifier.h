@@ -36,7 +36,7 @@ public:
      *  @return Value       Pointer to a new value object
      */
     virtual Value *modify(Value *input) = 0;
-    
+
     /**
      *  Modify a numeric value, and convert it into a variable value
      * 
@@ -44,7 +44,7 @@ public:
      *  @return Value       Pointer to a new value object
      */
     virtual Value *modify(int value) = 0;
-    
+
     /**
      *  Modify a string value, and convert it into a variable object
      * 
@@ -53,7 +53,7 @@ public:
      *  @return Value       Pointer to a new value object
      */
     virtual Value *modify(const char *input, size_t size) = 0;
-    
+
 };
     
 /**

@@ -35,7 +35,7 @@ private:
      *  A set of values that should be cleaned up afterwards
      */
     std::set<std::unique_ptr<Value>> _destroy_later;
-    
+
 public:
     /**
      *  Constructor

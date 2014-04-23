@@ -626,7 +626,7 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
             // pop the latest value from the stack
             auto var = pop();
             // let's apply the modifier and push the new result of it to the stack
-            _stack.push(_callbacks.apply(_userdata, var, mod));
+            _stack.push(_callbacks.modify_variable(_userdata, var, mod));
         }
     }
 }

@@ -18,20 +18,19 @@ int main(int argc, const char *argv[])
     // loop through the arguments
     for (int arg = 1; arg < argc; arg++)
     {
+        SmartTpl::File file(argv[arg]);
+        // create a template object
+        SmartTpl::Template tpl(file);
         // do a number of attempts
-        for (int x=0; x<1; x++)
+        for (int x=0; x<10; x++)
         {
-            SmartTpl::File file(argv[arg]);
-            // create a template object
-            SmartTpl::Template tpl(file);
-
             // construct data object
             SmartTpl::Data data;
             
             // assign variables
-            SmartTpl::MapValue *map = new SmartTpl::MapValue;
-            map->put("member", new SmartTpl::StringValue(std::string("Test")));
-            data.assign("variable", map)
+            SmartTpl::MapValue map;
+            map.assign("member", "Test");
+            data.assign("variable", &map)
                 .assign("name", "Testing..")
                 .assign("x", "Mr. x");
 

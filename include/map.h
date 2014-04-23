@@ -36,10 +36,17 @@ private:
     };
 
     /**
-     *  All values, indexed by name
+     *  All custom values, indexed by name
      *  @var    std::map
      */
+    std::map<const char *,Value*, cmp_str> _custom_values;
+
+    /**
+     *  All other values, indexed by name
+     *  @var std::map
+     */
     std::map<const char *,std::unique_ptr<Value>, cmp_str> _values;
+
 public:
     /**
      *  Constructor
@@ -87,7 +94,12 @@ public:
      */
     virtual Value *member(const char *name, size_t size) override
     {
-        // look up variable
+        // first look through the 'custom' values
+        auto c_iter = _custom_values.find(name);
+        if (c_iter != _custom_values.end())
+            return c_iter->second;
+
+        // if we didn't find it yet let's look in _values
         auto iter = _values.find(name);
         if (iter == _values.end()) return nullptr;
 
@@ -96,15 +108,45 @@ public:
     }
 
     /**
-     *  Put a new value in this map
+     *  Assign data
+     *  @param  name        Name of the variable
+     *  @param  value       Value of the variable
+     *  @return MapValue    Same object for chaining
+     */
+    MapValue& assign(const char *name, int value)
+    {
+        // append variable
+        _values[name] = std::unique_ptr<Value>(new NumericValue(value));
+
+        // allow chaining
+        return *this;
+    }
+
+    /**
+     *  Assign data
+     *  @param  name        Name of the variable
+     *  @param  value       Value of the variable
+     *  @return MapValue    Same object for chaining
+     */
+    MapValue& assign(const char *name, const std::string &value)
+    {
+        // append variable
+        _values[name] = std::unique_ptr<Value>(new StringValue(value));
+
+        // allow chaining
+        return *this;
+    }
+
+    /**
+     *  Assign a new value in this map
      *
      *  @param  name        name of the value
      *  @param  value       the actual value
      *  @return MapValue    Same object for chaining
      */
-    MapValue& put(const char* name, Value* value) {
+    MapValue& assign(const char* name, Value* value) {
         //Add to our values
-        _values[name] = std::unique_ptr<Value>(value);
+        _custom_values[name] = value;
 
         // Allow chaining
         return *this;

@@ -48,10 +48,16 @@ private:
     std::map<const char *,std::unique_ptr<Value>, cmp_str> _variables;
 
     /**
+     *  All 'custom' variables which were added through assign(const char*,Value*)
+     *  @var std::map
+     */
+    std::map<const char *,Value*, cmp_str> _custom_variables;
+
+    /**
      *  All modifiers
      *  @var std::map
      */
-    std::map<const char *,std::unique_ptr<Modifier>, cmp_str> _modifiers;
+    std::map<const char *,Modifier*, cmp_str> _modifiers;
     
     
 public:
