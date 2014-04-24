@@ -212,9 +212,8 @@ private:
      *  @param key                The magic variable name that should be used
      *  @param variable           The variable object to iterate over
      *  @param statements         The statements to execute on each iteration
-     *  @todo Implement this..
      */
-    virtual void foreach(const std::string& key, const Variable *variable, const Statements *statements) override {};
+    virtual void foreach(const std::string& key, const Variable *variable, const Statements *statements) override;
 
 
 public:

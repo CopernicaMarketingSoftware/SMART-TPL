@@ -94,6 +94,7 @@
 #include "callbacks/write.h"
 #include "callbacks/output.h"
 #include "callbacks/member.h"
+#include "callbacks/member_iter.h"
 #include "callbacks/variable.h"
 #include "callbacks/tostring.h"
 #include "callbacks/tonumeric.h"

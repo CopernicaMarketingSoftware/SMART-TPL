@@ -632,6 +632,49 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
 }
 
 /**
+ *  Generate the code to do a foreach loop over variable
+ *  @param key                The magic variable name that should be used
+ *  @param variable           The variable object to iterate over
+ *  @param statements         The statements to execute on each iteration
+ */
+void Bytecode::foreach(const std::string& key, const Variable *variable, const Statements *statements)
+{
+    // we create a label just before our loop so we can actually loop
+    // and we create a label just outside of it, so we can jump out of it
+    jit_label label_while = _function.new_label();
+    jit_label label_after_while = _function.new_label();
+
+    // we insert our label_while at the start
+    _function.insn_label(label_while);
+
+    // convert our magic key to jit_values for the callback
+    string(key);
+    auto size = pop();
+    auto buffer = pop();
+
+    // convert our variable to a jit_value
+    variable->pointer(this);
+    auto var = pop();
+
+    // make the member_iter callback
+    _stack.push(_callbacks.member_iter(_userdata, var, buffer, size));
+
+    // if the output of the callback is 0 (false) we jump to label_after_while
+    jit_value fals = _function.new_constant(0, jit_type_sys_int);
+    jit_value stop = _function.insn_eq(pop(), fals);
+    _function.insn_branch_if(stop, label_after_while);
+
+    // generate the actual statements
+    statements->generate(this);
+
+    // jump back to label_while
+    _function.insn_branch(label_while);
+
+    // insert our label_after_while at the end
+    _function.insn_label(label_after_while);
+}
+
+/**
  *  Execute the template given a certain handler
  *  @param  handler
  */

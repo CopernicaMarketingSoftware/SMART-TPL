@@ -24,7 +24,7 @@ int         smart_tpl_member_iter(void *userdata, void *variable, const char *ke
 void       *smart_tpl_variable(void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string(void *userdata, void *variable);
 size_t      smart_tpl_to_numeric(void *userdata, void *variable);
-size_t      smart_tpl_to_boolean(void *userdata, void *variable);
+int         smart_tpl_to_boolean(void *userdata, void *variable);
 size_t      smart_tpl_size(void *userdata, void *variable);
 void*       smart_tpl_modifier(void *userdata, const char *name, size_t size);
 void*       smart_tpl_modify_variable(void *userdata, void *modifier, void *variable);
@@ -48,13 +48,13 @@ private:
      *  @var    WriteCallback
      */
     static WriteCallback _write;
-    
+
     /**
      *  Signature of the output callback
      *  @var    OutputCallback
      */
     static OutputCallback _output;
-    
+
     /**
      *  Signature of the member callback
      *  @var    MemberCallback
@@ -62,17 +62,23 @@ private:
     static MemberCallback _member;
 
     /**
+     *  Signature of the member iter callback
+     *  @var MemberIterCallback
+     */
+    static MemberIterCallback _member_iter;
+
+    /**
      *  Signature of the variable callback
      *  @var    MemberCallback
      */
     static VariableCallback _variable;
-    
+
     /**
      *  Signature of the function to convert a variable to a string
      *  @var    ToStringCallback
      */
     static ToStringCallback _toString;
-    
+
     /**
      *  Signature of the function to convert a variable to a numeric value
      *  @var    ToNumericCallback
@@ -84,7 +90,7 @@ private:
      *  @var    ToBooleanCallback
      */
     static ToBooleanCallback _toBoolean;
-    
+
     /**
      *  Signature of the function to retrieve the size/strlen of a variable
      *  @var    SizeCallback
@@ -114,18 +120,18 @@ private:
      *  @var ModifyStringCallback
      */
     static ModifyStringCallback _modify_string;
-    
+
 public:
     /**
      *  Constructor
      */
     Callbacks(jit_function *func) : _function(func) {}
-    
+
     /**
      *  Destructor
      */
     virtual ~Callbacks() {}
-      
+
     /**
      *  Call the write function
      *  @param  userdata        Pointer to user-supplied data
@@ -140,11 +146,11 @@ public:
             buffer.raw(), 
             size.raw() 
         };
-        
+
         // create the instruction
         _function->insn_call_native("smart_tpl_write", (void *)smart_tpl_write, _write.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
-    
+
     /**
      *  Call the output function
      *  @param  userdata        Pointer to user-supplied data
@@ -157,11 +163,11 @@ public:
             userdata.raw(), 
             variable.raw()
         };
-        
+
         // create the instruction
         _function->insn_call_native("smart_tpl_output", (void *)smart_tpl_output, _output.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
-    
+
     /**
      *  Call the member function
      *  @param  userdata        Pointer to user-supplied data
@@ -179,9 +185,23 @@ public:
             name.raw(),
             size.raw()
         };
-        
+
         // create the instruction
         return _function->insn_call_native("smart_tpl_member", (void *)smart_tpl_member, _member.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    jit_value member_iter(const jit_value &userdata, const jit_value &variable, const jit_value &name, const jit_value &size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable.raw(),
+            name.raw(),
+            size.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_member_iter", (void *)smart_tpl_member_iter, _member_iter.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -199,11 +219,11 @@ public:
             name.raw(),
             size.raw()
         };
-        
+
         // create the instruction
         return _function->insn_call_native("smart_tpl_variable", (void *)smart_tpl_variable, _variable.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
-    
+
     /**
      *  Call the to_numeric function
      *  @param  userdata        Pointer to user-supplied data
@@ -217,7 +237,7 @@ public:
             userdata.raw(), 
             variable.raw()
         };
-        
+
         // create the instruction
         return _function->insn_call_native("smart_tpl_to_numeric", (void *)smart_tpl_to_numeric, _toNumeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
@@ -235,7 +255,7 @@ public:
             userdata.raw(), 
             variable.raw()
         };
-        
+
         // create the instruction
         return _function->insn_call_native("smart_tpl_to_boolean", (void *)smart_tpl_to_boolean, _toBoolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
@@ -253,7 +273,7 @@ public:
             userdata.raw(), 
             variable.raw()
         };
-        
+
         // create the instruction
         return _function->insn_call_native("smart_tpl_to_string", (void *)smart_tpl_to_string, _toString.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
@@ -271,7 +291,7 @@ public:
             userdata.raw(), 
             variable.raw()
         };
-        
+
         // create the instruction
         return _function->insn_call_native("smart_tpl_size", (void *)smart_tpl_size, _size.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
@@ -329,7 +349,7 @@ public:
         return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 };
-    
+
 /**
  *  End of namespace
  */

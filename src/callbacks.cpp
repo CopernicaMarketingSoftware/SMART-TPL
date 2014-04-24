@@ -37,6 +37,12 @@ OutputCallback Callbacks::_output;
 MemberCallback Callbacks::_member;
 
 /**
+ *  Signature of the member iter callback
+ *  @var MemberIterCallback
+ */
+MemberIterCallback Callbacks::_member_iter;
+
+/**
  *  Signature of the variable callback
  *  @var    MemberCallback
  */
@@ -221,7 +227,7 @@ size_t smart_tpl_to_numeric(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-size_t smart_tpl_to_boolean(void *userdata, void *variable)
+int smart_tpl_to_boolean(void *userdata, void *variable)
 {
     // convert the variable to a value object
     auto *var = (Value *)variable;
