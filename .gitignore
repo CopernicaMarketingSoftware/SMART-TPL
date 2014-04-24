@@ -7,3 +7,5 @@ parser.out
 tokenizer.cpp
 a.out
 smarttpl
+
+test/*.c

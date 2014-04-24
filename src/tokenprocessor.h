@@ -32,7 +32,7 @@ private:
      *  @var    void*
      */
     void *_resource;
-    
+
 protected:
     /**
      *  A set of statements that make up the template
@@ -45,19 +45,19 @@ protected:
      */
     TokenProcessor();
 
-public:        
+public:
     /**
      *  Destructor
      */
     virtual ~TokenProcessor();
-    
+
     /**
      *  Called by the tokenizer when a token is detected
      *  @param  id      Token identifier (see lemon.h)
      *  @param  token   Additional token information
      */
     void process(int id, Token *token);
-    
+
     /**
      *  Called when the statements were found that make up the program
      *  @param  statements

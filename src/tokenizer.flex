@@ -152,11 +152,13 @@ Tokenizer::~Tokenizer()
  *  @param  buffer
  *  @param  size
  *  @return bool
+ *  @throws std::runtime_error In case something during the parsing went wrong
+ *  @todo Get rid of this return value? Was originally for error handling, but
+ *        this is kind of pointless now as we just throw an exception instead.
  */
-bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size) const
+bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 {
     auto *state = yy_scan_bytes(buffer, size, _scanner);
-    bool ret = false;
     try {
         // ID of the current token
         int id;
@@ -173,15 +175,18 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 
         // pass the end-of-file to the parser
         parent->process(0, nullptr);
-
-        // done
-        ret = true;
     } catch (const std::runtime_error& error) {
-        std::cerr << error.what() << " at line " << line << std::endl;
+        // clear our buffer
+        yy_delete_buffer(state, _scanner);
+
+        // add the line number to the original error and rethrow it
+        std::stringstream stream;
+        stream << error.what() << " at line " << line;
+        throw std::runtime_error(stream.str());
     }
     yy_delete_buffer(state, _scanner);
 
-    return ret;
+    return true;
 }
 
 /**

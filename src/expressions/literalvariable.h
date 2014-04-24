@@ -23,7 +23,7 @@ private:
      *  @var    std::unique_ptr
      */
     std::unique_ptr<Token> _name;
-    
+
 public:
     /**
      *  Constructor
@@ -31,7 +31,7 @@ public:
      */
     LiteralVariable(Token *token) : 
         _name(token) {}
-    
+
     /**
      *  Destructor
      */
@@ -42,7 +42,7 @@ public:
      *  @return Type
      */
     virtual Type type() const { return Type::Value; }
-    
+
     /**
      *  Generate the output that leaves a pointer to the variable
      *  @param  generator
@@ -51,6 +51,15 @@ public:
     {
         // generate the code to get a variable pointer
         generator->varPointer(*_name);
+    }
+
+    /**
+     *  Return the token name of the variable
+     *  @return std::string
+     */
+    const std::string token() const
+    {
+        return *_name.get();
     }
 };
 

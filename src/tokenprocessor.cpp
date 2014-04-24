@@ -35,8 +35,10 @@ TokenProcessor::TokenProcessor()
  */
 TokenProcessor::~TokenProcessor()
 {
-    // clean resources
-    ParseFree(_resource, free);
+    // @todo For some reason we segfault if we call ParseFree after an exception
+    // is thrown from one of the classes created by lemon. Investigate why this
+    // is..
+    if (!std::uncaught_exception()) ParseFree(_resource, free);
 }
 
 /**

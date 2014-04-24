@@ -37,21 +37,20 @@ private:
 
     /**
      *  The current token
-     *  Mutable as it has to be modified in process, which is const
      */
-    mutable Token* token;
+    Token* token;
 
 public:
     /**
      *  Constructor
      */
     Tokenizer();
-    
+
     /**
      *  Destructor
      */
     virtual ~Tokenizer();
-    
+
     /**
      *  Process a string, and feed all elements to the parser
      *  @param  parent      Parser object that is notified about tokens
@@ -59,7 +58,7 @@ public:
      *  @param  size        Size of the buffer
      *  @return bool
      */
-    bool process(TokenProcessor *parent, const char *buffer, size_t size) const;
+    bool process(TokenProcessor *parent, const char *buffer, size_t size);
 
     /**
      *  Increase the line counter
@@ -71,7 +70,7 @@ public:
      */
     void setCurrentToken(Token* newToken) { token = newToken; };
 };
-    
+
 /**
  *  End of namespace
  */

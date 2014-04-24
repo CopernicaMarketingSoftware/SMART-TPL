@@ -20,18 +20,23 @@ namespace SmartTpl {
 Template::Template(const Source& source)
 {
     _executor = nullptr;
-    if (typeid(source) == typeid(File)) {
-        const File& file = dynamic_cast<const File&>(source);
-        const std::string filename = file.GetFilename();
-        char *extension = strrchr(filename.c_str(), '.');
-        if (extension && strcasecmp(extension, ".so") == 0) {
-            // this is a shared library
-            _executor = new Library(filename);
+    try {
+        if (typeid(source) == typeid(File)) {
+            const File& file = dynamic_cast<const File&>(source);
+            const std::string filename = file.GetFilename();
+            char *extension = strrchr(filename.c_str(), '.');
+            if (extension && strcasecmp(extension, ".so") == 0) {
+                // this is a shared library
+                _executor = new Library(filename);
+            }
         }
-    }
-    if (_executor == nullptr) {
-        // this is a raw template file, convert it into byte-code
-        _executor = new Bytecode(source);
+        if (_executor == nullptr) {
+            // this is a raw template file, convert it into byte-code
+            _executor = new Bytecode(source);
+        }
+    } catch (const std::runtime_error &error) {
+        _executor = nullptr;
+        throw;
     }
 }
 
@@ -41,7 +46,8 @@ Template::Template(const Source& source)
 Template::~Template()
 {
     // we no longer need the executor
-    delete _executor;
+    if (_executor)
+        delete _executor;
 }
 
 /**

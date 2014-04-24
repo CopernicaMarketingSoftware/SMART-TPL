@@ -31,12 +31,25 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  token
+     *  @param key           The {foreach ... in ${variable}} part of the foreach
+     *                       should probably always be a LiteralVariable, maybe just throw otherwise?
+     *  @param target        The variable to loop through, this does NOT have to be a LiteralVariable
+     *  @param statements    The statements to execute in the foreach loop
      */
     ForEachStatement(Variable *key, Variable *target, Statements *statements)
     : _key(key)
     , _target(target)
-    , _statements(statements) {}
+    , _statements(statements) {
+        LiteralVariable *k = dynamic_cast<LiteralVariable*>(key);
+        if (k == nullptr)
+            throw std::runtime_error("The key in the foreach loop is of the wrong type");
+        std::cout << ((LiteralVariable*) key)->token() << std::endl;
+        LiteralVariable* t = dynamic_cast<LiteralVariable*>(target);
+        if (t)
+            std::cout << t->token() << std::endl;
+        else
+            std::cout << "Target is not of type LiteralVariable." << std::endl;
+    }
 
     /**
      *  Destructor
