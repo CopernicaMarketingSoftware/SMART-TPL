@@ -115,6 +115,10 @@ public:
      */
     MapValue& assign(const char *name, numeric_t value)
     {
+        // Look in the _custom_values map first and remove it from there if it's there
+        auto iter = _custom_values.find(name);
+        if (iter != _custom_values.end()) _custom_values.erase(iter);
+
         // append variable
         _values[name] = std::unique_ptr<Value>(new NumericValue(value));
 
@@ -130,6 +134,10 @@ public:
      */
     MapValue& assign(const char *name, const std::string &value)
     {
+        // Look in the _custom_values map first and remove it from there if it's there
+        auto iter = _custom_values.find(name);
+        if (iter != _custom_values.end()) _custom_values.erase(iter);
+
         // append variable
         _values[name] = std::unique_ptr<Value>(new StringValue(value));
 
@@ -145,6 +153,10 @@ public:
      *  @return MapValue    Same object for chaining
      */
     MapValue& assign(const char* name, Value* value) {
+        // Look in the _values map first and remove it from there if it's there
+        auto iter = _values.find(name);
+        if (iter != _values.end()) _values.erase(iter);
+
         //Add to our values
         _custom_values[name] = value;
 
@@ -157,7 +169,32 @@ public:
      */
     virtual size_t memberCount() override
     {
-        return _values.size();
+        return _custom_values.size() + _values.size();
+    }
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param position
+     *  @return Value or nullptr if not present
+     */
+    virtual Value *memberAt(int position) override
+    {
+        // If we're out of bounds just return nullptr
+        if (position < 0 || position >= memberCount()) return nullptr;
+
+        // If we're within the bounds of _custom_values get it from there
+        if (position < _custom_values.size())
+        {
+            auto iter = _custom_values.begin();
+            std::advance(iter, position);
+            return iter->second;
+        }
+        else
+        {
+            auto iter = _values.begin();
+            std::advance(iter, position - _custom_values.size());
+            return iter->second.get();
+        }
     }
 
     /**

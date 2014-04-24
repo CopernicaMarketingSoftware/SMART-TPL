@@ -24,7 +24,7 @@ private:
      *  @var    std::string
      */
     std::string _buffer;
-    
+
     /**
      *  The underlying data
      *  @var    Data
@@ -36,6 +36,35 @@ private:
      *  needs to clean them up
      */
     std::map<Modifier*, std::set<Value*>> _destroy_later;
+
+    /**
+     *  Map with the 'iterators', we basically just map where we are in
+     *  looping through Value*
+     */
+    std::map<Value*, size_t> _iterators;
+
+    /**
+     *  Compare functor necessary for the map
+     */
+    struct cmp_str
+    {
+        /**
+         *  Invoke operator
+         *  @param  a
+         *  @param  b
+         *  @return bool
+         */
+        bool operator()(char const *a, char const *b) const
+        {
+            return std::strcmp(a, b) < 0;
+        }
+    };
+
+    /**
+     *  In here we map our magic foreach keys to actual values, we're basically
+     *  injecting the variable callbacks
+     */
+    std::map<const char *, Value*, cmp_str> _loop_values;
 
 public:
     /**
@@ -78,10 +107,43 @@ public:
      */
     Value *variable(const char *name, size_t size)
     {
+        auto iter = _loop_values.find(name);
+        if (iter != _loop_values.end()) return iter->second;
         // get the variable from the data object
         return _data->value(name,size);
     }
-    
+
+    bool iterate(Value *value, const char *key, size_t size)
+    {
+        // Retrieve the amount of members in value
+        size_t len = value->memberCount();
+
+        // We can't even iterate over this...
+        if (len == 0) return false;
+
+        // Let's look up where we were with iterating
+        auto iter = _iterators.find(value);
+        if (iter == _iterators.end())
+        {
+            _iterators[value] = 0;
+            _loop_values[key] = value->memberAt(0);
+            return true;
+        }
+        else
+        {
+            size_t newpos = ++_iterators[value];
+            if (newpos >= len)
+            {
+                _iterators.erase(iter);
+                auto liter = _loop_values.find(key);
+                if (liter != _loop_values.end()) _loop_values.erase(liter);
+                return false;
+            }
+            _loop_values[key] = value->memberAt(newpos);
+            return true;
+        }
+    }
+
     /**
      *  Return the generated output
      *  @return std::string

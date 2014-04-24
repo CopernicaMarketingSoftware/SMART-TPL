@@ -23,7 +23,7 @@ private:
      *  @var numeric
      */
     const numeric_t _value;
-    
+
     /**
      *  String representation
      *  @var std::string
@@ -36,7 +36,7 @@ public:
      *  @param  value
      */
     NumericValue(numeric_t value) : _value(value) {}
-    
+
     /**
      *  Destructor
      */
@@ -55,7 +55,7 @@ public:
         _str = new std::string(std::to_string(_value));
         return _str->c_str();
     }
-    
+
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
@@ -73,7 +73,7 @@ public:
     {
         return _value != 0;
     }
-    
+
     /**
      *  Get access to a member variable
      * 
@@ -93,7 +93,17 @@ public:
     {
         return 0;
     }
-    
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param position
+     *  @return Value or nullptr if not present
+     */
+    virtual Value *memberAt(int position) override
+    {
+        return nullptr;
+    }
+
     /**
      *  String length of the variable
      * 

@@ -21,6 +21,7 @@ static struct smart_tpl_callbacks callbacks = {
     .write          =   smart_tpl_write,
     .output         =   smart_tpl_output,
     .member         =   smart_tpl_member,
+    .member_iter    =   smart_tpl_member_iter,
     .variable       =   smart_tpl_variable,
     .to_string      =   smart_tpl_to_string,
     .to_numeric     =   smart_tpl_to_numeric,

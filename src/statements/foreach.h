@@ -32,9 +32,10 @@ public:
     /**
      *  Constructor
      *  @param key           The {foreach ... in ${variable}} part of the foreach
-     *                       should probably always be a LiteralVariable, maybe just throw otherwise?
+     *                       we demand that this is a LiteralVariable, otherwise we'll throw
      *  @param target        The variable to loop through, this does NOT have to be a LiteralVariable
      *  @param statements    The statements to execute in the foreach loop
+     *  @throws std::runtime_error In case the key is not of type LiteralVariable
      */
     ForEachStatement(Variable *key, Variable *target, Statements *statements)
     : _target(target)
@@ -56,7 +57,7 @@ public:
      */
     virtual void generate(Generator *generator) const override
     {
-        // add write instruction of raw data
+        generator->foreach(_key->token(), _target.get(), _statements.get());
     }
 };
 

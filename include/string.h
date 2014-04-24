@@ -85,7 +85,17 @@ public:
     {
         return 0;
     }
-    
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param position
+     *  @return Value or nullptr if not present
+     */
+    virtual Value *memberAt(int position) override
+    {
+        return nullptr;
+    }
+
     /**
      *  String length of the variable
      * 

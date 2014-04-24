@@ -135,14 +135,34 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t 
 {
     // convert the variable to a variable object
     auto *var = (Value *)variable;
-    
+
     // fetch the member
     auto *result = var->member(name, size);
-    
+
     // ensure that we always return an object
     return result ? result : &empty;
 }
-    
+
+/**
+ *  Check if we can continue iterating over variable and set the magic key to the next value
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  variable        pointer to variable
+ *  @param  key             name of the magic variable
+ *  @param  size            length of key
+ *  @return                 1 if we can continue iterating, 0 otherwise
+ */
+int smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size)
+{
+    // convert the variable to a Value object
+    auto *var = (Value *) variable;
+
+    // convert the userdata to our Handler object
+    auto *handler = (Handler *) userdata;
+
+    // return the memberCount()
+    return handler->iterate(var, key, size) ? 1 : 0;
+}
+
 /**
  *  Retrieve a pointer to a variable
  *  @param  userdata        pointer to user-supplied data

@@ -9,7 +9,7 @@
             And a conditional text
         {/if}
         {$variable.member}
-        {foreach $key in $variable.member}
+        {foreach $key in $map}
             Key: {$key}
         {/foreach}
         {if $variable}

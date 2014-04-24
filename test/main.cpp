@@ -29,8 +29,9 @@ int main(int argc, const char *argv[])
             
             // assign variables
             SmartTpl::MapValue map;
-            map.assign("member", "Test");
-            data.assign("variable", &map)
+            map.assign("member", "Test")
+               .assign("anothermember", "Testing 1 2 3..");
+            data.assign("map", &map)
                 .assign("name", "Testing..")
                 .assign("x", "Mr. x");
 

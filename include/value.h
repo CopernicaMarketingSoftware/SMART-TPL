@@ -31,19 +31,19 @@ public:
      *  @return const char *
      */
     virtual const char *toString() = 0;
-    
+
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
      */
     virtual numeric_t toNumeric() = 0;
-    
+
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
     virtual bool toBoolean() = 0;
-    
+
     /**
      *  Get access to a member value
      * 
@@ -57,7 +57,14 @@ public:
      *  Get access to the amount of members this value has
      */
     virtual size_t memberCount() = 0;
-    
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param position
+     *  @return Value or nullptr if not present
+     */
+    virtual Value *memberAt(int position) = 0;
+
     /**
      *  String length of the variable
      * 
@@ -65,7 +72,7 @@ public:
      */
     virtual size_t size() = 0;
 };
-    
+
 /**
  *  End namespace
  */

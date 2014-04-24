@@ -207,6 +207,15 @@ private:
      */
     virtual void modifiers(const Modifiers* modifiers, const Expression *expression) override;
 
+    /**
+     *  Generate the code to do a foreach loop over variable
+     *  @param key                The magic variable name that should be used
+     *  @param variable           The variable object to iterate over
+     *  @param statements         The statements to execute on each iteration
+     *  @todo Implement this..
+     */
+    virtual void foreach(const std::string& key, const Variable *variable, const Statements *statements) override {};
+
 
 public:
     /**

@@ -386,6 +386,26 @@ void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
 }
 
 /**
+ *  Generate the code to do a foreach loop over variable
+ *  @param key                The magic variable name that should be used
+ *  @param variable           The variable object to iterate over
+ *  @param statements         The statements to execute on each iteration
+ */
+void CCode::foreach(const std::string& key, const Variable *variable, const Statements *statements)
+{
+    // Start the actual loop
+    _out << "while (callbacks->member_iter(userdata,";
+    variable->pointer(this);
+    _out << ",";
+    string(key);
+    _out << ")) {" << std::endl;
+
+    statements->generate(this);
+
+    _out << "}" << std::endl;
+}
+
+/**
  *  End of namespace
  */
 }
