@@ -22,7 +22,7 @@ private:
      *  The raw data to be echo'ed
      *  @var    std::unique_ptr
      */
-    std::unique_ptr<Variable> _key;
+    std::unique_ptr<LiteralVariable> _key;
 
     std::unique_ptr<Variable> _target;
 
@@ -37,18 +37,12 @@ public:
      *  @param statements    The statements to execute in the foreach loop
      */
     ForEachStatement(Variable *key, Variable *target, Statements *statements)
-    : _key(key)
-    , _target(target)
+    : _target(target)
     , _statements(statements) {
         LiteralVariable *k = dynamic_cast<LiteralVariable*>(key);
         if (k == nullptr)
             throw std::runtime_error("The key in the foreach loop is of the wrong type");
-        std::cout << ((LiteralVariable*) key)->token() << std::endl;
-        LiteralVariable* t = dynamic_cast<LiteralVariable*>(target);
-        if (t)
-            std::cout << t->token() << std::endl;
-        else
-            std::cout << "Target is not of type LiteralVariable." << std::endl;
+        _key = std::unique_ptr<LiteralVariable>(k);
     }
 
     /**
