@@ -63,6 +63,12 @@ private:
     static MemberCallback _member;
 
     /**
+     *  Signature of the member_at callback
+     *  @var    MemberAtCallback
+     */
+    static MemberAtCallback _member_at;
+
+    /**
      *  Signature of the member iter callback
      *  @var MemberIterCallback
      */
@@ -191,6 +197,34 @@ public:
         return _function->insn_call_native("smart_tpl_member", (void *)smart_tpl_member, _member.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    /**
+     *  Call the member_at function
+     *  @param  userdata      Pointer to user-supplied data
+     *  @param  variable      Pointer to the variable
+     *  @param  position      Position of the member value
+     *  @return jit_value     The new variable pointer
+     */
+    jit_value member_at(const jit_value &userdata, const jit_value &variable, const jit_value &position)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable.raw(),
+            position.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_member_at", (void *)smart_tpl_member_at, _member_at.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the member_iter function
+     *  @param  userdata      Pointer to user-supplied data
+     *  @param  variable      Pointer to the variable
+     *  @param  name          Name of the magic key to store the iterated value in
+     *  @param  size          Size of name
+     *  @return jit_value     A boolean telling if you should continue looping or not
+     */
     jit_value member_iter(const jit_value &userdata, const jit_value &variable, const jit_value &name, const jit_value &size)
     {
         // construct the arguments

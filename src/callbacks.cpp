@@ -37,6 +37,12 @@ OutputCallback Callbacks::_output;
 MemberCallback Callbacks::_member;
 
 /**
+ *  Signature of the member_at callback
+ *  @var    MemberAtCallback
+ */
+MemberAtCallback Callbacks::_member_at;
+
+/**
  *  Signature of the member iter callback
  *  @var MemberIterCallback
  */

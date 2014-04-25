@@ -231,16 +231,31 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
  */
 void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 {
-    // convert the expression to a string (this pushes two values on the stack
-    expression->string(this);
-    
-    // pop the buffer and size from the stack (in reverse order)
-    auto size = pop();
-    auto buffer = pop();
-    
-    // call the native function to retrieve the member of a variable, and store the pointer
-    // to the variable on the stack
-    _stack.push(_callbacks.member(_userdata, pointer(parent), buffer, size));
+    if (expression->type() == Expression::Type::Numeric)
+    {
+        // convert the expression to a numeric value
+        expression->numeric(this);
+
+        // pop the output of expression->numeric(this) from the stack
+        auto position = pop();
+
+        // call the native function to retrieve the member of the variable and
+        // push the variable to the stack
+        _stack.push(_callbacks.member_at(_userdata, pointer(parent), position));
+    }
+    else
+    {
+        // convert the expression to a string (this pushes two values on the stack
+        expression->string(this);
+
+        // pop the buffer and size from the stack (in reverse order)
+        auto size = pop();
+        auto buffer = pop();
+
+        // call the native function to retrieve the member of a variable, and store the pointer
+        // to the variable on the stack
+        _stack.push(_callbacks.member(_userdata, pointer(parent), buffer, size));
+    }
 }
 
 /**
