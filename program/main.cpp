@@ -23,6 +23,7 @@
 #include <memory>
 #include <map>
 #include <unistd.h>
+#include <getopt.h>
 
 #include "include/source.h"
 #include "include/value.h"
@@ -31,6 +32,14 @@
 #include "include/template.h"
 
 #include "include/file.h"
+
+static const struct option opts[] = {
+    { "help",              no_argument, 0, 'h' },
+    { "keep-file",         no_argument, 0, 'k' },
+    { 0, 0, 0, 0 }
+};
+
+bool keepfile = false;
 
 /**
  *  Helper function to compile a template
@@ -52,11 +61,11 @@ static bool compile(const std::string &base)
     {
         // report error
         std::cerr << "Failure: " << input << " (" << c_output << " " << strerror(errno) << ")" << std::endl;
-        
+
         // report error
         return false;
     }
-    
+
     // when the template object is created, exceptions may pop-up describing
     // syntax error or other problems
     try
@@ -64,10 +73,10 @@ static bool compile(const std::string &base)
         SmartTpl::File file(input);
         // create template
         SmartTpl::Template tpl(file);
-        
+
         // convert into C code
         cstream << tpl.compile();
-        
+
         // close the c-stream
         cstream.close();
     }
@@ -77,12 +86,12 @@ static bool compile(const std::string &base)
         std::cerr << "Failure: " << input << " (" << error.what() << ")" << std::endl;
 
         // unlink our failed C file
-        //unlink(c_output.c_str());
-        
+        if (!keepfile) unlink(c_output.c_str());
+
         // report error
         return false;
     }
-    
+
     // the command to compile the C file into a *.so file
     std::ostringstream command;
     const char* compiler = getenv("CC");
@@ -92,15 +101,28 @@ static bool compile(const std::string &base)
 
     // run the command
     int status = system(command.str().c_str());
-    
+
     // if we ran into an error, we keep the C source file intact
     if (WEXITSTATUS(status) != 0) return false;
-    
+
     // unlink intermediate C file
-    //unlink(c_output.c_str());
-    
+    if (!keepfile) unlink(c_output.c_str());
+
     // done
     return true;
+}
+
+/**
+ *  Help printer
+ *  @param program   The program name
+ *  @param exit_code With what exit code should we exit the program afterwards
+ */
+void print_help(const char *program, int exit_code)
+{
+    std::cerr << "Usage: " << program << " [options] <yourtemplate.tpl>..." << std::endl
+              << "--help, -h      This help information." << std::endl
+              << "--keep-file, -k Keep the generated C file." << std::endl;
+    exit(exit_code);
 }
 
 /**
@@ -108,25 +130,36 @@ static bool compile(const std::string &base)
  *  @param  argc
  *  @param  argv
  */
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
     // check number of arguments
     if (argc < 2)
     {
-        // we need at least one template file
-        std::cerr << "Usage: " << argv[0] << " <yourtemplate.tpl>" << std::endl;
-        return -1;
+        print_help(argv[0], EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
-    
+
+    int arg;
+    while ((arg = getopt_long(argc, argv, "kh", opts, &argc)) != -1) {
+        switch (arg) {
+        case 'k':
+            keepfile = true;
+            break;
+        case 'h':
+            print_help(argv[0], EXIT_SUCCESS);
+            return EXIT_SUCCESS;
+        }
+    }
+
     // number of files compiled
     int success = 0;
-    
+
     // loop through the arguments
-    for (int i=1; i<argc; i++)
+    for (int i=optind; i<argc; i++)
     {
         // name of the template
         const char *filename = argv[i];
-        
+
         // find the extension
         const char *extension = strrchr(filename, '.');
         if (extension && strcmp(extension, ".tpl") == 0)
@@ -140,7 +173,7 @@ int main(int argc, const char *argv[])
             std::cerr << "Failure: " << filename << " (not a *.tpl file)" << std::endl;
         }
     }
-    
+
     // done
-    return success == (argc - 1) ? 0 : -1;
+    return success == (argc - optind) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
