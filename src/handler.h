@@ -38,10 +38,9 @@ private:
     std::map<Modifier*, std::set<Value*>> _destroy_later;
 
     /**
-     *  Map with the 'iterators', we basically just map where we are in
-     *  looping through Value*
+     *  Stack of our iterators
      */
-    std::map<Value*, size_t> _iterators;
+    std::stack<std::pair<const char*, size_t>> _iterator_stack;
 
     /**
      *  Compare functor necessary for the map
@@ -75,7 +74,7 @@ public:
     {
         _buffer.reserve(4096);
     }
-    
+
     /**
      *  Destructor
      */
@@ -88,7 +87,7 @@ public:
             for (auto & v : m.second) m.first->cleanup(v);
         }
     }
-    
+
     /**
      *  Write data to the buffer
      *  @param  buffer
@@ -98,7 +97,7 @@ public:
     {
         _buffer.append(buffer, size);
     }
-    
+
     /**
      *  Get access to a variable
      *  @param  name
@@ -113,6 +112,13 @@ public:
         return _data->value(name,size);
     }
 
+    /**
+     *  Iterate over a multi value value object
+     *  @param value   The value to iterate over
+     *  @param key     The magic key to assign the next value to
+     *  @param size    The size of the magic key
+     *  @return True if we should continue looping, false otherwise
+     */
     bool iterate(Value *value, const char *key, size_t size)
     {
         // Retrieve the amount of members in value
@@ -121,26 +127,52 @@ public:
         // We can't even iterate over this...
         if (len == 0) return false;
 
-        // Let's look up where we were with iterating
-        auto iter = _iterators.find(value);
-        if (iter == _iterators.end())
+        // If our iterator stack is empty create a new iterator
+        if (_iterator_stack.empty())
         {
-            _iterators[value] = 0;
+            std::pair<const char*, size_t> iter(key, 0);
+            _iterator_stack.push(iter);
+
+            // assign the first element of the iteration to our magic key
             _loop_values[key] = value->member(0);
             return true;
         }
         else
         {
-            size_t newpos = ++_iterators[value];
-            if (newpos >= len)
+            // Retrieve the last used iterator
+            std::pair<const char*, size_t> &iter = _iterator_stack.top();
+
+            // If it has the same key as we do it is the iterator we need
+            if (std::strcmp(key, iter.first) == 0)
             {
-                _iterators.erase(iter);
-                auto liter = _loop_values.find(key);
-                if (liter != _loop_values.end()) _loop_values.erase(liter);
-                return false;
+                // Increase our iterator by 1 and check if it goes over the bounds
+                if (++iter.second >= len)
+                {
+                    // if it does go over the boundaries just remove it from the stack
+                    _iterator_stack.pop();
+
+                    // and remove our magic value
+                    auto liter = _loop_values.find(key);
+                    if (liter != _loop_values.end()) _loop_values.erase(liter);
+
+                    // and tell the callback to stop looping
+                    return false;
+                }
+
+                // assign the next element in the iteration to our magic key
+                _loop_values[key] = value->member(iter.second);
+                return true;
             }
-            _loop_values[key] = value->member(newpos);
-            return true;
+            else
+            {
+                // If it is not the same key just create a new iterator
+                std::pair<const char*,size_t> iter(key, 0);
+                _iterator_stack.push(iter);
+
+                // assign the first element of the iteration to our magic key
+                _loop_values[key] = value->member(0);
+                return true;
+            }
         }
     }
 
