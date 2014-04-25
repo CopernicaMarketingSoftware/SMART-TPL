@@ -20,16 +20,16 @@ class ListValue : public Value
 private:
     /**
      *  The actual list with values
-     *  @var std::list
+     *  @var std::vector
      */
-    std::list<Value*> _list;
+    std::vector<Value*> _list;
 
     /**
      *  A list with values that should be destroyed later on
      *  mostly for Value objects created in place
-     *  @var std::list
+     *  @var std::set
      */
-    std::list<std::unique_ptr<Value>> _destroy_later;
+    std::set<std::unique_ptr<Value>> _destroy_later;
 
 public:
     /**
@@ -96,7 +96,7 @@ public:
         _list.push_back(value);
 
         // Push it into our destroy later list
-        _destroy_later.push_back(std::unique_ptr<Value>(value));
+        _destroy_later.insert(std::unique_ptr<Value>(value));
 
         // allow chaining
         return *this;
@@ -116,7 +116,7 @@ public:
         _list.push_back(value);
 
         // Push it into our destroy later list
-        _destroy_later.push_back(std::unique_ptr<Value>(value));
+        _destroy_later.insert(std::unique_ptr<Value>(value));
 
         // allow chaining
         return *this;
@@ -153,14 +153,8 @@ public:
         // If we're out of bounds just return nullptr
         if (position < 0 || position >= memberCount()) return nullptr;
 
-        // Get an iterator of the _list
-        auto iter = _list.begin();
-
-        // advance it by position
-        std::advance(iter, position);
-
-        // return the value the iterator has
-        return *iter;
+        // Just return it using the [] operator
+        return _list[position];
     }
 
     /**

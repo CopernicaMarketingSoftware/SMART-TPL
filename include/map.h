@@ -45,7 +45,7 @@ private:
      *  A list with all the interally created Values that
      *  should simply be destroyed later on
      */
-    std::list<std::unique_ptr<Value>> _destroy_later;
+    std::set<std::unique_ptr<Value>> _destroy_later;
 
 public:
     /**
@@ -99,7 +99,7 @@ public:
         if (iter == _values.end()) return nullptr;
 
         // get the pointer
-        return iter->second.get();
+        return iter->second;
     }
 
     /**
@@ -117,7 +117,7 @@ public:
         _values[name] = value;
 
         // and add it to our _destroy_later list
-        _destroy_later.push_back(std::unique_ptr<Value>(value));
+        _destroy_later.insert(std::unique_ptr<Value>(value));
 
         // allow chaining
         return *this;
@@ -138,7 +138,7 @@ public:
         _values[name] = value;
 
         // and add it to our _destroy_later list
-        _destroy_later.push_back(std::unique_ptr<Value>(value));
+        _destroy_later.insert(std::unique_ptr<Value>(value));
 
         // allow chaining
         return *this;
