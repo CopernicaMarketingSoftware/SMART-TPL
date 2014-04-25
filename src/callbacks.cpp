@@ -165,7 +165,7 @@ int smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_
     // convert the userdata to our Handler object
     auto *handler = (Handler *) userdata;
 
-    // return the memberCount()
+    // execute the interate method and return the result
     return handler->iterate(var, key, size) ? 1 : 0;
 }
 
