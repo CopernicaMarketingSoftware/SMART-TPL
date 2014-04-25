@@ -17,6 +17,11 @@ namespace SmartTpl {
  */
 class Modifiers
 {
+public:
+    /**
+     *  const_iterator typedef
+     */
+    typedef std::list<std::unique_ptr<const ModifierExpression>>::const_iterator const_iterator;
 private:
     /**
      *  List of modifiers
@@ -25,8 +30,6 @@ private:
     std::list<std::unique_ptr<const ModifierExpression>> _modifiers;
 
 public:
-    typedef std::list<std::unique_ptr<const ModifierExpression>>::const_iterator const_iterator;
-
     /**
      *  Constructor
      *  @param  modifier
@@ -55,6 +58,9 @@ public:
         generator->modifiers(this, expression);
     }
 
+    /**
+     *  Get the begin and end iterator
+     */
     const_iterator begin() const { return _modifiers.begin(); }
     const_iterator end() const { return _modifiers.end(); }
 };

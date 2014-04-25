@@ -17,6 +17,11 @@ namespace SmartTpl {
  */
 class ListValue : public Value
 {
+public:
+    /**
+     *  const_iterator typedef
+     */
+    typedef std::vector<Value*>::const_iterator const_iterator;
 private:
     /**
      *  The actual list with values
@@ -166,6 +171,12 @@ public:
     {
         return 0;
     }
+
+    /**
+     *  Get the begin and end iterator
+     */
+    const_iterator begin() const { return _list.begin(); }
+    const_iterator end() const { return _list.end(); }
 };
 
 /**
