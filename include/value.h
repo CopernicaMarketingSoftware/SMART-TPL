@@ -63,7 +63,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *memberAt(int position) = 0;
+    virtual Value *member(int position) = 0;
 
     /**
      *  String length of the variable

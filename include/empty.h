@@ -71,7 +71,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *memberAt(int position) override
+    virtual Value *member(int position) override
     {
         return nullptr;
     }

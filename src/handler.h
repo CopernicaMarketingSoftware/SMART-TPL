@@ -126,7 +126,7 @@ public:
         if (iter == _iterators.end())
         {
             _iterators[value] = 0;
-            _loop_values[key] = value->memberAt(0);
+            _loop_values[key] = value->member(0);
             return true;
         }
         else
@@ -139,7 +139,7 @@ public:
                 if (liter != _loop_values.end()) _loop_values.erase(liter);
                 return false;
             }
-            _loop_values[key] = value->memberAt(newpos);
+            _loop_values[key] = value->member(newpos);
             return true;
         }
     }

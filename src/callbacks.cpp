@@ -168,7 +168,7 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
     auto *var = (Value *)variable;
 
     // fetch the member
-    auto *result = var->memberAt(position);
+    auto *result = var->member(position);
 
     // ensure that we always return an object
     return result ? result : &empty;

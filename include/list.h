@@ -153,7 +153,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *memberAt(int position) override
+    virtual Value *member(int position) override
     {
         // If we're out of bounds just return nullptr
         if (position < 0 || position >= memberCount()) return nullptr;
