@@ -336,8 +336,28 @@ void CCode::multiply(const Expression *left, const Expression *right)   { left->
  *  Comparison operators
  *  @param  left
  *  @param  right
+ *  @todo Maybe don't actually compile in the comparison if it's a comparison between literals
+ *        it seems kind of pointless to evaluate something like (true == true) everytime.
  */
-void CCode::equals(const Expression *left, const Expression *right)         { left->numeric(this); _out << "=="; right->numeric(this); }
+void CCode::equals(const Expression *left, const Expression *right)
+{
+    if (left->type() == Expression::Type::Numeric && right->type() == Expression::Type::Numeric)
+    {
+        left->numeric(this); _out << "=="; right->numeric(this);
+    }
+    else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
+    {
+        _out << "strcmp("; left->string(this); _out << ","; right->string(this); _out << ") == 0";
+    }
+    else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
+    {
+        left->boolean(this); _out << "=="; right->boolean(this);
+    }
+    else
+    {
+        throw std::runtime_error("Comparison between different types is currently not supported.");
+    }
+}
 void CCode::notEquals(const Expression *left, const Expression *right)      { left->numeric(this); _out << "!="; right->numeric(this); }
 void CCode::greater(const Expression *left, const Expression *right)        { left->numeric(this); _out << ">" ; right->numeric(this); }
 void CCode::greaterEquals(const Expression *left, const Expression *right)  { left->numeric(this); _out << ">="; right->numeric(this); }
