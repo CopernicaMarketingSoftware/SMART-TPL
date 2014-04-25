@@ -22,22 +22,20 @@ private:
      *  The actual value
      *  @var    int
      */
-    int _value;
+    const int _value;
     
 public:
     /**
      *  Constructor
-     *  @param  bool
+     *  @param  token
      */
     LiteralInteger(Token *token)
+    : _value(std::atoi(token->c_str()))
     {
-        // store the value
-        _value = atoi(token->c_str());
-        
         // we no longer need the token
         delete token;
     }
-    
+
     /**
      *  Destructor
      */
@@ -68,7 +66,7 @@ public:
         // create numeric literal
         generator->numeric(_value ? 1 : 0);
     }
-    
+
     /**
      *  Generate the code to get the numeric value of the expression
      *  @param  generator

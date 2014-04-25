@@ -22,15 +22,15 @@ private:
      *  The actual value
      *  @var    bool
      */
-    bool _value;
-    
+    const bool _value;
+
 public:
     /**
      *  Constructor
      *  @param  bool
      */
     LiteralBoolean(bool value) : _value(value) {}
-    
+
     /**
      *  Destructor
      */
@@ -61,7 +61,7 @@ public:
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->numeric(_value ? 1 : 0);
     }
-    
+
     /**
      *  Generate the code to get the integer value of the expression
      *  @param  generator

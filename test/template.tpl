@@ -8,7 +8,7 @@
         {if true}
             And a conditional text
         {/if}
-        {$variable.member}
+        {$variable.member[0]}
         {for $key in $variable}
             {$key}
         {/for}

@@ -150,6 +150,25 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t 
 }
 
 /**
+ *  Retrieve a pointer to a member at a certain position
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  variable        pointer to variable
+ *  @param  position        what position would we like
+ *  @return                 pointer to a new variable
+ */
+void* smart_tpl_member_at(void* userdata, void* variable, long position)
+{
+    // convert the variable to a value object
+    auto *var = (Value *)variable;
+
+    // fetch the member
+    auto *result = var->memberAt(position);
+
+    // ensure that we always return an object
+    return result ? result : &empty;
+}
+
+/**
  *  Check if we can continue iterating over variable and set the magic key to the next value
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to variable

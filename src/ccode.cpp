@@ -162,20 +162,38 @@ void CCode::varPointer(const Variable *parent, const std::string &name)
  */
 void CCode::varPointer(const Variable *parent, const Expression *expression)
 {
-    // call the member() function
-    _out << "callbacks->member(userdata,";
+    if (expression->type() == Expression::Type::Numeric)
+    {
+        // call the member_at() function
+        _out << "callbacks->member_at(userdata,";
 
-    // generate a var pointer for the variable
-    parent->pointer(this);
-    
-    // and append a call to retrieve the member
-    _out << ",";
-    
-    // and now we should generate a string value for the expression
-    expression->string(this);
-    
-    // end expression
-    _out << ")";
+        // generate a var pointer for the variable
+        parent->pointer(this);
+        _out << ",";
+
+        // generate the expression as a numeric value
+        expression->numeric(this);
+
+        // end the member_at call
+        _out << ")";
+    }
+    else
+    {
+        // call the member() function
+        _out << "callbacks->member(userdata,";
+
+        // generate a var pointer for the variable
+        parent->pointer(this);
+
+        // and append a call to retrieve the member
+        _out << ",";
+
+        // and now we should generate a string value for the expression
+        expression->string(this);
+
+        // end expression
+        _out << ")";
+    }
 }
 
 /**
