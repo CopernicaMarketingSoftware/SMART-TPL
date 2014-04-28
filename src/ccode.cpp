@@ -455,6 +455,43 @@ void CCode::foreach(const std::string& key, const Variable *variable, const Stat
 }
 
 /**
+ *  Generate the code to assign the output of an expression to a key
+ *  @param key                  The key to assign the output to
+ *  @param expression           The expression to evaluate
+ */
+void CCode::assign(const std::string &key, const Expression *expression)
+{
+    std::cout << "expression = " << typeid(*expression).name() << std::endl;
+    switch (expression->type()) {
+    case Expression::Type::Numeric:
+        _out << "callbacks->assign_numeric(userdata,";
+        expression->numeric(this);
+        break;
+    case Expression::Type::String:
+        _out << "callbacks->assign_string(userdata,";
+        expression->string(this);
+        break;
+    case Expression::Type::Boolean:
+        _out << "callbacks->assign_boolean(userdata,";
+        expression->boolean(this);
+        break;
+    case Expression::Type::Value: {
+        const Variable *variable = dynamic_cast<const Variable*>(expression);
+        if (variable)
+        {
+            _out << "callbacks->assign(userdata,";
+            variable->pointer(this);
+            break;
+        }
+        throw std::runtime_error("Unsupported assign.");
+    }
+    }
+    _out << ",";
+    string(key);
+    _out << ");" << std::endl;
+}
+
+/**
  *  End of namespace
  */
 }

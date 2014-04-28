@@ -31,9 +31,13 @@ static struct smart_tpl_callbacks callbacks = {
     .modifier       =   smart_tpl_modifier,
     .modify_variable=   smart_tpl_modify_variable,
     .modify_numeric =   smart_tpl_modify_numeric,
-    .modify_string  =   smart_tpl_modify_string
+    .modify_string  =   smart_tpl_modify_string,
+    .assign_numeric =   smart_tpl_assign_numeric,
+    .assign_boolean =   smart_tpl_assign_boolean,
+    .assign_string  =   smart_tpl_assign_string,
+    .assign         =   smart_tpl_assign,
 };
-    
+
 /**
  *  Execute the template given a certain data source
  *  @param  data

@@ -216,6 +216,12 @@ private:
      */
     virtual void foreach(const std::string& key, const Variable *variable, const Statements *statements, const std::string &keyvar) override;
 
+    /**
+     *  Generate the code to assign the output of an expression to a key
+     *  @param key                  The key to assign the output to
+     *  @param expression           The expression to evaluate
+     */
+    virtual void assign(const std::string &key, const Expression *expression) override;
 
 public:
     /**

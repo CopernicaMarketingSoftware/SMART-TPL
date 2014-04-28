@@ -13,7 +13,10 @@
             Key: {$key}
             Value: {$value}
         {/foreach}
-        {if $variable}
+        Output before: {$output}
+        {assign true to $output}
+        Output after: {$output}
+        {if $output}
             sdfsdf
         {/if}
     </body>

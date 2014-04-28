@@ -33,7 +33,7 @@ private:
      *  @param  data        buffer to output
      */
     virtual void raw(const std::string &data) override;
-        
+
     /**
      *  Generate the code to output a variable
      *  @param  variable           The variable to output
@@ -79,7 +79,7 @@ private:
      */
     virtual void string(const std::string &value) override;
     virtual void numeric(numeric_t value) override;
-    
+
     /**
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
@@ -96,7 +96,7 @@ private:
      */
     virtual void numericToString(const Expression *expression) override;
     virtual void stringToNumeric(const Expression *expression) override;
-    
+
     /**
      *  Arithmetric operations
      *  @param  left
@@ -106,7 +106,7 @@ private:
     virtual void minus(const Expression *left, const Expression *right) override;
     virtual void divide(const Expression *left, const Expression *right) override;
     virtual void multiply(const Expression *left, const Expression *right) override;
-  
+
     /**
      *  Comparison operators
      *  @param  left
@@ -118,7 +118,7 @@ private:
     virtual void greaterEquals(const Expression *left, const Expression *right) override;
     virtual void lesser(const Expression *left, const Expression *right) override;
     virtual void lesserEquals(const Expression *left, const Expression *right) override;
-    
+
     /**
      *  Boolean operators
      *  @param  left
@@ -143,13 +143,20 @@ private:
      */
     virtual void foreach(const std::string& key, const Variable *variable, const Statements *statements, const std::string &keyvar) override;
 
+    /**
+     *  Generate the code to assign the output of an expression to a key
+     *  @param key                  The key to assign the output to
+     *  @param expression           The expression to evaluate
+     */
+    virtual void assign(const std::string &key, const Expression *expression) override;
+
 public:
     /**
      *  Constructor
      *  @param  tree        The abstract syntax tree of the template
      */
     CCode(const SyntaxTree &tree);
-    
+
     /**
      *  Destructor
      */

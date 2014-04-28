@@ -344,6 +344,35 @@ void* smart_tpl_modify_string(void *userdata, void *modifier, const char *value,
     return nullptr;
 }
 
+void smart_tpl_assign_numeric(void *userdata, long value, const char *key, size_t keysize)
+{
+    std::cout << "smart_tpl_assign_numeric("<<userdata<<","<<value<<","<<key<<","<<keysize<<");"<<std::endl;
+}
+
+void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size_t keysize)
+{
+    std::cout << "smart_tpl_assign_boolean("<<userdata<<","<<boolean<<","<<key<<","<<keysize<<");"<<std::endl;
+
+    auto handler = (Handler *) userdata;
+
+    handler->assignBoolean(boolean == 1, key, keysize);
+}
+
+void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize)
+{
+    std::cout << "smart_tpl_assign_string("<<userdata<<","<<buf<<","<<buf_size<<","<<key<<","<<keysize<<");"<<std::endl;
+}
+
+void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t keysize)
+{
+    std::cout << "smart_tpl_assign("<<userdata<<","<<variable<<","<<key<<","<<keysize<<");"<<std::endl;
+
+    auto handler = (Handler *) userdata;
+    auto value = (Value *) variable;
+
+    handler->assign(value, key, keysize);
+}
+
 /**
  *  End namespace
  */

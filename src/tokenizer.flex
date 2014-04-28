@@ -74,6 +74,7 @@
 "{else}"            { return TOKEN_ELSE; }
 "{foreach"[ \t]+    { BEGIN(EXPRESSION); return TOKEN_FOREACH; }
 "{/foreach}"        { return TOKEN_ENDFOREACH; }
+"{assign"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ASSIGN; }
 "{$"                { BEGIN(EXPRESSION); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
 "{"                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_RAW; }
@@ -92,6 +93,7 @@
     "or"                        { return TOKEN_OR; }
     "in"                        { return TOKEN_IN; }
     "as"                        { return TOKEN_AS; }
+    "to"                        { return TOKEN_TO; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_INTEGER; }
     "("                         { return TOKEN_LPAREN; }

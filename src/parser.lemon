@@ -7,6 +7,7 @@
 %type   ifStatement      {SmartTpl::IfStatement*}
 %type   elseStatement    {SmartTpl::Statements*}
 %type   foreachStatement {SmartTpl::ForEachStatement*}
+%type   assignStatement  {SmartTpl::AssignStatement*}
 %type   expr             {SmartTpl::Expression*}
 %type   boolexpr         {SmartTpl::Expression*}
 %type   outexpr          {SmartTpl::Expression*}
@@ -67,6 +68,8 @@ statement(A)        ::= foreachStatement(B) .                                   
 foreachStatement(A) ::= FOREACH variable(B) IN variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(B, C, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(C, B, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS variable(C) ASSIGN_FOREACH variable(D) statements(E) ENDFOREACH . { A= new SmartTpl::ForEachStatement(D, B, C, E); }
+statement(A)        ::= assignStatement(B) .                                    { A = B; }
+assignStatement(A)  ::= ASSIGN expr(B) TO variable(C) .                         { A = new SmartTpl::AssignStatement(B, C); }
 boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
 boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::BinaryEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) NE outexpr(C) .                              { A = new SmartTpl::BinaryNotEqualsOperator(B, C); }

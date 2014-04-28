@@ -48,6 +48,7 @@
 #include "smarttpl/numeric.h"
 #include "smarttpl/map.h"
 #include "smarttpl/list.h"
+#include "smarttpl/boolean.h"
 
 /**
  *  End of the include guard

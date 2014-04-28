@@ -41,6 +41,8 @@
 #include "include/string.h"
 #include "include/numeric.h"
 #include "include/map.h"
+#include "include/list.h"
+#include "include/boolean.h"
 
 /**
  *  Library only dependencies
@@ -74,6 +76,7 @@
 #include "statements/var.h"
 #include "statements/if.h"
 #include "statements/foreach.h"
+#include "statements/assign.h"
 #include "operators/operator.h"
 #include "operators/binary.h"
 #include "operators/binaryarithmetric.h"

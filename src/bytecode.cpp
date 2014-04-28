@@ -696,6 +696,16 @@ void Bytecode::foreach(const std::string& var, const Variable *variable, const S
 }
 
 /**
+ *  Generate the code to assign the output of an expression to a key
+ *  @param key                  The key to assign the output to
+ *  @param expression           The expression to evaluate
+ *  @todo  Implementation
+ */
+void Bytecode::assign(const std::string &key, const Expression *expression)
+{
+}
+
+/**
  *  Execute the template given a certain handler
  *  @param  handler
  */

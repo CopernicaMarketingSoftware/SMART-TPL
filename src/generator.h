@@ -37,7 +37,7 @@ protected:
      *  should be used
      */
     Generator() {}
-    
+
 public:
     /**
      *  Destructor
@@ -49,7 +49,7 @@ public:
      *  @param  data                data to output
      */
     virtual void raw(const std::string &data) = 0;
-    
+
     /**
      *  Generate the code to output a variable
      *  @param  variable           The variable to output
@@ -75,7 +75,7 @@ public:
      *  @param  elsestatements      the statements in the 'else' part
      */
     virtual void condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) = 0;
-    
+
     /**
      *  Generate the code to get a pointer to a variable
      *  There are three formats, to get a pointer to a literal variable by name,
@@ -88,7 +88,7 @@ public:
     virtual void varPointer(const Variable *parent, const std::string &name) = 0;
     virtual void varPointer(const Variable *parent, const Expression *expression) = 0;
     virtual void varPointer(const std::string &name) = 0;
-    
+
     /**
      *  Create a string, numeric or boolean literal
      *  @param  value
@@ -96,7 +96,7 @@ public:
     virtual void string(const std::string &value) = 0;
     virtual void numeric(numeric_t value) = 0;
     //virtual void boolean(bool value) = 0;
-    
+
     /**
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
@@ -105,7 +105,7 @@ public:
     virtual void numeric(const Variable *variable) = 0;
     virtual void boolean(const Variable *variable) = 0;
     virtual void variable(const Variable *variable) = 0;
-    
+
     /**
      *  Create a string literal from an expression that is known to return a numeric value,
      *  and a method to do this in the other direction
@@ -113,7 +113,7 @@ public:
      */
     virtual void numericToString(const Expression *expression) = 0;
     virtual void stringToNumeric(const Expression *expression) = 0;
-    
+
     /**
      *  Arithmetric operations
      *  @param  left
@@ -123,7 +123,7 @@ public:
     virtual void minus(const Expression *left, const Expression *right) = 0;
     virtual void divide(const Expression *left, const Expression *right) = 0;
     virtual void multiply(const Expression *left, const Expression *right) = 0;
-  
+
     /**
      *  Comparison operators
      *  @param  left
@@ -135,7 +135,7 @@ public:
     virtual void greaterEquals(const Expression *left, const Expression *right) = 0;
     virtual void lesser(const Expression *left, const Expression *right) = 0;
     virtual void lesserEquals(const Expression *left, const Expression *right) = 0;
-    
+
     /**
      *  Boolean operators
      *  @param  left
@@ -149,7 +149,7 @@ public:
      *  @param  modifiers          The set of modifiers to apply
      *  @param  expression         The expression to apply to modifiers on
      */
-    virtual void modifiers(const Modifiers* modifiers, const Expression *expression) = 0;
+    virtual void modifiers(const Modifiers *modifiers, const Expression *expression) = 0;
 
     /**
      *  Generate the code to do a foreach loop over variable
@@ -158,7 +158,14 @@ public:
      *  @param statements         The statements to execute on each iteration
      *  @param keyvar             The magic variable name that should contain the key, ignore if it is empty
      */
-    virtual void foreach(const std::string& key, const Variable *variable, const Statements *statements, const std::string &keyvar) = 0;
+    virtual void foreach(const std::string &key, const Variable *variable, const Statements *statements, const std::string &keyvar) = 0;
+
+    /**
+     *  Generate the code to assign the output of an expression to a key
+     *  @param key                  The key to assign the output to
+     *  @param expression           The expression to evaluate
+     */
+    virtual void assign(const std::string &key, const Expression *expression) = 0;
 };
 
 /**

@@ -60,10 +60,11 @@ private:
     };
 
     /**
-     *  In here we map our magic foreach keys to actual values, we're basically
-     *  injecting the variable callbacks
+     *  This map will contain values assigned during runtime, these can be
+     *  assigned using "assign .. to .." or they're simply the magic values in
+     *  a foreach loop
      */
-    std::map<const char *, Value*, cmp_str> _loop_values;
+    std::map<const char *, Value*, cmp_str> _local_values;
 
 public:
     /**
@@ -106,8 +107,8 @@ public:
      */
     Value *variable(const char *name, size_t size)
     {
-        auto iter = _loop_values.find(name);
-        if (iter != _loop_values.end()) return iter->second;
+        auto iter = _local_values.find(name);
+        if (iter != _local_values.end()) return iter->second;
         // get the variable from the data object
         return _data->value(name,size);
     }
@@ -136,7 +137,7 @@ public:
             _iterator_stack.push(iter);
 
             // assign the first element of the iteration to our magic key
-            _loop_values[key] = value->member(0);
+            _local_values[key] = value->member(0);
 
             // Let's see if they want the key as well
             if (keyvar_size > 0)
@@ -145,7 +146,7 @@ public:
                 Value *k = value->key(iter.second);
 
                 // Value isn't required to return a key so let's check if it is null
-                if (k != nullptr) _loop_values[keyvar] = k;
+                if (k != nullptr) _local_values[keyvar] = k;
             }
             return true;
         }
@@ -164,14 +165,14 @@ public:
                     _iterator_stack.pop();
 
                     // and remove our magic value
-                    auto liter = _loop_values.find(key);
-                    if (liter != _loop_values.end()) _loop_values.erase(liter);
+                    auto liter = _local_values.find(key);
+                    if (liter != _local_values.end()) _local_values.erase(liter);
 
                     // Let's look for our magic key var as well if we used it that is
                     if (keyvar_size > 0)
                     {
-                        liter = _loop_values.find(keyvar);
-                        if (liter != _loop_values.end()) _loop_values.erase(liter);
+                        liter = _local_values.find(keyvar);
+                        if (liter != _local_values.end()) _local_values.erase(liter);
                     }
 
                     // and tell the callback to stop looping
@@ -179,14 +180,14 @@ public:
                 }
 
                 // assign the next element in the iteration to our magic key
-                _loop_values[key] = value->member(iter.second);
+                _local_values[key] = value->member(iter.second);
                 if (keyvar_size > 0)
                 {
                     // The foreach wants a key, so let's try to get one
                     Value *k = value->key(iter.second);
 
                     // Value isn't required to return a key so let's check if it is null
-                    if (k != nullptr) _loop_values[keyvar] = k;
+                    if (k != nullptr) _local_values[keyvar] = k;
                 }
                 return true;
             }
@@ -197,14 +198,14 @@ public:
                 _iterator_stack.push(iter);
 
                 // assign the first element of the iteration to our magic key
-                _loop_values[key] = value->member(0);
+                _local_values[key] = value->member(0);
                 if (keyvar_size > 0)
                 {
                     // The foreach wants a key, so let's try to get one
                     Value *k = value->key(0);
 
                     // Value isn't required to return a key so let's check if it is null
-                    if (k != nullptr) _loop_values[keyvar] = k;
+                    if (k != nullptr) _local_values[keyvar] = k;
                 }
                 return true;
             }
@@ -236,9 +237,25 @@ public:
      *  @param modifier
      *  @param value
      */
-    void destroyValue(Modifier *modifier, Value* value)
+    void destroyValue(Modifier *modifier, Value *value)
     {
         _destroy_later[modifier].insert(value);
+    }
+
+    /**
+     *  Assign an existing value to a local variable
+     *  @param value       The value we would like to assign
+     *  @param key         The name for our local variable
+     *  @param key_size    The size of key
+     */
+    void assign(Value *value, const char *key, size_t key_size)
+    {
+        _local_values[key] = value;
+    }
+
+    void assignBoolean(bool boolean, const char *key, size_t key_size)
+    {
+        _local_values[key] = BooleanValue::create(boolean);
     }
 };
 
