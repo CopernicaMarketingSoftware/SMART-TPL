@@ -113,7 +113,7 @@ void smart_tpl_write(void *userdata, const char *data, size_t size)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
-    
+
     // call the handler
     handler->write(data, size);
 }
@@ -130,7 +130,7 @@ void smart_tpl_output(void *userdata, void *variable)
 
     // convert the variable to a variable object
     auto *var = (Value *)variable;
-    
+
     // output the variable
     handler->write(var->toString(), var->size());
 }
@@ -180,9 +180,11 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
  *  @param  variable        pointer to variable
  *  @param  key             name of the magic variable
  *  @param  size            length of key
+ *  @param  keyvar          name of the magic variable for the key
+ *  @param  keyvar_size     length of the magic variable for the key
  *  @return                 1 if we can continue iterating, 0 otherwise
  */
-int smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size)
+int smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size, const char *keyvar, size_t keyvar_size)
 {
     // convert the variable to a Value object
     auto *var = (Value *) variable;
@@ -190,8 +192,8 @@ int smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_
     // convert the userdata to our Handler object
     auto *handler = (Handler *) userdata;
 
-    // execute the interate method and return the result
-    return handler->iterate(var, key, size) ? 1 : 0;
+    // execute the iterate method and return the result
+    return handler->iterate(var, key, size, keyvar, keyvar_size) ? 1 : 0;
 }
 
 /**
@@ -205,7 +207,7 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
-    
+
     // convert to a variable
     auto *result = handler->variable(name, size);
 
@@ -223,10 +225,10 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
 {
     // convert the variable to a value object
     auto *var = (Value *)variable;
-    
+
     // convert to string
     auto *result = var->toString();
-    
+
     // ensure that a string is always returned
     return result ? result : empty.toString();
 }
@@ -241,7 +243,7 @@ size_t smart_tpl_to_numeric(void *userdata, void *variable)
 {
     // convert the variable to a value object
     auto *var = (Value *)variable;
-    
+
     // convert to numeric
     return var->toNumeric();
 }
@@ -256,11 +258,11 @@ int smart_tpl_to_boolean(void *userdata, void *variable)
 {
     // convert the variable to a value object
     auto *var = (Value *)variable;
-    
+
     // convert to bool
     return var->toBoolean();
 }
-    
+
 /**
  *  Retrieve the length of the string representation of a variable
  *  @param  userdata        pointer to user-supplied data
@@ -271,7 +273,7 @@ size_t smart_tpl_size(void *userdata, void *variable)
 {
     // convert the variable to a value object
     auto *var = (Value *)variable;
-    
+
     // return the size
     return var->size();
 }

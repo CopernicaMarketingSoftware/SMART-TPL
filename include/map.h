@@ -187,6 +187,32 @@ public:
     }
 
     /**
+     *  Get access to the key at a certain position
+     *  @param position
+     *  @return The name of the key at position or nullptr otherwise
+     */
+    virtual Value *key(int position) override
+    {
+        // If we're out of bounds just return nullptr
+        if (position < 0 || position >= memberCount()) return nullptr;
+
+        // get the iterator of _values
+        auto iter = _values.begin();
+
+        // advance it by position
+        std::advance(iter, position);
+
+        // Turn the key into a Value
+        StringValue *value = new StringValue(iter->first, std::strlen(iter->first));
+
+        // Add our new value to our _destroy_later set
+        _destroy_later.insert(std::unique_ptr<Value>(value));
+
+        // return the value
+        return value;
+    }
+
+    /**
      *  String length of the variable
      *
      *  @return size_t

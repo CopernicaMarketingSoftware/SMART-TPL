@@ -9,8 +9,9 @@
             And a conditional text
         {/if}
         {$variable.member}
-        {foreach $key.member in $variable.member}
+        {foreach $map as $key => $value}
             Key: {$key}
+            Value: {$value}
         {/foreach}
         {if $variable}
             sdfsdf

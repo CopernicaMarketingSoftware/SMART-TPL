@@ -21,7 +21,7 @@ void        smart_tpl_write(void *userdata, const char *data, size_t size);
 void        smart_tpl_output(void *userdata, void *variable);
 void       *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size);
 void       *smart_tpl_member_at(void *userdata, void *variable, long position);
-int         smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size);
+int         smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size, const char *keyvar, size_t keyvar_size);
 void       *smart_tpl_variable(void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string(void *userdata, void *variable);
 size_t      smart_tpl_to_numeric(void *userdata, void *variable);

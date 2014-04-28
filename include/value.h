@@ -66,6 +66,13 @@ public:
     virtual Value *member(int position) = 0;
 
     /**
+     *  Get access to the key at a certain position
+     *  @param position
+     *  @return The name of the key at position or nullptr otherwise
+     */
+    virtual Value *key(int position) = 0;
+
+    /**
      *  String length of the variable
      * 
      *  @return size_t

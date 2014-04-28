@@ -114,12 +114,14 @@ public:
 
     /**
      *  Iterate over a multi value value object
-     *  @param value   The value to iterate over
-     *  @param key     The magic key to assign the next value to
-     *  @param size    The size of the magic key
+     *  @param value       The value to iterate over
+     *  @param key         The magic key to assign the next value to
+     *  @param size        The size of the magic key
+     *  @param keyvar      The magic key to assign the member key to
+     *  @param keyvar_size The size of keyvar (may be 0!)
      *  @return True if we should continue looping, false otherwise
      */
-    bool iterate(Value *value, const char *key, size_t size)
+    bool iterate(Value *value, const char *key, size_t size, const char* keyvar, size_t keyvar_size)
     {
         // Retrieve the amount of members in value
         size_t len = value->memberCount();
@@ -135,6 +137,16 @@ public:
 
             // assign the first element of the iteration to our magic key
             _loop_values[key] = value->member(0);
+
+            // Let's see if they want the key as well
+            if (keyvar_size > 0)
+            {
+                // The foreach wants a key, so let's try to get one
+                Value *k = value->key(iter.second);
+
+                // Value isn't required to return a key so let's check if it is null
+                if (k != nullptr) _loop_values[keyvar] = k;
+            }
             return true;
         }
         else
@@ -155,12 +167,27 @@ public:
                     auto liter = _loop_values.find(key);
                     if (liter != _loop_values.end()) _loop_values.erase(liter);
 
+                    // Let's look for our magic key var as well if we used it that is
+                    if (keyvar_size > 0)
+                    {
+                        liter = _loop_values.find(keyvar);
+                        if (liter != _loop_values.end()) _loop_values.erase(liter);
+                    }
+
                     // and tell the callback to stop looping
                     return false;
                 }
 
                 // assign the next element in the iteration to our magic key
                 _loop_values[key] = value->member(iter.second);
+                if (keyvar_size > 0)
+                {
+                    // The foreach wants a key, so let's try to get one
+                    Value *k = value->key(iter.second);
+
+                    // Value isn't required to return a key so let's check if it is null
+                    if (k != nullptr) _loop_values[keyvar] = k;
+                }
                 return true;
             }
             else
@@ -171,6 +198,14 @@ public:
 
                 // assign the first element of the iteration to our magic key
                 _loop_values[key] = value->member(0);
+                if (keyvar_size > 0)
+                {
+                    // The foreach wants a key, so let's try to get one
+                    Value *k = value->key(0);
+
+                    // Value isn't required to return a key so let's check if it is null
+                    if (k != nullptr) _loop_values[keyvar] = k;
+                }
                 return true;
             }
         }

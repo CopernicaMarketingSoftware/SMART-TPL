@@ -32,7 +32,7 @@ public:
     StringValue(const std::string &value) : _value(value) {}
     StringValue(std::string &&value) : _value(std::move(value)) {}
     StringValue(const char *value, size_t size) : _value(value, size) {}
-    
+
     /**
      *  Destructor
      */
@@ -46,7 +46,7 @@ public:
     {
         return _value.c_str();
     }
-    
+
     /**
      *  Convert the variable to a numeric value
      *  @see std::strtoul
@@ -65,7 +65,7 @@ public:
     {
         return _value.size() > 0;
     }
-    
+
     /**
      *  Get access to a member variable
      * 
@@ -92,6 +92,16 @@ public:
      *  @return Value or nullptr if not present
      */
     virtual Value *member(int position) override
+    {
+        return nullptr;
+    }
+
+    /**
+     *  Get access to the key at a certain position
+     *  @param position
+     *  @return The name of the key at position or nullptr otherwise
+     */
+    virtual Value *key(int position) override
     {
         return nullptr;
     }

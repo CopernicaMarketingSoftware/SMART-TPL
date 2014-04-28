@@ -19,13 +19,24 @@ class ForEachStatement : public Statement
 {
 private:
     /**
-     *  The raw data to be echo'ed
-     *  @var    std::unique_ptr
+     *  The variable that will contain the value during the loop
      */
-    std::unique_ptr<LiteralVariable> _key;
+    std::unique_ptr<LiteralVariable> _var;
 
+    /**
+     *  The variable that will contain the key during the loop
+     *  @note This is not a requirement
+     */
+    std::unique_ptr<LiteralVariable> _keyvar;
+
+    /**
+     *  The variable to loop over
+     */
     std::unique_ptr<Variable> _target;
 
+    /**
+     *  The statements to execute within the loop
+     */
     std::unique_ptr<Statements> _statements;
 
 public:
@@ -37,13 +48,21 @@ public:
      *  @param statements    The statements to execute in the foreach loop
      *  @throws std::runtime_error In case the key is not of type LiteralVariable
      */
-    ForEachStatement(Variable *key, Variable *target, Statements *statements)
+    ForEachStatement(Variable *var, Variable *target, Statements *statements)
     : _target(target)
     , _statements(statements) {
-        LiteralVariable *k = dynamic_cast<LiteralVariable*>(key);
+        LiteralVariable *k = dynamic_cast<LiteralVariable*>(var);
         if (k == nullptr)
             throw std::runtime_error("The key in the foreach loop is of the wrong type");
-        _key = std::unique_ptr<LiteralVariable>(k);
+        _var = std::unique_ptr<LiteralVariable>(k);
+    }
+
+    ForEachStatement(Variable *var, Variable *target, Variable *keyvar, Statements *statements)
+    : ForEachStatement(var, target, statements) {
+        LiteralVariable *k = dynamic_cast<LiteralVariable*>(keyvar);
+        if (k == nullptr)
+            throw std::runtime_error("The variable for the key in the foreach loop is of the wrong type");
+        _keyvar = std::unique_ptr<LiteralVariable>(k);
     }
 
     /**
@@ -57,7 +76,7 @@ public:
      */
     virtual void generate(Generator *generator) const override
     {
-        generator->foreach(_key->token(), _target.get(), _statements.get());
+        generator->foreach(_var->token(), _target.get(), _statements.get(), (_keyvar) ? _keyvar->token() : "");
     }
 };
 

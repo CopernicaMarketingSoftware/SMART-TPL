@@ -105,6 +105,16 @@ public:
     }
 
     /**
+     *  Get access to the key at a certain position
+     *  @param position
+     *  @return The name of the key at position or nullptr otherwise
+     */
+    virtual Value *key(int position) override
+    {
+        return nullptr;
+    }
+
+    /**
      *  String length of the variable
      * 
      *  @return int

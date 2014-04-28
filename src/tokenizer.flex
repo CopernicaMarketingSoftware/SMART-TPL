@@ -91,6 +91,8 @@
     "and"                       { return TOKEN_AND; }
     "or"                        { return TOKEN_OR; }
     "in"                        { return TOKEN_IN; }
+    "as"                        { return TOKEN_AS; }
+    "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [0-9]+                      { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_INTEGER; }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }

@@ -27,7 +27,7 @@ public:
     {
         return "";
     }
-    
+
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
@@ -45,7 +45,7 @@ public:
     {
         return false;
     }
-    
+
     /**
      *  Get access to a member variable
      * 
@@ -72,6 +72,16 @@ public:
      *  @return Value or nullptr if not present
      */
     virtual Value *member(int position) override
+    {
+        return nullptr;
+    }
+
+    /**
+     *  Get access to the key at a certain position
+     *  @param position
+     *  @return The name of the key at position or nullptr otherwise
+     */
+    virtual Value *key(int position) override
     {
         return nullptr;
     }
