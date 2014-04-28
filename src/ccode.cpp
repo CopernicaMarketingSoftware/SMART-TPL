@@ -355,7 +355,7 @@ void CCode::equals(const Expression *left, const Expression *right)
     }
     else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
     {
-        _out << "strcmp("; left->string(this); _out << ","; right->string(this); _out << ") == 0";
+        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") == 0";
     }
     else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
     {

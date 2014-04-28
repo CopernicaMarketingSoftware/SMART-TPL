@@ -36,6 +36,7 @@ static struct smart_tpl_callbacks callbacks = {
     .assign_boolean =   smart_tpl_assign_boolean,
     .assign_string  =   smart_tpl_assign_string,
     .assign         =   smart_tpl_assign,
+    .strcmp         =   smart_tpl_strcmp,
 };
 
 /**

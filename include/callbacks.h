@@ -34,5 +34,5 @@ struct smart_tpl_callbacks {
     void (*assign_boolean)(void *userdata, int boolean, const char *key, size_t keysize);
     void (*assign_string)(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize);
     void (*assign)(void *userdata, void *variable, const char *key, size_t keysize);
+    int (*strcmp)(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
 };
-

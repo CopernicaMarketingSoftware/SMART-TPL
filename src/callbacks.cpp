@@ -415,6 +415,23 @@ void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t ke
 }
 
 /**
+ *  Compares 2 c strings
+ *  @param userdata           Pointer to user-supplied data
+ *  @param a
+ *  @param a_len              Length of a
+ *  @param b
+ *  @param b_len              Length of b
+ *  This method is just here to avoid having to rewrite the way CCode writes strings
+ *  which is "string",6. And it makes comparing strings from libjit a lot easier.
+ */
+int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len)
+{
+    if (a_len != b_len)
+        return -1;
+    return strncmp(a, b, a_len);
+}
+
+/**
  *  End namespace
  */
 }

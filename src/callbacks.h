@@ -35,6 +35,7 @@ void        smart_tpl_assign_numeric(void *userdata, long value, const char *key
 void        smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size_t keysize);
 void        smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize);
 void        smart_tpl_assign(void *userdata, void *variable, const char *key, size_t keysize);
+int         smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
 
 /**
  *  Class definition
