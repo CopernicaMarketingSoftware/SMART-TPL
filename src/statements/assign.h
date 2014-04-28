@@ -55,7 +55,6 @@ public:
     virtual void generate(Generator *generator) const override
     {
         generator->assign(_var.get()->token(), _expression.get());
-        std::cout << "AssignStatement::generate(" << generator << ");" << std::endl;
     }
 };
 

@@ -461,7 +461,6 @@ void CCode::foreach(const std::string& key, const Variable *variable, const Stat
  */
 void CCode::assign(const std::string &key, const Expression *expression)
 {
-    std::cout << "expression = " << typeid(*expression).name() << std::endl;
     switch (expression->type()) {
     case Expression::Type::Numeric:
         _out << "callbacks->assign_numeric(userdata,";

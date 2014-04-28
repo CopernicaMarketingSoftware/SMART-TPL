@@ -513,7 +513,7 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l >= r);
 }
@@ -730,6 +730,35 @@ void Bytecode::foreach(const std::string& var, const Variable *variable, const S
  */
 void Bytecode::assign(const std::string &key, const Expression *expression)
 {
+    // Convert the key to jit_values
+    string(key);
+    auto key_size = pop();
+    auto key_str = pop();
+
+    switch (expression->type()) {
+    case Expression::Type::Numeric: {
+        expression->numeric(this);
+        auto numeric = pop();
+        _callbacks.assign_numeric(_userdata, numeric, key_str, key_size);
+        break;
+    }
+    case Expression::Type::String: {
+        expression->string(this);
+        auto size = pop();
+        auto str = pop();
+        _callbacks.assign_string(_userdata, str, size, key_str, key_size);
+        break;
+    }
+    case Expression::Type::Boolean: {
+        expression->boolean(this);
+        auto boolean = pop();
+        _callbacks.assign_boolean(_userdata, boolean, key_str, key_size);
+        break;
+    }
+    default:
+        // @todo Implementation
+        throw std::runtime_error("Not yet implemented..");
+    }
 }
 
 /**

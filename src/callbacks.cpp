@@ -108,6 +108,11 @@ ModifyStringCallback Callbacks::_modify_string;
  */
 StrCmpCallback Callbacks::_strcmp;
 
+AssignCallback Callbacks::_assign;
+AssignBooleanCallback Callbacks::_assign_boolean;
+AssignNumericCallback Callbacks::_assign_numeric;
+AssignStringCallback Callbacks::_assign_string;
+
 
 /**
  *  Function to write raw data

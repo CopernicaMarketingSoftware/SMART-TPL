@@ -139,6 +139,11 @@ private:
      */
     static StrCmpCallback _strcmp;
 
+    static AssignCallback _assign;
+    static AssignBooleanCallback _assign_boolean;
+    static AssignNumericCallback _assign_numeric;
+    static AssignStringCallback _assign_string;
+
 public:
     /**
      *  Constructor
@@ -412,6 +417,63 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_strcmp", (void *) smart_tpl_strcmp, _strcmp.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    void assign(const jit_value &userdata, const jit_value &variable, const jit_value &key, const jit_value &key_size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable.raw(),
+            key.raw(),
+            key_size.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_assign", (void *) smart_tpl_assign, _assign.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    void assign_numeric(const jit_value &userdata, const jit_value &value, const jit_value &key, const jit_value &key_size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw(),
+            key.raw(),
+            key_size.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_assign_numeric", (void *) smart_tpl_assign_numeric, _assign_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    void assign_boolean(const jit_value &userdata, const jit_value &boolean, const jit_value &key, const jit_value &key_size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            boolean.raw(),
+            key.raw(),
+            key_size.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_assign_boolean", (void *) smart_tpl_assign_boolean, _assign_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    void assign_string(const jit_value &userdata, const jit_value &str, const jit_value str_size, const jit_value &key, const jit_value &key_size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            str.raw(),
+            str_size.raw(),
+            key.raw(),
+            key_size.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_assign_string", (void *) smart_tpl_assign_string, _assign_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 };
 
