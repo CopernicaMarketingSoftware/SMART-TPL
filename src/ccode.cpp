@@ -36,12 +36,12 @@ CCode::CCode(const SyntaxTree &tree)
  *  Generate the code to output raw data
  *  @param  data        buffer to output
  */
-void CCode::raw(const std::string &data) 
+void CCode::raw(const std::string &data)
 {
     // quote newlines, null characters, etc in the string so that it can
     // be picked up by the compiler
     QuotedString quoted(data);
-    
+
     // output the data
     _out << "callbacks->write(userdata,\"" << quoted << "\"," << data.size() << ");" << std::endl;
 }
@@ -104,26 +104,26 @@ void CCode::condition(const Expression *expression, const Statements *ifstatemen
 {
     // this is going to be a regular C "if" statement
     _out << "if (";
-    
+
     // and now we generate the code that turns the expression into a boolean
     expression->boolean(this);
-    
+
     // close the if condition and open a curly brace to start a new code block
     _out << "){" << std::endl;
-    
+
     // now we generate all statements
     ifstatements->generate(this);
-    
+
     // do we have an else block?
     if (elsestatements)
     {
         // close the if block and open the else block
         _out << "}else{" << std::endl;
-        
+
         // generate the else statements
         elsestatements->generate(this);
     }
-    
+
     // and of the block
     _out << "}" << std::endl;
 }
@@ -147,10 +147,10 @@ void CCode::varPointer(const Variable *parent, const std::string &name)
 {
     // call the member() function
     _out << "callbacks->member(userdata,";
-    
+
     // generate a var pointer for the variable
     parent->pointer(this);
-    
+
     // and append a call to retrieve the member
     _out << ",\"" << name << "\"," << name.size() << ")";
 }
@@ -228,16 +228,16 @@ void CCode::string(const Variable *variable)
 {
     // call the to_string method
     _out << "callbacks->to_string(userdata,";
-    
+
     // generate pointer to the variable
     variable->pointer(this);
-    
+
     // ask the size of the variable
     _out << "), callbacks->size(userdata,";
-    
+
     // generate another pointer to the variable
     variable->pointer(this);
-    
+
     // that was it
     _out << ")";
 }
@@ -250,7 +250,7 @@ void CCode::numeric(const Variable *variable)
 {
     // call the to_numeric method
     _out << "callbacks->to_numeric(userdata,";
-    
+
     // generate pointer to the variable
     variable->pointer(this);
 
@@ -266,7 +266,7 @@ void CCode::boolean(const Variable *variable)
 {
     // call the to_numeric method
     _out << "callbacks->to_boolean(userdata,";
-    
+
     // generate pointer to the variable
     variable->pointer(this);
 
@@ -298,10 +298,10 @@ void CCode::numericToString(const Expression *expression)
 {
     // we have a special function for this
     _out << "numeric_to_string(";
-    
+
     // output the expression to numeric
     expression->numeric(this);
-    
+
     // end of function
     _out << ")";
 }
@@ -314,10 +314,10 @@ void CCode::stringToNumeric(const Expression *expression)
 {
     // we have a special function for this
     _out << "string_to_numeric(";
-    
+
     // output the expression
     expression->string(this);
-    
+
     // end of function
     _out << ")";
 }

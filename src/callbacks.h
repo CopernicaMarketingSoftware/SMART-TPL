@@ -221,18 +221,22 @@ public:
      *  Call the member_iter function
      *  @param  userdata      Pointer to user-supplied data
      *  @param  variable      Pointer to the variable
-     *  @param  name          Name of the magic key to store the iterated value in
-     *  @param  size          Size of name
+     *  @param  var           Name of the magic key to store the iterated value in
+     *  @param  var_size      Size of name
+     *  @param  key           Key to assign the key to
+     *  @param  key_size      The size of key
      *  @return jit_value     A boolean telling if you should continue looping or not
      */
-    jit_value member_iter(const jit_value &userdata, const jit_value &variable, const jit_value &name, const jit_value &size)
+    jit_value member_iter(const jit_value &userdata, const jit_value &variable, const jit_value &var, const jit_value &var_size, const jit_value &key, const jit_value &key_size)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
             variable.raw(),
-            name.raw(),
-            size.raw()
+            var.raw(),
+            var_size.raw(),
+            key.raw(),
+            key_size.raw(),
         };
 
         // create the instruction

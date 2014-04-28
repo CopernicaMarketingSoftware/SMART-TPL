@@ -14,7 +14,7 @@
  *  Set up namespace
  */
 namespace SmartTpl {
-    
+
 /**
  *  Class definition
  */
@@ -61,7 +61,7 @@ private:
      *  @var    Callbacks
      */
     Callbacks _callbacks;
-    
+
     /**
      *  The user-data that is passed to the function
      *  @var    jit_value_t
@@ -106,7 +106,7 @@ private:
      *  @param  data                data to output
      */
     virtual void raw(const std::string &data) override;
-   
+
     /**
      *  Generate the code to output a variable
      *  @param  variable           The variable to output
@@ -132,7 +132,7 @@ private:
      *  @param  elsestatements      the statements in the 'else' part
      */
     virtual void condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements) override;
-    
+
     /**
      *  Generate the code to get a pointer to a variable
      *  There are three formats, to get a pointer to a literal variable by name,
@@ -145,14 +145,14 @@ private:
     virtual void varPointer(const Variable *parent, const std::string &name) override;
     virtual void varPointer(const Variable *parent, const Expression *expression) override;
     virtual void varPointer(const std::string &name) override;
-    
+
     /**
      *  Create a string or numeric literal
      *  @param  value
      */
     virtual void string(const std::string &value) override;
     virtual void numeric(numeric_t value) override;
-    
+
     /**
      *  Create a string or numeric constant for a variable
      *  @param  variable
@@ -161,7 +161,7 @@ private:
     virtual void numeric(const Variable *variable) override;
     virtual void boolean(const Variable *variable) override;
     virtual void variable(const Variable *variable) override;
-    
+
     /**
      *  Create a string literal from an expression that is known to return a numeric value,
      *  and a method to do this in the other direction
@@ -169,7 +169,7 @@ private:
      */
     virtual void numericToString(const Expression *expression) override;
     virtual void stringToNumeric(const Expression *expression) override;
-    
+
     /**
      *  Arithmetric operations
      *  @param  left
@@ -179,7 +179,7 @@ private:
     virtual void minus(const Expression *left, const Expression *right) override;
     virtual void divide(const Expression *left, const Expression *right) override;
     virtual void multiply(const Expression *left, const Expression *right) override;
-  
+
     /**
      *  Comparison operators
      *  @param  left
@@ -191,7 +191,7 @@ private:
     virtual void greaterEquals(const Expression *left, const Expression *right) override;
     virtual void lesser(const Expression *left, const Expression *right) override;
     virtual void lesserEquals(const Expression *left, const Expression *right) override;
-    
+
     /**
      *  Boolean operators
      *  @param  left
