@@ -16,15 +16,8 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class MemberIterCallback
+class MemberIterCallback : public Callback
 {
-private:
-    /**
-     *  The signature
-     *  @var    jit_type_t
-     */
-    jit_type_t _signature;
-
 public:
     /**
      *  Constructor
@@ -49,15 +42,6 @@ public:
      *  Destructor
      */
     virtual ~MemberIterCallback() {}
-
-    /**
-     *  Retrieve the signature
-     *  @return signature
-     */
-    const jit_type_t &signature() const
-    {
-        return _signature;
-    }
 };
 
 /**

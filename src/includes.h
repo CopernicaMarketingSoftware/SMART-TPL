@@ -91,6 +91,7 @@
 #include "operators/binaryboolean.h"
 #include "operators/binaryand.h"
 #include "operators/binaryor.h"
+#include "callbacks/callback.h"
 #include "callbacks/write.h"
 #include "callbacks/output.h"
 #include "callbacks/member.h"

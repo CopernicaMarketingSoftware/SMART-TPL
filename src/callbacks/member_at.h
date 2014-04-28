@@ -16,15 +16,8 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class MemberAtCallback
+class MemberAtCallback : public Callback
 {
-private:
-    /**
-     *  The signature
-     *  @var    jit_type_t
-     */
-    jit_type_t _signature;
-
 public:
     /**
      *  Constructor
@@ -46,15 +39,6 @@ public:
      *  Destructor
      */
     virtual ~MemberAtCallback() {}
-
-    /**
-     *  Retrieve the signature
-     *  @return signature
-     */
-    const jit_type_t &signature() const
-    {
-        return _signature;
-    }
 };
 
 /**

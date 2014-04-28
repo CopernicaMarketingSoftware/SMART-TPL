@@ -16,15 +16,8 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class MemberCallback
+class MemberCallback : public Callback
 {
-private:
-    /**
-     *  The signature
-     *  @var    jit_type_t
-     */
-    jit_type_t _signature;
-    
 public:
     /**
      *  Constructor
@@ -32,30 +25,21 @@ public:
     MemberCallback()
     {
         // parameters that are supported
-        jit_type_t params[4] = {
+        jit_type_t params[] = {
             jit_type_void_ptr,
             jit_type_void_ptr,
             jit_type_void_ptr,
             jit_type_sys_int,
         };
-    
+
         // create the signature
-        _signature = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr, params, 4, 1);
+        _signature = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr, params, sizeof(params)/sizeof(jit_type_t), 1);
     }
-    
+
     /**
      *  Destructor
      */
     virtual ~MemberCallback() {}
-    
-    /**
-     *  Retrieve the signature
-     *  @return signature
-     */
-    const jit_type_t &signature() const
-    {
-        return _signature;
-    }
 };
 
 /**
