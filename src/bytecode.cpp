@@ -755,9 +755,17 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         _callbacks.assign_boolean(_userdata, boolean, key_str, key_size);
         break;
     }
-    default:
-        // @todo Implementation
-        throw std::runtime_error("Not yet implemented..");
+    case Expression::Type::Value: {
+        const Variable *variable = dynamic_cast<const Variable*>(expression);
+        if (variable)
+        {
+            variable->pointer(this);
+            auto var = pop();
+            _callbacks.assign(_userdata, var, key_str, key_size);
+            break;
+        }
+        throw std::runtime_error("Unsupported assign.");
+    }
     }
 }
 
