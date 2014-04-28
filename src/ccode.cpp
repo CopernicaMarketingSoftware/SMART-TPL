@@ -24,10 +24,10 @@ CCode::CCode(const SyntaxTree &tree)
 
     // create function header
     _out << "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {" << std::endl;
-    
+
     // generate the statements
     tree.generate(this);
-    
+
     // end of the function
     _out << "}" << std::endl;
 }
@@ -202,12 +202,20 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
  */
 void CCode::string(const std::string &value)
 {
-    // quote newlines, null characters, etc in the string so that it can
-    // be picked up by the compiler
-    QuotedString quoted(value);
+    if (value.empty())
+    {
+        // If we're empty it is just more efficient to use NULL instead of ""
+        _out << "NULL,0";
+    }
+    else
+    {
+        // quote newlines, null characters, etc in the string so that it can
+        // be picked up by the compiler
+        QuotedString quoted(value);
 
-    // output string
-    _out << "\"" << quoted << "\"," << value.size();
+        // output string
+        _out << "\"" << quoted << "\"," << value.size();
+    }
 }
 
 /**
