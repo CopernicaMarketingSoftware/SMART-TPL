@@ -344,32 +344,69 @@ void* smart_tpl_modify_string(void *userdata, void *modifier, const char *value,
     return nullptr;
 }
 
+/**
+ *  Assign a numeric value to a local variable
+ *  @param userdata        pointer to user-supplied data
+ *  @param value           the numeric value we would like to assign
+ *  @param key             the key we would like to assign it to
+ *  @param keysize         the size of key
+ */
 void smart_tpl_assign_numeric(void *userdata, long value, const char *key, size_t keysize)
 {
-    std::cout << "smart_tpl_assign_numeric("<<userdata<<","<<value<<","<<key<<","<<keysize<<");"<<std::endl;
-}
-
-void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size_t keysize)
-{
-    std::cout << "smart_tpl_assign_boolean("<<userdata<<","<<boolean<<","<<key<<","<<keysize<<");"<<std::endl;
-
+    // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
 
+    // Assign numeric value to key
+    handler->assignNumeric(value, key, keysize);
+}
+
+/**
+ *  Assign a boolean value to a local variable
+ *  @param userdata             pointer to user-supplied data
+ *  @param boolean              the boolean value
+ *  @param key                  the key we would like to assign it to
+ *  @param keysize              the size of key
+ */
+void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size_t keysize)
+{
+    // Convert userdata to our Handler
+    auto handler = (Handler *) userdata;
+
+    // Assign boolean to key
     handler->assignBoolean(boolean == 1, key, keysize);
 }
 
+/**
+ *  Assign a string value to a local variable
+ *  @param userdata             pointer to user-supplied data
+ *  @param buf                  the string we would like to assign
+ *  @param buf_size             the size of buf
+ *  @param key                  the key we would like to assign it to
+ *  @param keysize              the size of key
+ *  @todo Implementation
+ *  @todo Implement literal strings so we can actually use this
+ */
 void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize)
 {
     std::cout << "smart_tpl_assign_string("<<userdata<<","<<buf<<","<<buf_size<<","<<key<<","<<keysize<<");"<<std::endl;
 }
 
+/**
+ *  Assign a variable to a local variable
+ *  @param userdata             pointer to user-supplied data
+ *  @param variable             the variable object we would like to assign
+ *  @param key                  the key we would like to assign it to
+ *  @param keysize              the size of key
+ */
 void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t keysize)
 {
-    std::cout << "smart_tpl_assign("<<userdata<<","<<variable<<","<<key<<","<<keysize<<");"<<std::endl;
-
+    // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
+
+    // Convert value to type Value
     auto value = (Value *) variable;
 
+    // Assign value to key
     handler->assign(value, key, keysize);
 }
 

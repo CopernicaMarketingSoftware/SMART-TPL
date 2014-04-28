@@ -18,7 +18,7 @@ namespace SmartTpl {
 class BooleanValue : public Value
 {
 public:
-    static BooleanValue *create(bool b)
+    static BooleanValue *get(bool b)
     {
         if (b) return &_true;
         return &_false;

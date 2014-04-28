@@ -66,6 +66,12 @@ private:
      */
     std::map<const char *, Value*, cmp_str> _local_values;
 
+    /**
+     *  Will contain the local values that were created just here and should
+     *  because of that be deleted
+     */
+    std::set<std::unique_ptr<Value>> _managed_local_values;
+
 public:
     /**
      *  Constructor
@@ -253,9 +259,22 @@ public:
         _local_values[key] = value;
     }
 
+    /**
+     *  Assign a boolean value to a local variable
+     *  @param boolean     The boolean value we want to assign
+     *  @param key         The name for our local variable
+     *  @param key_size    The size of key
+     */
     void assignBoolean(bool boolean, const char *key, size_t key_size)
     {
-        _local_values[key] = BooleanValue::create(boolean);
+        _local_values[key] = BooleanValue::get(boolean);
+    }
+
+    void assignNumeric(long value, const char *key, size_t key_size)
+    {
+        Value* v = new NumericValue(value);
+        _managed_local_values.insert(std::unique_ptr<Value>(v));
+        _local_values[key] = v;
     }
 };
 
