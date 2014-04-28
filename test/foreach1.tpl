@@ -14,9 +14,9 @@
             Value: {$value}
         {/foreach}
         Output before: {$output}
-        {assign true to $output}
+        {assign "string" to $output}
         Output after: {$output}
-        {if $output}
+        {if "string" == "string"}
             sdfsdf
         {/if}
     </body>

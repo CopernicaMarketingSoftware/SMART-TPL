@@ -91,6 +91,7 @@ expr(A)             ::= expr(B) DIVIDE expr(C) .                                
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::LiteralBoolean(false); }
 literal(A)          ::= INTEGER(B) .                                            { A = new SmartTpl::LiteralInteger(B); }
+literal(A)          ::= STRING(B) .                                             { A = new SmartTpl::LiteralString(B); }
 variable(A)         ::= VARIABLE(B) .                                           { A = new SmartTpl::LiteralVariable(B); }
 variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { A = new SmartTpl::VariableArrayAccess(B,C); }
 variable(A)         ::= variable(B) DOT IDENTIFIER(C) .                         { A = new SmartTpl::LiteralArrayAccess(B,C); }

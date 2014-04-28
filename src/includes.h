@@ -69,6 +69,7 @@
 #include "expressions/literal.h"
 #include "expressions/literalboolean.h"
 #include "expressions/literalinteger.h"
+#include "expressions/literalstring.h"
 #include "expressions/filter.h"
 #include "statements/statement.h"
 #include "statements/statements.h"
