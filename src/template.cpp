@@ -35,6 +35,7 @@ Template::Template(const Source& source)
             _executor = new Bytecode(source);
         }
     } catch (const std::runtime_error &error) {
+        std::cerr << error.what() << std::endl;
         _executor = nullptr;
         throw;
     }
@@ -76,14 +77,14 @@ std::string Template::process(const Data &data) const
 {
     // we need a handler object
     Handler handler(&data);
-    
+
     // ask the executor to display the template
     _executor->process(handler);
-    
+
     // return the generated output string
     return handler.output();
 }
-    
+
 /**
  *  End namespace
  */
