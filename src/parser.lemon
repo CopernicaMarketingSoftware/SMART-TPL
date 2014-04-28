@@ -65,6 +65,7 @@ elseStatement(A)    ::= ELSE statements(B) ENDIF .                              
 elseStatement(A)    ::= ELSEIF boolexpr(B) statements(C) elseStatement(D) .     { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B,C,D)); }
 statement(A)        ::= foreachStatement(B) .                                   { A = B; }
 foreachStatement(A) ::= FOREACH variable(B) IN variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(B, C, D); }
+foreachStatement(A) ::= FOREACH variable(B) AS variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(C, B, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS variable(C) ASSIGN_FOREACH variable(D) statements(E) ENDFOREACH . { A= new SmartTpl::ForEachStatement(D, B, C, E); }
 boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
 boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::BinaryEqualsOperator(B, C); }
