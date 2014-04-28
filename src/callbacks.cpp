@@ -388,7 +388,11 @@ void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size
  */
 void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize)
 {
-    std::cout << "smart_tpl_assign_string("<<userdata<<","<<buf<<","<<buf_size<<","<<key<<","<<keysize<<");"<<std::endl;
+    // Convert userdata to our Handler
+    auto handler = (Handler *) userdata;
+
+    // Assign value to key
+    handler->assignString(std::string(buf, buf_size), key, keysize);
 }
 
 /**

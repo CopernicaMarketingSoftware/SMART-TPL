@@ -270,9 +270,28 @@ public:
         _local_values[key] = BooleanValue::get(boolean);
     }
 
+    /**
+     *  Assign a numeric value to a local variable
+     *  @param value        The numeric value we want to assign
+     *  @param key          The name of our local variable
+     *  @param key_size     The size of key
+     */
     void assignNumeric(long value, const char *key, size_t key_size)
     {
-        Value* v = new NumericValue(value);
+        Value *v = new NumericValue(value);
+        _managed_local_values.insert(std::unique_ptr<Value>(v));
+        _local_values[key] = v;
+    }
+
+    /**
+     *  Assign a string value to a local variable
+     *  @param value          The string value we want to assign
+     *  @param key            The name of our local variable
+     *  @param key_size       The size of key
+     */
+    void assignString(const std::string &value, const char *key, size_t key_size)
+    {
+        Value *v = new StringValue(value);
         _managed_local_values.insert(std::unique_ptr<Value>(v));
         _local_values[key] = v;
     }

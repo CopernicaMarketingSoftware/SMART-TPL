@@ -16,7 +16,7 @@
         Output before: {$output}
         {assign "string" to $output}
         Output after: {$output}
-        {if "string" == "string"}
+        {if true}
             sdfsdf
         {/if}
     </body>
