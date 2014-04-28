@@ -28,12 +28,13 @@ public:
         // we reserve plenty of space (normally not more that two or three 
         // extra characters are necessary
         reserve(input.size() + 20);
-        
+
         // loop through the input
         for (char c : input)
         {
             switch (c) {
             case '\n':  append("\\n"); break;
+            case '\r':  append("\\r"); break;
             case '\0':  append("\\0"); break;
             case '\t':  append("\\t"); break;
             case '"' :  append("\\\""); break;
