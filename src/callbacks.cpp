@@ -102,6 +102,12 @@ ModifyNumericCallback Callbacks::_modify_numeric;
  */
 ModifyStringCallback Callbacks::_modify_string;
 
+/**
+ *  Signature of the function to compare 2 strings
+ *  @var StrCmpCallback
+ */
+StrCmpCallback Callbacks::_strcmp;
+
 
 /**
  *  Function to write raw data
@@ -428,7 +434,7 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
 {
     if (a_len != b_len)
         return -1;
-    return strncmp(a, b, a_len);
+    return strncmp(a, b, a_len) == 0;
 }
 
 /**

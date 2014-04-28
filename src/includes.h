@@ -110,6 +110,7 @@
 #include "callbacks/modify_numeric.h"
 #include "callbacks/modify_string.h"
 #include "callbacks/size.h"
+#include "callbacks/strcmp.h"
 #include "tokenprocessor.h"
 #include "parser.h"
 #include "tokenizer.h"

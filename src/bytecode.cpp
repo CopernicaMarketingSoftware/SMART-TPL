@@ -30,19 +30,19 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
 {
     // start building the function
     _context.build_start();
-    
+
     // read in the one and only parameter into _userdata
     _userdata = _function.get_param(0);
-    
+
     // generate the LLVM code
     _tree.generate(this);
-    
+
     // compile the function
     _function.compile();
-    
+
     // done building
     _context.build_end();
-    
+
     // get the closure
     _closure = (ShowTemplate *)_function.closure();
 }
@@ -64,10 +64,10 @@ jit_value Bytecode::pop()
         throw std::runtime_error("_stack is empty");
     // get the value from the stack
     jit_value value = _stack.top();
-    
+
     // remove the value from the stack
     _stack.pop();
-    
+
     // done
     return value;
 }
@@ -81,7 +81,7 @@ void Bytecode::raw(const std::string &data)
     // we need a constant of the buffer, and the buffer size
     jit_value buffer = _function.new_constant((void *)data.c_str(), jit_type_void_ptr);
     jit_value size = _function.new_constant(data.size(), jit_type_sys_int);
-    
+
     // call the write function
     _callbacks.write(_userdata, buffer, size);
 }
@@ -95,7 +95,7 @@ jit_value Bytecode::pointer(const Variable *variable)
 {
     // we first have to create a pointer to the variable on the stack
     variable->pointer(this);
-    
+
     // return it from the stack
     return pop();
 }
@@ -109,7 +109,7 @@ jit_value Bytecode::numeric(const Expression *expression)
 {
     // create on the stack
     expression->numeric(this);
-    
+
     // remove it from the stack
     return pop();
 }
@@ -123,7 +123,7 @@ jit_value Bytecode::boolean(const Expression *expression)
 {
     // create on the stack
     expression->boolean(this);
-    
+
     // remove from the stack
     return pop();
 }
@@ -165,7 +165,7 @@ void Bytecode::write(const Expression *expression)
 {
     // convert the expression to a string (this pushes two values on the stack
     expression->string(this);
-    
+
     // pop the buffer and size from the stack (in reverse order)
     auto size = pop();
     auto buffer = pop();
@@ -186,22 +186,22 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
     // part after the entire condition
     jit_label elselabel = _function.new_label();
     jit_label endlabel = _function.new_label();
-    
+
     // branche to the label if the expression is not valid
     _function.insn_branch_if_not(boolean(expression), elselabel);
-    
+
     // now we should create the if statements
     ifstatements->generate(this);
-    
+
     // branche to the end-position
     _function.insn_branch(endlabel);
-    
+
     // the else label starts here
     _function.insn_label(elselabel);
-    
+
     // generate the else instructions
     if (elsestatements) elsestatements->generate(this);
-    
+
     // the end-label starts here
     _function.insn_label(endlabel);
 }
@@ -217,7 +217,7 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
     // we need a constant of the name, and the name size
     jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
     jit_value namesize = _function.new_constant(name.size(), jit_type_sys_int);
-    
+
     // call the native function to retrieve the member of a variable, and store the pointer
     // to the variable on the stack
     _stack.push(_callbacks.member(_userdata, pointer(parent), namevalue, namesize));
@@ -305,7 +305,7 @@ void Bytecode::string(const Variable *variable)
 {
     // first we need a pointer to the variable
     jit_value var = pointer(variable);
-    
+
     // call the functions to retrieve the string value
     _stack.push(_callbacks.to_string(_userdata, var));
     _stack.push(_callbacks.size(_userdata, var));
@@ -370,7 +370,7 @@ void Bytecode::plus(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l + r);
 }
@@ -386,7 +386,7 @@ void Bytecode::minus(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l - r);
 }
@@ -402,7 +402,7 @@ void Bytecode::divide(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l / r);
 }
@@ -418,7 +418,7 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l * r);
 }
@@ -431,14 +431,41 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
  */
 void Bytecode::equals(const Expression *left, const Expression *right) 
 {
-    // @todo alternative for string comparison
-    
-    // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
-    
-    // calculate them, and push to stack
-    _stack.push(l == r);
+    if (left->type() == Expression::Type::Numeric && right->type() == Expression::Type::Numeric)
+    {
+        // Convert both expressions to numeric values
+        jit_value l = numeric(left);
+        jit_value r = numeric(right);
+
+        // Compare them and push it to the stack
+        _stack.push(l == r);
+    }
+    else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
+    {
+        // Convert both expressions to strings
+        left->string(this);
+        jit_value l_size = pop();
+        jit_value l = pop();
+        right->string(this);
+        jit_value r_size = pop();
+        jit_value r = pop();
+
+        // Call the strcmp callback and push the result to the stack
+        _stack.push(_callbacks.strcmp(_userdata, l, l_size, r, r_size));
+    }
+    else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
+    {
+        // Convert both expressions too boolean values
+        jit_value l = boolean(left);
+        jit_value r = boolean(right);
+
+        // Compare them and push it to the stack
+        _stack.push(l == r);
+    }
+    else
+    {
+        throw std::runtime_error("Comparison between different types is currently not supported.");
+    }
 }
 
 /**
@@ -450,11 +477,11 @@ void Bytecode::equals(const Expression *left, const Expression *right)
 void Bytecode::notEquals(const Expression *left, const Expression *right) 
 {
     // @todo alternative for string comparison
-    
+
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l != r);
 }
@@ -470,7 +497,7 @@ void Bytecode::greater(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l > r);
 }
@@ -502,7 +529,7 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l < r);
 }
@@ -518,7 +545,7 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
     // calculate left and right values
     jit_value l = numeric(left);
     jit_value r = numeric(right);
-    
+
     // calculate them, and push to stack
     _stack.push(l <= r);
 }
@@ -533,33 +560,33 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
 {
     // construct the result value
     jit_value result = _function.new_value(jit_type_sys_int);
-    
+
     // we need a label for the right part that only has to be evaluated if
     // the left part is true (otherwise the result is false anyway)
     jit_label rightlabel = _function.new_label();
     jit_label endlabel = _function.new_label();
-    
+
     // calculate the left value
     jit_value l = boolean(left);
-    
+
     // branche to the right label if the expression is true
     _function.insn_branch_if(l, rightlabel);
-    
+
     // left part already evaluates to false, store false in the result
     _function.store(result, l);
-    
+
     // go to the end label
     _function.insn_branch(endlabel);
-    
+
     // the right label starts here
     _function.insn_label(rightlabel);
-    
+
     // calculate the right value
     jit_value r = boolean(right);
-    
+
     // left part already evaluates to true, store r result in the result
     _function.store(result, r);
-    
+
     // the end-label starts here
     _function.insn_label(endlabel);
 
@@ -577,33 +604,33 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
 {
     // construct the result value
     jit_value result = _function.new_value(jit_type_sys_int);
-    
+
     // we need a label for the right part that only has to be evaluated if
     // the left part is false (otherwise the result is true anyway)
     jit_label rightlabel = _function.new_label();
     jit_label endlabel = _function.new_label();
-    
+
     // calculate the left value
     jit_value l = boolean(left);
-    
+
     // branche to the right label if the expression is not valid
     _function.insn_branch_if_not(l, rightlabel);
-    
+
     // left part already evaluates to true, store a 1 in the result
     _function.store(result, l);
-    
+
     // go to the end label
     _function.insn_branch(endlabel);
-    
+
     // the right label starts here
     _function.insn_label(rightlabel);
-    
+
     // calculate the right value
     jit_value r = boolean(right);
-    
+
     // left part evaluated to false, store right result in the result
     _function.store(result, r);
-    
+
     // the end-label starts here
     _function.insn_label(endlabel);
 
@@ -721,10 +748,10 @@ void Bytecode::process(Handler &handler)
     {
         // the is one argument, a pointer to the handler
         void *arg = &handler;
-        
+
         // arguments should be passed as pointers
         void *args[1] = { &arg };
-        
+
         // result variable (not used)
         int result;
 

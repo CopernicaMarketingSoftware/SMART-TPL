@@ -1,10 +1,10 @@
 /**
- *  ToBoolean.h
+ *  StrCmp.h
  *
- *  Signature of the to_boolean callback. This is a callback that will call back
- *  to the native function smart_tpl_to_boolean(void *, void *);
+ *  Signature of the strcmp callback. This is a callback that will call back
+ *  to the native function smart_tpl_strcmp(void*,const char*,size_t,const char*,size_t);
  *
- *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
+ *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
  */
 
@@ -16,18 +16,21 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class ToBooleanCallback : public Callback
+class StrCmpCallback : public Callback
 {
 public:
     /**
      *  Constructor
      */
-    ToBooleanCallback()
+    StrCmpCallback()
     {
         // parameters that are supported
         jit_type_t params[] = {
             jit_type_void_ptr,
-            jit_type_void_ptr
+            jit_type_void_ptr,
+            jit_type_sys_int,
+            jit_type_void_ptr,
+            jit_type_sys_int,
         };
 
         // create the signature
@@ -37,7 +40,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~ToBooleanCallback() {}
+    virtual ~StrCmpCallback() {}
 };
 
 /**

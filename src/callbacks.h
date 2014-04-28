@@ -133,6 +133,12 @@ private:
      */
     static ModifyStringCallback _modify_string;
 
+    /**
+     *  Signature of the function to compare 2 strings
+     *  @var StrCmpCallback
+     */
+    static StrCmpCallback _strcmp;
+
 public:
     /**
      *  Constructor
@@ -391,6 +397,21 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    jit_value strcmp(const jit_value &userdata, const jit_value &a, const jit_value &a_len, const jit_value &b, const jit_value &b_len)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            a.raw(),
+            a_len.raw(),
+            b.raw(),
+            b_len.raw(),
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_strcmp", (void *) smart_tpl_strcmp, _strcmp.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 };
 
