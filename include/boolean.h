@@ -37,6 +37,8 @@ private:
 
     /**
      *  Constructor
+     *  Private as you should just use BooleanValue::get(bool) to get one of
+     *  the global ones.
      */
     BooleanValue(bool b) : _boolean(b) {};
 

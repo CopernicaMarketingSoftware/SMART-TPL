@@ -23,7 +23,7 @@ protected:
      *  Constructor is protected, only derived classes can be instantiated
      */
     Literal() {}
-    
+
 public:
     /**
      *  Destructor

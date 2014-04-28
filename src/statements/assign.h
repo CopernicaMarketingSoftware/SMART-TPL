@@ -31,8 +31,8 @@ private:
 public:
     /**
      *  Constructor
-     *  @param expression    The expression we would like to assign to a variable
-     *  @param var           The variable we would like to assign it to
+     *  @param expression          The expression we would like to assign to a variable
+     *  @param var                 The variable we would like to assign it to
      *  @throws std::runtime_error In case the variable is not of type LiteralVariable
      */
     AssignStatement(Expression *expression, Variable *var)

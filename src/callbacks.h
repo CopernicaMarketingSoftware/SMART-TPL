@@ -139,9 +139,28 @@ private:
      */
     static StrCmpCallback _strcmp;
 
+    /**
+     *  Signature of the function to assign a variable to a local variable
+     *  @var AssignCallback
+     */
     static AssignCallback _assign;
+
+    /**
+     *  Signature of the function to assign a boolean to a local variable
+     *  @var AssignBooleanCallback
+     */
     static AssignBooleanCallback _assign_boolean;
+
+    /**
+     *  Signature of the function to assign a numeric value to a local variable
+     *  @var AssignNumericCallback
+     */
     static AssignNumericCallback _assign_numeric;
+
+    /**
+     *  Signature of the function to assign a string to a local variable
+     *  @var AssignStringCallback
+     */
     static AssignStringCallback _assign_string;
 
 public:

@@ -31,7 +31,7 @@ public:
      *  Destructor
      */
     virtual ~Statement() {}
-    
+
     /**
      *  Generate source code
      * 
@@ -42,9 +42,9 @@ public:
      *  @param  generator
      */
     virtual void generate(Generator *generator) const = 0;
-    
+
 };
-    
+
 /**
  *  End namespace
  */

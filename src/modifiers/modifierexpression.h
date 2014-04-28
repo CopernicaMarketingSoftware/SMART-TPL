@@ -30,7 +30,7 @@ private:
      */
     std::unique_ptr<const Parameters> _parameters;
 
-public:    
+public:
     /**
      *  Constructor
      *  @param  name
@@ -43,7 +43,7 @@ public:
      *  @param  parameters
      */
     ModifierExpression(const Token *name, const Parameters *parameters) : _name(name), _parameters(parameters) {}
-    
+
     /** 
      *  Destructor
      */
@@ -54,7 +54,7 @@ public:
      *  @return const std::string
      */
     const std::string token() const { return *_name.get(); };
-    
+
 };
 
 /**

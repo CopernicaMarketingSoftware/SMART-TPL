@@ -23,19 +23,19 @@ private:
      *  @var    Expression
      */
     std::unique_ptr<Expression> _expression;
-    
+
     /**
      *  The statements in the 'if' part
      *  @var    Statements
      */
     std::unique_ptr<Statements> _trueStatements;
-    
+
     /**
      *  The statements in the 'else' part
      *  @var    Statement
      */
     std::unique_ptr<Statements> _falseStatements;
-    
+
 public:
     /**
      *  Constructor
@@ -44,7 +44,7 @@ public:
      */
     IfStatement(Expression *expression, Statements *statements) :
         _expression(expression), _trueStatements(statements) {}
-    
+
     /**
      *  Constructor
      *  @param  expression
@@ -53,12 +53,12 @@ public:
      */
     IfStatement(Expression *expression, Statements *trueStatements, Statements *falseStatements) :
         _expression(expression), _trueStatements(trueStatements), _falseStatements(falseStatements) {}
-        
+
     /**
      *  Destructor
      */
     virtual ~IfStatement() {}
-    
+
     /**
      *  Generate the output of this statement
      *  @param  generator

@@ -23,7 +23,7 @@ private:
      *  @var    int
      */
     const int _value;
-    
+
 public:
     /**
      *  Constructor

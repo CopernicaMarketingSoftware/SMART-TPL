@@ -20,7 +20,7 @@ public:
      *  Destructor
      */
     virtual ~ToUpperModifier() {};
-    
+
     /**
      *  Modify a value object
      *  @param  input
@@ -44,7 +44,7 @@ public:
         // @todo implementation
         return nullptr;
     }
-    
+
     /**
      *  Modify a string value, and convert it into a variable object
      * 

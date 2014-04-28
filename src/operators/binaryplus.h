@@ -25,7 +25,7 @@ public:
      */
     BinaryPlusOperator(Expression *left, Expression *right) :
         BinaryArithmetricOperator(left, right) {}
-        
+
     /**
      *  Destructor
      */

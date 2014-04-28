@@ -463,14 +463,17 @@ void CCode::assign(const std::string &key, const Expression *expression)
 {
     switch (expression->type()) {
     case Expression::Type::Numeric:
+        // Convert to a numeric type and use the assign_numeric callback
         _out << "callbacks->assign_numeric(userdata,";
         expression->numeric(this);
         break;
     case Expression::Type::String:
+        // Convert to a string and use the assign_string callback
         _out << "callbacks->assign_string(userdata,";
         expression->string(this);
         break;
     case Expression::Type::Boolean:
+        // Convert to a boolean and use the assign_boolean callback
         _out << "callbacks->assign_boolean(userdata,";
         expression->boolean(this);
         break;
@@ -478,6 +481,7 @@ void CCode::assign(const std::string &key, const Expression *expression)
         const Variable *variable = dynamic_cast<const Variable*>(expression);
         if (variable)
         {
+            // If we are a variable just convert it to a pointer and pass that to the assign callback
             _out << "callbacks->assign(userdata,";
             variable->pointer(this);
             break;

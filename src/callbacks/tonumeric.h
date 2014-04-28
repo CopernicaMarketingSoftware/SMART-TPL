@@ -17,7 +17,8 @@ namespace SmartTpl {
  *  Class definition
  */
 class ToNumericCallback : public Callback
-{public:
+{
+public:
     /**
      *  Constructor
      */

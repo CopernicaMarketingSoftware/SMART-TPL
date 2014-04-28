@@ -45,7 +45,7 @@ public:
      *  @return Type
      */
     virtual Type type() const { return Type::Value; }
-    
+
     /**
      *  Generate a call that creates a pointer to a variable
      *  @param  generator

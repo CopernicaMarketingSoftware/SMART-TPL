@@ -17,7 +17,8 @@ namespace SmartTpl {
  *  Class definition
  */
 class VariableCallback : public Callback
-{public:
+{
+public:
     /**
      *  Constructor
      */

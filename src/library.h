@@ -28,7 +28,7 @@ private:
      *  Signature of the ShowTemplate function
      */
     using ShowTemplate = void(struct smart_tpl_callbacks *callbacks, const void *userdata);
-    
+
     /**
      *  The 'show_template' function
      *  @var    function
@@ -45,13 +45,13 @@ public:
     {
         // load the library
         _handle = dlopen(filename.c_str(), RTLD_LAZY | RTLD_LOCAL);
-        
+
         // must be open
         if (!_handle) throw std::runtime_error(dlerror());
-        
+
         // find the show_template symbol
         _function = (ShowTemplate *)dlsym(_handle, "show_template");
-        
+
         // function should exist
         if (!_function) throw std::runtime_error(dlerror());
     }
@@ -70,7 +70,7 @@ public:
      *  @param  data
      */
     virtual void process(Handler &handler) override;
-    
+
     /**
      *  Compile the template into C code
      *  @return std::string
@@ -82,7 +82,7 @@ public:
         return "";
     }
 };
-    
+
 /**
  *  End namespace
  */

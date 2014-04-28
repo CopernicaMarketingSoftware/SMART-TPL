@@ -23,13 +23,13 @@ private:
      *  @var std::list
      */
     std::list<std::unique_ptr<Statement>> _statements;
-    
+
 public:
     /**
      *  Constructor
      */
     Statements();
-    
+
     /**
      *  Constructor with already the first statement
      *  @param  statement
@@ -39,7 +39,7 @@ public:
         // add first statement
         add(statement);
     }
-    
+
     /**
      *  Function to add a statement to the list
      *  @param  statement

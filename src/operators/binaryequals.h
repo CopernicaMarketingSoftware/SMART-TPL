@@ -25,7 +25,7 @@ public:
      */
     BinaryEqualsOperator(Expression *left, Expression *right) :
         BinaryCompareOperator(left, right) {}
-        
+
     /**
      *  Destructor
      */

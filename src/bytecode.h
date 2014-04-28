@@ -230,7 +230,7 @@ public:
      *  @throws std::runtime_error If something went wrong while compiling the jit code
      */
     Bytecode(const Source& source);
-    
+
     /**
      *  Destructor
      */
@@ -252,7 +252,7 @@ public:
         return CCode(_tree).asString();
     }
 };
-    
+
 /**
  *  End namespace
  */

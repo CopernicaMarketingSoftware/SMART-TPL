@@ -38,12 +38,12 @@ public:
     {
         add(modifier);
     }
-    
+
     /**
      *  Destructor
      */
     virtual ~Modifiers() {}
-    
+
     /**
      *  Add a modifier to the list of modifiers
      *  @param  modifier

@@ -108,9 +108,28 @@ ModifyStringCallback Callbacks::_modify_string;
  */
 StrCmpCallback Callbacks::_strcmp;
 
+/**
+ *  Signature of the function to assign a variable to a local variable
+ *  @var AssignCallback
+ */
 AssignCallback Callbacks::_assign;
+
+/**
+ *  Signature of the function to assign a boolean to a local variable
+ *  @var AssignBooleanCallback
+ */
 AssignBooleanCallback Callbacks::_assign_boolean;
+
+/**
+ *  Signature of the function to assign a numeric value to a local variable
+ *  @var AssignNumericCallback
+ */
 AssignNumericCallback Callbacks::_assign_numeric;
+
+/**
+ *  Signature of the function to assign a string to a local variable
+ *  @var AssignStringCallback
+ */
 AssignStringCallback Callbacks::_assign_string;
 
 

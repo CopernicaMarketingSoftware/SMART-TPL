@@ -726,7 +726,6 @@ void Bytecode::foreach(const std::string& var, const Variable *variable, const S
  *  Generate the code to assign the output of an expression to a key
  *  @param key                  The key to assign the output to
  *  @param expression           The expression to evaluate
- *  @todo  Implementation
  */
 void Bytecode::assign(const std::string &key, const Expression *expression)
 {
@@ -737,12 +736,14 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
 
     switch (expression->type()) {
     case Expression::Type::Numeric: {
+        // Convert to a numeric type and use the assign_numeric callback
         expression->numeric(this);
         auto numeric = pop();
         _callbacks.assign_numeric(_userdata, numeric, key_str, key_size);
         break;
     }
     case Expression::Type::String: {
+        // Convert to a string and use the assign_string callback
         expression->string(this);
         auto size = pop();
         auto str = pop();
@@ -750,6 +751,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         break;
     }
     case Expression::Type::Boolean: {
+        // Convert to a boolean and use the assign_boolean callback
         expression->boolean(this);
         auto boolean = pop();
         _callbacks.assign_boolean(_userdata, boolean, key_str, key_size);
@@ -759,6 +761,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         const Variable *variable = dynamic_cast<const Variable*>(expression);
         if (variable)
         {
+            // If we are a variable just convert it to a pointer and pass that to the assign callback
             variable->pointer(this);
             auto var = pop();
             _callbacks.assign(_userdata, var, key_str, key_size);

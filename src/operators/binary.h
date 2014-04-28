@@ -23,7 +23,7 @@ protected:
      *  @var    Expression
      */
     std::unique_ptr<Expression> _left;
-    
+
     /**
      *  Right side of the operator
      *  @var    Expression
@@ -40,7 +40,7 @@ public:
     BinaryOperator(Expression *left, Expression *right) :
         _left(std::unique_ptr<Expression>(left)),
         _right(std::unique_ptr<Expression>(right)) {}
-        
+
     /**
      *  Destructor
      */

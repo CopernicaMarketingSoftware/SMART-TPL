@@ -25,7 +25,7 @@ public:
      */
     BinaryDivideOperator(Expression *left, Expression *right) :
         BinaryArithmetricOperator(left, right) {}
-        
+
     /**
      *  Destructor
      */

@@ -25,7 +25,7 @@ public:
      */
     BinaryMultiplyOperator(Expression *left, Expression *right) :
         BinaryArithmetricOperator(left, right) {}
-        
+
     /**
      *  Destructor
      */

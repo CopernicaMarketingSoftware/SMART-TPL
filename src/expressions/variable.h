@@ -23,7 +23,7 @@ protected:
      */
     Variable() {}
 
-public:    
+public:
     /**
      *  Destructor
      */
@@ -52,7 +52,7 @@ public:
     {
         generator->boolean(this);
     }
-    
+
     /**
      *  Generate a string for the variable
      *  @param  generator

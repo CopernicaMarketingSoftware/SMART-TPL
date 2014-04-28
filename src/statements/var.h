@@ -30,7 +30,7 @@ public:
      *  @param  expression
      */
     VarStatement(Expression *expression) : _expression(std::unique_ptr<Expression>(expression)) {}
-    
+
     /**
      *  Destructor
      */

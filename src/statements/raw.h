@@ -31,12 +31,12 @@ public:
      *  @param  token
      */
     RawStatement(Token *token) : _data(token) {}
-    
+
     /**
      *  Destructor
      */
     virtual ~RawStatement() {}
-    
+
     /**
      *  Generate the output of this statement
      *  @param  generator

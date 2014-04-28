@@ -38,7 +38,7 @@ public:
      */
     Filter(const Expression *expression, const Modifiers *modifiers) :
         _expression(expression), _modifiers(modifiers) {}
-        
+
     /**
      *  Destructor
      */
@@ -49,7 +49,7 @@ public:
      *  @return Type
      */
     virtual Type type() const { return Type::Value; };
-    
+
     /**
      *  Generate the expression as string value
      *  @param  generator

@@ -24,7 +24,7 @@ protected:
      *  @var    Variable
      */
     std::unique_ptr<Variable> _var;
-    
+
 protected:
     /**
      *  Constructor

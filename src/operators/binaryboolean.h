@@ -24,7 +24,7 @@ public:
      */
     BinaryBooleanOperator(Expression *left, Expression *right) :
         BinaryOperator(left, right) {}
-        
+
     /**
      *  Destructor
      */

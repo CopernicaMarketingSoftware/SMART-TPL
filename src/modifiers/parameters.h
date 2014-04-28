@@ -14,6 +14,7 @@ namespace SmartTpl {
 
 /**
  *  Class definition
+ *  @todo Actually start using this class?
  */
 class Parameters
 {
@@ -23,7 +24,7 @@ private:
      *  @var    std::list
      */
     std::list<std::unique_ptr<const Expression>> _parameters;
-    
+
 public:
     /**
      *  Constructor
@@ -33,12 +34,12 @@ public:
     {
         add(expression);
     }
-    
+
     /**
      *  Destructor
      */
     virtual ~Parameters() {}
-    
+
     /**
      *  Add a parameter
      *  @param  expression
