@@ -34,8 +34,14 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     // read in the one and only parameter into _userdata
     _userdata = _function.get_param(0);
 
-    // generate the LLVM code
-    _tree.generate(this);
+    try {
+        // generate the LLVM code
+        _tree.generate(this);
+    } catch (const std::runtime_error &error) {
+        // we caught a compile error from _tree.generate(this); cleanup libjit and rethrow
+        _context.build_end();
+        throw;
+    }
 
     // compile the function
     _function.compile();

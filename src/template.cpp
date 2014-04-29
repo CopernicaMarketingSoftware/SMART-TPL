@@ -21,21 +21,22 @@ Template::Template(const Source& source)
 {
     _executor = nullptr;
     try {
+        // check if our source happens to be of type File
         if (typeid(source) == typeid(File)) {
+            // If it is, cast it to a file and check if the filename ends with .so
             const File& file = dynamic_cast<const File&>(source);
             const std::string filename = file.GetFilename();
             char *extension = strrchr(filename.c_str(), '.');
             if (extension && strcasecmp(extension, ".so") == 0) {
-                // this is a shared library
+                // if the filename ends with .so load it as a shared library
                 _executor = new Library(filename);
             }
         }
         if (_executor == nullptr) {
-            // this is a raw template file, convert it into byte-code
+            // if it was either not a file or not a .so we'll just load/compile it as Bytecode
             _executor = new Bytecode(source);
         }
     } catch (const std::runtime_error &error) {
-        std::cerr << error.what() << std::endl;
         _executor = nullptr;
         throw;
     }
