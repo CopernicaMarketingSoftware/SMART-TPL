@@ -33,12 +33,12 @@ private:
     /**
      *  The line currently being processed
      */
-    int line;
+    int _line;
 
     /**
      *  The current token
      */
-    Token* token;
+    Token* _token;
 
 public:
     /**
@@ -56,19 +56,24 @@ public:
      *  @param  parent      Parser object that is notified about tokens
      *  @param  buffer      The buffer to process
      *  @param  size        Size of the buffer
-     *  @return bool
+     *  @return true if parsing finished succesful, false otherwise
      */
     bool process(TokenProcessor *parent, const char *buffer, size_t size);
 
     /**
      *  Increase the line counter
      */
-    void increaseLine() { line++; };
+    void increaseLine() { _line++; };
+
+    /**
+     *  Get the current line that we are/were at
+     */
+    int getCurrentLine() const { return _line; };
 
     /**
      *  Change the current token to newToken
      */
-    void setCurrentToken(Token* newToken) { token = newToken; };
+    void setCurrentToken(Token* newToken) { _token = newToken; };
 };
 
 /**

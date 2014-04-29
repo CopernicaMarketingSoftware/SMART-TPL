@@ -35,21 +35,25 @@ TokenProcessor::TokenProcessor()
  */
 TokenProcessor::~TokenProcessor()
 {
-    // @todo For some reason we segfault if we call ParseFree after an exception
-    // is thrown from one of the classes created by lemon. Investigate why this
-    // is..
-    if (!std::uncaught_exception()) ParseFree(_resource, free);
+    ParseFree(_resource, free);
 }
 
 /**
  *  Called by the tokenizer when a token is detected
  *  @param  id      Token identifier (see lemon.h)
  *  @param  token   Additional token information
+ *  @return false if an error occured
  */
-void TokenProcessor::process(int id, Token *token)
+bool TokenProcessor::process(int id, Token *token)
 {
     // call the global Parse() function
     Parse(_resource, id, token, this);
+    if (_error.seekg(0, _error.end).tellg() > 0)
+    {
+        _error.seekg(0, _error.beg);
+        return false;
+    }
+    return true;
 }
 
 /**

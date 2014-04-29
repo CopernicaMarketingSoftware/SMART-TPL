@@ -138,8 +138,8 @@ Tokenizer::Tokenizer()
 {
     // initialize the scanner, and set the tokenizer as the user defined data
     yylex_init_extra(this, &_scanner);
-    line = 1; // We start at line 1, not 0
-    token = nullptr;
+    _line = 1; // We start at line 1, not 0
+    _token = nullptr;
 }
 
 /**
@@ -153,44 +153,38 @@ Tokenizer::~Tokenizer()
 
 /**
  *  Run the tokenizer on an input buffer
- *  @param  parent
- *  @param  buffer
- *  @param  size
- *  @return bool
- *  @throws std::runtime_error In case something during the parsing went wrong
- *  @todo Get rid of this return value? Was originally for error handling, but
- *        this is kind of pointless now as we just throw an exception instead.
+ *  @param  parent      Parser object that is notified about tokens
+ *  @param  buffer      The buffer to process
+ *  @param  size        Size of the buffer
+ *  @return true if parsing finished succesful, false otherwise
  */
 bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 {
+    // read our data into a buffer that flex wants
     auto *state = yy_scan_bytes(buffer, size, _scanner);
-    try {
-        // ID of the current token
-        int id;
 
-        // keep fetching tokens
-        while ((id = yylex(_scanner)) != 0)
-        {
-            // pass token to the parser
-            parent->process(id, token);
+    // ID of the current token
+    int id;
 
-            // reset current token for next iteration
-            token = nullptr;
+    // keep fetching tokens
+    while ((id = yylex(_scanner)) != 0)
+    {
+        // pass token to the parser
+        if (parent->process(id, _token) == false)
+        {   // clean up the buffer
+            yy_delete_buffer(state, _scanner);
+            return false;
         }
 
-        // pass the end-of-file to the parser
-        parent->process(0, nullptr);
-    } catch (const std::runtime_error& error) {
-        // clear our buffer
-        yy_delete_buffer(state, _scanner);
-
-        // add the line number to the original error and rethrow it
-        std::stringstream stream;
-        stream << error.what() << " at line " << line;
-        throw std::runtime_error(stream.str());
+        // reset current token for next iteration
+        _token = nullptr;
     }
-    yy_delete_buffer(state, _scanner);
 
+    // pass the end-of-file to the parser
+    parent->process(0, nullptr);
+
+    // clean up the buffer
+    yy_delete_buffer(state, _scanner);
     return true;
 }
 

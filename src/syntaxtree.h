@@ -27,15 +27,18 @@ public:
      *  Constructor
      *  @param  buffer          The buffer to parse
      *  @param  size            Size of the buffer
+     *  @throws std::runtime_error in the case of an error
      */
     SyntaxTree(const char *buffer, size_t size) : TokenProcessor()
     {
         // ask the tokenizer to process the buffer, and tell that this object
         // is the parser that can be fed with the tokens found in the buffer
         Tokenizer tokenizer;
-        tokenizer.process(this, buffer, size);
-
-        // @todo    error handling
+        if (tokenizer.process(this, buffer, size) == false)
+        {
+            _error << " at line " << tokenizer.getCurrentLine();
+            throw std::runtime_error(_error.str());
+        }
     }
 
     /**

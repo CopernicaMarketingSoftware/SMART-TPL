@@ -41,6 +41,12 @@ protected:
     std::unique_ptr<Statements> _statements;
 
     /**
+     *  This will contain any form of human readable errors in case there is
+     *  something in _error we should stop parsing as soon as possible!
+     */
+    std::stringstream _error;
+
+    /**
      *  Constructor
      */
     TokenProcessor();
@@ -55,8 +61,9 @@ public:
      *  Called by the tokenizer when a token is detected
      *  @param  id      Token identifier (see lemon.h)
      *  @param  token   Additional token information
+     *  @return false if an error occured
      */
-    void process(int id, Token *token);
+    bool process(int id, Token *token);
 
     /**
      *  Called when the statements were found that make up the program
@@ -66,6 +73,22 @@ public:
     {
         // store in unique ptr
         _statements = std::unique_ptr<Statements>(statements);
+    }
+
+    /**
+     *  This will get called by lemon in case of a syntax error
+     */
+    void syntaxError()
+    {
+        _error << "Syntax error";
+    }
+
+    /**
+     *  This will get called by lemon in case of a parse failure
+     */
+    void parseFailure()
+    {
+        _error << "Parse failure";
     }
 };
  
