@@ -19,6 +19,37 @@ namespace SmartTpl {
  */
 jit_type_t Bytecode::_function_signature = jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params);
 
+void* Bytecode::jit_exception_handler(int exception_type)
+{
+    std::stringstream error;
+    switch (exception_type) {
+    case JIT_RESULT_OVERFLOW:
+        error << "Overflow during checked arithmetic operation"; break;
+    case JIT_RESULT_ARITHMETIC:
+        error << "Arithmetic exception (dividing the minimum integer by -1)"; break;
+    case JIT_RESULT_DIVISION_BY_ZERO:
+        error << "Division by zero"; break;
+    case JIT_RESULT_COMPILE_ERROR:
+        error << "Error during function compilation"; break;
+    case JIT_RESULT_OUT_OF_MEMORY:
+        error << "Out of memory"; break;
+    case JIT_RESULT_NULL_REFERENCE:
+        error << "Null pointer dereferenced"; break;
+    case JIT_RESULT_NULL_FUNCTION:
+        error << "Null function pointer called"; break;
+    case JIT_RESULT_CALLED_NESTED:
+        error << "Nested function called from non-nested context"; break;
+    case JIT_RESULT_OUT_OF_BOUNDS:
+        error << "Array index out of bounds"; break;
+    case JIT_RESULT_UNDEFINED_LABEL:
+        error << "Undefined label"; break;
+    case JIT_RESULT_OK:
+    default:
+        return NULL;
+    };
+    throw std::runtime_error(error.str());
+}
+
 /**
  *  Constructor
  *  @param  source The source that holds the template
@@ -28,6 +59,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, _function_signature),
     _callbacks(&_function)
 {
+    jit_exception_set_handler(Bytecode::jit_exception_handler);
     // start building the function
     _context.build_start();
 
@@ -37,14 +69,14 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     try {
         // generate the LLVM code
         _tree.generate(this);
+
+        // compile the function
+        _function.compile();
     } catch (const std::runtime_error &error) {
-        // we caught a compile error from _tree.generate(this); cleanup libjit and rethrow
+        // we caught a compile error while generating/compiling, cleanup libjit and rethrow
         _context.build_end();
         throw;
     }
-
-    // compile the function
-    _function.compile();
 
     // done building
     _context.build_end();

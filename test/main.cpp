@@ -26,7 +26,7 @@ int main(int argc, const char *argv[])
         {
             // construct data object
             SmartTpl::Data data;
-            
+
             // assign variables
             SmartTpl::MapValue map;
             map.assign("member", "Test")
