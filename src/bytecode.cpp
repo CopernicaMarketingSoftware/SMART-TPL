@@ -22,6 +22,9 @@ jit_type_t Bytecode::_function_signature = jit_function::signature_helper(jit_ty
 void* Bytecode::jit_exception_handler(int exception_type)
 {
     std::stringstream error;
+
+    // convert the exception type to a human readable string
+    // source: https://github.com/agalakhov/libjit/blob/master/jit/jit-except.c#L213
     switch (exception_type) {
     case JIT_RESULT_OVERFLOW:
         error << "Overflow during checked arithmetic operation"; break;
@@ -43,10 +46,13 @@ void* Bytecode::jit_exception_handler(int exception_type)
         error << "Array index out of bounds"; break;
     case JIT_RESULT_UNDEFINED_LABEL:
         error << "Undefined label"; break;
-    case JIT_RESULT_OK:
+    case JIT_RESULT_OK: // I'm assuming this will never actually happen..
+        error << "Uhm, success?"; break;
     default:
-        return NULL;
+        error << "Unknown exception " << exception_type; break;
     };
+
+    // throw our error string as a runtime error
     throw std::runtime_error(error.str());
 }
 
@@ -59,7 +65,9 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, _function_signature),
     _callbacks(&_function)
 {
+    // set our jit_exception_handler as the exception handler for jit
     jit_exception_set_handler(Bytecode::jit_exception_handler);
+
     // start building the function
     _context.build_start();
 
