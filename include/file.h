@@ -17,7 +17,7 @@
  *  Namespace
  */
 namespace SmartTpl {
-    
+
 /**
  *  Class definition
  */
@@ -29,7 +29,7 @@ private:
      *  @var    std::string
      */
     const std::string _name;
-    
+
 public:
     /**
      *  Constructor
@@ -39,17 +39,13 @@ public:
     File(const std::string& name) : File(name.c_str()) {};
     File(const char *name) : _name(name) {
         std::ifstream file(_name);
-        if (!file)
-            throw std::runtime_error("File doesn't exist");
-        file.seekg(0, std::ios_base::end);
-        size_t len = file.tellg();
-        file.seekg(0, std::ios_base::beg);
-        file.clear();
-        char buf[len];
-        file.read(buf, len);
-        _buffer.append(buf, len);
+        // if file failed to open it probably doesn't exist so we throw
+        if (!file) throw std::runtime_error("File doesn't exist");
+
+        // read the file into _buffer using istreambuf_iterators, this wil automatically buffer
+        _buffer= std::string(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
     }
-    
+
     /**
      *  Destructor
      */
@@ -60,9 +56,9 @@ public:
      *
      *  @return std::string
      */
-    const std::string GetFilename() const { return _name; };
+    const std::string filename() const { return _name; };
 };
-    
+
 /**
  *  End namespace
  */

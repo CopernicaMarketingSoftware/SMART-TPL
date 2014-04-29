@@ -25,7 +25,7 @@ Template::Template(const Source& source)
         if (typeid(source) == typeid(File)) {
             // If it is, cast it to a file and check if the filename ends with .so
             const File& file = dynamic_cast<const File&>(source);
-            const std::string filename = file.GetFilename();
+            const std::string filename = file.filename();
             char *extension = strrchr(filename.c_str(), '.');
             if (extension && strcasecmp(extension, ".so") == 0) {
                 // if the filename ends with .so load it as a shared library
