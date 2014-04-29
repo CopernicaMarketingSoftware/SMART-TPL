@@ -442,15 +442,20 @@ void CCode::foreach(const std::string& key, const Variable *variable, const Stat
 {
     // Start the actual loop
     _out << "while (callbacks->member_iter(userdata,";
-    variable->pointer(this);
-    _out << ",";
-    string(key);
-    _out << ",";
-    string(keyvar);
-    _out << ")) {" << std::endl;
 
+    // write out a pointer to the variable we're iterating over
+    variable->pointer(this); _out << ",";
+
+    // write the magic key
+    string(key); _out << ",";
+
+    // write the magic key for the key
+    string(keyvar); _out << ")) {" << std::endl;
+
+    // generate the actual statements
     statements->generate(this);
 
+    // end the while loop
     _out << "}" << std::endl;
 }
 
@@ -490,8 +495,9 @@ void CCode::assign(const std::string &key, const Expression *expression)
     }
     }
     _out << ",";
-    string(key);
-    _out << ");" << std::endl;
+
+    // write the key we want to assign our value to
+    string(key); _out << ");" << std::endl;
 }
 
 /**

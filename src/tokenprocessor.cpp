@@ -12,9 +12,9 @@
  *  The following functions are implemented in the Lemon.cpp file, but that
  *  file does not come with a header file, we redefine them here
  */
-extern void *ParseAlloc(void *(*mallocProc)(size_t));
-extern void  ParseFree(void *p, void (*freeProc)(void*));
-extern void  Parse(void *yyp, int yymajor, SmartTpl::Token *token, SmartTpl::TokenProcessor *processor);
+void *ParseAlloc(void *(*mallocProc)(size_t));
+void  ParseFree(void *p, void (*freeProc)(void*));
+void  Parse(void *yyp, int yymajor, SmartTpl::Token *token, SmartTpl::TokenProcessor *processor);
 
 /**
  *  Set up namespace

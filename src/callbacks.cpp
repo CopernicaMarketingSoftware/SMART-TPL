@@ -413,8 +413,6 @@ void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size
  *  @param buf_size             the size of buf
  *  @param key                  the key we would like to assign it to
  *  @param keysize              the size of key
- *  @todo Implementation
- *  @todo Implement literal strings so we can actually use this
  */
 void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize)
 {

@@ -180,10 +180,13 @@ jit_value Bytecode::boolean(const Expression *expression)
  */
 void Bytecode::output(const Variable *variable)
 {
+    // get a pointer to the variable
     variable->pointer(this);
 
+    // pop the value variable->pointer(this); pushed to the stack from the stack
     auto var = pop();
 
+    // output the variable using the output callback
     _callbacks.output(_userdata, var);
 }
 

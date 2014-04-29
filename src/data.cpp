@@ -25,7 +25,7 @@ Data::Data()
     modifier("toupper", &toupper);
     modifier("tolower", &tolower);
 }
-    
+
 /**
  *  Assign data
  *  @param  name        Name of the variable
@@ -36,11 +36,11 @@ Data &Data::assign(const char *name, const std::string &value)
 {
     // append variable
     _variables[name] = std::unique_ptr<Value>(new StringValue(value));
-    
+
     // allow chaining
     return *this;
 }
-    
+
 /**
  *  Assign data
  *  @param  name        Name of the variable
@@ -81,7 +81,7 @@ Data &Data::modifier(const char *name, Modifier* modifier)
 {
     // assign variable
     _modifiers[name] = modifier;
-    
+
     // allow chaining
     return *this;
 }
@@ -102,7 +102,7 @@ Value *Data::value(const char *name, size_t size) const
     // if we didn't find it yet let's look in _variables
     auto iter = _variables.find(name);
     if (iter == _variables.end()) return nullptr;
-    
+
     // get the pointer
     return iter->second.get();
 }
@@ -118,7 +118,7 @@ Modifier* Data::modifier(const char* name, size_t size) const
     // check if the modifier is listed
     auto iter = _modifiers.find(name);
     if (iter == _modifiers.end()) return nullptr;
-    
+
     // get the pointer
     return iter->second;
 }
