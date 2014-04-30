@@ -25,13 +25,7 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include "include/source.h"
-#include "include/value.h"
-#include "include/modifier.h"
-#include "include/data.h"
-#include "include/template.h"
-
-#include "include/file.h"
+#include "smarttpl.h"
 
 static const struct option opts[] = {
     { "help",              no_argument, 0, 'h' },

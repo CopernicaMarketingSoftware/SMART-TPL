@@ -32,7 +32,7 @@ int main(int argc, const char *argv[])
             map.assign("member", "Test")
                .assign("anothermember", "Testing 1 2 3..");
             data.assign("map", &map)
-                .assign("name", "Testing..")
+                .assignCallback("name", []() { return "Toon"; })
                 .assign("x", "Mr. x");
 
             // output the template

@@ -29,20 +29,24 @@
 /**
  *  Public includes
  */
+
 #include "include/source.h"
-#include "include/value.h"
-#include "include/callbacks.h"
-#include "include/modifier.h"
-#include "include/data.h"
-#include "include/template.h"
 #include "include/file.h"
 #include "include/buffer.h"
-#include "include/empty.h"
+
+#include "include/value.h"
 #include "include/string.h"
 #include "include/numeric.h"
+#include "include/empty.h"
 #include "include/map.h"
 #include "include/list.h"
 #include "include/boolean.h"
+
+#include "include/callbacks.h"
+#include "include/modifier.h"
+#include "include/wrapped_value.h"
+#include "include/data.h"
+#include "include/template.h"
 
 /**
  *  Library only dependencies

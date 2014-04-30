@@ -35,20 +35,22 @@
 #include <set>
 
 #include "smarttpl/source.h"
-#include "smarttpl/value.h"
-#include "smarttpl/callbacks.h"
-#include "smarttpl/modifier.h"
-#include "smarttpl/data.h"
-#include "smarttpl/template.h"
-
 #include "smarttpl/file.h"
 #include "smarttpl/buffer.h"
-#include "smarttpl/empty.h"
+
+#include "smarttpl/value.h"
 #include "smarttpl/string.h"
 #include "smarttpl/numeric.h"
+#include "smarttpl/empty.h"
 #include "smarttpl/map.h"
 #include "smarttpl/list.h"
 #include "smarttpl/boolean.h"
+
+#include "smarttpl/callbacks.h"
+#include "smarttpl/modifier.h"
+#include "smarttpl/wrapped_value.h"
+#include "smarttpl/data.h"
+#include "smarttpl/template.h"
 
 /**
  *  End of the include guard

@@ -61,7 +61,7 @@ private:
 
     /**
      *  This map will contain values assigned during runtime, these can be
-     *  assigned using "assign .. to .." or they're simply the magic values in
+     *  assigned using "assign .. to ..", callbacks or they're simply the magic values in
      *  a foreach loop
      */
     std::map<const char *, Value*, cmp_str> _local_values;
@@ -71,6 +71,8 @@ private:
      *  because of that be deleted
      */
     std::set<std::unique_ptr<Value>> _managed_local_values;
+
+    std::list<WrappedValue> _wrapped_values;
 
 public:
     /**
@@ -113,10 +115,29 @@ public:
      */
     Value *variable(const char *name, size_t size)
     {
+        // look through our local values first
         auto iter = _local_values.find(name);
         if (iter != _local_values.end()) return iter->second;
-        // get the variable from the data object
-        return _data->value(name,size);
+
+        // didn't find it? get the variable from the data object
+        Value *value = _data->value(name, size);
+        if (value != nullptr) return value;
+
+        // if we still didn't find it let's look for a callback function
+        auto callback = _data->callback(name, size);
+
+        // Did we get a callback? No? nullptr it is
+        if (callback == nullptr) return nullptr;
+
+        // We got the callback, let's execute it and cache the output
+        WrappedValue wvalue = (*callback)();
+        _local_values[name] = wvalue;
+
+        // Keep track of all the wrapped values so the internal Value objects of those remain valid
+        _wrapped_values.push_back(wvalue);
+
+        // Return the value
+        return wvalue;
     }
 
     /**

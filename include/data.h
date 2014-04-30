@@ -16,8 +16,6 @@
  */
 namespace SmartTpl {
 
-
-
 /**
  *  Class definition
  */
@@ -39,33 +37,39 @@ private:
         {
             return std::strcmp(a, b) < 0;
         }
-    };    
+    };
 
     /**
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<const char *,std::unique_ptr<Value>, cmp_str> _variables;
+    std::map<const char *, std::unique_ptr<Value>, cmp_str> _variables;
 
     /**
      *  All 'custom' variables which were added through assign(const char*,Value*)
      *  @var std::map
      */
-    std::map<const char *,Value*, cmp_str> _custom_variables;
+    std::map<const char *, Value*, cmp_str> _custom_variables;
 
     /**
      *  All modifiers
      *  @var std::map
      */
-    std::map<const char *,Modifier*, cmp_str> _modifiers;
-    
-    
+    std::map<const char *, Modifier*, cmp_str> _modifiers;
+
+    /**
+     *  Callback methods and their cleanup methods
+     *  The first function in the pair will be to create the value, the second one to clean it up
+     *  @var std::map
+     */
+    std::map<const char *, std::function<WrappedValue()>, cmp_str> _callbacks;
+
 public:
     /**
      *  Constructor
      */
     Data();
-    
+
     /**
      *  Destructor
      */
@@ -80,6 +84,7 @@ public:
     Data &assign(const char *name, const std::string &value);
     Data &assign(const char *name, numeric_t value);
     Data &assign(const char *name, Value *value);
+    Data &assignCallback(const char *name, const std::function<WrappedValue()> &lambda);
 
     /**
      *  Register a modifier
@@ -103,7 +108,15 @@ public:
      *  @param  size        size of the name
      *  @return Modifier*   nullptr in case it isn't found
      */
-    Modifier* modifier(const char* name, size_t) const;
+    Modifier *modifier(const char *name, size_t) const;
+
+    /**
+     *  Retrieve a value callback function
+     *  @param  name         the name of the callback
+     *  @param  size         the size of the name
+     *  @return std::function<WrappedValue()>
+     */
+    const std::function<WrappedValue()> *callback(const char *name, size_t size) const;
 };
 
 /**

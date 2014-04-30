@@ -155,8 +155,8 @@ void example()
     SmartTpl::Data data;
     
     // assign data
-    data.assign("name", "John Doe");
-    data.assign("age", 32);
+    data.assign("name", "John Doe")
+        .assign("age", 32);
     
     // show the template
     std::cout << tpl.process(data);
@@ -184,7 +184,7 @@ void example()
     SmartTpl::Data data;
     
     // assign data
-    data.assign("name", []() -> const char * {
+    data.assignCallback("name", []() -> const char * {
     
         // @todo 
         //      find out the value of the name, for example by starting
