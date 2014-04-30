@@ -54,6 +54,11 @@
     parent->syntaxError();
 }
 
+%stack_overflow
+{
+    parent->stackOverflow();
+}
+
 start               ::= statements(A) .                                         { parent->add(A); }
 statements(A)       ::= statements(B) statement(C) .                            { A = B; A->add(C); }
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Statements(B); }

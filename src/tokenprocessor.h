@@ -90,6 +90,14 @@ public:
     {
         _error << "Parse failure";
     }
+
+    /**
+     *  This will get called by lemon if the internal lemon stack is overflowing
+     */
+    void stackOverflow()
+    {
+        _error << "Stack overflow";
+    }
 };
  
 /**
