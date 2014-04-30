@@ -10,17 +10,6 @@
  */
 #include "includes.h"
 
-/**
- *  We keep track of the linenumber to ease error messages
- *  @var    int
- *
- *  @todo   enable this, but not by using a global variable
- */
-//int line = 1;
-
-
-
-
 %}
 
 /**
