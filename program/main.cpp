@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include "smarttpl.h"
+#include "src/includes.h"
 
 static const struct option opts[] = {
     { "help",              no_argument, 0, 'h' },
@@ -66,10 +66,10 @@ static bool compile(const std::string &base)
     {
         SmartTpl::File file(input);
         // create template
-        SmartTpl::Template tpl(file);
+        SmartTpl::CCode code(file);
 
         // convert into C code
-        cstream << tpl.compile();
+        cstream << code;
 
         // close the c-stream
         cstream.close();

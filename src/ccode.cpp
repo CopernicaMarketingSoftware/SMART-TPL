@@ -32,6 +32,11 @@ CCode::CCode(const SyntaxTree &tree)
     _out << "}" << std::endl;
 }
 
+CCode::CCode(const Source& source)
+: CCode(SyntaxTree(source.data(), source.size()))
+{
+}
+
 /**
  *  Generate the code to output raw data
  *  @param  data        buffer to output

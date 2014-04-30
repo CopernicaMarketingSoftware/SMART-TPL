@@ -75,7 +75,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _userdata = _function.get_param(0);
 
     try {
-        // generate the LLVM code
+        // generate the libjit code
         _tree.generate(this);
 
         // compile the function

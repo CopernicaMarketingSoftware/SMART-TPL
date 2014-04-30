@@ -158,6 +158,12 @@ public:
     CCode(const SyntaxTree &tree);
 
     /**
+     *  Constructor
+     *  @param  source      The source to generate our C Code from
+     */
+    CCode(const Source& source);
+
+    /**
      *  Destructor
      */
     virtual ~CCode() {}
