@@ -23,7 +23,6 @@ static struct smart_tpl_callbacks callbacks = {
     .member         =   smart_tpl_member,
     .member_at      =   smart_tpl_member_at,
     .loop_start     =   smart_tpl_loop_start,
-    .loop_stop      =   smart_tpl_loop_stop,
     .member_iter    =   smart_tpl_member_iter,
     .variable       =   smart_tpl_variable,
     .to_string      =   smart_tpl_to_string,

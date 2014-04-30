@@ -49,6 +49,12 @@ MemberAtCallback Callbacks::_member_at;
 MemberIterCallback Callbacks::_member_iter;
 
 /**
+ *  Signature of the start loop callback
+ *  @var LoopStartCallback
+ */
+LoopStartCallback Callbacks::_loop_start;
+
+/**
  *  Signature of the variable callback
  *  @var    MemberCallback
  */
@@ -204,16 +210,14 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
     return result ? result : &empty;
 }
 
+/**
+ *  Tell the handler that we are starting a new loop
+ *  @param userdata         pointer to user-supplied data
+ */
 void smart_tpl_loop_start(void *userdata)
 {
     auto *handler = (Handler *) userdata;
     handler->startLoop();
-}
-
-void smart_tpl_loop_stop(void *userdata)
-{
-    auto *handler = (Handler *) userdata;
-    handler->stopLoop();
 }
 
 /**

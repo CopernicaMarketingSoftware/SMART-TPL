@@ -731,6 +731,9 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
  */
 void Bytecode::foreach(const std::string& var, const Variable *variable, const Statements *statements, const std::string &keyvar)
 {
+    // tell the callbacks that we're starting our loop
+    _callbacks.loop_start(_userdata);
+
     // we create a label just before our loop so we can actually loop
     // and we create a label just outside of it, so we can jump out of it
     jit_label label_while = _function.new_label();

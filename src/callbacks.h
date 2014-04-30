@@ -22,7 +22,6 @@ void        smart_tpl_output(void *userdata, void *variable);
 void       *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size);
 void       *smart_tpl_member_at(void *userdata, void *variable, long position);
 void        smart_tpl_loop_start(void *userdata);
-void        smart_tpl_loop_stop(void *userdata);
 int         smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size, const char *keyvar, size_t keyvar_size);
 void       *smart_tpl_variable(void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string(void *userdata, void *variable);
@@ -80,6 +79,12 @@ private:
      *  @var MemberIterCallback
      */
     static MemberIterCallback _member_iter;
+
+    /**
+     *  Signature of the start loop callback
+     *  @var LoopStartCallback
+     */
+    static LoopStartCallback _loop_start;
 
     /**
      *  Signature of the variable callback
@@ -278,6 +283,17 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_member_iter", (void *)smart_tpl_member_iter, _member_iter.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    void loop_start(const jit_value &userdata)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_loop_start", (void *) smart_tpl_loop_start, _loop_start.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

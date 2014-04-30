@@ -21,7 +21,6 @@ struct smart_tpl_callbacks {
     void *(*member)(void *userdata, void *variable, const char *name, size_t size);
     void *(*member_at)(void *userdata, void *variable, long position);
     void (*loop_start)(void *userdata);
-    void (*loop_stop)(void *userdata);
     int (*member_iter)(void *userdata, void *variable, const char *key, size_t size, const char *keyvar, size_t keyvar_size);
     void *(*variable)(void *userdata, const char *name, size_t size);
     const char *(*to_string)(void *userdata, void *variable);

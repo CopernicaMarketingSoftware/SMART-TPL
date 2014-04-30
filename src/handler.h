@@ -153,14 +153,6 @@ public:
     }
 
     /**
-     *  Stop the current loop by popping it from the iterator stack
-     */
-    void stopLoop()
-    {
-        _iterator_stack.pop();
-    }
-
-    /**
      *  Iterate over a multi value value object
      *  @param value       The value to iterate over
      *  @param key         The magic key to assign the next value to
@@ -197,6 +189,9 @@ public:
                 liter = _local_values.find(keyvar);
                 if (liter != _local_values.end()) _local_values.erase(liter);
             }
+
+            // Remove this loop from the stack
+            _iterator_stack.pop();
 
             // and tell the callback to stop looping
             return false;

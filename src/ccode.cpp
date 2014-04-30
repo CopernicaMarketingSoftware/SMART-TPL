@@ -460,9 +460,6 @@ void CCode::foreach(const std::string& key, const Variable *variable, const Stat
 
     // end the while loop
     _out << "}" << std::endl;
-
-    // Instruct our callbacks that we're done looping
-    _out << "callbacks->loop_stop(userdata);" << std::endl;
 }
 
 /**

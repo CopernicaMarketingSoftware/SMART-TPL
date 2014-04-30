@@ -105,6 +105,7 @@
 #include "callbacks/member.h"
 #include "callbacks/member_at.h"
 #include "callbacks/member_iter.h"
+#include "callbacks/loop_start.h"
 #include "callbacks/variable.h"
 #include "callbacks/tostring.h"
 #include "callbacks/tonumeric.h"
