@@ -12,9 +12,9 @@
  *  The following functions are implemented in the Lemon.cpp file, but that
  *  file does not come with a header file, we redefine them here
  */
-void *ParseAlloc(void *(*mallocProc)(size_t));
-void  ParseFree(void *p, void (*freeProc)(void*));
-void  Parse(void *yyp, int yymajor, SmartTpl::Token *token, SmartTpl::TokenProcessor *processor);
+void *SmartTplParseAlloc(void *(*mallocProc)(size_t));
+void  SmartTplParseFree(void *p, void (*freeProc)(void*));
+void  SmartTplParse(void *yyp, int yymajor, SmartTpl::Token *token, SmartTpl::TokenProcessor *processor);
 
 /**
  *  Set up namespace
@@ -27,7 +27,7 @@ namespace SmartTpl {
 TokenProcessor::TokenProcessor()
 {
     // allocate the the parser
-    _resource = ParseAlloc(malloc);
+    _resource = SmartTplParseAlloc(malloc);
 }
 
 /**
@@ -35,7 +35,7 @@ TokenProcessor::TokenProcessor()
  */
 TokenProcessor::~TokenProcessor()
 {
-    ParseFree(_resource, free);
+    SmartTplParseFree(_resource, free);
 }
 
 /**
@@ -47,7 +47,7 @@ TokenProcessor::~TokenProcessor()
 bool TokenProcessor::process(int id, Token *token)
 {
     // call the global Parse() function
-    Parse(_resource, id, token, this);
+    SmartTplParse(_resource, id, token, this);
 
     // check if there is something in _error by moving to the end and looking up that position
     if (_error.seekg(0, _error.end).tellg() > 0)

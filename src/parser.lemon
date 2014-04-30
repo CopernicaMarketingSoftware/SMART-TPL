@@ -1,6 +1,7 @@
 %extra_argument { SmartTpl::TokenProcessor *parent }
 %token_type { SmartTpl::Token* }
 %token_prefix TOKEN_
+%name SmartTplParse
 
 %type   statement        {SmartTpl::Statement*}
 %type   statements       {SmartTpl::Statements*}
