@@ -204,6 +204,18 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
     return result ? result : &empty;
 }
 
+void smart_tpl_loop_start(void *userdata)
+{
+    auto *handler = (Handler *) userdata;
+    handler->startLoop();
+}
+
+void smart_tpl_loop_stop(void *userdata)
+{
+    auto *handler = (Handler *) userdata;
+    handler->stopLoop();
+}
+
 /**
  *  Check if we can continue iterating over variable and set the magic key to the next value
  *  @param  userdata        pointer to user-supplied data

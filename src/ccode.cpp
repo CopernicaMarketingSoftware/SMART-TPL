@@ -440,6 +440,9 @@ void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
  */
 void CCode::foreach(const std::string& key, const Variable *variable, const Statements *statements, const std::string &keyvar)
 {
+    // Instruct our callbacks that we want to start a new loop
+    _out << "callbacks->loop_start(userdata);" << std::endl;
+
     // Start the actual loop
     _out << "while (callbacks->member_iter(userdata,";
 
@@ -457,6 +460,9 @@ void CCode::foreach(const std::string& key, const Variable *variable, const Stat
 
     // end the while loop
     _out << "}" << std::endl;
+
+    // Instruct our callbacks that we're done looping
+    _out << "callbacks->loop_stop(userdata);" << std::endl;
 }
 
 /**
