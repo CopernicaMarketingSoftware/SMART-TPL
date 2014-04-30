@@ -71,7 +71,7 @@ Data &Data::assign(const char *name, Value* value)
     return *this;
 }
 
-Data &Data::assignCallback(const char *name, const std::function<WrappedValue()> &lambda)
+Data &Data::callback(const char *name, const std::function<Variant()> &lambda)
 {
     _callbacks[name] = lambda;
     // allow chaining
@@ -129,7 +129,7 @@ Modifier *Data::modifier(const char* name, size_t size) const
     return iter->second;
 }
 
-const std::function<WrappedValue()> *Data::callback(const char *name, size_t size) const
+const std::function<Variant()> *Data::callback(const char *name, size_t size) const
 {
     auto iter = _callbacks.find(name);
     if (iter != _callbacks.end()) return &iter->second;

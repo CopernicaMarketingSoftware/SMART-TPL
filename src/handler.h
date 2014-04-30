@@ -76,7 +76,7 @@ private:
      */
     std::set<std::unique_ptr<Value>> _managed_local_values;
 
-    std::list<WrappedValue> _wrapped_values;
+    std::list<Variant> _wrapped_values;
 
 public:
     /**
@@ -134,7 +134,7 @@ public:
         if (callback == nullptr) return nullptr;
 
         // We got the callback, let's execute it and cache the output
-        WrappedValue wvalue = (*callback)();
+        Variant wvalue = (*callback)();
         _local_values[name] = wvalue;
 
         // Keep track of all the wrapped values so the internal Value objects of those remain valid

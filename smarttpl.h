@@ -48,7 +48,7 @@
 
 #include "smarttpl/callbacks.h"
 #include "smarttpl/modifier.h"
-#include "smarttpl/wrapped_value.h"
+#include "smarttpl/variant.h"
 #include "smarttpl/data.h"
 #include "smarttpl/template.h"
 

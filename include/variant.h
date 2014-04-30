@@ -1,5 +1,5 @@
 /**
- *  WrappedValue.h
+ *  Variant.h
  *
  *  A simple value wrapper purely available for lambda functions
  *
@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class WrappedValue
+class Variant
 {
 private:
     /**
@@ -26,18 +26,19 @@ public:
     /**
      *  Constructor
      */
-    WrappedValue(const char *value) : _value(new StringValue(value)) {};
-    WrappedValue(const char *value, size_t size) : _value(new StringValue(value, size)) {};
-    WrappedValue(const std::string &value) : _value(new StringValue(value)) {};
-    WrappedValue(numeric_t value) : _value(new NumericValue(value)) {};
+    Variant(const char *value) : _value(new StringValue(value)) {};
+    Variant(const char *value, size_t size) : _value(new StringValue(value, size)) {};
+    Variant(const std::string &value) : _value(new StringValue(value)) {};
+    Variant(numeric_t value) : _value(new NumericValue(value)) {};
 
     /**
      *  Deconstructor
      */
-    virtual ~WrappedValue() {};
+    virtual ~Variant() {};
 
     /**
      *  Value* operator, to convert this wrapper value to a Value*
+     *  @internal
      */
     operator Value*() { return _value.get(); };
 };

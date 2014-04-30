@@ -62,7 +62,7 @@ private:
      *  The first function in the pair will be to create the value, the second one to clean it up
      *  @var std::map
      */
-    std::map<const char *, std::function<WrappedValue()>, cmp_str> _callbacks;
+    std::map<const char *, std::function<Variant()>, cmp_str> _callbacks;
 
 public:
     /**
@@ -84,7 +84,7 @@ public:
     Data &assign(const char *name, const std::string &value);
     Data &assign(const char *name, numeric_t value);
     Data &assign(const char *name, Value *value);
-    Data &assignCallback(const char *name, const std::function<WrappedValue()> &lambda);
+    Data &callback(const char *name, const std::function<Variant()> &lambda);
 
     /**
      *  Register a modifier
@@ -114,9 +114,9 @@ public:
      *  Retrieve a value callback function
      *  @param  name         the name of the callback
      *  @param  size         the size of the name
-     *  @return std::function<WrappedValue()>
+     *  @return std::function<Variant()>
      */
-    const std::function<WrappedValue()> *callback(const char *name, size_t size) const;
+    const std::function<Variant()> *callback(const char *name, size_t size) const;
 };
 
 /**

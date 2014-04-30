@@ -44,7 +44,7 @@
 
 #include "include/callbacks.h"
 #include "include/modifier.h"
-#include "include/wrapped_value.h"
+#include "include/variant.h"
 #include "include/data.h"
 #include "include/template.h"
 
