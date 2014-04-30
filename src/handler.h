@@ -175,9 +175,8 @@ public:
         // get our iterator
         unsigned int &iter = _iterator_stack.top();
 
-        // increase our iterator by 1 and if it goes out of bounds that means
-        // that we are done
-        if (++iter >= len)
+        // if our iterator goes out of bounds that means that we are done and should clean up
+        if (iter >= len)
         {
             // remove our magic value
             auto liter = _local_values.find(key);
@@ -208,6 +207,9 @@ public:
                 // Value isn't required to return a key so let's check if it is nullptr or not
                 if (k != nullptr) _local_values[keyvar] = k;
             }
+
+            // increase our iterator
+            iter++;
             return true;
         }
     }
