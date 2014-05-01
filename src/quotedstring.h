@@ -33,11 +33,14 @@ public:
         for (char c : input)
         {
             switch (c) {
+            case '\a':  append("\\a"); break;
             case '\n':  append("\\n"); break;
             case '\r':  append("\\r"); break;
             case '\0':  append("\\0"); break;
             case '\t':  append("\\t"); break;
             case '"' :  append("\\\""); break;
+            case '\'':  append("\\\'"); break;
+            case '\\':  append("\\\\"); break;
             default:    append(&c, 1); break;
             }
         }

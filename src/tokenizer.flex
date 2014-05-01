@@ -85,7 +85,7 @@
     "to"                        { return TOKEN_TO; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_INTEGER; }
-    "\""[a-zA-Z0-9]*"\""        { yyextra->setCurrentToken(new SmartTpl::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
+    "\""[^\"]*"\""              { yyextra->setCurrentToken(new SmartTpl::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
