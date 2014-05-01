@@ -35,10 +35,11 @@ Data::Data()
 Data &Data::assign(const char *name, const std::string &value)
 {
     // append variable
-    _variables[name] = new StringValue(value);
+    Value *v = new StringValue(value);
+    _variables[name] = v;
 
     // Make our newly allocated StringValue managed
-    _managed_variables.push_back(std::unique_ptr<Value>(_variables[name]));
+    _managed_variables.push_back(std::unique_ptr<Value>(v));
 
     // allow chaining
     return *this;
@@ -53,10 +54,11 @@ Data &Data::assign(const char *name, const std::string &value)
 Data &Data::assign(const char *name, numeric_t value)
 {
     // append variable
-    _variables[name] = new NumericValue(value);
+    Value *v = new NumericValue(value);
+    _variables[name] = v;
 
     // Make our newly allocated NumericValue managed
-    _managed_variables.push_back(std::unique_ptr<Value>(_variables[name]));
+    _managed_variables.push_back(std::unique_ptr<Value>(v));
 
     // allow chaining
     return *this;
