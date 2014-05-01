@@ -45,7 +45,12 @@ private:
      *  A list with all the interally created Values that
      *  should simply be destroyed later on
      */
-    std::set<std::unique_ptr<Value>> _destroy_later;
+    std::vector<std::unique_ptr<Value>> _destroy_later;
+
+    /**
+     *  A vector with all the Values created to return as keys
+     */
+    std::vector<std::unique_ptr<Value>> _key_cache;
 
 public:
     /**
@@ -117,7 +122,7 @@ public:
         _values[name] = value;
 
         // and add it to our _destroy_later list
-        _destroy_later.insert(std::unique_ptr<Value>(value));
+        _destroy_later.push_back(std::unique_ptr<Value>(value));
 
         // allow chaining
         return *this;
@@ -138,7 +143,7 @@ public:
         _values[name] = value;
 
         // and add it to our _destroy_later list
-        _destroy_later.insert(std::unique_ptr<Value>(value));
+        _destroy_later.push_back(std::unique_ptr<Value>(value));
 
         // allow chaining
         return *this;
@@ -196,6 +201,12 @@ public:
         // If we're out of bounds just return nullptr
         if (position < 0 || position >= memberCount()) return nullptr;
 
+        // Resize the _key_cache to the amount of members we have
+        _key_cache.resize(memberCount());
+
+        // Check if we have it in our cache already, if we do return that one
+        if (_key_cache[position]) return _key_cache[position].get();
+
         // get the iterator of _values
         auto iter = _values.begin();
 
@@ -206,7 +217,7 @@ public:
         StringValue *value = new StringValue(iter->first, std::strlen(iter->first));
 
         // Add our new value to our _destroy_later set
-        _destroy_later.insert(std::unique_ptr<Value>(value));
+        _key_cache[position] = std::unique_ptr<Value>(value);
 
         // return the value
         return value;
