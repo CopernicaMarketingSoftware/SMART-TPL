@@ -500,7 +500,10 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         jit_value r = pop();
 
         // Call the strcmp callback and push the result to the stack
-        _stack.push(_callbacks.strcmp(_userdata, l, l_size, r, r_size));
+        jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
+        numeric(0);
+        jit_value tru = pop();
+        _stack.push(cmp == tru);
     }
     else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
     {
@@ -525,14 +528,44 @@ void Bytecode::equals(const Expression *left, const Expression *right)
  */
 void Bytecode::notEquals(const Expression *left, const Expression *right) 
 {
-    // @todo alternative for string comparison
+    if (left->type() == Expression::Type::Numeric && right->type() == Expression::Type::Numeric)
+    {
+        // Convert both expressions to numeric values
+        jit_value l = numeric(left);
+        jit_value r = numeric(right);
 
-    // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+        // Compare them and push it to the stack
+        _stack.push(l != r);
+    }
+    else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
+    {
+        // Convert both expressions to strings
+        left->string(this);
+        jit_value l_size = pop();
+        jit_value l = pop();
+        right->string(this);
+        jit_value r_size = pop();
+        jit_value r = pop();
 
-    // calculate them, and push to stack
-    _stack.push(l != r);
+        // Call the strcmp callback and push the result to the stack
+        jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
+        numeric(0);
+        jit_value tru = pop();
+        _stack.push(cmp != tru);
+    }
+    else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
+    {
+        // Convert both expressions too boolean values
+        jit_value l = boolean(left);
+        jit_value r = boolean(right);
+
+        // Compare them and push it to the stack
+        _stack.push(l != r);
+    }
+    else
+    {
+        throw std::runtime_error("Comparison between different types is currently not supported.");
+    }
 }
 
 /**

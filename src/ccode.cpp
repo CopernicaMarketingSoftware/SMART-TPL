@@ -360,7 +360,7 @@ void CCode::equals(const Expression *left, const Expression *right)
     }
     else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
     {
-        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ")";
+        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") == 0";
     }
     else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
     {
@@ -371,7 +371,26 @@ void CCode::equals(const Expression *left, const Expression *right)
         throw std::runtime_error("Comparison between different types is currently not supported.");
     }
 }
-void CCode::notEquals(const Expression *left, const Expression *right)      { left->numeric(this); _out << "!="; right->numeric(this); }
+
+void CCode::notEquals(const Expression *left, const Expression *right)
+{
+    if (left->type() == Expression::Type::Numeric && right->type() == Expression::Type::Numeric)
+    {
+        left->numeric(this); _out << "!="; right->numeric(this);
+    }
+    else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
+    {
+        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") != 0";
+    }
+    else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
+    {
+        left->boolean(this); _out << "!="; right->boolean(this);
+    }
+    else
+    {
+        throw std::runtime_error("Comparison between different types is currently not supported.");
+    }
+}
 void CCode::greater(const Expression *left, const Expression *right)        { left->numeric(this); _out << ">" ; right->numeric(this); }
 void CCode::greaterEquals(const Expression *left, const Expression *right)  { left->numeric(this); _out << ">="; right->numeric(this); }
 void CCode::lesser(const Expression *left, const Expression *right)         { left->numeric(this); _out << "<";  right->numeric(this); }
