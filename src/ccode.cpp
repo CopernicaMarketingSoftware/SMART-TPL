@@ -421,10 +421,10 @@ void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
     const Variable* variable = dynamic_cast<const Variable*>(expression);
     if (variable)
     {
-        for (auto &modifier : *modifiers)
+        for (auto iter = modifiers->rbegin(); iter != modifiers->rend(); ++iter)
         {
             _out << "callbacks->modify_variable(userdata,callbacks->modifier(userdata,";
-            string(modifier.get()->token());
+            string(iter->get()->token());
             _out << "),";
         }
         variable->pointer(this);

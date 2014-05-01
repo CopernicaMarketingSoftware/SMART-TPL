@@ -18,7 +18,7 @@ namespace SmartTpl {
  *  have to modify this.
  */
 typedef int numeric_t;
-    
+
 /**
  *  Class definition
  */

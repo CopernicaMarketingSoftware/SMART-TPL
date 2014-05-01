@@ -58,8 +58,7 @@ private:
     std::map<const char *, Modifier*, cmp_str> _modifiers;
 
     /**
-     *  Callback methods and their cleanup methods
-     *  The first function in the pair will be to create the value, the second one to clean it up
+     *  Callback methods
      *  @var std::map
      */
     std::map<const char *, std::function<Variant()>, cmp_str> _callbacks;

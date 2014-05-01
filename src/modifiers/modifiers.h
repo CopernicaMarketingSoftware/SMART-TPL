@@ -22,6 +22,7 @@ public:
      *  const_iterator typedef
      */
     typedef std::list<std::unique_ptr<const ModifierExpression>>::const_iterator const_iterator;
+    typedef std::list<std::unique_ptr<const ModifierExpression>>::const_reverse_iterator const_reverse_iterator;
 private:
     /**
      *  List of modifiers
@@ -63,6 +64,8 @@ public:
      */
     const_iterator begin() const { return _modifiers.begin(); }
     const_iterator end() const { return _modifiers.end(); }
+    const_reverse_iterator rbegin() const { return _modifiers.rbegin(); }
+    const_reverse_iterator rend() const { return _modifiers.rend(); }
 };
 
 /**
