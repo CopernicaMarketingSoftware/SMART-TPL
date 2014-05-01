@@ -474,8 +474,11 @@ void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t ke
  */
 int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len)
 {
-    if (a_len != b_len)
-        return -1;
+    // If we aren't the same size to begin with we might as well just error out already
+    if (a_len != b_len) return -1;
+    // If we didn't return yet we are both the same length, if we're both 0 we're equal!
+    else if (a_len == 0) return 0;
+    // Pfft, we still don't know if we're equal, let's just ask strncmp() then
     return strncmp(a, b, a_len);
 }
 
