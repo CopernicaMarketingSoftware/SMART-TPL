@@ -80,6 +80,8 @@ public:
      */
     Handler(const Data *data) : _data(data) 
     {
+        // we reserve some space in the output buffer, so that it is not
+        // necessary to reallocate all the time (which is slow)
         _buffer.reserve(4096);
     }
 
