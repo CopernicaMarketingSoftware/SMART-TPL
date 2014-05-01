@@ -79,6 +79,12 @@ Data &Data::assign(const char *name, Value* value)
     return *this;
 }
 
+/**
+ *  Assign a callback
+ *  @param name        Name of the callback
+ *  @param lambda      The std::function, can be lambda's of course
+ *  @return Data       Same object for chaining
+ */
 Data &Data::callback(const char *name, const std::function<Variant()> &lambda)
 {
     _callbacks[name] = lambda;
@@ -133,6 +139,12 @@ Modifier *Data::modifier(const char* name, size_t size) const
     return iter->second;
 }
 
+/**
+ *  Retrieve a value callback function
+ *  @param  name         the name of the callback
+ *  @param  size         the size of the name
+ *  @return std::function<Variant()>
+ */
 const std::function<Variant()> *Data::callback(const char *name, size_t size) const
 {
     auto iter = _callbacks.find(name);
