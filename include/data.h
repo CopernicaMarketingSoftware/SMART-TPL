@@ -43,13 +43,13 @@ private:
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<const char *, std::unique_ptr<Value>, cmp_str> _variables;
+    std::map<const char *, Value*, cmp_str> _variables;
 
     /**
-     *  All 'custom' variables which were added through assign(const char*,Value*)
-     *  @var std::map
+     *  This will contain all the variables created internally, this is purely
+     *  to automatically clean them up afterwards.
      */
-    std::map<const char *, Value*, cmp_str> _custom_variables;
+    std::list<std::unique_ptr<Value>> _managed_variables;
 
     /**
      *  All modifiers

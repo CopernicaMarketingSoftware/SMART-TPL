@@ -35,7 +35,10 @@ Data::Data()
 Data &Data::assign(const char *name, const std::string &value)
 {
     // append variable
-    _variables[name] = std::unique_ptr<Value>(new StringValue(value));
+    _variables[name] = new StringValue(value);
+
+    // Make our newly allocated StringValue managed
+    _managed_variables.push_back(std::unique_ptr<Value>(_variables[name]));
 
     // allow chaining
     return *this;
@@ -50,7 +53,10 @@ Data &Data::assign(const char *name, const std::string &value)
 Data &Data::assign(const char *name, numeric_t value)
 {
     // append variable
-    _variables[name] = std::unique_ptr<Value>(new NumericValue(value));
+    _variables[name] = new NumericValue(value);
+
+    // Make our newly allocated NumericValue managed
+    _managed_variables.push_back(std::unique_ptr<Value>(_variables[name]));
 
     // allow chaining
     return *this;
@@ -65,7 +71,7 @@ Data &Data::assign(const char *name, numeric_t value)
 Data &Data::assign(const char *name, Value* value)
 {
     // append variable
-    _custom_variables[name] = value;
+    _variables[name] = value;
 
     // allow chaining
     return *this;
@@ -101,13 +107,9 @@ Data &Data::modifier(const char *name, Modifier* modifier)
  */
 Value *Data::value(const char *name, size_t size) const
 {
-    // first look through the 'custom' variables
-    auto c_iter = _custom_variables.find(name);
-    if (c_iter != _custom_variables.end()) return c_iter->second;
-
-    // if we didn't find it yet let's look in _variables
+    // look it up in _variables
     auto iter = _variables.find(name);
-    if (iter != _variables.end()) return iter->second.get();
+    if (iter != _variables.end()) return iter->second;
 
     // return nullptr if we found nothing
     return nullptr;
