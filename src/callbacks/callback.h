@@ -15,27 +15,25 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Callback
+class BaseCallback
 {
 protected:
     /**
      *  The signature
      *  @var    jit_type_t
      */
-    jit_type_t _signature;
+    jit_type_t _signature = nullptr;
 
 public:
     /**
      *  Constructor
      */
-    Callback() {
-        _signature = nullptr;
-    }
+    BaseCallback() {}
 
     /**
      *  Destructor
      */
-    virtual ~Callback()
+    virtual ~BaseCallback()
     {
         if (_signature) jit_type_free(_signature);
     }

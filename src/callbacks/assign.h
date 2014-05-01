@@ -16,7 +16,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class AssignCallback : public Callback
+class AssignCallback : public BaseCallback
 {
 public:
     /**

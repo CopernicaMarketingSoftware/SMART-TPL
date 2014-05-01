@@ -25,7 +25,11 @@ typedef int numeric_t;
 class Value
 {
 public:
+    /**
+     *  Destructor
+     */
     virtual ~Value() {};
+
     /**
      *  Convert the value to a string
      *  @return const char *
@@ -55,13 +59,14 @@ public:
 
     /**
      *  Get access to the amount of members this value has
+     *  @return size_t
      */
     virtual size_t memberCount() = 0;
 
     /**
      *  Get access to a member at a certain position
-     *  @param position
-     *  @return Value or nullptr if not present
+     *  @param  position
+     *  @return Value       Value object, or a nullptr if not present
      */
     virtual Value *member(int position) = 0;
 

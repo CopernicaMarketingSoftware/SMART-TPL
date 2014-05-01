@@ -20,8 +20,10 @@ class Variant : public Value
 private:
     /**
      *  The underlying value
+     *  @var std::shared_ptr<Value>
      */
     std::shared_ptr<Value> _value;
+
 public:
     /**
      *  Constructor

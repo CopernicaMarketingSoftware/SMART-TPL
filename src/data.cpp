@@ -34,8 +34,10 @@ Data::Data()
  */
 Data &Data::assign(const char *name, const std::string &value)
 {
-    // append variable
+    // construct variable
     Value *v = new StringValue(value);
+
+    // store in the list of variables
     _variables[name] = v;
 
     // Make our newly allocated StringValue managed
@@ -53,8 +55,10 @@ Data &Data::assign(const char *name, const std::string &value)
  */
 Data &Data::assign(const char *name, numeric_t value)
 {
-    // append variable
+    // construct variable
     Value *v = new NumericValue(value);
+    
+    // store in the list of variables
     _variables[name] = v;
 
     // Make our newly allocated NumericValue managed
@@ -81,13 +85,21 @@ Data &Data::assign(const char *name, Value* value)
 
 /**
  *  Assign a callback
- *  @param name        Name of the callback
- *  @param lambda      The std::function, can be lambda's of course
+ *  @param  name        Name of the variable
+ *  @param  callback    Callback function
  *  @return Data       Same object for chaining
  */
-Data &Data::callback(const char *name, const std::function<Variant()> &lambda)
+Data &Data::callback(const char *name, const Callback &callback)
 {
-    _callbacks[name] = lambda;
+    // construct variable
+    Value *v = new CallbackValue(callback);
+    
+    // store in the list of variables
+    _variables[name] = v;
+
+    // Make our newly allocated NumericValue managed
+    _managed_variables.push_back(std::unique_ptr<Value>(v));
+
     // allow chaining
     return *this;
 }
@@ -137,19 +149,6 @@ Modifier *Data::modifier(const char* name, size_t size) const
 
     // get the pointer
     return iter->second;
-}
-
-/**
- *  Retrieve a value callback function
- *  @param  name         the name of the callback
- *  @param  size         the size of the name
- *  @return std::function<Variant()>
- */
-const std::function<Variant()> *Data::callback(const char *name, size_t size) const
-{
-    auto iter = _callbacks.find(name);
-    if (iter != _callbacks.end()) return &iter->second;
-    return nullptr;
 }
 
 /**

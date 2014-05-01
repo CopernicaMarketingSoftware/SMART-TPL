@@ -38,6 +38,8 @@
 #include "include/value.h"
 #include "include/string.h"
 #include "include/numeric.h"
+#include "include/variant.h"
+#include "include/callback.h"
 #include "include/empty.h"
 #include "include/map.h"
 #include "include/list.h"
@@ -45,7 +47,6 @@
 #include "include/datevalue.h"
 
 #include "include/callbacks.h"
-#include "include/variant.h"
 #include "include/modifier.h"
 #include "include/data.h"
 #include "include/template.h"

@@ -19,28 +19,16 @@ namespace SmartTpl {
  */
 Template::Template(const Source& source)
 {
-    // prevent exceptions
-    try 
+    // is the source a shared library?
+    if (source.library())
     {
-        // is the source a shared library?
-        if (source.library())
-        {
-            // hey that's cool, we can create create a shard library
-            _executor = new Library(source.name());
-        }
-        else
-        {
-            // it was not a shared library, we're going to compile it into bytecode ourselves
-            _executor = new Bytecode(source);
-        }
-    } 
-    catch (const std::runtime_error &error) 
+        // hey that's cool, we can create create a shard library
+        _executor = new Library(source.name());
+    }
+    else
     {
-        // @todo is this necessary?
-        
-        // an error occured
-        _executor = nullptr;
-        throw;
+        // it was not a shared library, we're going to compile it into bytecode ourselves
+        _executor = new Bytecode(source);
     }
 }
 

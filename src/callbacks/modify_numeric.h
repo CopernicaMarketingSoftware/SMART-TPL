@@ -16,7 +16,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class ModifyNumericCallback : public Callback
+class ModifyNumericCallback : public BaseCallback
 {
 public:
     /**
