@@ -21,20 +21,22 @@ int main(int argc, const char *argv[])
         SmartTpl::File file(argv[arg]);
         // create a template object
         SmartTpl::Template tpl(file);
+
+        // construct data object
+        SmartTpl::Data data;
+
+        // assign variables
+        SmartTpl::MapValue map;
+        map.assign("member", "Test")
+            .assign("anothermember", "Testing 1 2 3..");
+        SmartTpl::DateValue date("%A %d %B %Y %T");
+        data.assign("map", &map)
+            .callback("name", []() { return "Toon"; })
+            .assign("date", &date)
+            .assign("x", "Mr. x");
         // do a number of attempts
-        for (int x=0; x<1; x++)
+        for (int x=0; x<100000; x++)
         {
-            // construct data object
-            SmartTpl::Data data;
-
-            // assign variables
-            SmartTpl::MapValue map;
-            map.assign("member", "Test")
-               .assign("anothermember", "Testing 1 2 3..");
-            data.assign("map", &map)
-                .callback("name", []() { return "Toon"; })
-                .assign("x", "Mr. x");
-
             // output the template
             std::cout << tpl.process(data) << std::endl;
             //tpl.process(data);

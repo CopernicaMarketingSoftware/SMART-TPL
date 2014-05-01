@@ -1,5 +1,6 @@
 <html>
     <body>
+        {$date}
         This is an example template.
         With a {$name|toupper|tolower}!
 

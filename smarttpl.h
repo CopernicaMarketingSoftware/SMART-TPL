@@ -33,6 +33,7 @@
 #include <cstring>
 #include <algorithm>
 #include <set>
+#include <ctime>
 
 #include "smarttpl/source.h"
 #include "smarttpl/file.h"
@@ -45,6 +46,7 @@
 #include "smarttpl/map.h"
 #include "smarttpl/list.h"
 #include "smarttpl/boolean.h"
+#include "smarttpl/datevalue.h"
 
 #include "smarttpl/callbacks.h"
 #include "smarttpl/variant.h"
