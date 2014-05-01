@@ -38,6 +38,7 @@
     #include "includes.h"
     #include <iostream>
     #include <assert.h>
+    #define YYSTACKDEPTH 1000
 }
 
 %parse_accept

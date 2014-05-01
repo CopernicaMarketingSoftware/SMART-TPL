@@ -2,9 +2,10 @@
 
 OUTPUT=innerforeachloops.tpl
 
-# 13 seems to be the max, after that the internal lemon stack will start to overflow
+# 13 seems fine with a lemon stack of 100
+# 142 seems to be the max with a lemon stack of 1000
 
-COUNT=13
+COUNT=142
 
 cat /dev/null > "$OUTPUT"
 
