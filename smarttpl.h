@@ -47,8 +47,8 @@
 #include "smarttpl/boolean.h"
 
 #include "smarttpl/callbacks.h"
-#include "smarttpl/modifier.h"
 #include "smarttpl/variant.h"
+#include "smarttpl/modifier.h"
 #include "smarttpl/data.h"
 #include "smarttpl/template.h"
 

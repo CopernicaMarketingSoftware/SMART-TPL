@@ -32,12 +32,6 @@ private:
     const Data *_data;
 
     /**
-     *  Map values to the modifiers that created them so we know who
-     *  needs to clean them up
-     */
-    std::map<Modifier*, std::set<Value*>> _destroy_later;
-
-    /**
      *  Stack of our iterators
      *
      *  This is a stack of active {foreach} loops. The top of the stack
@@ -76,7 +70,15 @@ private:
      */
     std::set<std::unique_ptr<Value>> _managed_local_values;
 
+    /**
+     *  Variant values coming directly from callbacks
+     */
     std::list<Variant> _wrapped_values;
+
+    /**
+     *  Output values from the modify methods
+     */
+    std::set<std::unique_ptr<Variant>> _modified_values;
 
 public:
     /**
@@ -91,15 +93,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Handler()
-    {
-        // Loop through all the modifiers in the _destroy_later map
-        for (auto & m : _destroy_later)
-        {
-            // For each modifier loop through all the values and clean them up
-            for (auto & v : m.second) m.first->cleanup(v);
-        }
-    }
+    virtual ~Handler() {}
 
     /**
      *  Write data to the buffer
@@ -134,14 +128,12 @@ public:
         if (callback == nullptr) return nullptr;
 
         // We got the callback, let's execute it and cache the output
-        Variant wvalue = (*callback)();
-        _local_values[name] = wvalue;
-
-        // Keep track of all the wrapped values so the internal Value objects of those remain valid
-        _wrapped_values.push_back(wvalue);
+        Variant *variant = new Variant((*callback)());
+        manageVariant(variant);
+        _local_values[name] = variant;
 
         // Return the value
-        return wvalue;
+        return variant;
     }
 
     /**
@@ -235,16 +227,6 @@ public:
     }
 
     /**
-     *  Mark a value as clean up later on
-     *  @param modifier
-     *  @param value
-     */
-    void destroyValue(Modifier *modifier, Value *value)
-    {
-        _destroy_later[modifier].insert(value);
-    }
-
-    /**
      *  Assign an existing value to a local variable
      *  @param value       The value we would like to assign
      *  @param key         The name for our local variable
@@ -290,6 +272,15 @@ public:
         Value *v = new StringValue(value);
         _managed_local_values.insert(std::unique_ptr<Value>(v));
         _local_values[key] = v;
+    }
+
+    /**
+     *  Make this variant object managed by the handler
+     *  @param variant    The variant object to make managed
+     */
+    void manageVariant(Variant *variant)
+    {
+        _modified_values.insert(std::unique_ptr<Variant>(variant));
     }
 };
 

@@ -13,7 +13,7 @@
  *  Set up namespace
  */
 namespace SmartTpl {
-    
+
 /**
  *  Class definition
  */
@@ -31,34 +31,28 @@ public:
      *  This method is called if the initial value object may not be modified!
      * 
      *  @param  input       Initial value
-     *  @return Value       Pointer to a new value object
+     *  @return Variant     A new value object
      */
-    virtual Value *modify(Value *input) = 0;
+    virtual Variant modify(Value *input) = 0;
 
     /**
      *  Modify a numeric value, and convert it into a variable value
      * 
      *  @param  input       Numeric value
-     *  @return Value       Pointer to a new value object
+     *  @return Variant     A new value object
      */
-    virtual Value *modify(int value) = 0;
+    virtual Variant modify(int value) = 0;
 
     /**
      *  Modify a string value, and convert it into a variable object
      * 
      *  @param  input       String input
      *  @param  size        Size of the string
-     *  @return Value       Pointer to a new value object
+     *  @return Variant     A new value object
      */
-    virtual Value *modify(const char *input, size_t size) = 0;
-
-    /**
-     *  Clean up the values you created
-     *  @param value        The value to clean up
-     */
-    virtual void cleanup(Value* value) = 0;
+    virtual Variant modify(const char *input, size_t size) = 0;
 };
-    
+
 /**
  *  End namespace
  */

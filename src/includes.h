@@ -43,8 +43,8 @@
 #include "include/boolean.h"
 
 #include "include/callbacks.h"
-#include "include/modifier.h"
 #include "include/variant.h"
+#include "include/modifier.h"
 #include "include/data.h"
 #include "include/template.h"
 

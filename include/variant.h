@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class Variant
+class Variant : public Value
 {
 private:
     /**
@@ -37,10 +37,81 @@ public:
     virtual ~Variant() {};
 
     /**
-     *  Value* operator, to convert this wrapper value to a Value*
-     *  @internal
+     *  Convert the value to a string
+     *  @return const char *
      */
-    operator Value*() { return _value.get(); };
+    virtual const char *toString()
+    {
+        return _value->toString();
+    }
+
+    /**
+     *  Convert the variable to a numeric value
+     *  @return numeric
+     */
+    virtual numeric_t toNumeric()
+    {
+        return _value->toNumeric();
+    }
+
+    /**
+     *  Convert the variable to a boolean value
+     *  @return bool
+     */
+    virtual bool toBoolean()
+    {
+        return _value->toBoolean();
+    }
+
+    /**
+     *  Get access to a member value
+     *
+     *  @param  name        name of the member
+     *  @param  size        size of the name
+     *  @return Value
+     */
+    virtual Value *member(const char *name, size_t size)
+    {
+        return _value->member(name, size);
+    }
+
+    /**
+     *  Get access to the amount of members this value has
+     */
+    virtual size_t memberCount()
+    {
+        return _value->memberCount();
+    }
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param position
+     *  @return Value or nullptr if not present
+     */
+    virtual Value *member(int position)
+    {
+        return _value->member(position);
+    }
+
+    /**
+     *  Get access to the key at a certain position
+     *  @param position
+     *  @return The name of the key at position or nullptr otherwise
+     */
+    virtual Value *key(int position)
+    {
+        return _value->key(position);
+    }
+
+    /**
+     *  String length of the variable
+     *
+     *  @return size_t
+     */
+    virtual size_t size()
+    {
+        return _value->size();
+    }
 };
 
 /**

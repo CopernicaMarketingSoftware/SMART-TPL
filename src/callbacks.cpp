@@ -349,19 +349,23 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variable)
 {
     // In case the modifier is a nullptr just return the original value
-    if (modifier_ptr == nullptr || variable == nullptr)
-        return variable;
+    if (modifier_ptr == nullptr || variable == nullptr) return variable;
     // convert to the Modifier
     auto *modifier = (Modifier*) modifier_ptr;
+
     // convert to the Value object
     auto *value = (Value*) variable;
 
-    auto *output = modifier->modify(value);
-    if (output != value)
-    {  // As our output value is different from our input value we mark it as destroy later
-        auto *handler = (Handler *)userdata;
-        handler->destroyValue(modifier, output);
-    }
+    // Actually modify the value
+    auto variant = modifier->modify(value);
+
+    // Convert the variant to a pointer so we can actually return it from C
+    auto *output = new Variant(variant);
+
+    // Give it to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *)userdata;
+    handler->manageVariant(output);
+
     return output;
 }
 
