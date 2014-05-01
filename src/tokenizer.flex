@@ -10,6 +10,8 @@
  */
 #include "includes.h"
 
+#define YY_NO_INPUT
+
 %}
 
 /**
