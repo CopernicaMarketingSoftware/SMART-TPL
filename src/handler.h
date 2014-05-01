@@ -59,8 +59,8 @@ private:
 
     /**
      *  This map will contain values assigned during runtime, these can be
-     *  assigned using "assign .. to ..", callbacks or they're simply the magic values in
-     *  a foreach loop
+     *  assigned using "assign .. to ..", or the magic values inside
+     *  foreach loops
      */
     std::map<const char *, Value*, cmp_str> _local_values;
 
@@ -72,11 +72,6 @@ private:
      */
     std::list<std::unique_ptr<Value>> _managed_local_values;
 
-    /**
-     *  Variant values coming directly from callbacks
-     *  @todo   can this be removed? callbacks do not exist at this level
-     */
-    std::list<Variant> _wrapped_values;
 
 public:
     /**
