@@ -364,7 +364,7 @@ void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variab
 
     // Give it to our handler so he can manage the Variant pointer
     auto *handler = (Handler *)userdata;
-    handler->manageVariant(output);
+    handler->manageValue(output);
 
     return output;
 }

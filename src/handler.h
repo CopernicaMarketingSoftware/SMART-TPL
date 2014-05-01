@@ -67,18 +67,15 @@ private:
     /**
      *  Will contain the local values that were created just here and should
      *  because of that be deleted
+     *
+     *  Can also contain externally created Values that were made managed using manageValue(Value*)
      */
-    std::set<std::unique_ptr<Value>> _managed_local_values;
+    std::list<std::unique_ptr<Value>> _managed_local_values;
 
     /**
      *  Variant values coming directly from callbacks
      */
     std::list<Variant> _wrapped_values;
-
-    /**
-     *  Output values from the modify methods
-     */
-    std::set<std::unique_ptr<Variant>> _modified_values;
 
 public:
     /**
@@ -129,7 +126,7 @@ public:
 
         // We got the callback, let's execute it and cache the output
         Variant *variant = new Variant((*callback)());
-        manageVariant(variant);
+        manageValue(variant);
         _local_values[name] = variant;
 
         // Return the value
@@ -257,7 +254,7 @@ public:
     void assignNumeric(long value, const char *key, size_t key_size)
     {
         Value *v = new NumericValue(value);
-        _managed_local_values.insert(std::unique_ptr<Value>(v));
+        _managed_local_values.push_back(std::unique_ptr<Value>(v));
         _local_values[key] = v;
     }
 
@@ -270,17 +267,17 @@ public:
     void assignString(const std::string &value, const char *key, size_t key_size)
     {
         Value *v = new StringValue(value);
-        _managed_local_values.insert(std::unique_ptr<Value>(v));
+        _managed_local_values.push_back(std::unique_ptr<Value>(v));
         _local_values[key] = v;
     }
 
     /**
-     *  Make this variant object managed by the handler
-     *  @param variant    The variant object to make managed
+     *  Make this value object managed by the handler
+     *  @param value    The value object to make managed
      */
-    void manageVariant(Variant *variant)
+    void manageValue(Variant *value)
     {
-        _modified_values.insert(std::unique_ptr<Variant>(variant));
+        _managed_local_values.push_back(std::unique_ptr<Value>(value));
     }
 };
 
