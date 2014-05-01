@@ -33,16 +33,38 @@ protected:
      */
     Source() {}
 
-    /**
-     *  Underlying buffer, if you're implementing the Source class put your data in here.
-     */
-    std::string _buffer;
-    
 public:
     /**
      *  Destructor
      */
     virtual ~Source() {}
+    
+    /**
+     *  Name of the source
+     * 
+     *  This is the name by which the template is identifier. For file-templates
+     *  this could be the filename, and for templates from other sources this
+     *  could be a different name.
+     * 
+     *  @return const char*
+     */
+    virtual const char *name() const = 0;
+    
+    /**
+     *  Is this a shared library?
+     * 
+     *  When the source represents a shared library, it means that that it could
+     *  be opened by a call to dlopen(), and it is stored as a .so file on the
+     *  system. The name() method should return the path to the shared library.
+     * 
+     *  @return bool
+     */
+    virtual bool library() const
+    {
+        // by default we return false, because this is the most likely
+        // implementation for almost all source
+        return false;
+    }
 
     /**
      *  Returns a const char* to the start of the buffer, use size() to get the length
@@ -50,15 +72,14 @@ public:
      *
      *  @return const char*
      */
-    const char* data() const { return _buffer.data(); };
+    virtual const char *data() const = 0;
 
     /**
      *  Returns the size of the buffer.
      *
      *  @return size_t
      */
-    size_t size() const { return _buffer.size(); };
-    
+    virtual size_t size() const = 0;    
 
 };
 
