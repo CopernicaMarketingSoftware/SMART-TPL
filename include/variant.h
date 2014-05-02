@@ -14,6 +14,14 @@ namespace SmartTpl {
 
 /**
  *  Class definition
+ * 
+ * 
+ *  @todo 
+ * 
+ *      is it a good idea that a variant also implements the value
+ *      interface? Inside the library we probably only want to work
+ *      with real Value objects, and not the wrapped Variant ones.
+ *      
  */
 class Variant : public Value
 {

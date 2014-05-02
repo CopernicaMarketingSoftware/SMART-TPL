@@ -54,6 +54,17 @@ public:
      *  @param  name        name of the member
      *  @param  size        size of the name
      *  @return Value
+     * 
+     *  
+     *  @todo
+     * 
+     *      all the member functions that return a Value* could also
+     *      return a Variant object. This has as benefit that no memory
+     *      management is necessary for the user, and that creating your
+     *      own value classes becomes much simpler, but the downside is
+     *      that implementations that do 'return this' will be harder
+     *      to create. what to do?
+     * 
      */
     virtual Value *member(const char *name, size_t size) = 0;
 
