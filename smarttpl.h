@@ -51,6 +51,7 @@
 #include "smarttpl/callbacks.h"
 #include "smarttpl/variant.h"
 #include "smarttpl/modifier.h"
+#include "smarttpl/callback.h"
 #include "smarttpl/data.h"
 #include "smarttpl/template.h"
 
