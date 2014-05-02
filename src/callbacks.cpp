@@ -129,9 +129,14 @@ void *smart_tpl_create_iterator(void *userdata, void *variable)
     auto *var = (Value *)variable;
     
     // construct a new iterator
-    // @todo 
+    //  @todo 
     //      can we allocate this on the heap instead of allocating with new?
     //      for example by using an already-allocated stack of iterator objects inside the handler object?
+    //
+    //  @todo
+    //      because the iterators are not pushed to a stack, we will have a memory
+    //      leak if the statements inside the loop crash, and the delete_itertor
+    //      callback does not get called. Is this a serious possibility?
     return new Iterator(var);
 }
 
@@ -316,6 +321,7 @@ void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variab
 {
     // In case the modifier is a nullptr just return the original value
     if (modifier_ptr == nullptr || variable == nullptr) return variable;
+
     // convert to the Modifier
     auto *modifier = (Modifier*) modifier_ptr;
 
@@ -442,8 +448,10 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
 {
     // If we aren't the same size to begin with we might as well just error out already
     if (a_len != b_len) return -1;
+
     // If we didn't return yet we are both the same length, if we're both 0 we're equal!
     else if (a_len == 0) return 0;
+
     // Pfft, we still don't know if we're equal, let's just ask strncmp() then
     return strncmp(a, b, a_len);
 }

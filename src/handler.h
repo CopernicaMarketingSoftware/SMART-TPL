@@ -129,6 +129,16 @@ public:
 
     /**
      *  Assign an existing value to a local variable
+     * 
+     *  @todo
+     *      change signature to assign(key, size, value)
+     * 
+     *  @todo
+     *      is it possible to use c++ polymorphism so that we have
+     *      the same assign() method for all different types (instead
+     *      of having assignBoolean, assignString, etcetera)
+     * 
+     * 
      *  @param value       The value we would like to assign
      *  @param key         The name for our local variable
      *  @param key_size    The size of key

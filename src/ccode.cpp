@@ -478,8 +478,8 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
     _out << "while (callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
     
     // assign the key and value
-    if (!key.empty()) _out << "callbacks->assign(userdata,callbacks->iterator_key(userdata,iterator),"; string(key); _out << ");";
-    if (!value.empty()) _out << "callbacks->assign(userdata,callbacks->iterator_value(userdata,iterator),"; string(value); _out << ");";
+    if (!key.empty()) { _out << "callbacks->assign(userdata,callbacks->iterator_key(userdata,iterator),"; string(key); _out << ");" << std::endl; }
+    if (!value.empty()) { _out << "callbacks->assign(userdata,callbacks->iterator_value(userdata,iterator),"; string(value); _out << ");" << std::endl; }
 
     // generate the actual statements
     statements->generate(this);
