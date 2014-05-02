@@ -71,6 +71,7 @@ ifStatement(A)      ::= IF boolexpr(B) statements(C) elseStatement(D) .         
 ifStatement(A)      ::= IF boolexpr(B) statements(C) ENDIF .                    { A = new SmartTpl::IfStatement(B, C); }
 elseStatement(A)    ::= ELSE statements(B) ENDIF .                              { A = B; }
 elseStatement(A)    ::= ELSEIF boolexpr(B) statements(C) elseStatement(D) .     { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B,C,D)); }
+elseStatement(A)    ::= ELSEIF boolexpr(B) statements(C) ENDIF .                { A = new SmartTpl::Statements(new SmartTpl::IfStatement(B, C)); }
 statement(A)        ::= foreachStatement(B) .                                   { A = B; }
 foreachStatement(A) ::= FOREACH VARIABLE(B) IN variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(B, C, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) statements(D) ENDFOREACH . { A = new SmartTpl::ForEachStatement(C, B, D); }
