@@ -21,7 +21,7 @@ private:
     /**
      *  The variable we'll assign to
      */
-    std::unique_ptr<LiteralVariable> _var;
+    std::unique_ptr<Token> _var;
 
     /**
      *  The expression we would like to assign
@@ -35,12 +35,9 @@ public:
      *  @param var                 The variable we would like to assign it to
      *  @throws std::runtime_error In case the variable is not of type LiteralVariable
      */
-    AssignStatement(Expression *expression, Variable *var)
-    : _expression(expression) {
-        LiteralVariable *k = dynamic_cast<LiteralVariable*>(var);
-        if (k == nullptr)
-            throw std::runtime_error("The variable you are trying to assign to is of the wrong type");
-        _var = std::unique_ptr<LiteralVariable>(k);
+    AssignStatement(Expression *expression, Token *var)
+    : _var(var)
+    , _expression(expression) {
     }
 
     /**
@@ -54,7 +51,7 @@ public:
      */
     virtual void generate(Generator *generator) const override
     {
-        generator->assign(_var.get()->token(), _expression.get());
+        generator->assign(*_var, _expression.get());
     }
 };
 

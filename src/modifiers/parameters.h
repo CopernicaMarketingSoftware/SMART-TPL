@@ -30,7 +30,7 @@ public:
      *  Constructor
      *  @param  expression
      */
-    Parameters(const Expression *expression) 
+    Parameters(const Expression *expression)
     {
         add(expression);
     }
