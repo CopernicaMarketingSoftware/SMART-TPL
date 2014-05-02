@@ -53,14 +53,6 @@ public:
         generator->varPointer(*_name);
     }
 
-    /**
-     *  Return the token name of the variable
-     *  @return std::string
-     */
-    const std::string token() const
-    {
-        return *_name.get();
-    }
 };
 
 /**
