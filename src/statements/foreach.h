@@ -19,54 +19,49 @@ class ForEachStatement : public Statement
 {
 private:
     /**
-     *  The variable that will contain the value during the loop
+     *  The variable to loop over
+     *  @var Variable
      */
-    std::unique_ptr<Token> _var;
+    std::unique_ptr<Variable> _source;
 
     /**
      *  The variable that will contain the key during the loop
      *  @note This is not a requirement
+     *  @var Token
      */
-    std::unique_ptr<Token> _keyvar;
+    std::unique_ptr<Token> _key;
 
     /**
-     *  The variable to loop over
+     *  The variable name that will contain the value during the loop
+     *  @var Token
      */
-    std::unique_ptr<Variable> _target;
+    std::unique_ptr<Token> _value;
 
     /**
      *  The statements to execute within the loop
+     *  @var Statements
      */
     std::unique_ptr<Statements> _statements;
 
 public:
     /**
      *  Constructor
-     *  @param key           The {foreach ... in ${variable}} part of the foreach
-     *                       we demand that this is a LiteralVariable, otherwise we'll throw
-     *  @param target        The variable to loop through, this does NOT have to be a LiteralVariable
-     *  @param statements    The statements to execute in the foreach loop
+     *  @param  target      The variable to loop through
+     *  @param  value       Name of the value variable
+     *  @param  statements  The statements to execute in the foreach loop
      */
-    ForEachStatement(Token *var, Variable *target, Statements *statements)
-    : _var(var)
-    , _target(target)
-    , _statements(statements) {
-    }
+    ForEachStatement(Variable *source, Token *value, Statements *statements) : 
+        _source(source), _value(value), _statements(statements) {}
 
     /**
      *  Constructor
-     *  @param key           The {foreach ... in ${variable}} part of the foreach
-     *                       we demand that this is a LiteralVariable, otherwise we'll throw
-     *  @param target        The variable to loop through, this does NOT have to be a LiteralVariable
-     *  @param statements    The statements to execute in the foreach loop
-     *  @param keyvar        The variable to store the key in
+     *  @param  target      The variable to loop through
+     *  @param  key         Name of the key variable
+     *  @param  value       Name of the value variable
+     *  @param  statements  The statements to execute in the foreach loop
      */
-    ForEachStatement(Token *var, Variable *target, Token *keyvar, Statements *statements)
-    : _var(var)
-    , _keyvar(keyvar)
-    , _target(target)
-    , _statements(statements) {
-    }
+    ForEachStatement(Variable *source, Token *key, Token *value, Statements *statements) : 
+        _source(source), _key(key), _value(value), _statements(statements) {}
 
     /**
      *  Destructor
@@ -79,7 +74,8 @@ public:
      */
     virtual void generate(Generator *generator) const override
     {
-        generator->foreach(*_var.get(), _target.get(), _statements.get(), (_keyvar) ? *_keyvar.get() : std::string(""));
+        // call the generator
+        generator->foreach(_source.get(), _key ? *_key.get() : std::string(""), *_value.get(), _statements.get());
     }
 };
 

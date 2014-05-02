@@ -1,8 +1,8 @@
 /**
- *  Member_Iter.h
+ *  IteratorValue.h
  *
- *  Signature of the member callback. This is a callback that will call back
- *  to the native function smart_tpl_member_iter(void *, void *, const char *, size_t, const char *, size_t);
+ *  Signature of the iterator_value callback. This is a callback that will call back
+ *  to the native function smart_tpl_iterator_value(void*,void*);
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -16,22 +16,18 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class MemberIterCallback : public BaseCallback
+class IteratorValueCallback : public BaseCallback
 {
 public:
     /**
      *  Constructor
      */
-    MemberIterCallback()
+    IteratorValueCallback()
     {
         // parameters that are supported
         jit_type_t params[] = {
-            jit_type_void_ptr,
-            jit_type_void_ptr,
-            jit_type_void_ptr,
-            jit_type_sys_int,
-            jit_type_void_ptr,
-            jit_type_sys_int,
+            jit_type_void_ptr,  // userdata
+            jit_type_void_ptr   // iterator
         };
 
         // create the signature
@@ -41,7 +37,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~MemberIterCallback() {}
+    virtual ~IteratorValueCallback() {}
 };
 
 /**

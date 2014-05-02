@@ -19,124 +19,32 @@ namespace SmartTpl {
 static EmptyValue empty;
 
 /**
- *  Signature of the write callback
- *  @var    WriteCallback
+ *  Create all static variables
  */
-WriteCallback Callbacks::_write;
-
-/**
- *  Signature of the output callback
- *  @var    OutputCallback
- */
-OutputCallback Callbacks::_output;
-
-/**
- *  Signature of the member callback
- *  @var    MemberCallback
- */
-MemberCallback Callbacks::_member;
-
-/**
- *  Signature of the member_at callback
- *  @var    MemberAtCallback
- */
-MemberAtCallback Callbacks::_member_at;
-
-/**
- *  Signature of the member iter callback
- *  @var MemberIterCallback
- */
-MemberIterCallback Callbacks::_member_iter;
-
-/**
- *  Signature of the start loop callback
- *  @var LoopStartCallback
- */
-LoopStartCallback Callbacks::_loop_start;
-
-/**
- *  Signature of the variable callback
- *  @var    MemberCallback
- */
-VariableCallback Callbacks::_variable;
-
-/**
- *  Signature of the function to convert a variable to a string
- *  @var    ToStringCallback
- */
-ToStringCallback Callbacks::_toString;
-
-/**
- *  Signature of the function to convert a variable to a numeric value
- *  @var    ToNumericCallback
- */
-ToNumericCallback Callbacks::_toNumeric;
-
-/**
- *  Signature of the function to convert a variable to a boolean value
- *  @var    ToBooleanCallback
- */
-ToBooleanCallback Callbacks::_toBoolean;
-
-/**
- *  Signature of the function to retrieve the size/strlen of a variable
- *  @var    SizeCallback
- */
-SizeCallback Callbacks::_size;
-
-/**
- *  Signature of the function to retrieve the modifier
- *  @var    ModifierCallback
- */
-ModifierCallback Callbacks::_modifier;
-
-/**
- *  Signature of the function to modify a variable
- *  @var    ModifyVariableCallback
- */
-ModifyVariableCallback Callbacks::_modify_variable;
-
-/**
- *  Signature of the function to modify a numeric variable
- *  @var ModifyNumericCallback
- */
-ModifyNumericCallback Callbacks::_modify_numeric;
-
-/**
- *  Signature of the function to modify a string variable
- *  @var ModifyStringCallback
- */
-ModifyStringCallback Callbacks::_modify_string;
-
-/**
- *  Signature of the function to compare 2 strings
- *  @var StrCmpCallback
- */
-StrCmpCallback Callbacks::_strcmp;
-
-/**
- *  Signature of the function to assign a variable to a local variable
- *  @var AssignCallback
- */
-AssignCallback Callbacks::_assign;
-
-/**
- *  Signature of the function to assign a boolean to a local variable
- *  @var AssignBooleanCallback
- */
-AssignBooleanCallback Callbacks::_assign_boolean;
-
-/**
- *  Signature of the function to assign a numeric value to a local variable
- *  @var AssignNumericCallback
- */
-AssignNumericCallback Callbacks::_assign_numeric;
-
-/**
- *  Signature of the function to assign a string to a local variable
- *  @var AssignStringCallback
- */
-AssignStringCallback Callbacks::_assign_string;
+WriteCallback           Callbacks::_write;
+OutputCallback          Callbacks::_output;
+MemberCallback          Callbacks::_member;
+MemberAtCallback        Callbacks::_member_at;
+CreateIteratorCallback  Callbacks::_create_iterator;
+DeleteIteratorCallback  Callbacks::_delete_iterator;
+ValidIteratorCallback   Callbacks::_valid_iterator;
+IteratorKeyCallback     Callbacks::_iterator_key;
+IteratorValueCallback   Callbacks::_iterator_value;
+IteratorNextCallback    Callbacks::_iterator_next;
+VariableCallback        Callbacks::_variable;
+ToStringCallback        Callbacks::_toString;
+ToNumericCallback       Callbacks::_toNumeric;
+ToBooleanCallback       Callbacks::_toBoolean;
+SizeCallback            Callbacks::_size;
+ModifierCallback        Callbacks::_modifier;
+ModifyVariableCallback  Callbacks::_modify_variable;
+ModifyNumericCallback   Callbacks::_modify_numeric;
+ModifyStringCallback    Callbacks::_modify_string;
+StrCmpCallback          Callbacks::_strcmp;
+AssignCallback          Callbacks::_assign;
+AssignBooleanCallback   Callbacks::_assign_boolean;
+AssignNumericCallback   Callbacks::_assign_numeric;
+AssignStringCallback    Callbacks::_assign_string;
 
 
 /**
@@ -212,34 +120,92 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
 
 /**
  *  Tell the handler that we are starting a new loop
- *  @param userdata         pointer to user-supplied data
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  variable        pointer to the variable that is being iterated
  */
-void smart_tpl_loop_start(void *userdata)
+void *smart_tpl_create_iterator(void *userdata, void *variable)
 {
-    auto *handler = (Handler *) userdata;
-    handler->startLoop();
+    // cast to actual value object
+    auto *var = (Value *)variable;
+    
+    // construct a new iterator
+    // @todo 
+    //      can we allocate this on the heap instead of allocating with new?
+    //      for example by using an already-allocated stack of iterator objects inside the handler object?
+    return new Iterator(var);
+}
+
+/**
+ *  Tell the handler that a loop is completed
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  iterator        pointer to the iterator created with smart_tpl_delete_iterator
+ */
+void smart_tpl_delete_iterator(void *userdata, void *iterator)
+{
+    // cast to iterator
+    auto *iter = (Iterator *)iterator;
+    
+    // destruct it
+    delete iter;
 }
 
 /**
  *  Check if we can continue iterating over variable and set the magic key to the next value
  *  @param  userdata        pointer to user-supplied data
- *  @param  variable        pointer to variable
- *  @param  key             name of the magic variable
- *  @param  size            length of key
- *  @param  keyvar          name of the magic variable for the key
- *  @param  keyvar_size     length of the magic variable for the key
+ *  @param  iterator        pointer to the iterator returned by smart_tpl_create_iterator
  *  @return                 1 if we can continue iterating, 0 otherwise
  */
-int smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size, const char *keyvar, size_t keyvar_size)
+int smart_tpl_valid_iterator(void *userdata, void *iterator)
 {
-    // convert the variable to a Value object
-    auto *var = (Value *) variable;
+    // cast to iterator
+    auto *iter = (Iterator *)iterator;
+    
+    // check it
+    return iter->valid();
+}
 
-    // convert the userdata to our Handler object
-    auto *handler = (Handler *) userdata;
+/**
+ *  Retrieve the iterator key
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  iterator        pointer to the iterator returned by smart_tpl_create_iterator
+ *  @return                 pointer to the current key object
+ */
+void *smart_tpl_iterator_key(void *userdata, void *iterator)
+{
+    // cast to iterator
+    auto *iter = (Iterator *)iterator;
+    
+    // ask the iterator
+    return iter->key();
+}
 
-    // execute the iterate method and return the result
-    return handler->iterate(var, key, size, keyvar, keyvar_size) ? 1 : 0;
+/**
+ *  Retrieve the iterator value
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  iterator        pointer to the iterator returned by smart_tpl_create_iterator
+ *  @return                 pointer to the current value object
+ */
+void *smart_tpl_iterator_value(void *userdata, void *iterator)
+{
+    // cast to iterator
+    auto *iter = (Iterator *)iterator;
+    
+    // ask the iterator
+    return iter->value();
+}
+
+/**
+ *  Move to the next iterator value
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  iterator        pointer to the iterator returned by smart_tpl_create_iterator
+ */
+void smart_tpl_iterator_next(void *userdata, void *iterator)
+{
+    // cast to iterator
+    auto *iter = (Iterator *)iterator;
+    
+    // tell the iterator
+    iter->next();
 }
 
 /**

@@ -757,16 +757,20 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
 
 /**
  *  Generate the code to do a foreach loop over variable
- *  @param var                The magic variable name that should be used
- *  @param variable           The variable object to iterate over
- *  @param statements         The statements to execute on each iteration
- *  @param keyvar             The magic variable name that should contain the key, ignore if it is empty
+ *  @param variable         The variable object to iterate over
+ *  @param key              The magic variable name for the keys
+ *  @param value            The magic variable name for the values
+ *  @param statements       The statements to execute on each iteration
  */
-void Bytecode::foreach(const std::string& var, const Variable *variable, const Statements *statements, const std::string &keyvar)
+void Bytecode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements)
 {
-    // tell the callbacks that we're starting our loop
-    _callbacks.loop_start(_userdata);
+    // convert our variable to a jit_value
+    variable->pointer(this);
+    auto var = pop();
 
+    // tell the callbacks that we're creating an iterator
+    auto iterator = _callbacks.create_iterator(_userdata, var);
+    
     // we create a label just before our loop so we can actually loop
     // and we create a label just outside of it, so we can jump out of it
     jit_label label_while = _function.new_label();
@@ -775,30 +779,47 @@ void Bytecode::foreach(const std::string& var, const Variable *variable, const S
     // we insert our label_while at the start
     _function.insn_label(label_while);
 
-    // convert our magic key to jit_values for the callback
-    string(var);
-    auto var_size = pop();
-    auto var_buffer = pop();
-
-    // convert our magic key for the key to jit_values for the callback
-    string(keyvar);
-    auto key_size = pop();
-    auto key_buf = pop();
-
-    // convert our variable to a jit_value
-    variable->pointer(this);
-    auto value = pop();
-
-    // make the member_iter callback
-    _stack.push(_callbacks.member_iter(_userdata, value, var_buffer, var_size, key_buf, key_size));
-
+    // make the valid_iterator callback
+    auto valid = _callbacks.valid_iterator(_userdata, iterator);
+    
     // if the output of the callback is 0 (false) we jump to label_after_while
-    jit_value fals = _function.new_constant(0, jit_type_sys_int);
-    jit_value stop = _function.insn_eq(pop(), fals);
-    _function.insn_branch_if(stop, label_after_while);
+    _function.insn_branch_if_not(valid, label_after_while);
+
+    // do we have a key?
+    if (!key.empty())
+    {
+        // construct jit values for the key name
+        string(key);
+        auto key_size = pop();
+        auto key_buf = pop();
+
+        // ask for the key
+        auto current_key = _callbacks.iterator_key(_userdata, iterator);
+
+        // assign the key
+        _callbacks.assign(_userdata, current_key, key_buf, key_size);
+    }
+    
+    // do we have a value?
+    if (!value.empty())
+    {
+        // convert our magic key to jit_values for the callback
+        string(value);
+        auto value_size = pop();
+        auto value_buf = pop();
+
+        // ask for the value
+        auto current_value = _callbacks.iterator_value(_userdata, iterator);
+
+        // assign the value
+        _callbacks.assign(_userdata, current_value, value_buf, value_size);
+    }
 
     // generate the actual statements
     statements->generate(this);
+    
+    // proceed with iterator
+    _callbacks.iterator_next(_userdata, iterator);
 
     // jump back to label_while
     _function.insn_branch(label_while);

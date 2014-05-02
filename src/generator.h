@@ -153,12 +153,12 @@ public:
 
     /**
      *  Generate the code to do a foreach loop over variable
-     *  @param key                The magic variable name that should be used
-     *  @param variable           The variable object to iterate over
-     *  @param statements         The statements to execute on each iteration
-     *  @param keyvar             The magic variable name that should contain the key, ignore if it is empty
+     *  @param variable         The variable object to iterate over
+     *  @param key              The magic variable name for the keys
+     *  @param value            The magic variable name for the values
+     *  @param statements       The statements to execute on each iteration
      */
-    virtual void foreach(const std::string &key, const Variable *variable, const Statements *statements, const std::string &keyvar) = 0;
+    virtual void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements) = 0;
 
     /**
      *  Generate the code to assign the output of an expression to a key

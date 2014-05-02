@@ -457,33 +457,45 @@ void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
 
 /**
  *  Generate the code to do a foreach loop over variable
- *  @param key                The magic variable name that should be used
- *  @param variable           The variable object to iterate over
- *  @param statements         The statements to execute on each iteration
- *  @param keyvar             The magic variable name that should contain the key, ignore if it is empty
+ *  @param variable         The variable object to iterate over
+ *  @param key              The magic variable name for the keys
+ *  @param value            The magic variable name for the values
+ *  @param statements       The statements to execute on each iteration
  */
-void CCode::foreach(const std::string& key, const Variable *variable, const Statements *statements, const std::string &keyvar)
+void CCode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements)
 {
-    // Instruct our callbacks that we want to start a new loop
-    _out << "callbacks->loop_start(userdata);" << std::endl;
-
-    // Start the actual loop
-    _out << "while (callbacks->member_iter(userdata,";
-
-    // write out a pointer to the variable we're iterating over
-    variable->pointer(this); _out << ",";
-
-    // write the magic key
-    string(key); _out << ",";
-
-    // write the magic key for the key
-    string(keyvar); _out << ")) {" << std::endl;
+    // foreach loops are implemented inside a seperate block to create
+    // a local variable scope
+    _out << "{" << std::endl;
+    
+    // create the code to create the iterator
+    _out << "void *iterator = callbacks->create_iterator(userdata,";
+    
+    // pointer to the variable
+    variable->pointer(this); _out << ");" << std::endl;
+    
+    // construct the loop
+    _out << "while (callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
+    
+    // assign the key and value
+    if (!key.empty()) _out << "callbacks->assign(userdata,callbacks->iterator_key(userdata,iterator),"; string(key); _out << ");";
+    if (!value.empty()) _out << "callbacks->assign(userdata,callbacks->iterator_value(userdata,iterator),"; string(value); _out << ");";
 
     // generate the actual statements
     statements->generate(this);
-
-    // end the while loop
+    
+    // proceed the iterator
+    _out << "callbacks->iterator_next(userdata,iterator);" << std::endl;
+    
+    // end of the whilte loop
     _out << "}" << std::endl;
+
+    // clean up the iterator
+    _out << "callbacks->delete_iterator(userdata,iterator);" << std::endl;
+
+    // end of the block
+    _out << "}" << std::endl;
+
 }
 
 /**

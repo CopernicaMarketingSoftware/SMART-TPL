@@ -21,8 +21,12 @@ void        smart_tpl_write(void *userdata, const char *data, size_t size);
 void        smart_tpl_output(void *userdata, void *variable);
 void       *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size);
 void       *smart_tpl_member_at(void *userdata, void *variable, long position);
-void        smart_tpl_loop_start(void *userdata);
-int         smart_tpl_member_iter(void *userdata, void *variable, const char *key, size_t size, const char *keyvar, size_t keyvar_size);
+void       *smart_tpl_create_iterator(void *userdata, void *variable);
+void        smart_tpl_delete_iterator(void *userdata, void *iterator);
+int         smart_tpl_valid_iterator(void *userdata, void *iterator);
+void       *smart_tpl_iterator_key(void *userdata, void *iterator);
+void       *smart_tpl_iterator_value(void *userdata, void *iterator);
+void        smart_tpl_iterator_next(void *userdata, void *iterator);
 void       *smart_tpl_variable(void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string(void *userdata, void *variable);
 size_t      smart_tpl_to_numeric(void *userdata, void *variable);
@@ -75,16 +79,40 @@ private:
     static MemberAtCallback _member_at;
 
     /**
-     *  Signature of the member iter callback
-     *  @var MemberIterCallback
+     *  Signature of the create-iterator callback
+     *  @var CreateItereratorCallback
      */
-    static MemberIterCallback _member_iter;
+    static CreateIteratorCallback _create_iterator;
 
     /**
-     *  Signature of the start loop callback
-     *  @var LoopStartCallback
+     *  Signature of the delete-iterator callback
+     *  @var DeleteItereratorCallback
      */
-    static LoopStartCallback _loop_start;
+    static DeleteIteratorCallback _delete_iterator;
+
+    /**
+     *  Signature of the valid-iterator callback
+     *  @var ValidItereratorCallback
+     */
+    static ValidIteratorCallback _valid_iterator;
+    
+    /**
+     *  Signature of the iterator-key callback
+     *  @var ItereratorKeyCallback
+     */
+    static IteratorKeyCallback _iterator_key;
+
+    /**
+     *  Signature of the iterator-value callback
+     *  @var ItereratorValueCallback
+     */
+    static IteratorValueCallback _iterator_value;
+    
+    /**
+     *  Signature of the iterator-next callback
+     *  @var IteratorNextCallback
+     */
+    static IteratorNextCallback _iterator_next;
 
     /**
      *  Signature of the variable callback
@@ -241,10 +269,10 @@ public:
 
     /**
      *  Call the member_at function
-     *  @param  userdata      Pointer to user-supplied data
-     *  @param  variable      Pointer to the variable
-     *  @param  position      Position of the member value
-     *  @return jit_value     The new variable pointer
+     *  @param  userdata    Pointer to user-supplied data
+     *  @param  variable    Pointer to the variable
+     *  @param  position    Position of the member value
+     *  @return jit_value   The new variable pointer
      */
     jit_value member_at(const jit_value &userdata, const jit_value &variable, const jit_value &position)
     {
@@ -258,42 +286,94 @@ public:
         // create the instruction
         return _function->insn_call_native("smart_tpl_member_at", (void *)smart_tpl_member_at, _member_at.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
-
+    
     /**
-     *  Call the member_iter function
-     *  @param  userdata      Pointer to user-supplied data
-     *  @param  variable      Pointer to the variable
-     *  @param  var           Name of the magic key to store the iterated value in
-     *  @param  var_size      Size of name
-     *  @param  key           Key to assign the key to
-     *  @param  key_size      The size of key
-     *  @return jit_value     A boolean telling if you should continue looping or not
+     *  Call the create_iterator function
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  variable    Variable over which we're iterating
+     *  @return jit_value   The new iterator pointer
      */
-    jit_value member_iter(const jit_value &userdata, const jit_value &variable, const jit_value &var, const jit_value &var_size, const jit_value &key, const jit_value &key_size)
+    jit_value create_iterator(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
-            variable.raw(),
-            var.raw(),
-            var_size.raw(),
-            key.raw(),
-            key_size.raw(),
+            variable.raw()
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_member_iter", (void *)smart_tpl_member_iter, _member_iter.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        return _function->insn_call_native("smart_tpl_create_iterator", (void *)smart_tpl_create_iterator, _create_iterator.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
-    void loop_start(const jit_value &userdata)
+    /**
+     *  Call the valid_iterator function
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  iterator    Iterator that is in use
+     *  @return jit_value   Boolean value
+     */
+    jit_value valid_iterator(const jit_value &userdata, const jit_value &iterator)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
+            iterator.raw()
         };
 
         // create the instruction
-        _function->insn_call_native("smart_tpl_loop_start", (void *) smart_tpl_loop_start, _loop_start.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        return _function->insn_call_native("smart_tpl_valid_iterator", (void *)smart_tpl_valid_iterator, _valid_iterator.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the iterator_key function
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  iterator    Iterator that is in use
+     *  @return jit_value   Current key pointer
+     */
+    jit_value iterator_key(const jit_value &userdata, const jit_value &iterator)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            iterator.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_iterator_key", (void *)smart_tpl_iterator_key, _iterator_key.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the iterator_value function
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  iterator    Iterator that is in use
+     *  @return jit_value   Current value pointer
+     */
+    jit_value iterator_value(const jit_value &userdata, const jit_value &iterator)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            iterator.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_iterator_value", (void *)smart_tpl_iterator_value, _iterator_value.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the iterator_next function
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  iterator    Iterator that is in use
+     */
+    void iterator_next(const jit_value &userdata, const jit_value &iterator)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            iterator.raw()
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_iterator_next", (void *)smart_tpl_iterator_next, _iterator_next.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -388,6 +468,7 @@ public:
         return _function->insn_call_native("smart_tpl_size", (void *)smart_tpl_size, _size.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     jit_value modifier(const jit_value &userdata, const jit_value &name, const jit_value &size)
     {
         // construct the arguments
@@ -400,7 +481,8 @@ public:
         // create the instruction
         return _function->insn_call_native("smart_tpl_modifier", (void *)smart_tpl_modifier, _modifier.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
-
+    
+    // @todo documentation
     jit_value modify_variable(const jit_value &userdata, const jit_value &modifier, const jit_value &variable)
     {
         // construct the arguments
@@ -414,6 +496,7 @@ public:
         return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _modify_variable.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     jit_value modify_numeric(const jit_value &userdata, const jit_value &modifier, const jit_value &value)
     {
         // construct the arguments
@@ -427,6 +510,7 @@ public:
         return _function->insn_call_native("smart_tpl_modify_numeric", (void *) smart_tpl_modify_numeric, _modify_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     jit_value modify_string(const jit_value &userdata, const jit_value &modifier, const jit_value &data, const jit_value &size)
     {
         // construct the arguments
@@ -441,6 +525,7 @@ public:
         return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     jit_value strcmp(const jit_value &userdata, const jit_value &a, const jit_value &a_len, const jit_value &b, const jit_value &b_len)
     {
         // construct the arguments
@@ -456,6 +541,7 @@ public:
         return _function->insn_call_native("smart_tpl_strcmp", (void *) smart_tpl_strcmp, _strcmp.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     void assign(const jit_value &userdata, const jit_value &variable, const jit_value &key, const jit_value &key_size)
     {
         // construct the arguments
@@ -470,6 +556,7 @@ public:
         _function->insn_call_native("smart_tpl_assign", (void *) smart_tpl_assign, _assign.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     void assign_numeric(const jit_value &userdata, const jit_value &value, const jit_value &key, const jit_value &key_size)
     {
         // construct the arguments
@@ -484,6 +571,7 @@ public:
         _function->insn_call_native("smart_tpl_assign_numeric", (void *) smart_tpl_assign_numeric, _assign_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     void assign_boolean(const jit_value &userdata, const jit_value &boolean, const jit_value &key, const jit_value &key_size)
     {
         // construct the arguments
@@ -498,6 +586,7 @@ public:
         _function->insn_call_native("smart_tpl_assign_boolean", (void *) smart_tpl_assign_boolean, _assign_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
+    // @todo documentation
     void assign_string(const jit_value &userdata, const jit_value &str, const jit_value str_size, const jit_value &key, const jit_value &key_size)
     {
         // construct the arguments

@@ -1,8 +1,8 @@
 /**
- *  LoopStart.h
+ *  IteratorNext.h
  *
- *  Signature of the start_loop callback. This is a callback that will call back
- *  to the native function smart_tpl_loop_start(void*);
+ *  Signature of the iterator_next callback. This is a callback that will call back
+ *  to the native function smart_tpl_iterator_next(void*,void*);
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -16,17 +16,18 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class LoopStartCallback : public BaseCallback
+class IteratorNextCallback : public BaseCallback
 {
 public:
     /**
      *  Constructor
      */
-    LoopStartCallback()
+    IteratorNextCallback()
     {
         // parameters that are supported
         jit_type_t params[] = {
-            jit_type_void_ptr
+            jit_type_void_ptr,  // userdata
+            jit_type_void_ptr   // iterator
         };
 
         // create the signature
@@ -36,7 +37,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~LoopStartCallback() {}
+    virtual ~IteratorNextCallback() {}
 };
 
 /**

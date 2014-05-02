@@ -35,10 +35,11 @@ private:
      *  Stack of our iterators
      *
      *  This is a stack of active {foreach} loops. The top of the stack
-     *  contains the foreach loop that is now running. The stack contains just
-     *  an integer with the current loop-counter/position in the Value
+     *  contains the foreach loop that is now running.
+     * 
+     *  @var std::stack
      */
-    std::stack<unsigned int> _iterator_stack;
+    std::stack<Iterator> _iterators;
 
     /**
      *  Compare functor necessary for the map
@@ -118,10 +119,16 @@ public:
 
     /**
      *  Start a new foreach loop and push the initial position of a for loop
+     *  @param  
+     * 
+     * 
+     *  @return Iterator*
      */
     void startLoop()
     {
-        _iterator_stack.push(0);
+        // @todo implementation
+        
+//        _iterator_stack.push(0);
     }
 
     /**
@@ -135,55 +142,58 @@ public:
      */
     bool iterate(Value *value, const char *key, size_t size, const char* keyvar, size_t keyvar_size)
     {
-        // In case our _iterator_stack is empty just return false
-        if (_iterator_stack.empty()) return false;
-
-        // Retrieve the amount of members in value
-        size_t len = value->memberCount();
-
-        // We can't even iterate over this...
-        if (len == 0) return false;
-
-        // get our iterator
-        unsigned int &iter = _iterator_stack.top();
-
-        // if our iterator goes out of bounds that means that we are done and should clean up
-        if (iter >= len)
-        {
-            // remove our magic value
-            auto liter = _local_values.find(key);
-            if (liter != _local_values.end()) _local_values.erase(liter);
-
-            // Let's look for our magic key var as well if we used it that is
-            if (keyvar_size > 0)
-            {
-                liter = _local_values.find(keyvar);
-                if (liter != _local_values.end()) _local_values.erase(liter);
-            }
-
-            // Remove this loop from the stack
-            _iterator_stack.pop();
-
-            // and tell the callback to stop looping
-            return false;
-        }
-        else
-        {
-            // assign the next element in the iteration to our magic key
-            _local_values[key] = value->member(iter);
-            if (keyvar_size > 0)
-            {
-                // The foreach wants a key, so let's try to get one
-                Value *k = value->key(iter);
-
-                // Value isn't required to return a key so let's check if it is nullptr or not
-                if (k != nullptr) _local_values[keyvar] = k;
-            }
-
-            // increase our iterator
-            iter++;
-            return true;
-        }
+        // @todo implementation
+        return false;
+        
+//        // In case our _iterator_stack is empty just return false
+//        if (_iterator_stack.empty()) return false;
+//
+//        // Retrieve the amount of members in value
+//        size_t len = value->memberCount();
+//
+//        // We can't even iterate over this...
+//        if (len == 0) return false;
+//
+//        // get our iterator
+//        unsigned int &iter = _iterator_stack.top();
+//
+//        // if our iterator goes out of bounds that means that we are done and should clean up
+//        if (iter >= len)
+//        {
+//            // remove our magic value
+//            auto liter = _local_values.find(key);
+//            if (liter != _local_values.end()) _local_values.erase(liter);
+//
+//            // Let's look for our magic key var as well if we used it that is
+//            if (keyvar_size > 0)
+//            {
+//                liter = _local_values.find(keyvar);
+//                if (liter != _local_values.end()) _local_values.erase(liter);
+//            }
+//
+//            // Remove this loop from the stack
+//            _iterator_stack.pop();
+//
+//            // and tell the callback to stop looping
+//            return false;
+//        }
+//        else
+//        {
+//            // assign the next element in the iteration to our magic key
+//            _local_values[key] = value->member(iter);
+//            if (keyvar_size > 0)
+//            {
+//                // The foreach wants a key, so let's try to get one
+//                Value *k = value->key(iter);
+//
+//                // Value isn't required to return a key so let's check if it is nullptr or not
+//                if (k != nullptr) _local_values[keyvar] = k;
+//            }
+//
+//            // increase our iterator
+//            iter++;
+//            return true;
+//        }
     }
 
     /**
