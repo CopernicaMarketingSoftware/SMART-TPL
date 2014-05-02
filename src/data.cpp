@@ -57,7 +57,7 @@ Data &Data::assign(const char *name, numeric_t value)
 {
     // construct variable
     Value *v = new NumericValue(value);
-    
+
     // store in the list of variables
     _variables[name] = v;
 
@@ -87,13 +87,14 @@ Data &Data::assign(const char *name, Value* value)
  *  Assign a callback
  *  @param  name        Name of the variable
  *  @param  callback    Callback function
- *  @return Data       Same object for chaining
+ *  @param  cache       Should we cache calls to your callback?
+ *  @return Data        Same object for chaining
  */
-Data &Data::callback(const char *name, const Callback &callback)
+Data &Data::callback(const char *name, const Callback &callback, bool cache)
 {
     // construct variable
-    Value *v = new CallbackValue(callback);
-    
+    Value *v = new CallbackValue(callback, cache);
+
     // store in the list of variables
     _variables[name] = v;
 

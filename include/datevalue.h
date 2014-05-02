@@ -142,6 +142,14 @@ public:
         // Returns the size of the buffer, toString() should be called first
         return _buffer.size();
     }
+
+    /**
+     *  Method used to get a instance of this value
+     */
+    virtual Variant cache() override
+    {
+        return Variant();
+    }
 };
 
 /**

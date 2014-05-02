@@ -46,13 +46,16 @@ public:
      *  Constructor
      *  @param  callback
      */
-    CallbackValue(const Callback &callback) : _callback(callback) {}
-    
+    CallbackValue(const Callback &callback, bool cache = false) : _callback(callback)
+    {
+        _cacheable = cache;
+    }
+
     /**
      *  Destructor
      */
     virtual ~CallbackValue() {}
-    
+
     /**
      *  Convert the value to a string
      *  @return const char *
@@ -61,10 +64,10 @@ public:
     {
         // call the callback to find out the actual value
         Variant value(_callback());
-        
+
         // retrieve the string value
         return value.toString();
-    }   
+    }
 
     /**
      *  Convert the variable to a numeric value
@@ -74,11 +77,10 @@ public:
     {
         // call the callback to find out the actual value
         Variant value(_callback());
-        
+
         // retrieve the numeric value
         return value.toNumeric();
     }
-        
 
     /**
      *  Convert the variable to a boolean value
@@ -88,7 +90,7 @@ public:
     {
         // call the callback to find out the actual value
         Variant value(_callback());
-        
+
         // retrieve the boolean value
         return value.toBoolean();
     }
@@ -148,12 +150,20 @@ public:
     {
         // call the callback to find out the actual value
         Variant value(_callback());
-        
+
         // retrieve the size
         return value.size();
     }
+
+    /**
+     *  Method used to get a instance of this value
+     */
+    virtual Variant cache() override
+    {
+        return _callback();
+    }
 };
-    
+
 /**
  *  End of namespace
  */

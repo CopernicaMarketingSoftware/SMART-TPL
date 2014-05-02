@@ -20,15 +20,31 @@ namespace SmartTpl {
 typedef int numeric_t;
 
 /**
+ *  Forward declaration of Variant so we can return Variant from cache()
+ */
+class Variant;
+
+/**
  *  Class definition
  */
 class Value
 {
+protected:
+    /**
+     *  Should this value be cached using cache() or not?
+     *  False by default
+     */
+    bool _cacheable = false;
 public:
     /**
      *  Destructor
      */
     virtual ~Value() {};
+
+    /**
+     *  Returns if this value is cachable or not
+     */
+    bool cacheable() const { return _cacheable; }
 
     /**
      *  Convert the value to a string
@@ -83,6 +99,11 @@ public:
      *  @return size_t
      */
     virtual size_t size() = 0;
+
+    /**
+     *  Method used to get a instance of this value
+     */
+    virtual Variant cache() = 0;
 };
 
 /**

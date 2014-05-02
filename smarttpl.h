@@ -40,6 +40,7 @@
 #include "smarttpl/buffer.h"
 
 #include "smarttpl/value.h"
+#include "smarttpl/variant.h"
 #include "smarttpl/string.h"
 #include "smarttpl/numeric.h"
 #include "smarttpl/empty.h"
@@ -49,7 +50,6 @@
 #include "smarttpl/datevalue.h"
 
 #include "smarttpl/callbacks.h"
-#include "smarttpl/variant.h"
 #include "smarttpl/modifier.h"
 #include "smarttpl/callback.h"
 #include "smarttpl/data.h"
