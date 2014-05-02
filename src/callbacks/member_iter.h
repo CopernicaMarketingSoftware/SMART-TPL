@@ -16,7 +16,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class MemberIterCallback : public Callback
+class MemberIterCallback : public BaseCallback
 {
 public:
     /**

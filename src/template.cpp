@@ -19,26 +19,16 @@ namespace SmartTpl {
  */
 Template::Template(const Source& source)
 {
-    _executor = nullptr;
-    try {
-        // check if our source happens to be of type File
-        if (typeid(source) == typeid(File)) {
-            // If it is, cast it to a file and check if the filename ends with .so
-            const File& file = dynamic_cast<const File&>(source);
-            const std::string filename = file.filename();
-            char *extension = strrchr(filename.c_str(), '.');
-            if (extension && strcasecmp(extension, ".so") == 0) {
-                // if the filename ends with .so load it as a shared library
-                _executor = new Library(filename);
-            }
-        }
-        if (_executor == nullptr) {
-            // if it was either not a file or not a .so we'll just load/compile it as Bytecode
-            _executor = new Bytecode(source);
-        }
-    } catch (const std::runtime_error &error) {
-        _executor = nullptr;
-        throw;
+    // is the source a shared library?
+    if (source.library())
+    {
+        // hey that's cool, we can create create a shard library
+        _executor = new Library(source.name());
+    }
+    else
+    {
+        // it was not a shared library, we're going to compile it into bytecode ourselves
+        _executor = new Bytecode(source);
     }
 }
 
@@ -48,8 +38,7 @@ Template::Template(const Source& source)
 Template::~Template()
 {
     // we no longer need the executor
-    if (_executor)
-        delete _executor;
+    if (_executor) delete _executor;
 }
 
 /**

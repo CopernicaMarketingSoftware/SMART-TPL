@@ -34,14 +34,14 @@ private:
      * 
      *  @var    Executor
      */
-    Executor *_executor;
+    Executor *_executor = nullptr;
     
 public:
     /**
      *  Constructor
      *  @param  source        Source of your template
      */
-    Template(const Source& source);
+    Template(const Source &source);
 
     /**
      *  Deleted copy constructor

@@ -16,7 +16,7 @@ namespace SmartTpl {
 /**
  *  Class definition
  */
-class LoopStartCallback : public Callback
+class LoopStartCallback : public BaseCallback
 {
 public:
     /**

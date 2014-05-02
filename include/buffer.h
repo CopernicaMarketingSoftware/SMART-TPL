@@ -26,6 +26,13 @@ namespace SmartTpl {
  */
 class Buffer : public Source
 {
+private:
+    /**
+     *  The internal buffer
+     *  @var std::string
+     */
+    std::string _buffer;
+    
 public:
     /**
      *  Constructor
@@ -33,21 +40,57 @@ public:
      *  @param  buffer      Pointer to the buffer
      *  @param  size        Size of the buffer
      */
-    Buffer(const char *buffer, size_t size) {
-        _buffer.append(buffer, size);
-    }
+    Buffer(const char *buffer, size_t size) : _buffer(buffer, size) {}
 
     /**
      *  Constructor
      *
      *  @param  buffer      Create buffer from a std::string
      */
-    Buffer(const std::string& buffer) : Buffer(buffer.data(), buffer.size()) {};
+    Buffer(const std::string &buffer) : _buffer(buffer) {}
     
     /**
      *  Destructor
      */
     virtual ~Buffer() {}
+
+    /**
+     *  Name of the source
+     * 
+     *  This is the name by which the template is identifier. For file-templates
+     *  this could be the filename, and for templates from other sources this
+     *  could be a different name.
+     * 
+     *  @return const char*
+     */
+    virtual const char *name() const override
+    {
+        // an in-memory buffer does not have a variable name, return an empty string instead
+        return "";
+    }
+    
+    /**
+     *  Returns a const char* to the start of the buffer, use size() to get the length
+     *  of this buffer.
+     *
+     *  @return const char*
+     */
+    virtual const char *data() const override
+    {
+        // stored in a member
+        return _buffer.c_str();
+    }
+
+    /**
+     *  Returns the size of the buffer.
+     *
+     *  @return size_t
+     */
+    virtual size_t size() const override
+    {
+        // stored in a member
+        return _buffer.size();
+    }
 };
     
 /**

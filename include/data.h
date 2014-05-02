@@ -57,12 +57,6 @@ private:
      */
     std::map<const char *, Modifier*, cmp_str> _modifiers;
 
-    /**
-     *  Callback methods
-     *  @var std::map
-     */
-    std::map<const char *, std::function<Variant()>, cmp_str> _callbacks;
-
 public:
     /**
      *  Constructor
@@ -83,7 +77,16 @@ public:
     Data &assign(const char *name, const std::string &value);
     Data &assign(const char *name, numeric_t value);
     Data &assign(const char *name, Value *value);
-    Data &callback(const char *name, const std::function<Variant()> &lambda);
+    
+    /**
+     *  Assign a callback
+     *  The callback will only be called when a variable with the given name
+     *  is used inside a template
+     *  @param  name        Name of the variable
+     *  @param  callback    Function to be called when the variable is accessed
+     *  @return Data        Same object for chaining
+     */
+    Data &callback(const char *name, const Callback &callback);
 
     /**
      *  Register a modifier
@@ -108,14 +111,6 @@ public:
      *  @return Modifier*   nullptr in case it isn't found
      */
     Modifier *modifier(const char *name, size_t) const;
-
-    /**
-     *  Retrieve a value callback function
-     *  @param  name         the name of the callback
-     *  @param  size         the size of the name
-     *  @return std::function<Variant()>
-     */
-    const std::function<Variant()> *callback(const char *name, size_t size) const;
 };
 
 /**

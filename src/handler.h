@@ -59,8 +59,8 @@ private:
 
     /**
      *  This map will contain values assigned during runtime, these can be
-     *  assigned using "assign .. to ..", callbacks or they're simply the magic values in
-     *  a foreach loop
+     *  assigned using "assign .. to ..", or the magic values inside
+     *  foreach loops
      */
     std::map<const char *, Value*, cmp_str> _local_values;
 
@@ -72,10 +72,6 @@ private:
      */
     std::list<std::unique_ptr<Value>> _managed_local_values;
 
-    /**
-     *  Variant values coming directly from callbacks
-     */
-    std::list<Variant> _wrapped_values;
 
 public:
     /**
@@ -84,6 +80,8 @@ public:
      */
     Handler(const Data *data) : _data(data) 
     {
+        // we reserve some space in the output buffer, so that it is not
+        // necessary to reallocate all the time (which is slow)
         _buffer.reserve(4096);
     }
 
@@ -115,22 +113,7 @@ public:
         if (iter != _local_values.end()) return iter->second;
 
         // didn't find it? get the variable from the data object
-        Value *value = _data->value(name, size);
-        if (value != nullptr) return value;
-
-        // if we still didn't find it let's look for a callback function
-        auto callback = _data->callback(name, size);
-
-        // Did we get a callback? No? nullptr it is
-        if (callback == nullptr) return nullptr;
-
-        // We got the callback, let's execute it and cache the output
-        Variant *variant = new Variant((*callback)());
-        manageValue(variant);
-        _local_values[name] = variant;
-
-        // Return the value
-        return variant;
+        return _data->value(name, size);
     }
 
     /**
