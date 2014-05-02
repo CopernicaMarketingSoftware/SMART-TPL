@@ -36,9 +36,9 @@
 #include "include/buffer.h"
 
 #include "include/value.h"
+#include "include/variant.h"
 #include "include/string.h"
 #include "include/numeric.h"
-#include "include/variant.h"
 #include "include/callback.h"
 #include "include/empty.h"
 #include "include/map.h"

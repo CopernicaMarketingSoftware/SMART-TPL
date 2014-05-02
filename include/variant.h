@@ -36,10 +36,11 @@ public:
     /**
      *  Constructor
      */
-    Variant(const char *value) : _value(new StringValue(value)) {};
-    Variant(const char *value, size_t size) : _value(new StringValue(value, size)) {};
-    Variant(const std::string &value) : _value(new StringValue(value)) {};
-    Variant(numeric_t value) : _value(new NumericValue(value)) {};
+    Variant();
+    Variant(const char *value);
+    Variant(const char *value, size_t size);
+    Variant(const std::string &value);
+    Variant(numeric_t value);
 
     /**
      *  Deconstructor
@@ -50,7 +51,7 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual const char *toString()
+    virtual const char *toString() override
     {
         return _value->toString();
     }
@@ -59,7 +60,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric()
+    virtual numeric_t toNumeric() override
     {
         return _value->toNumeric();
     }
@@ -68,7 +69,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean()
+    virtual bool toBoolean() override
     {
         return _value->toBoolean();
     }
@@ -80,7 +81,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, size_t size)
+    virtual Value *member(const char *name, size_t size) override
     {
         return _value->member(name, size);
     }
@@ -88,7 +89,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount()
+    virtual size_t memberCount() override
     {
         return _value->memberCount();
     }
@@ -98,7 +99,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *member(int position)
+    virtual Value *member(int position) override
     {
         return _value->member(position);
     }
@@ -108,7 +109,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Value *key(int position)
+    virtual Value *key(int position) override
     {
         return _value->key(position);
     }
@@ -118,9 +119,18 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size()
+    virtual size_t size() override
     {
         return _value->size();
+    }
+
+    /**
+     *  Method used to get a instance of this value
+     */
+    virtual Variant cache() override
+    {
+        // Returns itself
+        return *this;
     }
 };
 

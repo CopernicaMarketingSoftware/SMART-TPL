@@ -125,6 +125,14 @@ public:
         _str = new std::string(std::to_string(_value));
         return _str->size();
     }
+
+    /**
+     *  Method used to get a instance of this value
+     */
+    virtual Variant cache() override
+    {
+        return Variant();
+    }
 };
 
 /**

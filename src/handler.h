@@ -104,7 +104,24 @@ public:
         if (iter != _local_values.end()) return iter->second;
 
         // didn't find it? get the variable from the data object
-        return _data->value(name, size);
+        Value *value = _data->value(name, size);
+
+        // check if our value is cacheable
+        if (value->cacheable())
+        {
+            // As we are cacheable just use the cache() method and push that to our _local_values
+            Value *output = new Variant(value->cache());
+            _local_values[name] = output;
+
+            // Make our duplicate of the cache() output managed
+            _managed_local_values.push_back(std::unique_ptr<Value>(output));
+
+            // Return the output
+            return output;
+        }
+
+        // As we aren't cacheable just return the original value from _data
+        return value;
     }
 
     /**

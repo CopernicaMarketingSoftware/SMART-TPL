@@ -77,16 +77,17 @@ public:
     Data &assign(const char *name, const std::string &value);
     Data &assign(const char *name, numeric_t value);
     Data &assign(const char *name, Value *value);
-    
+
     /**
      *  Assign a callback
      *  The callback will only be called when a variable with the given name
      *  is used inside a template
      *  @param  name        Name of the variable
      *  @param  callback    Function to be called when the variable is accessed
+     *  @param  cache       Should we cache calls to your callback?
      *  @return Data        Same object for chaining
      */
-    Data &callback(const char *name, const Callback &callback);
+    Data &callback(const char *name, const Callback &callback, bool cache = false);
 
     /**
      *  Register a modifier
