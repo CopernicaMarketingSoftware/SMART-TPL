@@ -379,7 +379,7 @@ void smart_tpl_assign_numeric(void *userdata, long value, const char *key, size_
     auto handler = (Handler *) userdata;
 
     // Assign numeric value to key
-    handler->assignNumeric(value, key, keysize);
+    handler->assignNumeric(key, keysize, value);
 }
 
 /**
@@ -395,7 +395,7 @@ void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size
     auto handler = (Handler *) userdata;
 
     // Assign boolean to key
-    handler->assignBoolean(boolean == 1, key, keysize);
+    handler->assignBoolean(key, keysize, boolean == 1);
 }
 
 /**
@@ -412,7 +412,7 @@ void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, c
     auto handler = (Handler *) userdata;
 
     // Assign value to key
-    handler->assignString(std::string(buf, buf_size), key, keysize);
+    handler->assignString(key, keysize, std::string(buf, buf_size));
 }
 
 /**
@@ -421,6 +421,7 @@ void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, c
  *  @param variable             the variable object we would like to assign
  *  @param key                  the key we would like to assign it to
  *  @param keysize              the size of key
+ *  @todo  change signature to assign(key, size, value)
  */
 void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t keysize)
 {
@@ -431,7 +432,7 @@ void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t ke
     auto value = (Value *) variable;
 
     // Assign value to key
-    handler->assign(value, key, keysize);
+    handler->assign(key, keysize, value);
 }
 
 /**
