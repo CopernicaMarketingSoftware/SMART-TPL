@@ -374,7 +374,7 @@ void smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, l
     auto handler = (Handler *) userdata;
 
     // Assign numeric value to key
-    handler->assignNumeric(key, keysize, value);
+    handler->assign(key, keysize, value);
 }
 
 /**
@@ -390,7 +390,7 @@ void smart_tpl_assign_boolean(void *userdata, const char *key, size_t keysize, i
     auto handler = (Handler *) userdata;
 
     // Assign boolean to key
-    handler->assignBoolean(key, keysize, boolean == 1);
+    handler->assign(key, keysize, boolean != 0);
 }
 
 /**
@@ -407,7 +407,7 @@ void smart_tpl_assign_string(void *userdata, const char *key, size_t keysize, co
     auto handler = (Handler *) userdata;
 
     // Assign value to key
-    handler->assignString(key, keysize, std::string(buf, buf_size));
+    handler->assign(key, keysize, std::string(buf, buf_size));
 }
 
 /**

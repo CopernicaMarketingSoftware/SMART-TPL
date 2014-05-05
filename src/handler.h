@@ -147,12 +147,6 @@ public:
     /**
      *  Assign an existing value to a local variable
      *
-     *  @todo
-     *      is it possible to use c++ polymorphism so that we have
-     *      the same assign() method for all different types (instead
-     *      of having assignBoolean, assignString, etcetera)
-     *
-     *
      *  @param value       The value we would like to assign
      *  @param key         The name for our local variable
      *  @param key_size    The size of key
@@ -168,7 +162,7 @@ public:
      *  @param key         The name for our local variable
      *  @param key_size    The size of key
      */
-    void assignBoolean(const char *key, size_t key_size, bool boolean)
+    void assign(const char *key, size_t key_size, bool boolean)
     {
         _local_values[key] = BooleanValue::get(boolean);
     }
@@ -179,7 +173,7 @@ public:
      *  @param key          The name of our local variable
      *  @param key_size     The size of key
      */
-    void assignNumeric(const char *key, size_t key_size, long value)
+    void assign(const char *key, size_t key_size, long value)
     {
         Value *v = new NumericValue(value);
         _managed_local_values.push_back(std::unique_ptr<Value>(v));
@@ -192,7 +186,7 @@ public:
      *  @param key            The name of our local variable
      *  @param key_size       The size of key
      */
-    void assignString(const char *key, size_t key_size, const std::string &value)
+    void assign(const char *key, size_t key_size, const std::string &value)
     {
         Value *v = new StringValue(value);
         _managed_local_values.push_back(std::unique_ptr<Value>(v));
