@@ -29,6 +29,28 @@ private:
      */
     std::string _buffer;
 
+    /**
+     *  Put the current date/time in the _buffer
+     */
+    void initializeDate()
+    {
+        // Get the current time
+        std::time_t time = std::time(NULL);
+
+        // Convert it to our local time
+        std::tm *timeinfo = std::localtime(&time);
+
+        // Print it into _buffer using strftime
+        // http://en.cppreference.com/w/cpp/chrono/c/strftime
+        std::size_t len = std::strftime(&_buffer[0], _buffer.size(), _format.c_str(), timeinfo);
+        while (len == 0)
+        {
+            // if strftime failed increase the buffer size and try again
+            _buffer.reserve(_buffer.size() * 2);
+            len = std::strftime(&_buffer[0], _buffer.size(), _format.c_str(), timeinfo);
+        }
+    }
+
 public:
     /**
      *  Constructor
@@ -39,7 +61,7 @@ public:
      */
     DateValue(const std::string &format)
     : _format(format) {
-        _buffer.resize(_format.size());
+        _buffer.reserve(_format.size());
         if (_format.empty()) throw std::runtime_error("A DateValue with an empty format is undefined");
     }
 
@@ -54,21 +76,8 @@ public:
      */
     virtual const char *toString() override
     {
-        // Get the current time
-        std::time_t time = std::time(NULL);
-
-        // Convert it to our local time
-        std::tm *timeinfo = std::localtime(&time);
-
-        // Print it into _buffer using strftime
-        // http://en.cppreference.com/w/cpp/chrono/c/strftime
-        std::size_t len = std::strftime(&_buffer[0], _buffer.size(), _format.c_str(), timeinfo);
-        while (len == 0)
-        {
-            // if strftime failed increase the buffer size and try again
-            _buffer.resize(_buffer.size() * 2);
-            len = std::strftime(&_buffer[0], _buffer.size(), _format.c_str(), timeinfo);
-        }
+        // Put the current date/time in our buffer
+        initializeDate();
 
         // return the buffer as a C String
         return _buffer.c_str();
@@ -139,7 +148,10 @@ public:
      */
     virtual size_t size() override
     {
-        // Returns the size of the buffer, toString() should be called first
+        // Put the current date/time in the buffer
+        initializeDate();
+
+        // Returns the size of the buffer
         return _buffer.size();
     }
 
