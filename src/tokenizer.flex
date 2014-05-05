@@ -38,10 +38,10 @@
 %option outfile="src/tokenizer.cpp"
 
 /**
- *  Exclusive parser mode "EXPRESSION" and "IDENTIFIER". This is exclusive, 
+ *  Exclusive parser mode "INSIDE_CURLY_BRACES" and "IDENTIFIER". This is exclusive,
  *  because other tokens are disabled when in one of these modes
  */
-%x EXPRESSION
+%x INSIDE_CURLY_BRACES
 %x IDENTIFIER
 
 /**
@@ -60,13 +60,13 @@
 [^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Token("{", 1)); return TOKEN_RAW; }
 "{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Token("}", 1)); return TOKEN_RAW; }
-"{if"[ \t]+         { BEGIN(EXPRESSION); return TOKEN_IF; }
-"{elseif"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ELSEIF; }
+"{if"[ \t]+         { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_IF; }
+"{elseif"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
-"{foreach"[ \t]+    { BEGIN(EXPRESSION); return TOKEN_FOREACH; }
+"{foreach"[ \t]+    { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_FOREACH; }
 "{/foreach}"        { return TOKEN_ENDFOREACH; }
-"{assign"[ \t]+     { BEGIN(EXPRESSION); return TOKEN_ASSIGN; }
-"{$"                { BEGIN(EXPRESSION); yyless(1); return TOKEN_EXPRESSION; }
+"{assign"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ASSIGN; }
+"{$"                { BEGIN(INSIDE_CURLY_BRACES); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
 "{"                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_RAW; }
 
@@ -75,7 +75,7 @@
      *  statement or {$variable} or something similar
      */
 
-<EXPRESSION>{
+<INSIDE_CURLY_BRACES>{
     [ \t]
     "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra->setCurrentToken(new SmartTpl::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
     "true"                      { return TOKEN_TRUE; }
@@ -85,6 +85,7 @@
     "in"                        { return TOKEN_IN; }
     "as"                        { return TOKEN_AS; }
     "to"                        { return TOKEN_TO; }
+    "="                         { return TOKEN_IS; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_INTEGER; }
     "\""[^\"]*"\""              { yyextra->setCurrentToken(new SmartTpl::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
@@ -112,7 +113,7 @@
 }
 
 <IDENTIFIER>{
-    [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(EXPRESSION); yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
+    [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
 }
 
 %%
@@ -165,7 +166,8 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
     {
         // pass token to the parser
         if (parent->process(id, _token) == false)
-        {   // clean up the buffer
+        {
+            // clean up the buffer
             yy_delete_buffer(state, _scanner);
             return false;
         }

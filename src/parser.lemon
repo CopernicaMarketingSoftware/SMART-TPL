@@ -78,6 +78,7 @@ foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) statements(D) ENDFORE
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) ASSIGN_FOREACH VARIABLE(D) statements(E) ENDFOREACH . { A = new SmartTpl::ForEachStatement(B, C, D, E); }
 statement(A)        ::= assignStatement(B) .                                    { A = B; }
 assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) .                         { A = new SmartTpl::AssignStatement(B, C); }
+assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) .                     { A = new SmartTpl::AssignStatement(C, B); }
 boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
 boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::BinaryEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) NE outexpr(C) .                              { A = new SmartTpl::BinaryNotEqualsOperator(B, C); }
