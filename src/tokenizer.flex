@@ -127,6 +127,9 @@ namespace SmartTpl {
  */
 Tokenizer::Tokenizer()
 {
+    // Supress the unused function warning on yyunput
+    (void) yyunput;
+
     // initialize the scanner, and set the tokenizer as the user defined data
     yylex_init_extra(this, &_scanner);
     _line = 1; // We start at line 1, not 0
