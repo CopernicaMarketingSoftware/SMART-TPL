@@ -38,6 +38,9 @@ public:
             case '\r':  append("\\r"); break;
             case '\0':  append("\\0"); break;
             case '\t':  append("\\t"); break;
+            case '\f':  append("\\f"); break;
+            case '\b':  append("\\b"); break;
+            case '\v':  append("\\v"); break;
             case '"' :  append("\\\""); break;
             case '\'':  append("\\\'"); break;
             case '\\':  append("\\\\"); break;
