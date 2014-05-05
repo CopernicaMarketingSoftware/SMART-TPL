@@ -11,7 +11,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  The signature for _function
@@ -918,5 +918,4 @@ void Bytecode::process(Handler &handler)
 /**
  *  End namespace
  */
-}
-
+}}

@@ -11,10 +11,9 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  End namespace
  */
-}
-
+}}

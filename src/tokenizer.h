@@ -11,7 +11,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Forward declarations
@@ -79,5 +79,4 @@ public:
 /**
  *  End of namespace
  */
-}
-
+}}

@@ -15,7 +15,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -68,5 +68,4 @@ public:
 /**
  *  End namespace
  */
-}
-
+}}

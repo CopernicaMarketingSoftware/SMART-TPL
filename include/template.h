@@ -17,8 +17,11 @@ namespace SmartTpl {
 
 /**
  *  Forward declarations
+ *  @todo It is probably not a good idea to do a forward declaration to an interal class here!
  */
-class Executor;
+namespace Internal {
+    class Executor;
+}
 
 /**
  *  Class definition
@@ -34,8 +37,8 @@ private:
      * 
      *  @var    Executor
      */
-    Executor *_executor = nullptr;
-    
+    Internal::Executor *_executor = nullptr;
+
 public:
     /**
      *  Constructor

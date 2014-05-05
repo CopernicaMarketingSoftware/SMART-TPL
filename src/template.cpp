@@ -23,12 +23,12 @@ Template::Template(const Source& source)
     if (source.library())
     {
         // hey that's cool, we can create create a shard library
-        _executor = new Library(source.name());
+        _executor = new Internal::Library(source.name());
     }
     else
     {
         // it was not a shared library, we're going to compile it into bytecode ourselves
-        _executor = new Bytecode(source);
+        _executor = new Internal::Bytecode(source);
     }
 }
 

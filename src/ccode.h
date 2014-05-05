@@ -14,7 +14,7 @@
 /**
  *  Namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -192,5 +192,4 @@ inline std::ostream &operator<<(std::ostream &stream, const CCode &value)
 /**
  *  End namespace
  */
-}
-
+}}

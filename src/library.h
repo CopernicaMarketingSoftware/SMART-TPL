@@ -10,7 +10,7 @@
 /**
  *  Namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -86,5 +86,4 @@ public:
 /**
  *  End namespace
  */
-}
-
+}}

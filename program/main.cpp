@@ -66,7 +66,7 @@ static bool compile(const std::string &base)
     {
         SmartTpl::File file(input);
         // create template
-        SmartTpl::CCode code(file);
+        SmartTpl::Internal::CCode code(file);
 
         // convert into C code
         cstream << code;

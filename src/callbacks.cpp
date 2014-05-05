@@ -11,7 +11,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Create all static variables
@@ -454,5 +454,4 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
 /**
  *  End namespace
  */
-}
-
+}}

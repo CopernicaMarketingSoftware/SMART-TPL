@@ -30,7 +30,7 @@
  *  The user-supplied extra data that we store in the scanner object, is info
  *  about the current token that is being processed.
  */
-%option extra-type="SmartTpl::Tokenizer *"
+%option extra-type="SmartTpl::Internal::Tokenizer *"
 
 /**
  *  Output to tokenizer.cpp please
@@ -56,10 +56,10 @@
      *  The rules that are active when the parser is in 'template' mode, and just
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
-[\n]                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Token("\n", 1)); return TOKEN_RAW; }
-[^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_RAW; }
-"{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Token("{", 1)); return TOKEN_RAW; }
-"{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Token("}", 1)); return TOKEN_RAW; }
+[\n]                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token("\n", 1)); return TOKEN_RAW; }
+[^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
+"{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("{", 1)); return TOKEN_RAW; }
+"{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("}", 1)); return TOKEN_RAW; }
 "{if"[ \t]+         { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
@@ -68,7 +68,7 @@
 "{assign"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ASSIGN; }
 "{$"                { BEGIN(INSIDE_CURLY_BRACES); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
-"{"                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_RAW; }
+"{"                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 
     /**
      *  When in expression mode, we are tokenizing an expression inside an {if}
@@ -77,7 +77,7 @@
 
 <INSIDE_CURLY_BRACES>{
     [ \t]
-    "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra->setCurrentToken(new SmartTpl::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
+    "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
     "true"                      { return TOKEN_TRUE; }
     "false"                     { return TOKEN_FALSE; }
     "and"                       { return TOKEN_AND; }
@@ -87,8 +87,8 @@
     "to"                        { return TOKEN_TO; }
     "="                         { return TOKEN_IS; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
-    [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_INTEGER; }
-    "\""[^\"]*"\""              { yyextra->setCurrentToken(new SmartTpl::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
+    [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
+    "\""[^\"]*"\""              { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
@@ -113,7 +113,7 @@
 }
 
 <IDENTIFIER>{
-    [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
+    [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
 }
 
 %%
@@ -121,7 +121,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Constructor
@@ -187,5 +187,4 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 /**
  *  End namespace
  */
-}
-
+}}

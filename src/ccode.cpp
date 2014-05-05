@@ -11,7 +11,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Constructor
@@ -544,5 +544,4 @@ void CCode::assign(const std::string &key, const Expression *expression)
 /**
  *  End of namespace
  */
-}
-
+}}

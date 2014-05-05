@@ -12,7 +12,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Signatures of the global callback functions
@@ -689,5 +689,4 @@ public:
 /**
  *  End of namespace
  */
-}
-
+}}

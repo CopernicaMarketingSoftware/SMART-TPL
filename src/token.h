@@ -11,7 +11,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  The current parsed token
@@ -35,5 +35,4 @@ public:
 /**
  *  End namespace
  */
-}
-
+}}

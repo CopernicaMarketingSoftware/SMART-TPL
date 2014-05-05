@@ -11,7 +11,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Structure with all the callbacks
@@ -57,5 +57,4 @@ void Library::process(Handler &handler)
 /**
  *  End namespace
  */
-}
-
+}}

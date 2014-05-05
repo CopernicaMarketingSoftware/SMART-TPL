@@ -14,12 +14,12 @@
  */
 void *SmartTplParseAlloc(void *(*mallocProc)(size_t));
 void  SmartTplParseFree(void *p, void (*freeProc)(void*));
-void  SmartTplParse(void *yyp, int yymajor, SmartTpl::Token *token, SmartTpl::TokenProcessor *processor);
+void  SmartTplParse(void *yyp, int yymajor, SmartTpl::Internal::Token *token, SmartTpl::Internal::TokenProcessor *processor);
 
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Constructor
@@ -61,5 +61,4 @@ bool TokenProcessor::process(int id, Token *token)
 /**
  *  End namespace
  */
-}
-
+}}
