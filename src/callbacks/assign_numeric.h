@@ -2,7 +2,7 @@
  *  AssignNumeric.h
  *
  *  Signature of the assign_numeric callback. This is a callback that will call back
- *  to the native function smart_tpl_assign_numeric(void *, long, const char *data, size_t size);
+ *  to the native function smart_tpl_assign_numeric(void *, const char *data, size_t size, long);
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -27,9 +27,9 @@ public:
         // parameters that are supported
         jit_type_t params[] = {
             jit_type_void_ptr,
-            jit_type_sys_int,
             jit_type_void_ptr,
-            jit_type_ulong
+            jit_type_ulong,
+            jit_type_sys_int,
         };
 
         // create the signature

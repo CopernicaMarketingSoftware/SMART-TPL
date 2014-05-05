@@ -467,26 +467,26 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
     // foreach loops are implemented inside a seperate block to create
     // a local variable scope
     _out << "{" << std::endl;
-    
+
     // create the code to create the iterator
     _out << "void *iterator = callbacks->create_iterator(userdata,";
-    
+
     // pointer to the variable
     variable->pointer(this); _out << ");" << std::endl;
-    
+
     // construct the loop
     _out << "while (callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
-    
+
     // assign the key and value
-    if (!key.empty()) { _out << "callbacks->assign(userdata,callbacks->iterator_key(userdata,iterator),"; string(key); _out << ");" << std::endl; }
-    if (!value.empty()) { _out << "callbacks->assign(userdata,callbacks->iterator_value(userdata,iterator),"; string(value); _out << ");" << std::endl; }
+    if (!key.empty()) { _out << "callbacks->assign(userdata,"; string(key); _out << ",callbacks->iterator_key(userdata,iterator));" << std::endl; }
+    if (!value.empty()) { _out << "callbacks->assign(userdata,"; string(value); _out << ",callbacks->iterator_value(userdata,iterator));" << std::endl; }
 
     // generate the actual statements
     statements->generate(this);
-    
+
     // proceed the iterator
     _out << "callbacks->iterator_next(userdata,iterator);" << std::endl;
-    
+
     // end of the whilte loop
     _out << "}" << std::endl;
 
@@ -509,16 +509,19 @@ void CCode::assign(const std::string &key, const Expression *expression)
     case Expression::Type::Numeric:
         // Convert to a numeric type and use the assign_numeric callback
         _out << "callbacks->assign_numeric(userdata,";
+        string(key); _out << ",";
         expression->numeric(this);
         break;
     case Expression::Type::String:
         // Convert to a string and use the assign_string callback
         _out << "callbacks->assign_string(userdata,";
+        string(key); _out << ",";
         expression->string(this);
         break;
     case Expression::Type::Boolean:
         // Convert to a boolean and use the assign_boolean callback
         _out << "callbacks->assign_boolean(userdata,";
+        string(key); _out << ",";
         expression->boolean(this);
         break;
     case Expression::Type::Value: {
@@ -527,16 +530,15 @@ void CCode::assign(const std::string &key, const Expression *expression)
         {
             // If we are a variable just convert it to a pointer and pass that to the assign callback
             _out << "callbacks->assign(userdata,";
+            string(key); _out << ",";
             variable->pointer(this);
             break;
         }
         throw std::runtime_error("Unsupported assign.");
     }
     }
-    _out << ",";
-
-    // write the key we want to assign our value to
-    string(key); _out << ");" << std::endl;
+    // Finish this statement
+    _out << ");" << std::endl;
 }
 
 /**

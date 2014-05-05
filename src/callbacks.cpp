@@ -127,7 +127,7 @@ void *smart_tpl_create_iterator(void *userdata, void *variable)
 {
     // cast to actual value object
     auto *var = (Value *)variable;
-    
+
     // construct a new iterator
     //  @todo 
     //      can we allocate this on the heap instead of allocating with new?
@@ -149,7 +149,7 @@ void smart_tpl_delete_iterator(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
-    
+
     // destruct it
     delete iter;
 }
@@ -164,7 +164,7 @@ int smart_tpl_valid_iterator(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
-    
+
     // check it
     return iter->valid();
 }
@@ -179,7 +179,7 @@ void *smart_tpl_iterator_key(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
-    
+
     // ask the iterator
     return iter->key();
 }
@@ -208,7 +208,7 @@ void smart_tpl_iterator_next(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
-    
+
     // tell the iterator
     iter->next();
 }
@@ -369,11 +369,11 @@ void* smart_tpl_modify_string(void *userdata, void *modifier, const char *value,
 /**
  *  Assign a numeric value to a local variable
  *  @param userdata        pointer to user-supplied data
- *  @param value           the numeric value we would like to assign
  *  @param key             the key we would like to assign it to
  *  @param keysize         the size of key
+ *  @param value           the numeric value we would like to assign
  */
-void smart_tpl_assign_numeric(void *userdata, long value, const char *key, size_t keysize)
+void smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, long value)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
@@ -385,11 +385,11 @@ void smart_tpl_assign_numeric(void *userdata, long value, const char *key, size_
 /**
  *  Assign a boolean value to a local variable
  *  @param userdata             pointer to user-supplied data
- *  @param boolean              the boolean value
  *  @param key                  the key we would like to assign it to
  *  @param keysize              the size of key
+ *  @param boolean              the boolean value
  */
-void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size_t keysize)
+void smart_tpl_assign_boolean(void *userdata, const char *key, size_t keysize, int boolean)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
@@ -401,12 +401,12 @@ void smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size
 /**
  *  Assign a string value to a local variable
  *  @param userdata             pointer to user-supplied data
- *  @param buf                  the string we would like to assign
- *  @param buf_size             the size of buf
  *  @param key                  the key we would like to assign it to
  *  @param keysize              the size of key
+ *  @param buf                  the string we would like to assign
+ *  @param buf_size             the size of buf
  */
-void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize)
+void smart_tpl_assign_string(void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
@@ -418,12 +418,11 @@ void smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, c
 /**
  *  Assign a variable to a local variable
  *  @param userdata             pointer to user-supplied data
- *  @param variable             the variable object we would like to assign
  *  @param key                  the key we would like to assign it to
  *  @param keysize              the size of key
- *  @todo  change signature to assign(key, size, value)
+ *  @param variable             the variable object we would like to assign
  */
-void smart_tpl_assign(void *userdata, void *variable, const char *key, size_t keysize)
+void smart_tpl_assign(void *userdata, const char *key, size_t keysize, void *variable)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;

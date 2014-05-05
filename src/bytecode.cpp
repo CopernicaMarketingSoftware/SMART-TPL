@@ -19,6 +19,13 @@ namespace SmartTpl {
  */
 jit_type_t Bytecode::_function_signature = jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params);
 
+/**
+ *  Custom exception handler for libjit
+ *  We purely need this as the default exception handler of libjit will call
+ *  exit(1); Which we obviously don't want. The only way around this is to
+ *  register our own exception handler and throw a C++ exception from there
+ *  so it'll jump over parts of the default libjit exception handler.
+ */
 void* Bytecode::jit_exception_handler(int exception_type)
 {
     std::stringstream error;
@@ -66,6 +73,8 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _callbacks(&_function)
 {
     // set our jit_exception_handler as the exception handler for jit
+    // @todo Set the jit_exception_handler back to the original after we're done with it?
+    //       Would be pretty much required if the library user is using libjit as well
     jit_exception_set_handler(Bytecode::jit_exception_handler);
 
     // start building the function
@@ -770,7 +779,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
 
     // tell the callbacks that we're creating an iterator
     auto iterator = _callbacks.create_iterator(_userdata, var);
-    
+
     // we create a label just before our loop so we can actually loop
     // and we create a label just outside of it, so we can jump out of it
     jit_label label_while = _function.new_label();
@@ -781,7 +790,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
 
     // make the valid_iterator callback
     auto valid = _callbacks.valid_iterator(_userdata, iterator);
-    
+
     // if the output of the callback is 0 (false) we jump to label_after_while
     _function.insn_branch_if_not(valid, label_after_while);
 
@@ -797,9 +806,9 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
         auto current_key = _callbacks.iterator_key(_userdata, iterator);
 
         // assign the key
-        _callbacks.assign(_userdata, current_key, key_buf, key_size);
+        _callbacks.assign(_userdata, key_buf, key_size, current_key);
     }
-    
+
     // do we have a value?
     if (!value.empty())
     {
@@ -812,12 +821,12 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
         auto current_value = _callbacks.iterator_value(_userdata, iterator);
 
         // assign the value
-        _callbacks.assign(_userdata, current_value, value_buf, value_size);
+        _callbacks.assign(_userdata, value_buf, value_size, current_value);
     }
 
     // generate the actual statements
     statements->generate(this);
-    
+
     // proceed with iterator
     _callbacks.iterator_next(_userdata, iterator);
 
@@ -845,7 +854,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         // Convert to a numeric type and use the assign_numeric callback
         expression->numeric(this);
         auto numeric = pop();
-        _callbacks.assign_numeric(_userdata, numeric, key_str, key_size);
+        _callbacks.assign_numeric(_userdata, key_str, key_size, numeric);
         break;
     }
     case Expression::Type::String: {
@@ -853,14 +862,14 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         expression->string(this);
         auto size = pop();
         auto str = pop();
-        _callbacks.assign_string(_userdata, str, size, key_str, key_size);
+        _callbacks.assign_string(_userdata, key_str, key_size, str, size);
         break;
     }
     case Expression::Type::Boolean: {
         // Convert to a boolean and use the assign_boolean callback
         expression->boolean(this);
         auto boolean = pop();
-        _callbacks.assign_boolean(_userdata, boolean, key_str, key_size);
+        _callbacks.assign_boolean(_userdata, key_str, key_size, boolean);
         break;
     }
     case Expression::Type::Value: {
@@ -870,7 +879,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
             // If we are a variable just convert it to a pointer and pass that to the assign callback
             variable->pointer(this);
             auto var = pop();
-            _callbacks.assign(_userdata, var, key_str, key_size);
+            _callbacks.assign(_userdata, key_str, key_size, var);
             break;
         }
         throw std::runtime_error("Unsupported assign.");

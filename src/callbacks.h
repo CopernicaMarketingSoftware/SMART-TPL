@@ -36,10 +36,10 @@ void*       smart_tpl_modifier(void *userdata, const char *name, size_t size);
 void*       smart_tpl_modify_variable(void *userdata, void *modifier, void *variable);
 void*       smart_tpl_modify_numeric(void *userdata, void *modifier, long value);
 void*       smart_tpl_modify_string(void *userdata, void *modifier, const char *value, size_t size);
-void        smart_tpl_assign_numeric(void *userdata, long value, const char *key, size_t keysize);
-void        smart_tpl_assign_boolean(void *userdata, int boolean, const char *key, size_t keysize);
-void        smart_tpl_assign_string(void *userdata, const char *buf, size_t buf_size, const char *key, size_t keysize);
-void        smart_tpl_assign(void *userdata, void *variable, const char *key, size_t keysize);
+void        smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, long value);
+void        smart_tpl_assign_boolean(void *userdata, const char *key, size_t keysize, int boolean);
+void        smart_tpl_assign_string(void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
+void        smart_tpl_assign(void *userdata, const char *key, size_t keysize, void *variable);
 int         smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
 
 /**
