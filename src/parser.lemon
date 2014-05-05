@@ -19,7 +19,7 @@
 %type   modifiers        {SmartTpl::Modifiers*}
 %type   modifier         {SmartTpl::ModifierExpression*}
 
-%default_destructor { if ($$) delete $$; }
+%default_destructor { (void) parent; if ($$) delete $$; }
 %token_destructor { if ($$) delete $$; }
 
 %left OR.
