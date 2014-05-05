@@ -31,26 +31,29 @@ public:
      *  This method is called if the initial value object may not be modified!
      * 
      *  @param  input       Initial value
+     *  @param  params      Parameters used for this modification
      *  @return Variant     A new value object
      */
-    virtual Variant modify(Value *input) = 0;
+    virtual Variant modify(Value *input, const Parameters *params) = 0;
 
     /**
      *  Modify a numeric value, and convert it into a variable value
      * 
      *  @param  input       Numeric value
+     *  @param  params      Parameters used for this modification
      *  @return Variant     A new value object
      */
-    virtual Variant modify(int value) = 0;
+    virtual Variant modify(int value, const Parameters *params) = 0;
 
     /**
      *  Modify a string value, and convert it into a variable object
      * 
      *  @param  input       String input
      *  @param  size        Size of the string
+     *  @param  params      Parameters used for this modification
      *  @return Variant     A new value object
      */
-    virtual Variant modify(const char *input, size_t size) = 0;
+    virtual Variant modify(const char *input, size_t size, const Parameters *params) = 0;
 };
 
 /**

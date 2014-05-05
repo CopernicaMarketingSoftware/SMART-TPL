@@ -311,6 +311,7 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
  *  @param userdata       pointer to user-supplied data
  *  @param modifier_ptr   pointer to the modifier that should be applied
  *  @param variable       pointer to a value that we should apply the modifier on
+ *  @todo Implement Parameters here
  */
 void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variable)
 {
@@ -324,7 +325,7 @@ void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variab
     auto *value = (Value*) variable;
 
     // Actually modify the value
-    auto variant = modifier->modify(value);
+    auto variant = modifier->modify(value, nullptr);
 
     // Convert the variant to a pointer so we can actually return it from C
     auto *output = new Variant(variant);

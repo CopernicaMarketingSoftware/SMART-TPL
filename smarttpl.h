@@ -50,6 +50,7 @@
 #include "smarttpl/datevalue.h"
 
 #include "smarttpl/callbacks.h"
+#include "smarttpl/parameters.h"
 #include "smarttpl/modifier.h"
 #include "smarttpl/callback.h"
 #include "smarttpl/data.h"

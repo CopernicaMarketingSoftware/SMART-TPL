@@ -47,6 +47,7 @@
 #include "include/datevalue.h"
 
 #include "include/callbacks.h"
+#include "include/parameters.h"
 #include "include/modifier.h"
 #include "include/data.h"
 #include "include/template.h"
