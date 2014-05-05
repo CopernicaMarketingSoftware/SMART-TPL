@@ -42,12 +42,12 @@ private:
 
         // Print it into _buffer using strftime
         // http://en.cppreference.com/w/cpp/chrono/c/strftime
-        std::size_t len = std::strftime(&_buffer[0], _buffer.size(), _format.c_str(), timeinfo);
+        std::size_t len = std::strftime(&_buffer[0], _buffer.capacity(), _format.c_str(), timeinfo);
         while (len == 0)
         {
-            // if strftime failed increase the buffer size and try again
-            _buffer.reserve(_buffer.size() * 2);
-            len = std::strftime(&_buffer[0], _buffer.size(), _format.c_str(), timeinfo);
+            // if strftime failed increase the buffer capacity and try again
+            _buffer.reserve(_buffer.capacity() * 2);
+            len = std::strftime(&_buffer[0], _buffer.capacity(), _format.c_str(), timeinfo);
         }
     }
 
