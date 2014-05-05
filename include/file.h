@@ -3,12 +3,12 @@
  *
  *  Template source that can be used for templates that are fetched from
  *  the local filesystem.
- * 
+ *
  *  Explanation: when you instantiate a Template object, you need to pass
  *  a Source object to it to tell the Template object where it can be found.
  *  This File class is one of the available Source objects that can be used
  *  for templates that are stored on the local filesystem.
- *  
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
@@ -29,19 +29,19 @@ private:
      *  @var    std::string
      */
     const std::string _name;
-    
+
     /**
      *  Is this a shared library?
      *  @var    bool
      */
     bool _library = false;
-    
+
     /**
      *  The full source code
      *  @var    std::string
      */
     std::string _source;
-    
+
     /**
      *  Internal helper function to initialize
      */
@@ -49,20 +49,20 @@ private:
     {
         // find the file extension
         const char *extension = strrchr(name(), '.');
-        
+
         // if the file extension is .so, we assume that it is a shared library
         _library = extension && strcasecmp(extension, ".so") == 0;
-        
+
         // and if this is a shared library, we're not going to read the contents 
         // because it most likely is binary code that we do not understand anyway
         if (_library) return;
-        
+
         // we're going to read the entire file into a buffer, use a stream object
         std::ifstream file(_name);
 
         // skip if file is not valid
-        if (!file) return;
-    
+        if (!file) throw std::runtime_error("IO failure");
+
         // read the file into _buffer using istreambuf_iterators, this wil automatically buffer
         _source = std::string(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
     }
@@ -70,7 +70,8 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  name        Name of the file
+     *  @param  name               Name of the file
+     *  @throws std::runtime_error If the file doesn't seem to exist or some other IO operation failed
      */
     File(const char *name) : _name(name) 
     {
@@ -81,7 +82,7 @@ public:
     /**
      *  Constructor
      *  @param  name               Name of the file
-     *  @throws std::runtime_error If the file doesn't seem to exist
+     *  @throws std::runtime_error If the file doesn't seem to exist or some other IO operation failed
      */
     File(const std::string &name) : _name(name)
     {
@@ -108,7 +109,7 @@ public:
         // return the filename
         return _name.c_str();
     }
-    
+
     /**
      *  Is this a shared library?
      * 
@@ -146,7 +147,6 @@ public:
         // check the source object
         return _source.size();
     }
-
 
 };
 
