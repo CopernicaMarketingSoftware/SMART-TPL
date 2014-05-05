@@ -14,11 +14,6 @@
 namespace SmartTpl {
 
 /**
- *  We always have a empty variable in place
- */
-static EmptyValue empty;
-
-/**
  *  Create all static variables
  */
 WriteCallback           Callbacks::_write;
@@ -96,7 +91,7 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t 
     auto *result = var->member(name, size);
 
     // ensure that we always return an object
-    return result ? result : &empty;
+    return result ? result : &EmptyValue::get();
 }
 
 /**
@@ -115,7 +110,7 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
     auto *result = var->member(position);
 
     // ensure that we always return an object
-    return result ? result : &empty;
+    return result ? result : &EmptyValue::get();
 }
 
 /**
@@ -229,7 +224,7 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
     auto *result = handler->variable(name, size);
 
     // ensure that we always return an object
-    return result ? result : &empty;
+    return result ? result : &EmptyValue::get();
 }
 
 /**
@@ -247,7 +242,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
     auto *result = var->toString();
 
     // ensure that a string is always returned
-    return result ? result : empty.toString();
+    return result ? result : EmptyValue::get().toString();
 }
 
 /**

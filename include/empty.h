@@ -18,7 +18,20 @@ namespace SmartTpl {
 class EmptyValue : public Value
 {
 public:
+    /**
+     *  Get a static singleton of EmptyValue
+     */
+    static EmptyValue& get()
+    {
+        static EmptyValue empty;
+        return empty;
+    }
+
+    /**
+     *  Deconstructor
+     */
     virtual ~EmptyValue() {};
+
     /**
      *  Convert the variable to a string
      *  @return const char *
