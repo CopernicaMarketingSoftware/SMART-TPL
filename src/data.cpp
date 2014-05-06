@@ -15,15 +15,17 @@ namespace SmartTpl {
 
 static ToUpperModifier toupper;
 static ToLowerModifier tolower;
+static CatModifier     cat;
 
 /**
  *  Constructor
  */
 Data::Data()
 {
-    // register two built-in modifiers
+    // register built-in modifiers
     modifier("toupper", &toupper);
     modifier("tolower", &tolower);
+    modifier("cat", &cat);
 }
 
 /**

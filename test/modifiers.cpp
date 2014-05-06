@@ -6,34 +6,6 @@
 using namespace SmartTpl;
 using namespace std;
 
-TEST(Modifiers, ToUpper) {
-    string input("{$var|toupper}");
-    Buffer buffer(input);
-    Template tpl(buffer);
-
-    Data data;
-    data.assign("var", "VaRiAbLe");
-
-    string expectedOutput("VARIABLE");
-    EXPECT_EQ(expectedOutput, tpl.process(data));
-
-    compile(tpl);
-};
-
-TEST(Modifiers, ToLower) {
-    string input("{$var|tolower}");
-    Buffer buffer(input);
-    Template tpl(buffer);
-
-    Data data;
-    data.assign("var", "VaRiAbLe");
-
-    string expectedOutput("variable");
-    EXPECT_EQ(expectedOutput, tpl.process(data));
-
-    compile(tpl);
-};
-
 TEST(Modifiers, ChainedModifiers) {
     string input("{$var|tolower|toupper|tolower}");
     Buffer buffer(input);
@@ -151,3 +123,47 @@ TEST(Modifier, ParametersString) {
 
     compile(tpl);
 };
+
+TEST(Modifiers, ToUpper) {
+    string input("{$var|toupper}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "VaRiAbLe");
+
+    string expectedOutput("VARIABLE");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+};
+
+TEST(Modifiers, ToLower)
+{
+    string input("{$var|tolower}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "VaRiAbLe");
+
+    string expectedOutput("variable");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+}
+
+TEST(Modifiers, Cat)
+{
+    string input("{$var|cat:\" 1 2 3\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "Testing");
+
+    string expectedOutput("Testing 1 2 3");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+}
