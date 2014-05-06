@@ -889,6 +889,8 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
 
     // insert our label_after_while at the end
     _function.insn_label(label_after_while);
+
+    _callbacks.delete_iterator(_userdata, iterator);
 }
 
 /**

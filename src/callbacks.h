@@ -415,6 +415,24 @@ public:
     }
 
     /**
+     *  Call the delete_iterator callback
+     *  @param  userdata         Pointer to user-supplied data
+     *  @param  iterator         Iterator to delete
+     *  @see    smart_tpl_delete_iterator
+     */
+    void delete_iterator(const jit_value &userdata, const jit_value &iterator)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            iterator.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_delete_iterator", (void *) smart_tpl_delete_iterator, _delete_iterator.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
      *  Call the variable function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  name            Name of the variable
