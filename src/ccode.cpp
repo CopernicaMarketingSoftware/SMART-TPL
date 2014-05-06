@@ -73,14 +73,23 @@ void CCode::output(const Variable* variable)
  */
 void CCode::output(const Filter *filter)
 {
+    // Start a new block
+    _out << "{" << std::endl;
+
+    // First construct all the parameters
+    filter->parameters(this);
+
     // We're going to call the output callback function
-    _out << "callbacks->output(userdata,";
+    _out << "void *o = ";
 
     // call the string method on our filter, which writes all the filtering code for us
     filter->string(this);
 
     // and let's properly end the C statement
-    _out << ");" << std::endl;
+    _out << "callbacks->output(userdata,o);" << std::endl;
+
+    // End our block
+    _out << "}" << std::endl;
 }
 
 /**
@@ -440,18 +449,65 @@ void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
     const Variable* variable = dynamic_cast<const Variable*>(expression);
     if (variable)
     {
-        for (auto iter = modifiers->rbegin(); iter != modifiers->rend(); ++iter)
-        {
-            _out << "callbacks->modify_variable(userdata,callbacks->modifier(userdata,";
-            string(iter->get()->token());
-            _out << "),";
-        }
-        variable->pointer(this);
+        // First setup all our parameters
         for (auto &modifier : *modifiers)
         {
+            // Start the modify_variable callback
+            _out << "callbacks->modify_variable(userdata,";
             (void) modifier; // Yeah yeah compiler I get it, I'm not using modifier..
-            _out << ")";
         }
+
+        // Write out a pointer to our variable
+        variable->pointer(this);
+        _out << ",";
+
+        for (auto iter = modifiers->rbegin(); iter != modifiers->rend(); ++iter)
+        {
+            // Write the get modifier callback
+            _out << "callbacks->modifier(userdata,";
+            string((*iter)->token());
+            _out << "),";
+
+            // Retrieve the parameters
+            const Parameters *params = (*iter)->parameters();
+            // If there are parameters write our local variable here, NULL otherwise
+            if (params) _out << "p";
+            else _out << "NULL";
+            _out << "),";
+        }
+
+        // Go back by 1 character to get rid of that final "," ,; is invalid after all
+        long pos = _out.tellp();
+        _out.seekp(pos-1);
+
+        // End this statement
+        _out << ";";
+
+        // @todo Deconstruct the parameters from here
+    }
+}
+
+/**
+ *  Generate the code to construct the following parameters
+ *  @param  parameters         The parameters to construct
+ *  @note Construct as in, generate the code so the runtime can construct them
+ */
+void CCode::parameters(const Parameters *parameters)
+{
+    _out << "void *p = callbacks->create_params(userdata);" << std::endl;
+    for (auto &param : *parameters)
+    {
+        switch (param->type()) {
+        case Expression::Type::Numeric:
+            // This expression in the parameters is a numeric value, so we use params_append_numeric
+            _out << "callbacks->params_append_numeric(userdata,p,";
+            param->numeric(this);
+            _out << ");";
+            break;
+        default:
+            throw std::runtime_error("Unsupported operation for now");
+        }
+        _out << std::endl;
     }
 }
 

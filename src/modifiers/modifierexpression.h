@@ -55,6 +55,11 @@ public:
      */
     const std::string token() const { return *_name.get(); };
 
+    /**
+     *  Returns the internal Parameters object
+     */
+    const Parameters *parameters() const { return _parameters.get(); };
+
 };
 
 /**

@@ -58,6 +58,22 @@ public:
     {
         _modifiers.get()->generate(generator, _expression.get());
     }
+
+    /**
+     *  Generate the code to construct the parameters, should be called before string()
+     *  @param  generator
+     */
+    void parameters(Generator *generator) const
+    {
+        for (auto &modifier : *_modifiers)
+        {
+            auto *parameters = modifier->parameters();
+            if (parameters)
+            {
+                parameters->generate(generator);
+            }
+        }
+    }
 };
 
 /**

@@ -42,6 +42,9 @@ static struct smart_tpl_callbacks callbacks = {
     .assign_string      =   smart_tpl_assign_string,
     .assign             =   smart_tpl_assign,
     .strcmp             =   smart_tpl_strcmp,
+    .create_params      =   smart_tpl_create_params,
+    .delete_params      =   smart_tpl_delete_params,
+    .params_append_numeric =smart_tpl_params_append_numeric,
 };
 
 /**

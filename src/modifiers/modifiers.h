@@ -54,6 +54,10 @@ public:
         _modifiers.push_back(std::unique_ptr<const ModifierExpression>(modifier));
     }
 
+    /**
+     *  Generate the output of these modifiers
+     *  @param  generator
+     */
     void generate(Generator *generator, const Expression *expression) const
     {
         generator->modifiers(this, expression);

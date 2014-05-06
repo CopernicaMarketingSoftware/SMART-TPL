@@ -213,6 +213,16 @@ private:
     virtual void modifiers(const Modifiers* modifiers, const Expression *expression) override;
 
     /**
+     *  Generate the code to construct the following parameters
+     *  @param  parameters         The parameters to construct
+     *  @note Construct as in, generate the code so the runtime can construct them
+     *  @todo Implement this in libjit
+     */
+    virtual void parameters(const Parameters *parameters) override
+    {
+    }
+
+    /**
      *  Generate the code to do a foreach loop over variable
      *  @param variable         The variable object to iterate over
      *  @param key              The magic variable name for the keys

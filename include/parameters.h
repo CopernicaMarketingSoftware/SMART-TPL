@@ -53,7 +53,7 @@ public:
      *  @param  position    The position of the value you would like to retrieve
      *  @return Variant
      */
-    const Variant get(int position) const
+    Variant get(int position) const
     {
         // If we're out of bounds just return a empty Variant to avoid undefined behavior
         if (position >= _values.size()) return Variant();

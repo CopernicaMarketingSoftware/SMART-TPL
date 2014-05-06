@@ -33,7 +33,8 @@ size_t      smart_tpl_to_numeric(void *userdata, void *variable);
 int         smart_tpl_to_boolean(void *userdata, void *variable);
 size_t      smart_tpl_size(void *userdata, void *variable);
 void*       smart_tpl_modifier(void *userdata, const char *name, size_t size);
-void*       smart_tpl_modify_variable(void *userdata, void *modifier, void *variable);
+void*       smart_tpl_modify_variable(void *userdata, void *variable, void *modifier, void *parameters);
+// @todo Rework modify_numeric and modify_string just like modify_variable (signature wise)
 void*       smart_tpl_modify_numeric(void *userdata, void *modifier, long value);
 void*       smart_tpl_modify_string(void *userdata, void *modifier, const char *value, size_t size);
 void        smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, long value);
@@ -41,6 +42,9 @@ void        smart_tpl_assign_boolean(void *userdata, const char *key, size_t key
 void        smart_tpl_assign_string(void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
 void        smart_tpl_assign(void *userdata, const char *key, size_t keysize, void *variable);
 int         smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
+void       *smart_tpl_create_params(void *userdata);
+void        smart_tpl_delete_params(void *userdata, void *parameters);
+void        smart_tpl_params_append_numeric(void *userdata, void *parameters, long value);
 
 /**
  *  Class definition

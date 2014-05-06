@@ -300,7 +300,7 @@ size_t smart_tpl_size(void *userdata, void *variable)
 void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 {
     // convert to Handler
-    auto *handler = (Handler *)userdata;
+    auto *handler = (Handler *) userdata;
 
     // Lookup and return the modifier in the Handler
     return handler->modifier(name, size);
@@ -309,29 +309,32 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
 /**
  *  Apply a modifier from smart_tpl_modifier on a value
  *  @param userdata       pointer to user-supplied data
- *  @param modifier_ptr   pointer to the modifier that should be applied
  *  @param variable       pointer to a value that we should apply the modifier on
- *  @todo Implement Parameters here
+ *  @param modifier_ptr   pointer to the modifier that should be applied
+ *  @param parameters     pointer to a Parameters object
  */
-void* smart_tpl_modify_variable(void *userdata, void *modifier_ptr, void *variable)
+void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_ptr, void *parameters)
 {
     // In case the modifier is a nullptr just return the original value
     if (modifier_ptr == nullptr || variable == nullptr) return variable;
 
     // convert to the Modifier
-    auto *modifier = (Modifier*) modifier_ptr;
+    auto *modifier = (Modifier *) modifier_ptr;
 
     // convert to the Value object
-    auto *value = (Value*) variable;
+    auto *value = (Value *) variable;
+
+    // convert to Parameters object
+    auto *params = (SmartTpl::Parameters *) parameters;
 
     // Actually modify the value
-    auto variant = modifier->modify(value, nullptr);
+    auto variant = modifier->modify(value, params);
 
     // Convert the variant to a pointer so we can actually return it from C
     auto *output = new Variant(variant);
 
     // Give it to our handler so he can manage the Variant pointer
-    auto *handler = (Handler *)userdata;
+    auto *handler = (Handler *) userdata;
     handler->manageValue(output);
 
     return output;
@@ -450,6 +453,46 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
 
     // Pfft, we still don't know if we're equal, let's just ask strncmp() then
     return strncmp(a, b, a_len);
+}
+
+/**
+ *  Create a Parameters object
+ *  @param  userdata     Pointer to user-supplied data
+ *  @return Pointer to a new SmartTpl::Parameters object
+ */
+void *smart_tpl_create_params(void *userdata)
+{
+    // Important that we create the public Parameters here and not the internal one
+    return new SmartTpl::Parameters();
+}
+
+/**
+ *  Append a numeric value to the parameters
+ *  @param  userdata       Pointer to user-supplied data
+ *  @param  parameters     Pointer to a SmartTpl::Parameters object
+ *  @param  value          The numeric value to append
+ */
+void smart_tpl_params_append_numeric(void *userdata, void *parameters, long value)
+{
+    // Convert to a Parameters object
+    auto *params = (SmartTpl::Parameters *) parameters;
+
+    // Add the numeric value
+    params->add(value);
+}
+
+/**
+ *  Used to deconstruct the Parameters object
+ *  @param  userdata        Pointer to user-supplied data
+ *  @param  parameters      Pointer to a SmartTpl::Parameters object
+ */
+void smart_tpl_delete_params(void *userdata, void *parameters)
+{
+    // Convert to a Parameters object
+    auto *params = (SmartTpl::Parameters *) parameters;
+
+    // Deconstruct the Parameters
+    delete params;
 }
 
 /**

@@ -25,6 +25,7 @@ class Expression;
 class Statements;
 class Modifiers;
 class Filter;
+class Parameters;
 
 /**
  *  Class definition
@@ -150,6 +151,13 @@ public:
      *  @param  expression         The expression to apply to modifiers on
      */
     virtual void modifiers(const Modifiers *modifiers, const Expression *expression) = 0;
+
+    /**
+     *  Generate the code to construct the following parameters
+     *  @param  parameters         The parameters to construct
+     *  @note Construct as in, generate the code so the runtime can construct them
+     */
+    virtual void parameters(const Parameters *parameters) = 0;
 
     /**
      *  Generate the code to do a foreach loop over variable
