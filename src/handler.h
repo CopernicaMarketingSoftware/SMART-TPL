@@ -106,6 +106,9 @@ public:
         // didn't find it? get the variable from the data object
         Value *value = _data->value(name, size);
 
+        // If our value is nullptr return it right away
+        if (value == nullptr) return nullptr;
+
         // check if our value is cacheable
         if (value->cacheable())
         {
