@@ -16,30 +16,33 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Create all static variables
  */
-WriteCallback           Callbacks::_write;
-OutputCallback          Callbacks::_output;
-MemberCallback          Callbacks::_member;
-MemberAtCallback        Callbacks::_member_at;
-CreateIteratorCallback  Callbacks::_create_iterator;
-DeleteIteratorCallback  Callbacks::_delete_iterator;
-ValidIteratorCallback   Callbacks::_valid_iterator;
-IteratorKeyCallback     Callbacks::_iterator_key;
-IteratorValueCallback   Callbacks::_iterator_value;
-IteratorNextCallback    Callbacks::_iterator_next;
-VariableCallback        Callbacks::_variable;
-ToStringCallback        Callbacks::_toString;
-ToNumericCallback       Callbacks::_toNumeric;
-ToBooleanCallback       Callbacks::_toBoolean;
-SizeCallback            Callbacks::_size;
-ModifierCallback        Callbacks::_modifier;
-ModifyVariableCallback  Callbacks::_modify_variable;
-ModifyNumericCallback   Callbacks::_modify_numeric;
-ModifyStringCallback    Callbacks::_modify_string;
-StrCmpCallback          Callbacks::_strcmp;
-AssignCallback          Callbacks::_assign;
-AssignBooleanCallback   Callbacks::_assign_boolean;
-AssignNumericCallback   Callbacks::_assign_numeric;
-AssignStringCallback    Callbacks::_assign_string;
+WriteCallback               Callbacks::_write;
+OutputCallback              Callbacks::_output;
+MemberCallback              Callbacks::_member;
+MemberAtCallback            Callbacks::_member_at;
+CreateIteratorCallback      Callbacks::_create_iterator;
+DeleteIteratorCallback      Callbacks::_delete_iterator;
+ValidIteratorCallback       Callbacks::_valid_iterator;
+IteratorKeyCallback         Callbacks::_iterator_key;
+IteratorValueCallback       Callbacks::_iterator_value;
+IteratorNextCallback        Callbacks::_iterator_next;
+VariableCallback            Callbacks::_variable;
+ToStringCallback            Callbacks::_toString;
+ToNumericCallback           Callbacks::_toNumeric;
+ToBooleanCallback           Callbacks::_toBoolean;
+SizeCallback                Callbacks::_size;
+ModifierCallback            Callbacks::_modifier;
+ModifyVariableCallback      Callbacks::_modify_variable;
+ModifyNumericCallback       Callbacks::_modify_numeric;
+ModifyStringCallback        Callbacks::_modify_string;
+CreateParamsCallback        Callbacks::_create_params;
+ParamsAppendNumericCallback Callbacks::_params_append_numeric;
+DeleteParamsCallback        Callbacks::_delete_params;
+StrCmpCallback              Callbacks::_strcmp;
+AssignCallback              Callbacks::_assign;
+AssignBooleanCallback       Callbacks::_assign_boolean;
+AssignNumericCallback       Callbacks::_assign_numeric;
+AssignStringCallback        Callbacks::_assign_string;
 
 
 /**

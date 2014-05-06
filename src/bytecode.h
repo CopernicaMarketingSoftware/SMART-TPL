@@ -216,11 +216,8 @@ private:
      *  Generate the code to construct the following parameters
      *  @param  parameters         The parameters to construct
      *  @note Construct as in, generate the code so the runtime can construct them
-     *  @todo Implement this in libjit
      */
-    virtual void parameters(const Parameters *parameters) override
-    {
-    }
+    virtual void parameters(const Parameters *parameters) override;
 
     /**
      *  Generate the code to do a foreach loop over variable

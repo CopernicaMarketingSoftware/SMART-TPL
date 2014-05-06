@@ -115,8 +115,7 @@ Bytecode::~Bytecode() {}
 jit_value Bytecode::pop()
 {
     // let's check if the stack is empty and throw an error if it is instead of crashing
-    if (_stack.empty())
-        throw std::runtime_error("_stack is empty");
+    if (_stack.empty()) throw std::runtime_error("_stack is empty");
     // get the value from the stack
     jit_value value = _stack.top();
 
@@ -741,6 +740,7 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
     const Variable* variable = dynamic_cast<const Variable*>(expression);
     if (variable)
     {
+        jit_value null = _function.new_constant(NULL, jit_type_void_ptr);
         variable->pointer(this);
         for (auto &modifier : *modifiers)
         {
@@ -758,10 +758,26 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
             auto mod = pop();
             // pop the latest value from the stack
             auto var = pop();
+
+            const Parameters *params = modifier->parameters();
+            if (params) parameters(params);
+
             // let's apply the modifier and push the new result of it to the stack
-            _stack.push(_callbacks.modify_variable(_userdata, mod, var));
+            _stack.push(_callbacks.modify_variable(_userdata, var, mod, (params) ? pop() : null));
         }
     }
+}
+
+/**
+ *  Generate the code to construct the following parameters
+ *  @param  parameters         The parameters to construct
+ *  @note   Construct as in, generate the code so the runtime can construct them
+ *  @note   +1 on the stack
+ *  @todo   Actually append the parameters here...
+ */
+void Bytecode::parameters(const Parameters *parameters)
+{
+    _stack.push(_callbacks.create_params(_userdata));
 }
 
 /**

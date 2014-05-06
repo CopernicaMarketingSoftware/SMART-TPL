@@ -99,7 +99,7 @@ private:
      *  @var ValidItereratorCallback
      */
     static ValidIteratorCallback _valid_iterator;
-    
+
     /**
      *  Signature of the iterator-key callback
      *  @var ItereratorKeyCallback
@@ -111,7 +111,7 @@ private:
      *  @var ItereratorValueCallback
      */
     static IteratorValueCallback _iterator_value;
-    
+
     /**
      *  Signature of the iterator-next callback
      *  @var IteratorNextCallback
@@ -171,6 +171,24 @@ private:
      *  @var ModifyStringCallback
      */
     static ModifyStringCallback _modify_string;
+
+    /**
+     *  Signature of the function to create a new parameters object
+     *  @var CreateParamsCallback
+     */
+    static CreateParamsCallback _create_params;
+
+    /**
+     *  Signature of the function to append a numeric value to parameters
+     *  @var ParamsAppendNumericCallback
+     */
+    static ParamsAppendNumericCallback _params_append_numeric;
+
+    /**
+     *  Signature of the function to delete the parameters
+     *  @var DeleteParamsCallback
+     */
+    static DeleteParamsCallback _delete_params;
 
     /**
      *  Signature of the function to compare 2 strings
@@ -487,6 +505,61 @@ public:
     }
 
     /**
+     *  Call the create_params function
+     *  @param  userdata       Pointer to user-supplied data
+     *  @return jit_value      Pointer to a new SmartTpl::Parameters object
+     *  @see    smart_tpl_create_params
+     */
+    jit_value create_params(const jit_value &userdata)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_create_params", (void *) smart_tpl_create_params, _create_params.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the params_append_numeric function
+     *  @param  userdata       Pointer to user-supplied data
+     *  @param  parameters     Pointer to the parameters we would like to append to
+     *  @param  value          The numeric value we would like to add
+     *  @see    smart_tpl_params_append_numeric
+     */
+    void params_append_numeric(const jit_value &userdata, const jit_value &parameters, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            parameters.raw(),
+            value.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_params_append_numeric", (void *) smart_tpl_params_append_numeric, _params_append_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the delete_params function
+     *  @param  userdata       Pointer to user-supplied data
+     *  @param  parameters     Pointer to the parameters we would like to delete
+     *  @see    smart_tpl_delete_params
+     */
+    void delete_params(const jit_value &userdata, const jit_value &parameters)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            parameters.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_delete_params", (void *) smart_tpl_delete_params, _delete_params.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
      *  Call the modifier function
      *  @param  userdata      Pointer to user-supplied data
      *  @param  name          Name of the modifier we want to retrieve
@@ -510,18 +583,20 @@ public:
     /**
      *  Call the modify_variable function
      *  @param  userdata    Pointer to user-supplied data
-     *  @param  modifier    The modifier to apply @see modifier()
      *  @param  variable    The variable to modify
+     *  @param  modifier    The modifier to apply @see modifier()
+     *  @param  parameters  The parameters for this modifier
      *  @return jit_value   A new modified variable pointer
      *  @see    smart_tpl_modify_variable
      */
-    jit_value modify_variable(const jit_value &userdata, const jit_value &modifier, const jit_value &variable)
+    jit_value modify_variable(const jit_value &userdata, const jit_value &variable, const jit_value &modifier, const jit_value &parameters)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
+            variable.raw(),
             modifier.raw(),
-            variable.raw()
+            parameters.raw(),
         };
 
         // create the instruction

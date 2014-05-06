@@ -1,8 +1,8 @@
 /**
- *  Modify_Variable.h
+ *  Delete_params.h
  *
- *  Signature of the modify variable callback. This is a callback that will call back
- *  to the native function smart_tpl_modify_variable(void *, void *, void *, void *);
+ *  Signature of the delete_params callback. This is a callback that will call back
+ *  to the native function smart_tpl_delete_params(void *, void *);
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -16,30 +16,28 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class ModifyVariableCallback : public BaseCallback
+class DeleteParamsCallback : public BaseCallback
 {
 public:
     /**
      *  Constructor
      */
-    ModifyVariableCallback()
+    DeleteParamsCallback()
     {
         // parameters that are supported
         jit_type_t params[] = {
             jit_type_void_ptr,
             jit_type_void_ptr,
-            jit_type_void_ptr,
-            jit_type_void_ptr,
         };
 
         // create the signature
-        _signature = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr, params, sizeof(params)/sizeof(jit_type_t), 1);
+        _signature = jit_type_create_signature(jit_abi_cdecl, jit_type_void, params, sizeof(params)/sizeof(jit_type_t), 1);
     }
 
     /**
      *  Destructor
      */
-    virtual ~ModifyVariableCallback() {}
+    virtual ~DeleteParamsCallback() {}
 };
 
 /**

@@ -1,8 +1,8 @@
 /**
- *  Modify_Variable.h
+ *  Create_Params.h
  *
- *  Signature of the modify variable callback. This is a callback that will call back
- *  to the native function smart_tpl_modify_variable(void *, void *, void *, void *);
+ *  Signature of the create_params callback. This is a callback that will call back
+ *  to the native function smart_tpl_create_params(void*)
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -16,19 +16,16 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class ModifyVariableCallback : public BaseCallback
+class CreateParamsCallback : public BaseCallback
 {
 public:
     /**
      *  Constructor
      */
-    ModifyVariableCallback()
+    CreateParamsCallback()
     {
         // parameters that are supported
         jit_type_t params[] = {
-            jit_type_void_ptr,
-            jit_type_void_ptr,
-            jit_type_void_ptr,
             jit_type_void_ptr,
         };
 
@@ -39,7 +36,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~ModifyVariableCallback() {}
+    virtual ~CreateParamsCallback() {}
 };
 
 /**
