@@ -8,4 +8,4 @@ tokenizer.cpp
 a.out
 smarttpl
 
-test/*.c
+examples/*.c

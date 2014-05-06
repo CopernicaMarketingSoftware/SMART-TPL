@@ -1,50 +1,31 @@
-#
-# Makefile template
-#
+override CXXFLAGS += -Wall -g -O0 -pipe -std=c++11
+INC               += -I../ -I. -Igtest-1.7.0/include
+CC                := clang
+CXX               := clang++
 
-#
-# Compiler and linker
-#
+BINARY := test.out
+DEPS := $(patsubst %.cpp, %.o, $(shell find . -name \*.cpp -type f))
 
-COMPILER = clang++
-LINKER = g++
-COMPILER_FLAGS = -Wall -c -O0 -g -std=c++11 -fpic -o
-LINKER_DEPENDENCIES = -lsmarttpl
-LINKER_FLAGS = 
+all: $(BINARY)
 
-#
-# Command to remove files, copy files and create directories.
-#
+%.o: %.cpp libgtest.a
+	$(CXX) $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
 
-RM = rm -f
-CP = cp -f
-MKDIR = mkdir -p
+$(BINARY): $(DEPS) $(MODS) main.cpp
+	$(CXX) $(CXXFLAGS) $(DEFINES) $(INC) -o $(BINARY) $(DEPS) libgtest.a -pthread ../libsmarttpl.so
 
-#
-# All source files are simply all *.cpp files found in the current directory
-#
+libgtest.a:
+	wget -q http://googletest.googlecode.com/files/gtest-1.7.0.zip
+	unzip -qq gtest-1.7.0.zip
+	$(CXX) $(CXXFLAGS) -I gtest-1.7.0/include -I gtest-1.7.0 -c gtest-1.7.0/src/gtest-all.cc
+	ar -rv libgtest.a gtest-all.o
 
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:%.cpp=%.o)
+.PHONY: test
 
-#
-# Result file
-#
+test: $(BINARY)
+	./$(BINARY)
 
-RESULT = a.out
-
-#
-# From here the build instructions start
-#
-
-all: ${OBJECTS} ${RESULT}
-
-${RESULT}: ${OBJECTS}
-	${LINKER} ${LINKER_FLAGS} -o $@ ${OBJECTS} ${LINKER_DEPENDENCIES}
-
-${OBJECTS}:
-	${COMPILER} ${COMPILER_FLAGS} $@ ${@:%.o=%.cpp}
+.PHONY: clean
 
 clean:
-	${RM} ${RESULT} ${OBJECTS}
-
+	rm -rf $(BINARY) $(DEPS) $(MODS)
