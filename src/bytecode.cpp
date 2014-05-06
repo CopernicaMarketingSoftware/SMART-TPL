@@ -73,9 +73,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _callbacks(&_function)
 {
     // set our jit_exception_handler as the exception handler for jit
-    // @todo Set the jit_exception_handler back to the original after we're done with it?
-    //       Would be pretty much required if the library user is using libjit as well
-    jit_exception_set_handler(Bytecode::jit_exception_handler);
+    auto original = jit_exception_set_handler(Bytecode::jit_exception_handler);
 
     // start building the function
     _context.build_start();
@@ -90,8 +88,13 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
         // compile the function
         _function.compile();
     } catch (const std::runtime_error &error) {
-        // we caught a compile error while generating/compiling, cleanup libjit and rethrow
+        // we caught a compile error while generating/compiling, cleanup libjit
         _context.build_end();
+
+        // Set the jit_exception_handler back to the original handler
+        jit_exception_set_handler(original);
+
+        // rethrow
         throw;
     }
 
@@ -100,6 +103,9 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
 
     // get the closure
     _closure = (ShowTemplate *)_function.closure();
+
+    // Set the jit_exception_handler back to the original handler
+    jit_exception_set_handler(original);
 }
 
 /**
