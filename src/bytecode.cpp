@@ -759,11 +759,17 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
             // pop the latest value from the stack
             auto var = pop();
 
+            // Let's retrieve our parameters and if we have them generate them
             const Parameters *params = modifier->parameters();
             if (params) parameters(params);
 
+            auto jitparams = (params) ? pop() : null;
+
             // let's apply the modifier and push the new result of it to the stack
-            _stack.push(_callbacks.modify_variable(_userdata, var, mod, (params) ? pop() : null));
+            _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
+
+            // If we actually constructed parameters let's deconstruct them again
+            if (params) _callbacks.delete_params(_userdata, jitparams);
         }
     }
 }
@@ -773,11 +779,26 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
  *  @param  parameters         The parameters to construct
  *  @note   Construct as in, generate the code so the runtime can construct them
  *  @note   +1 on the stack
- *  @todo   Actually append the parameters here...
  */
 void Bytecode::parameters(const Parameters *parameters)
 {
-    _stack.push(_callbacks.create_params(_userdata));
+    // Construct the parameters through our callback
+    auto params = _callbacks.create_params(_userdata);
+
+    for (auto &param : *parameters)
+    {
+        switch (param->type()) {
+        case Expression::Type::Numeric:
+            // Convert the expression to a numeric value and append it using params_append_numeric
+            _callbacks.params_append_numeric(_userdata, params, numeric(param.get()));
+            break;
+        default:
+            throw std::runtime_error("Unsupported operation for now");
+        }
+    }
+
+    // Push the parameters to the stack
+    _stack.push(params);
 }
 
 /**
