@@ -1,3 +1,12 @@
+/**
+ *  CCode.cpp
+ *
+ *  C code related unit tests, mostly to check if they generate the correct code
+ *
+ *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
+ *  @copyright 2014 Copernica BV
+ */
+
 #include <gtest/gtest.h>
 #include <smarttpl.h>
 
@@ -6,7 +15,8 @@
 using namespace SmartTpl;
 using namespace std;
 
-TEST(CCode, ForEach) {
+TEST(CCode, ForEach)
+{
     string input("{foreach $key in $map}key: {$key}\n{/foreach}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -22,9 +32,10 @@ TEST(CCode, ForEach) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, ForEachWithKeys) {
+TEST(CCode, ForEachWithKeys)
+{
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -42,9 +53,10 @@ TEST(CCode, ForEachWithKeys) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, SingleModifier) {
+TEST(CCode, SingleModifier)
+{
     string input("{$var|toupper}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -56,9 +68,10 @@ TEST(CCode, SingleModifier) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, ChainedModifiers) {
+TEST(CCode, ChainedModifiers)
+{
     string input("{$var|toupper|tolower|toupper|tolower}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -73,9 +86,10 @@ TEST(CCode, ChainedModifiers) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, IfElse) {
+TEST(CCode, IfElse)
+{
     string input("{if $variable}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -87,9 +101,10 @@ TEST(CCode, IfElse) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, ElseIf) {
+TEST(CCode, ElseIf)
+{
     string input("{if $variable}first is true{elseif $othervariable}second is true{else}nothing is true{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -104,9 +119,10 @@ TEST(CCode, ElseIf) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, VarGreaterThen) {
+TEST(CCode, VarGreaterThen)
+{
     string input("{if $age > 18}You are over 18 years old.{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -118,9 +134,10 @@ TEST(CCode, VarGreaterThen) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, VarGreaterThenNegativeNumber) {
+TEST(CCode, VarGreaterThenNegativeNumber)
+{
     string input("{if $age > -1}You are alive..{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -132,24 +149,26 @@ TEST(CCode, VarGreaterThenNegativeNumber) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, LiteralArrayAccess) {
-  string input("{$map[0]}\n{$map.anothermember}");
-  Buffer buffer(input);
-  Template tpl(buffer);
+TEST(CCode, LiteralArrayAccess)
+{
+    string input("{$map[0]}\n{$map.anothermember}");
+    Buffer buffer(input);
+    Template tpl(buffer);
 
-  string expectedOutput("#include <smarttpl/callbacks.h>\n"
-  "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-  "callbacks->output(userdata,callbacks->member_at(userdata,callbacks->variable(userdata,\"map\",3),0));\n"
-  "callbacks->write(userdata,\"\\n\",1);\n"
-  "callbacks->output(userdata,callbacks->member(userdata,callbacks->variable(userdata,\"map\",3),\"anothermember\",13));\n}\n");
-  EXPECT_EQ(expectedOutput, tpl.compile());
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->output(userdata,callbacks->member_at(userdata,callbacks->variable(userdata,\"map\",3),0));\n"
+    "callbacks->write(userdata,\"\\n\",1);\n"
+    "callbacks->output(userdata,callbacks->member(userdata,callbacks->variable(userdata,\"map\",3),\"anothermember\",13));\n}\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
 
-  compile(tpl);
-};
+    compile(tpl);
+}
 
-TEST(CCode, NumericComparison) {
+TEST(CCode, NumericComparison)
+{
     string input("{if 10 == 100}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -161,9 +180,10 @@ TEST(CCode, NumericComparison) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, BoolComparison) {
+TEST(CCode, BoolComparison)
+{
     string input("{if true == false}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -174,9 +194,10 @@ TEST(CCode, BoolComparison) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, StringComparison) {
+TEST(CCode, StringComparison)
+{
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -188,9 +209,10 @@ TEST(CCode, StringComparison) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, StringComparisonNotEquals) {
+TEST(CCode, StringComparisonNotEquals)
+{
     string input("{if \"string1\" != \"string2\"}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -202,15 +224,17 @@ TEST(CCode, StringComparisonNotEquals) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, CompareDifferentTypes) {
+TEST(CCode, CompareDifferentTypes)
+{
     string input("{if true == 1}true{else}false{/if}");
     Buffer buffer(input);
     EXPECT_THROW(Template tpl(buffer);, std::runtime_error);
-};
+}
 
-TEST(CCode, AssignValue) {
+TEST(CCode, AssignValue)
+{
     string input("{assign \"string\" to $value}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -221,9 +245,10 @@ TEST(CCode, AssignValue) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, AssignValueIs) {
+TEST(CCode, AssignValueIs)
+{
     string input("{$value = \"string\"}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -234,9 +259,10 @@ TEST(CCode, AssignValueIs) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, LiteralStringsWeirdCharacters) {
+TEST(CCode, LiteralStringsWeirdCharacters)
+{
     string input("{if \"?_<test>\" == \"-\'/%#^&\"}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -248,9 +274,10 @@ TEST(CCode, LiteralStringsWeirdCharacters) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, LiteralEmptyString) {
+TEST(CCode, LiteralEmptyString)
+{
     string input("{if \"\" == \"not empty\"}true{else}false{/if}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -262,9 +289,10 @@ TEST(CCode, LiteralEmptyString) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, ModifierParameters) {
+TEST(CCode, ModifierParameters)
+{
     string input("{$var|substring:1:5}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -280,9 +308,10 @@ TEST(CCode, ModifierParameters) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}
 
-TEST(CCode, Unicode) {
+TEST(CCode, Unicode)
+{
     string input("이것은 단순한 유니 테스트입니다 ..");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -295,4 +324,4 @@ TEST(CCode, Unicode) {
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-};
+}

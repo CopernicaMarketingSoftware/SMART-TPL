@@ -1,3 +1,12 @@
+/**
+ *  Modifiers.cpp
+ *
+ *  Modifier related tests
+ *
+ *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
+ *  @copyright 2014 Copernica BV
+ */
+
 #include <gtest/gtest.h>
 #include <smarttpl.h>
 
@@ -47,23 +56,12 @@ public:
         };
         return string(input->toString(), input->size());
     }
-
-    virtual Variant modify(int value, const Parameters *params) override
-    {
-        ADD_FAILURE() << "This method should not be called";
-        return value;
-    }
-
-    virtual Variant modify(const char *input, size_t size, const Parameters *params) override
-    {
-        ADD_FAILURE() << "This method should not be called";
-        return string(input, size);
-    }
 private:
     const Mode _mode;
 };
 
-TEST(Modifiers, Parameters) {
+TEST(Modifiers, Parameters)
+{
     string input("{$var|test:0:1:2:3}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -76,9 +74,10 @@ TEST(Modifiers, Parameters) {
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
-};
+}
 
-TEST(Modifiers, ParametersChainingNoParameters) {
+TEST(Modifiers, ParametersChainingNoParameters)
+{
     string input("{$var|toupper|test:0:1:2:3}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -91,9 +90,10 @@ TEST(Modifiers, ParametersChainingNoParameters) {
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
-};
+}
 
-TEST(Modifiers, ParametersChainingParameters) {
+TEST(Modifiers, ParametersChainingParameters)
+{
     string input("{$var|test:0:1:2:3|test:0:1:2:3}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -106,9 +106,10 @@ TEST(Modifiers, ParametersChainingParameters) {
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
-};
+}
 
-TEST(Modifier, ParametersString) {
+TEST(Modifier, ParametersString)
+{
     string input("{$var|test:\"test\"}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -122,9 +123,12 @@ TEST(Modifier, ParametersString) {
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
-};
+}
 
-TEST(Modifiers, ToUpper) {
+// From here on the actual builtin modifiers are tested
+
+TEST(Modifiers, ToUpper)
+{
     string input("{$var|toupper}");
     Buffer buffer(input);
     Template tpl(buffer);
@@ -136,7 +140,7 @@ TEST(Modifiers, ToUpper) {
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
-};
+}
 
 TEST(Modifiers, ToLower)
 {
