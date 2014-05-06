@@ -37,6 +37,7 @@ ModifyNumericCallback       Callbacks::_modify_numeric;
 ModifyStringCallback        Callbacks::_modify_string;
 CreateParamsCallback        Callbacks::_create_params;
 ParamsAppendNumericCallback Callbacks::_params_append_numeric;
+ParamsAppendStringCallback  Callbacks::_params_append_string;
 DeleteParamsCallback        Callbacks::_delete_params;
 StrCmpCallback              Callbacks::_strcmp;
 AssignCallback              Callbacks::_assign;
@@ -482,6 +483,22 @@ void smart_tpl_params_append_numeric(void *userdata, void *parameters, long valu
 
     // Add the numeric value
     params->add(value);
+}
+
+/**
+ *  Append a string value to the parameters
+ *  @param  userdata      Pointer to user-supplied data
+ *  @param  parameters    Pointer to a SmartTpl::Parameters object
+ *  @param  buf           String we would like to append
+ *  @param  len           Size of buf
+ */
+void smart_tpl_params_append_string(void *userdata, void *parameters, const char *buf, size_t len)
+{
+    // Convert to a Parameters object
+    auto *params = (SmartTpl::Parameters *) parameters;
+
+    // Add the string value
+    params->add(std::string(buf, len));
 }
 
 /**

@@ -510,6 +510,12 @@ void CCode::parameters(const Parameters *parameters)
             param->numeric(this);
             _out << ");";
             break;
+        case Expression::Type::String:
+            // This expression in the parameters is a string value, so we use params_append_string
+            _out << "callbacks->params_append_string(userdata,p,";
+            param->string(this);
+            _out << ");";
+            break;
         default:
             throw std::runtime_error("Unsupported operation for now");
         }

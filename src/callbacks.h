@@ -45,6 +45,7 @@ int         smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const 
 void       *smart_tpl_create_params(void *userdata);
 void        smart_tpl_delete_params(void *userdata, void *parameters);
 void        smart_tpl_params_append_numeric(void *userdata, void *parameters, long value);
+void        smart_tpl_params_append_string(void *userdata, void *parameters, const char *buf, size_t len);
 
 /**
  *  Class definition
@@ -183,6 +184,12 @@ private:
      *  @var ParamsAppendNumericCallback
      */
     static ParamsAppendNumericCallback _params_append_numeric;
+
+    /**
+     *  Signature of the function to append a string value to parameters
+     *  @var ParamsAppendStringCallback
+     */
+    static ParamsAppendStringCallback _params_append_string;
 
     /**
      *  Signature of the function to delete the parameters
@@ -539,6 +546,28 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_params_append_numeric", (void *) smart_tpl_params_append_numeric, _params_append_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the params_append_string function
+     *  @param  userdata       Pointer to user-supplied data
+     *  @param  parameters     Pointer to the parameters we would like to append to
+     *  @param  buf            The string we would like to append
+     *  @param  len            The length of the string we would like to append
+     *  @see    smart_tpl_params_append_string
+     */
+    void params_append_string(const jit_value &userdata, const jit_value &parameters, const jit_value &buf, const jit_value &len)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            parameters.raw(),
+            buf.raw(),
+            len.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_params_append_string", (void *) smart_tpl_params_append_string, _params_append_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

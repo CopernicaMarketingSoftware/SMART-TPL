@@ -798,6 +798,17 @@ void Bytecode::parameters(const Parameters *parameters)
             // Convert the expression to a numeric value and append it using params_append_numeric
             _callbacks.params_append_numeric(_userdata, params, numeric(param.get()));
             break;
+        case Expression::Type::String: {
+            // Convert the expression to a string value and append it using params_append_string
+            param->string(this);
+
+            // pop the buffer and size from the stack (in reverse order) to get output of the expression
+            auto size = pop();
+            auto buffer = pop();
+
+            _callbacks.params_append_string(_userdata, params, buffer, size);
+            break;
+        }
         default:
             throw std::runtime_error("Unsupported operation for now");
         }
