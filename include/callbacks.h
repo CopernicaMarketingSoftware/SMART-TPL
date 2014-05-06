@@ -33,8 +33,6 @@ struct smart_tpl_callbacks {
     size_t      (*size)                 (void *userdata, void *variable);
     void       *(*modifier)             (void *userdata, const char *name, size_t size);
     void       *(*modify_variable)      (void *userdata, void *variable, void *modifier, void *parameters);
-    void       *(*modify_numeric)       (void *userdata, void *modifier, long value);
-    void       *(*modify_string)        (void *userdata, void *modifier, const char *data, size_t size);
     void        (*assign_numeric)       (void *userdata, const char *key, size_t keysize, long value);
     void        (*assign_boolean)       (void *userdata, const char *key, size_t keysize, int boolean);
     void        (*assign_string)        (void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);

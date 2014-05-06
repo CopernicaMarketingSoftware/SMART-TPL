@@ -33,8 +33,6 @@ ToBooleanCallback           Callbacks::_toBoolean;
 SizeCallback                Callbacks::_size;
 ModifierCallback            Callbacks::_modifier;
 ModifyVariableCallback      Callbacks::_modify_variable;
-ModifyNumericCallback       Callbacks::_modify_numeric;
-ModifyStringCallback        Callbacks::_modify_string;
 CreateParamsCallback        Callbacks::_create_params;
 ParamsAppendNumericCallback Callbacks::_params_append_numeric;
 ParamsAppendStringCallback  Callbacks::_params_append_string;

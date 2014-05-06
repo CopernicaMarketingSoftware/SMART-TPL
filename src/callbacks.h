@@ -34,9 +34,6 @@ int         smart_tpl_to_boolean(void *userdata, void *variable);
 size_t      smart_tpl_size(void *userdata, void *variable);
 void*       smart_tpl_modifier(void *userdata, const char *name, size_t size);
 void*       smart_tpl_modify_variable(void *userdata, void *variable, void *modifier, void *parameters);
-// @todo Rework modify_numeric and modify_string just like modify_variable (signature wise)
-void*       smart_tpl_modify_numeric(void *userdata, void *modifier, long value);
-void*       smart_tpl_modify_string(void *userdata, void *modifier, const char *value, size_t size);
 void        smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, long value);
 void        smart_tpl_assign_boolean(void *userdata, const char *key, size_t keysize, int boolean);
 void        smart_tpl_assign_string(void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
@@ -160,18 +157,6 @@ private:
      *  @var    ModifyVariableCallback
      */
     static ModifyVariableCallback _modify_variable;
-
-    /**
-     *  Signature of the function to modify a numeric variable
-     *  @var ModifyNumericCallback
-     */
-    static ModifyNumericCallback _modify_numeric;
-
-    /**
-     *  Signature of the function to modify a string variable
-     *  @var ModifyStringCallback
-     */
-    static ModifyStringCallback _modify_string;
 
     /**
      *  Signature of the function to create a new parameters object
@@ -648,52 +633,6 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_modify_variable", (void *) smart_tpl_modify_variable, _modify_variable.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
-    }
-
-    /**
-     *  Call the modify_numeric function
-     *  @param  userdata    Pointer to user-supplied data
-     *  @param  modifier    The modifier to apply @see modifier()
-     *  @param  value       The numeric value to modify
-     *  @return jit_value   A new modified variable pointer
-     *  @see smart_tpl_modify_numeric
-     *  @todo   Start actually using these methods
-     */
-    jit_value modify_numeric(const jit_value &userdata, const jit_value &modifier, const jit_value &value)
-    {
-        // construct the arguments
-        jit_value_t args[] = {
-            userdata.raw(),
-            modifier.raw(),
-            value.raw()
-        };
-
-        // create the instruction
-        return _function->insn_call_native("smart_tpl_modify_numeric", (void *) smart_tpl_modify_numeric, _modify_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
-    }
-
-    /**
-     *  Call the modify_string function
-     *  @param  userdata    Pointer to user-supplied data
-     *  @param  modifier    The modifier to apply @see modifier()
-     *  @param  data        The string to modify
-     *  @param  size        The length of the string to modify
-     *  @return jit_value   A new modified variable pointer
-     *  @see    smart_tpl_modify_string
-     *  @todo   Start actually using these methods
-     */
-    jit_value modify_string(const jit_value &userdata, const jit_value &modifier, const jit_value &data, const jit_value &size)
-    {
-        // construct the arguments
-        jit_value_t args[] = {
-            userdata.raw(),
-            modifier.raw(),
-            data.raw(),
-            size.raw()
-        };
-
-        // create the instruction
-        return _function->insn_call_native("smart_tpl_modify_string", (void *) smart_tpl_modify_string, _modify_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

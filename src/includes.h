@@ -120,8 +120,6 @@
 #include "callbacks/toboolean.h"
 #include "callbacks/modifier.h"
 #include "callbacks/modify_variable.h"
-#include "callbacks/modify_numeric.h"
-#include "callbacks/modify_string.h"
 #include "callbacks/create_params.h"
 #include "callbacks/params_append_numeric.h"
 #include "callbacks/params_append_string.h"
