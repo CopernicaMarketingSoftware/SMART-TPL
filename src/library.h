@@ -36,14 +36,9 @@ private:
     ShowTemplate *_function;
 
     /**
-     *  Signature of the mode() function
-     */
-    using Mode = const char*();
-
-    /**
      *  The 'mode' function
      */
-    Mode *_mode;
+    const char *_mode;
 
 public:
     /**
@@ -65,10 +60,13 @@ public:
         if (!_function) throw std::runtime_error(dlerror());
 
         // find the mode symbol
-        _mode = (Mode *) dlsym(_handle, "mode");
+        const char **mode_ptr = (const char **) dlsym(_handle, "mode");
 
-        // mode should exist
-        if (!_mode) throw std::runtime_error(dlerror());
+        // Pointer to mode should exist
+        if (!mode_ptr) throw std::runtime_error(dlerror());
+
+        // Turn the const char ** into const char *
+        _mode = *mode_ptr;
     }
 
     /**
@@ -103,7 +101,7 @@ public:
      */
     virtual std::string encoding() override
     {
-        return std::string(_mode());
+        return std::string(_mode);
     }
 };
 
