@@ -36,6 +36,7 @@ ModifyVariableCallback      Callbacks::_modify_variable;
 CreateParamsCallback        Callbacks::_create_params;
 ParamsAppendNumericCallback Callbacks::_params_append_numeric;
 ParamsAppendStringCallback  Callbacks::_params_append_string;
+ParamsAppendBooleanCallback Callbacks::_params_append_boolean;
 DeleteParamsCallback        Callbacks::_delete_params;
 StrCmpCallback              Callbacks::_strcmp;
 AssignCallback              Callbacks::_assign;
@@ -126,14 +127,12 @@ void *smart_tpl_create_iterator(void *userdata, void *variable)
     auto *var = (Value *)variable;
 
     // construct a new iterator
-    //  @todo 
-    //      can we allocate this on the heap instead of allocating with new?
-    //      for example by using an already-allocated stack of iterator objects inside the handler object?
+    //  @todo can we allocate this on the heap instead of allocating with new?
+    //        for example by using an already-allocated stack of iterator objects inside the handler object?
     //
-    //  @todo
-    //      because the iterators are not pushed to a stack, we will have a memory
-    //      leak if the statements inside the loop crash, and the delete_itertor
-    //      callback does not get called. Is this a serious possibility?
+    //  @todo because the iterators are not pushed to a stack, we will have a memory
+    //        leak if the statements inside the loop crash, and the delete_itertor
+    //        callback does not get called. Is this a serious possibility?
     return new Iterator(var);
 }
 
@@ -497,6 +496,21 @@ void smart_tpl_params_append_string(void *userdata, void *parameters, const char
 
     // Add the string value
     params->add(std::string(buf, len));
+}
+
+/**
+ *  Append a boolean value to the parameters
+ *  @param  userdata       Pointer to user-supplied data
+ *  @param  parameters     Pointer to a SmartTpl::Parameters object
+ *  @param  boolean        A 'boolean' value, 0 is 
+ */
+void smart_tpl_params_append_boolean(void *userdata, void *parameters, int boolean)
+{
+    // Convert to a Parameters object
+    auto *params = (SmartTpl::Parameters *) parameters;
+
+    // Add the boolean value to the parameters
+    params->add(boolean != 0);
 }
 
 /**

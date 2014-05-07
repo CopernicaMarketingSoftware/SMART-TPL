@@ -504,6 +504,12 @@ void CCode::parameters(const Parameters *parameters)
     for (auto &param : *parameters)
     {
         switch (param->type()) {
+        case Expression::Type::Boolean:
+            // This expression in the parameters is a boolean value, so we use params_append_boolean
+            _out << "callbacks->params_append_boolean(userdata,p,";
+            param->boolean(this);
+            _out << ");";
+            break;
         case Expression::Type::Numeric:
             // This expression in the parameters is a numeric value, so we use params_append_numeric
             _out << "callbacks->params_append_numeric(userdata,p,";

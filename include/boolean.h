@@ -34,7 +34,7 @@ private:
      *  The boolean value
      */
     const bool _boolean;
-
+public:
     /**
      *  Constructor
      *  Private as you should just use BooleanValue::get(bool) to get one of

@@ -794,6 +794,10 @@ void Bytecode::parameters(const Parameters *parameters)
     for (auto &param : *parameters)
     {
         switch (param->type()) {
+        case Expression::Type::Boolean:
+            // Convert the expression to a boolean value and append it using params_append_boolean
+            _callbacks.params_append_boolean(_userdata, params, boolean(param.get()));
+            break;
         case Expression::Type::Numeric:
             // Convert the expression to a numeric value and append it using params_append_numeric
             _callbacks.params_append_numeric(_userdata, params, numeric(param.get()));

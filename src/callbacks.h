@@ -43,6 +43,7 @@ void       *smart_tpl_create_params(void *userdata);
 void        smart_tpl_delete_params(void *userdata, void *parameters);
 void        smart_tpl_params_append_numeric(void *userdata, void *parameters, long value);
 void        smart_tpl_params_append_string(void *userdata, void *parameters, const char *buf, size_t len);
+void        smart_tpl_params_append_boolean(void *userdata, void *parameters, int boolean);
 
 /**
  *  Class definition
@@ -175,6 +176,12 @@ private:
      *  @var ParamsAppendStringCallback
      */
     static ParamsAppendStringCallback _params_append_string;
+
+    /**
+     *  Signature of the function to append a boolean value to parameters
+     *  @var ParamsAppendBooleanCallback
+     */
+    static ParamsAppendBooleanCallback _params_append_boolean;
 
     /**
      *  Signature of the function to delete the parameters
@@ -532,10 +539,30 @@ public:
     }
 
     /**
+     *  Call the params_append_boolean function
+     *  @param  userdata       Pointer to user-supplied data
+     *  @param  parameters     Pointer to the parameters we would like to append to
+     *  @param  value          The boolean value we would like to append
+     *  @see    smart_tpl_params_append_boolean
+     */
+    void params_append_boolean(const jit_value &userdata, const jit_value &parameters, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            parameters.raw(),
+            value.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_params_append_boolean", (void *) smart_tpl_params_append_boolean, _params_append_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
      *  Call the params_append_numeric function
      *  @param  userdata       Pointer to user-supplied data
      *  @param  parameters     Pointer to the parameters we would like to append to
-     *  @param  value          The numeric value we would like to add
+     *  @param  value          The numeric value we would like to append
      *  @see    smart_tpl_params_append_numeric
      */
     void params_append_numeric(const jit_value &userdata, const jit_value &parameters, const jit_value &value)

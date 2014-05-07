@@ -41,6 +41,7 @@ public:
     Variant(const char *value, size_t size);
     Variant(const std::string &value);
     Variant(numeric_t value);
+    explicit Variant(bool value);
 
     /**
      *  Deconstructor

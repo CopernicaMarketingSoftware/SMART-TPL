@@ -122,6 +122,7 @@
 #include "callbacks/modifier.h"
 #include "callbacks/modify_variable.h"
 #include "callbacks/create_params.h"
+#include "callbacks/params_append_boolean.h"
 #include "callbacks/params_append_numeric.h"
 #include "callbacks/params_append_string.h"
 #include "callbacks/delete_params.h"

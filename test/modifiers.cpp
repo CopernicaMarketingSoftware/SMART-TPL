@@ -34,6 +34,7 @@ public:
     enum Mode {
         NumericMode,
         StringMode,
+        BooleanMode,
     };
     TestModifier(Mode mode) : Modifier(), _mode(mode) {};
     virtual ~TestModifier() {};
@@ -52,6 +53,12 @@ public:
                 EXPECT_EQ(1, params->size());
                 EXPECT_STREQ("test", params->get(0).toString());
                 EXPECT_EQ(4, params->get(0).size());
+                break;
+            case BooleanMode:
+                EXPECT_EQ(3, params->size());
+                EXPECT_TRUE(params->get(0).toBoolean());
+                EXPECT_FALSE(params->get(1).toBoolean());
+                EXPECT_TRUE(params->get(2).toBoolean());
                 break;
         };
         return string(input->toString(), input->size());
@@ -115,6 +122,23 @@ TEST(Modifier, ParametersString)
     Template tpl(buffer);
 
     TestModifier test(TestModifier::StringMode);
+    Data data;
+    data.modifier("test", &test)
+        .assign("var", "Test");
+
+    string expectedOutput("Test");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+}
+
+TEST(Modifier, ParametersBoolean)
+{
+    string input("{$var|test:true:false:true}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    TestModifier test(TestModifier::BooleanMode);
     Data data;
     data.modifier("test", &test)
         .assign("var", "Test");
