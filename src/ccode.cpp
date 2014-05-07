@@ -30,6 +30,14 @@ CCode::CCode(const SyntaxTree &tree)
 
     // end of the function
     _out << "}" << std::endl;
+
+    // Write a second function that returns what mode we are in
+    _out << "const char *mode() { return ";
+
+    // Quote the string from mode() just in case
+    QuotedString quoted(tree.mode());
+
+    _out << "\"" << quoted << "\"; }" << std::endl;
 }
 
 CCode::CCode(const Source& source)

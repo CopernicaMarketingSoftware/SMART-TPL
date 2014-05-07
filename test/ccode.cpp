@@ -28,7 +28,8 @@ TEST(CCode, ForEach)
     "callbacks->assign(userdata,\"key\",3,callbacks->iterator_value(userdata,iterator));\n"
     "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3));\n"
     "callbacks->write(userdata,\"\\n\",1);\ncallbacks->iterator_next(userdata,iterator);\n}\n"
-    "callbacks->delete_iterator(userdata,iterator);\n}\n}\n");
+    "callbacks->delete_iterator(userdata,iterator);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -49,7 +50,8 @@ TEST(CCode, ForEachWithKeys)
     "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3));\n"
     "callbacks->write(userdata,\"\\n\",1);\ncallbacks->write(userdata,\"value: \",7);\n"
     "callbacks->output(userdata,callbacks->variable(userdata,\"value\",5));\n"
-    "callbacks->iterator_next(userdata,iterator);\n}\ncallbacks->delete_iterator(userdata,iterator);\n}\n}\n");
+    "callbacks->iterator_next(userdata,iterator);\n}\ncallbacks->delete_iterator(userdata,iterator);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -64,7 +66,8 @@ TEST(CCode, SingleModifier)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nvoid *o = NULL;\n"
     "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"toupper\",7),NULL);\n"
-    "callbacks->output(userdata,o);\n}\n}\n");
+    "callbacks->output(userdata,o);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -82,7 +85,8 @@ TEST(CCode, ChainedModifiers)
     "o = callbacks->modify_variable(userdata,o,callbacks->modifier(userdata,\"tolower\",7),NULL);\n"
     "o = callbacks->modify_variable(userdata,o,callbacks->modifier(userdata,\"toupper\",7),NULL);\n"
     "o = callbacks->modify_variable(userdata,o,callbacks->modifier(userdata,\"tolower\",7),NULL);\n"
-    "callbacks->output(userdata,o);\n}\n}\n");
+    "callbacks->output(userdata,o);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -97,7 +101,8 @@ TEST(CCode, IfElse)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->to_boolean(userdata,callbacks->variable(userdata,\"variable\",8))){\n"
-    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -115,7 +120,8 @@ TEST(CCode, ElseIf)
     "callbacks->write(userdata,\"first is true\",13);\n}else{\n"
     "if (callbacks->to_boolean(userdata,callbacks->variable(userdata,\"othervariable\",13))){\n"
     "callbacks->write(userdata,\"second is true\",14);\n}else{\n"
-    "callbacks->write(userdata,\"nothing is true\",15);\n}\n}\n}\n");
+    "callbacks->write(userdata,\"nothing is true\",15);\n}\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -130,7 +136,8 @@ TEST(CCode, VarGreaterThen)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->to_numeric(userdata,callbacks->variable(userdata,\"age\",3))>18){\n"
-    "callbacks->write(userdata,\"You are over 18 years old.\",26);\n}\n}\n");
+    "callbacks->write(userdata,\"You are over 18 years old.\",26);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -145,7 +152,8 @@ TEST(CCode, VarGreaterThenNegativeNumber)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->to_numeric(userdata,callbacks->variable(userdata,\"age\",3))>-1){\n"
-    "callbacks->write(userdata,\"You are alive..\",15);\n}\n}\n");
+    "callbacks->write(userdata,\"You are alive..\",15);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -161,7 +169,8 @@ TEST(CCode, LiteralArrayAccess)
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "callbacks->output(userdata,callbacks->member_at(userdata,callbacks->variable(userdata,\"map\",3),0));\n"
     "callbacks->write(userdata,\"\\n\",1);\n"
-    "callbacks->output(userdata,callbacks->member(userdata,callbacks->variable(userdata,\"map\",3),\"anothermember\",13));\n}\n");
+    "callbacks->output(userdata,callbacks->member(userdata,callbacks->variable(userdata,\"map\",3),\"anothermember\",13));\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -176,7 +185,8 @@ TEST(CCode, NumericComparison)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (10==100){\ncallbacks->write(userdata,\"true\",4);\n}else{\n"
-    "callbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "callbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -190,7 +200,8 @@ TEST(CCode, BoolComparison)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "if (1==0){\ncallbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "if (1==0){\ncallbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -205,7 +216,8 @@ TEST(CCode, StringComparison)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->strcmp(userdata,\"string1\",7,\"string2\",7) == 0){\ncallbacks->write(userdata,\"true\",4);\n}else{\n"
-    "callbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "callbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -220,7 +232,8 @@ TEST(CCode, StringComparisonNotEquals)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->strcmp(userdata,\"string1\",7,\"string2\",7) != 0){\n"
-    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -241,7 +254,8 @@ TEST(CCode, AssignValue)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "callbacks->assign_string(userdata,\"value\",5,\"string\",6);\n}\n");
+    "callbacks->assign_string(userdata,\"value\",5,\"string\",6);\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -255,7 +269,8 @@ TEST(CCode, AssignValueIs)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "callbacks->assign_string(userdata,\"value\",5,\"string\",6);\n}\n");
+    "callbacks->assign_string(userdata,\"value\",5,\"string\",6);\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -270,7 +285,8 @@ TEST(CCode, LiteralStringsWeirdCharacters)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->strcmp(userdata,\"?_<test>\",8,\"-\\'/%#^&\",7) == 0){\n"
-    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -285,7 +301,8 @@ TEST(CCode, LiteralEmptyString)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "if (callbacks->strcmp(userdata,NULL,0,\"not empty\",9) == 0){\n"
-    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n");
+    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -304,7 +321,8 @@ TEST(CCode, ModifierParameters)
     "callbacks->params_append_numeric(userdata,p,5);\n"
     "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),p);\n"
     "callbacks->delete_params(userdata,p);\n}\n"
-    "callbacks->output(userdata,o);\n}\n}\n");
+    "callbacks->output(userdata,o);\n}\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -320,7 +338,23 @@ TEST(CCode, Unicode)
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "callbacks->write(userdata,\"\xEC\x9D\xB4\xEA\xB2\x83\xEC\x9D\x80 \xEB\x8B\xA8\xEC"
     "\x88\x9C\xED\x95\x9C \xEC\x9C\xA0\xEB\x8B\x88 \xED\x85\x8C\xEC\x8A\xA4\xED\x8A\xB8"
-    "\xEC\x9E\x85\xEB\x8B\x88\xEB\x8B\xA4 ..\",48);\n}\n");
+    "\xEC\x9E\x85\xEB\x8B\x88\xEB\x8B\xA4 ..\",48);\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
+
+    compile(tpl);
+}
+
+TEST(CCode, TemplateMode)
+{
+    string input("{mode=raw}{$var}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->output(userdata,callbacks->variable(userdata,\"var\",3));\n}\n"
+    "const char *mode() { return \"raw\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);

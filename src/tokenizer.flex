@@ -65,6 +65,7 @@
 "{else}"            { return TOKEN_ELSE; }
 "{foreach"[ \t]+    { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_FOREACH; }
 "{/foreach}"        { return TOKEN_ENDFOREACH; }
+"{mode="            { BEGIN(IDENTIFIER); return TOKEN_MODE; }
 "{assign"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ASSIGN; }
 "{$"                { BEGIN(INSIDE_CURLY_BRACES); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
