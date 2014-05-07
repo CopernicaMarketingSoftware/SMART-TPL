@@ -31,13 +31,20 @@ class Template
 private:
     /**
      *  The template 'executor'
-     * 
+     *
      *  This is a different object depending whether you constructed the template
      *  with a shared object (*.so file) or with a template source file (*.tpl)
      * 
      *  @var    Executor
      */
     Internal::Executor *_executor = nullptr;
+
+    /**
+     *  Contains the human readable name of the encoding that is used natively
+     *
+     *  @var std::string
+     */
+    std::string _encoding;
 
 public:
     /**
@@ -73,26 +80,28 @@ public:
      *  that contains the values of all variables that can be user inside the
      *  template.
      * 
-     *  @param  data        Data source
+     *  @param  data         Data source
+     *  @param  outencoding  The encoding that should be used for the output
      *  @return std::string
      */
-    std::string process(const Data &data) const;
+    std::string process(const Data &data, const std::string &outencoding = "null") const;
 
     /**
      *  Process the template, without any input
-     * 
+     *
+     *  @param  outencoding  The encoding that should be used for the output
      *  @return std::string
      */
-    std::string process() const
+    std::string process(const std::string &outencoding = "null") const
     {
         // start with an empty data object
-        return process(Data());
+        return process(Data(), outencoding);
     }
 
     /**
      *  Used to retrieve what encoding this template is in, natively
      */
-    const std::string encoding() const;
+    const std::string encoding() const { return _encoding; };
 };
 
 /**

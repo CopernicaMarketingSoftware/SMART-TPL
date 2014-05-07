@@ -30,6 +30,7 @@ Template::Template(const Source& source)
         // it was not a shared library, we're going to compile it into bytecode ourselves
         _executor = new Internal::Bytecode(source);
     }
+    _encoding = _executor->encoding();
 }
 
 /**
@@ -39,14 +40,6 @@ Template::~Template()
 {
     // we no longer need the executor
     if (_executor) delete _executor;
-}
-
-/**
- *  Used to retrieve what encoding this template is in, natively
- */
-const std::string Template::encoding() const
-{
-    return _executor->encoding();
 }
 
 /**
@@ -68,10 +61,11 @@ std::string Template::compile() const
  *  that contains the values of all variables that can be user inside the
  *  template.
  * 
- *  @param  data        Data source
+ *  @param  data         Data source
+ *  @param  outencoding  The encoding that should be used for the output
  *  @return std::string
  */
-std::string Template::process(const Data &data) const
+std::string Template::process(const Data &data, const std::string &outencoding) const
 {
     // we need a handler object
     Handler handler(&data);
@@ -79,8 +73,17 @@ std::string Template::process(const Data &data) const
     // ask the executor to display the template
     _executor->process(handler);
 
-    // return the generated output string
-    return handler.output();
+    // generate the output string
+    std::string output = handler.output();
+
+    if (outencoding != "null")
+    {
+        const Internal::Escaper *escaper = Internal::Escaper::get(outencoding);
+        return escaper->encode(output);
+    }
+
+    // return the output
+    return output;
 }
 
 /**

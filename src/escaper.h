@@ -58,7 +58,7 @@ public:
      *  @param  encoding     The human readable name of the Escaper
      *  @return A static Escaper which you should NOT delete
      */
-    const Escaper* get(const std::string &encoding) const;
+    static const Escaper* get(const std::string &encoding);
 
     /**
      *  Encode the given input
