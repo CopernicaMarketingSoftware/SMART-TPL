@@ -42,6 +42,14 @@ Template::~Template()
 }
 
 /**
+ *  Used to retrieve what encoding this template is in, natively
+ */
+const std::string Template::encoding() const
+{
+    return _executor->encoding();
+}
+
+/**
  *  Get the template representation in C that can be compiled into a shared 
  *  object. This method only works for templates that were not already a 
  *  shared library.

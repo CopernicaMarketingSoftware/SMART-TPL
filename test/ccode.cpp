@@ -347,15 +347,16 @@ TEST(CCode, Unicode)
 
 TEST(CCode, TemplateMode)
 {
-    string input("{mode=raw}{$var}");
+    string input("{mode=test}{$var}");
     Buffer buffer(input);
     Template tpl(buffer);
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "callbacks->output(userdata,callbacks->variable(userdata,\"var\",3));\n}\n"
-    "const char *mode() { return \"raw\"; }\n");
+    "const char *mode() { return \"test\"; }\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
+    EXPECT_EQ("test", tpl.encoding());
 
     compile(tpl);
 }

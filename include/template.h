@@ -77,7 +77,7 @@ public:
      *  @return std::string
      */
     std::string process(const Data &data) const;
-    
+
     /**
      *  Process the template, without any input
      * 
@@ -88,6 +88,11 @@ public:
         // start with an empty data object
         return process(Data());
     }
+
+    /**
+     *  Used to retrieve what encoding this template is in, natively
+     */
+    const std::string encoding() const;
 };
 
 /**
