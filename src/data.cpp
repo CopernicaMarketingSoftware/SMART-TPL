@@ -13,9 +13,10 @@
  */
 namespace SmartTpl {
 
-static ToUpperModifier toupper;
-static ToLowerModifier tolower;
-static CatModifier     cat;
+static ToUpperModifier         toupper;
+static ToLowerModifier         tolower;
+static CatModifier             cat;
+static CountCharactersModifier count_characters;
 
 /**
  *  Constructor
@@ -26,6 +27,7 @@ Data::Data()
     modifier("toupper", &toupper);
     modifier("tolower", &tolower);
     modifier("cat", &cat);
+    modifier("count_characters", &count_characters);
 }
 
 /**

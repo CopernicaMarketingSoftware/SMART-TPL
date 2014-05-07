@@ -66,6 +66,7 @@
 #include "builtin/tolower.h"
 #include "builtin/toupper.h"
 #include "builtin/cat.h"
+#include "builtin/count_characters.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

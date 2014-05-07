@@ -195,3 +195,18 @@ TEST(Modifiers, Cat)
 
     compile(tpl);
 }
+
+TEST(Modifiers, CountCharacters)
+{
+    string input("{$var|count_characters}\n{$var|count_characters:true}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "Cold Wave Linked to Temperatures.");
+
+    string expectedOutput("29\n33");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+}

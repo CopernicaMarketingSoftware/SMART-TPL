@@ -1,6 +1,9 @@
 /**
  *  ToLower.h
  *
+ *  Built-in "|tolower" modifier
+ *
+ *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
  */
  
