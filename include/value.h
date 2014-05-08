@@ -20,7 +20,7 @@ namespace SmartTpl {
 typedef int numeric_t;
 
 /**
- *  Forward declaration of Variant so we can return Variant from cache()
+ *  Forward declaration of Variant so we can return Variant
  */
 class Variant;
 
@@ -102,7 +102,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Value *key(int position) = 0;
+    virtual Variant key(int position) = 0;
 
     /**
      *  String length of the variable

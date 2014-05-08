@@ -1,7 +1,7 @@
 /**
  *  Variant.h
  *
- *  A simple value wrapper purely available for lambda functions
+ *  A simple value wrapper
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -14,14 +14,11 @@ namespace SmartTpl {
 
 /**
  *  Class definition
- * 
- * 
- *  @todo 
- * 
- *      is it a good idea that a variant also implements the value
- *      interface? Inside the library we probably only want to work
- *      with real Value objects, and not the wrapped Variant ones.
- *      
+ *
+ *  @todo is it a good idea that a variant also implements the value
+ *        interface? Inside the library we probably only want to work
+ *        with real Value objects, and not the wrapped Variant ones.
+ *
  */
 class Variant : public Value
 {
@@ -110,7 +107,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Value *key(int position) override
+    virtual Variant key(int position) override
     {
         return _value->key(position);
     }
@@ -139,3 +136,4 @@ public:
  *  End namespace
  */
 }
+

@@ -31,24 +31,24 @@ private:
 
     /**
      *  Current position
-     * 
-     *  @todo 
+     *
+     *  @todo
      *      other sort of iterator implementation, in which we are not forced
      *      to use integers to keep the current index (which can be slow if 
      *      the underlying object is for example a std::map or std::list),
      *      the value class should have its own system for defining custom
      *      iterators.
-     * 
+     *
      *  @var int
      */
     int _pos = 0;
-    
+
     /**
      *  Maximum position
      *  @var int
      */
     int _max;
-    
+
 public:
     /**
      *  Constructor
@@ -56,7 +56,7 @@ public:
      */
     Iterator(Value *source) :
         _source(source), _max(source->memberCount()) {}
-        
+
     /**
      *  Destructor
      */
@@ -68,7 +68,7 @@ public:
         //      (although i do not think it is disastrous if we keep
         //      the loop-variables in scope after the loop if completed)
     }
-    
+
     /**
      *  Check if the iterator is still valid
      *  @return bool
@@ -78,16 +78,16 @@ public:
         // check if we have not yet reached the max
         return _pos < _max;
     }
-    
+
     /**
      *  Retrieve a pointer to the current key
      *  @return void*
      */
-    void *key() const
+    Variant key() const
     {
         return _source->key(_pos);
     }
-    
+
     /**
      *  Retrieve pointer to the current member
      *  @return void*
@@ -96,7 +96,7 @@ public:
     {
         return _source->member(_pos);
     }
-    
+
     /**
      *  Move to the next position
      */

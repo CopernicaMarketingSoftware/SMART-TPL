@@ -94,7 +94,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Value *key(int position) override
+    virtual Variant key(int position) override
     {
         return nullptr;
     }

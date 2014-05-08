@@ -176,8 +176,18 @@ void *smart_tpl_iterator_key(void *userdata, void *iterator)
     // cast to iterator
     auto *iter = (Iterator *)iterator;
 
-    // ask the iterator
-    return iter->key();
+    // Ask the iterator
+    auto key = iter->key();
+
+    // Allocate it on the heap so we can return the pointer to it
+    auto *output = new Variant(key);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // Return the pointer
+    return output;
 }
 
 /**
@@ -190,7 +200,7 @@ void *smart_tpl_iterator_value(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
-    
+
     // ask the iterator
     return iter->value();
 }

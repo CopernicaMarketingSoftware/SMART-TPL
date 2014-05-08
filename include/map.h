@@ -196,16 +196,10 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Value *key(int position) override
+    virtual Variant key(int position) override
     {
         // If we're out of bounds just return nullptr
-        if (position < 0 || position >= memberCount()) return nullptr;
-
-        // Resize the _key_cache to the amount of members we have
-        _key_cache.resize(memberCount());
-
-        // Check if we have it in our cache already, if we do return that one
-        if (_key_cache[position]) return _key_cache[position].get();
+        if (position < 0 || position >= memberCount()) return Variant();
 
         // get the iterator of _values
         auto iter = _values.begin();
@@ -213,14 +207,8 @@ public:
         // advance it by position
         std::advance(iter, position);
 
-        // Turn the key into a Value
-        StringValue *value = new StringValue(iter->first, std::strlen(iter->first));
-
-        // Add our new value to our _destroy_later set
-        _key_cache[position] = std::unique_ptr<Value>(value);
-
-        // return the value
-        return value;
+        // Return the key
+        return iter->first;
     }
 
     /**

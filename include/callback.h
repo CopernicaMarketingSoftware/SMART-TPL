@@ -134,11 +134,11 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Value *key(int position) override
+    virtual Variant key(int position) override
     {
         // callbacks can only return simple scalar values, so retrieving
         // a key never happens
-        return nullptr;
+        return Variant();
     }
 
     /**
