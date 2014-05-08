@@ -90,3 +90,17 @@ TEST(Modifier, CountParagraphs)
 
     compile(tpl);
 }
+
+TEST(Modifier, Default)
+{
+    string input("{$var|default:\"default string\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    EXPECT_EQ("default string", tpl.process());
+    Data data;
+    data.assign("var", "string");
+    EXPECT_EQ("string", tpl.process(data));
+
+    compile(tpl);
+}

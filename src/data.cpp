@@ -18,6 +18,7 @@ static ToLowerModifier         tolower;
 static CatModifier             cat;
 static CountCharactersModifier count_characters;
 static CountParagraphsModifier count_paragraphs;
+static DefaultModifier         _default; // Underscore is purely because default is a keyword
 
 /**
  *  Constructor
@@ -30,6 +31,7 @@ Data::Data()
     modifier("cat", &cat);
     modifier("count_characters", &count_characters);
     modifier("count_paragraphs", &count_paragraphs);
+    modifier("default", &_default);
 }
 
 /**
