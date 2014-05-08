@@ -115,7 +115,7 @@ TEST(Modifiers, ParametersChainingParameters)
     compile(tpl);
 }
 
-TEST(Modifier, ParametersString)
+TEST(Modifiers, ParametersString)
 {
     string input("{$var|test:\"test\"}");
     Buffer buffer(input);
@@ -132,7 +132,7 @@ TEST(Modifier, ParametersString)
     compile(tpl);
 }
 
-TEST(Modifier, ParametersBoolean)
+TEST(Modifiers, ParametersBoolean)
 {
     string input("{$var|test:true:false:true}");
     Buffer buffer(input);

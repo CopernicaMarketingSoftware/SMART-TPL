@@ -104,3 +104,16 @@ TEST(Modifier, Default)
 
     compile(tpl);
 }
+
+TEST(Modifier, Escape)
+{
+    string input("{$var|escape:\"html\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "<b>This is bold</b>");
+
+    string expectedOutput("&lt;b&gt;This is bold&lt;/b&gt;");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}
