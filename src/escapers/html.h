@@ -36,10 +36,10 @@ public:
     virtual std::string &encode(std::string &input) const override
     {
         // Replace the <, >, " and & with their escaped versions
+        replace(input, "&",  "&amp;"); // Replace all the &'s first as it would overwrite all of them otherwise..
         replace(input, "<",  "&lt;");
         replace(input, ">",  "&gt;");
         replace(input, "\"", "&quot;");
-        replace(input, "&",  "&amp;");
 
         // Return the modified input
         return input;

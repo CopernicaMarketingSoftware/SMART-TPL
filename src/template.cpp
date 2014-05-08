@@ -30,6 +30,8 @@ Template::Template(const Source& source)
         // it was not a shared library, we're going to compile it into bytecode ourselves
         _executor = new Internal::Bytecode(source);
     }
+
+    // Set the _encoding using the encoding() method on our executor
     _encoding = _executor->encoding();
 }
 
@@ -78,8 +80,17 @@ std::string Template::process(const Data &data, const std::string &outencoding) 
 
     if (outencoding != "null")
     {
-        const Internal::Escaper *escaper = Internal::Escaper::get(outencoding);
-        return escaper->encode(output);
+        // Get the decoder for our current type
+        const Internal::Escaper *decoder = Internal::Escaper::get(_encoding);
+
+        // Decode it to raw
+        output = decoder->decode(output);
+
+        // Get the encoder for the out type
+        const Internal::Escaper *encoder = Internal::Escaper::get(outencoding);
+
+        // Return the output of our encoder
+        return encoder->encode(output);
     }
 
     // return the output
