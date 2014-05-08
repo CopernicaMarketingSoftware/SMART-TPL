@@ -10,7 +10,7 @@
 /**
  *  Namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const Parameters *params) override
+    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
     {
         // We default to the html encoder
         std::string encoder("html");
@@ -37,7 +37,7 @@ public:
         // But if we have at least 1 parameter the first argument is our encoding
         if (params) encoder = params->get(0).toString();
 
-        const Internal::Escaper *escaper = Internal::Escaper::get(encoder);
+        const Escaper *escaper = Escaper::get(encoder);
 
         // Turn our input into a string
         std::string output(input->toString(), input->size());
@@ -50,5 +50,4 @@ public:
 /**
  *  End namespace
  */
-}
-
+}}

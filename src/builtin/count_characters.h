@@ -10,7 +10,7 @@
 /**
  *  Namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const Parameters *params) override
+    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
     {
         // By default we don't include whitespaces
         bool include_whitespaces = false;
@@ -65,5 +65,4 @@ public:
 /**
  *  End namespace
  */
-}
-
+}}

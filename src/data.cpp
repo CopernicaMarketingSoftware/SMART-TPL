@@ -13,13 +13,13 @@
  */
 namespace SmartTpl {
 
-static ToUpperModifier         toupper;
-static ToLowerModifier         tolower;
-static CatModifier             cat;
-static CountCharactersModifier count_characters;
-static CountParagraphsModifier count_paragraphs;
-static DefaultModifier         _default; // Underscore is purely because default is a keyword
-static EscapeModifier          escape;
+static Internal::ToUpperModifier         toupper;
+static Internal::ToLowerModifier         tolower;
+static Internal::CatModifier             cat;
+static Internal::CountCharactersModifier count_characters;
+static Internal::CountParagraphsModifier count_paragraphs;
+static Internal::DefaultModifier         _default; // Underscore is purely because default is a keyword
+static Internal::EscapeModifier          escape;
 
 /**
  *  Constructor

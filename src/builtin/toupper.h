@@ -10,7 +10,7 @@
 /**
  *  Namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -28,7 +28,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Variant
      */
-    virtual Variant modify(Value *input, const Parameters *params) override
+    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
     {
         // copy the entire string
         std::string output(input->toString(), input->size());
@@ -44,5 +44,4 @@ public:
 /**
  *  End namespace
  */
-}
-
+}}
