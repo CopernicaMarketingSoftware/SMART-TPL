@@ -76,13 +76,13 @@ void CCode::output(const Filter *filter)
     // Start a new block
     _out << "{" << std::endl;
 
-    // We're going to call the output callback function
+    // Let's first of all declare our output variable
     _out << "void *o = NULL;" << std::endl;
 
     // call the string method on our filter, which writes all the filtering code for us
     filter->string(this);
 
-    // and let's properly end the C statement
+    // Now let's actually call the output callback
     _out << "callbacks->output(userdata,o);" << std::endl;
 
     // End our block
