@@ -74,3 +74,19 @@ TEST(Modifier, CountCharacters)
 
     compile(tpl);
 }
+
+TEST(Modifier, CountParagraphs)
+{
+    string input("{$var|count_paragraphs}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "War Dims Hope for Peace. Child's Death Ruins Couple's Holiday.\n\n"
+                       "Man is Fatally Slain. Death Causes Loneliness, Feeling of Isolation.");
+
+    string expectedOutput("2");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+}

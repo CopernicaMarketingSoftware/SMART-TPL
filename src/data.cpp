@@ -17,6 +17,7 @@ static ToUpperModifier         toupper;
 static ToLowerModifier         tolower;
 static CatModifier             cat;
 static CountCharactersModifier count_characters;
+static CountParagraphsModifier count_paragraphs;
 
 /**
  *  Constructor
@@ -28,6 +29,7 @@ Data::Data()
     modifier("tolower", &tolower);
     modifier("cat", &cat);
     modifier("count_characters", &count_characters);
+    modifier("count_paragraphs", &count_paragraphs);
 }
 
 /**
