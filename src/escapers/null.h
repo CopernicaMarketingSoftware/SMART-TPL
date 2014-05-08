@@ -21,7 +21,7 @@ public:
     /**
      *  Constructor
      */
-    NullEscaper() {};
+    NullEscaper() : Escaper("null") {};
     /**
      *  Destructor
      */

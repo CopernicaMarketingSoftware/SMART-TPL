@@ -21,7 +21,7 @@ public:
     /**
      *  Constructor
      */
-    HtmlEscaper() {};
+    HtmlEscaper() : Escaper("html") {};
     /**
      *  Destructor
      */

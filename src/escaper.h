@@ -21,7 +21,7 @@ protected:
     /**
      *  Protected constructor
      */
-    Escaper() {}
+    Escaper(const std::string &name);
 
     /**
      *  Helper method to find and replace strings in the input buffer

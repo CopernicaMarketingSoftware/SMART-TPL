@@ -14,6 +14,23 @@
  */
 namespace SmartTpl { namespace Internal {
 
+/**
+ *  Map which maps the human readable names to the actual escapers
+ */
+std::map<std::string, const Escaper*> _escapers;
+
+/**
+ *  Constructor, the escaper will automatically register itself in _escapers
+ *  @param  name     The human readable name it should use to register itself
+ */
+Escaper::Escaper(const std::string &name)
+{
+    _escapers[name] = this;
+}
+
+/**
+ *  Create static instances of all known escapers
+ */
 static NullEscaper _null;
 static HtmlEscaper _html;
 
@@ -25,9 +42,13 @@ static HtmlEscaper _html;
  */
 const Escaper* Escaper::get(const std::string &encoding)
 {
-    if (encoding == "html") return &_html;
-    else if (encoding == "raw") return &_null;
-    else if (encoding == "null") return &_null;
+    // Look for the escaper with name encoding in _escapers
+    auto iter = _escapers.find(encoding);
+
+    // Did we find it? Yes? Return it
+    if (iter != _escapers.end()) return iter->second;
+
+    // We didn't find it? That's too bad, let's return the null escaper
     return &_null;
 }
 
