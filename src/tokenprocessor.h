@@ -47,6 +47,11 @@ protected:
     std::stringstream _error;
 
     /**
+     *  This will contain the mode of the eventual template, set through {mode=raw}
+     */
+    std::unique_ptr<Token> _encoding;
+
+    /**
      *  Constructor
      */
     TokenProcessor();
@@ -97,6 +102,22 @@ public:
     void stackOverflow()
     {
         _error << "Stack overflow";
+    }
+
+    /**
+     *  Set the encoding mode, will be called from lemon
+     */
+    void mode(Token *token)
+    {
+        _encoding = std::unique_ptr<Token>(token);
+    }
+
+    /**
+     *  Retrieve the current encoding mode of this tokenprocessor
+     */
+    const std::string &mode() const
+    {
+        return *_encoding;
     }
 };
  

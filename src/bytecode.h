@@ -263,6 +263,15 @@ public:
         // convert the syntax tree into C code
         return CCode(_tree).asString();
     }
+
+    /**
+     *  Retrieve what encoding the 'template' has natively
+     *  @return std::string
+     */
+    virtual std::string encoding() override
+    {
+        return _tree.mode();
+    }
 };
 
 /**

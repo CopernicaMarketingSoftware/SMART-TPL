@@ -19,6 +19,7 @@ namespace SmartTpl { namespace Internal {
  */
 CCode::CCode(const SyntaxTree &tree)
 {
+    _encoder = Escaper::get(tree.mode());
     // include headers
     _out << "#include <smarttpl/callbacks.h>" << std::endl;
 
@@ -30,6 +31,14 @@ CCode::CCode(const SyntaxTree &tree)
 
     // end of the function
     _out << "}" << std::endl;
+
+    // Write a second function that returns what mode we are in
+    _out << "const char *mode = ";
+
+    // Quote the string from mode() just in case
+    QuotedString quoted(tree.mode());
+
+    _out << "\"" << quoted << "\";" << std::endl;
 }
 
 CCode::CCode(const Source& source)
@@ -43,12 +52,14 @@ CCode::CCode(const Source& source)
  */
 void CCode::raw(const std::string &data)
 {
+    std::string copy(data);
+    copy = _encoder->encode(copy);
     // quote newlines, null characters, etc in the string so that it can
     // be picked up by the compiler
-    QuotedString quoted(data);
+    QuotedString quoted(copy);
 
     // output the data
-    _out << "callbacks->write(userdata,\"" << quoted << "\"," << data.size() << ");" << std::endl;
+    _out << "callbacks->write(userdata,\"" << quoted << "\"," << copy.size() << ");" << std::endl;
 }
 
 /**

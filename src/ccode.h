@@ -28,6 +28,8 @@ private:
      */
     std::ostringstream _out;
 
+    Escaper *_encoder = nullptr;
+
     /**
      *  Output raw data
      *  @param  data        buffer to output

@@ -24,6 +24,9 @@ Template::Template(const Source& source)
     {
         // hey that's cool, we can create create a shard library
         _executor = new Internal::Library(source.name());
+
+        // Set the _encoding using the encoding() method on our executor
+        _encoding = _executor->encoding();
     }
     else
     {
@@ -60,10 +63,11 @@ std::string Template::compile() const
  *  that contains the values of all variables that can be user inside the
  *  template.
  * 
- *  @param  data        Data source
+ *  @param  data         Data source
+ *  @param  outencoding  The encoding that should be used for the output
  *  @return std::string
  */
-std::string Template::process(const Data &data) const
+std::string Template::process(const Data &data, const std::string &outencoding) const
 {
     // we need a handler object
     Handler handler(&data);
@@ -71,8 +75,26 @@ std::string Template::process(const Data &data) const
     // ask the executor to display the template
     _executor->process(handler);
 
-    // return the generated output string
-    return handler.output();
+    // generate the output string
+    std::string output = handler.output();
+
+    if (outencoding != "null" && _encoding != outencoding)
+    {
+        // Get the decoder for our current type
+        const Internal::Escaper *decoder = Internal::Escaper::get(_encoding);
+
+        // Decode it to raw
+        output = decoder->decode(output);
+
+        // Get the encoder for the out type
+        const Internal::Escaper *encoder = Internal::Escaper::get(outencoding);
+
+        // Return the output of our encoder
+        return encoder->encode(output);
+    }
+
+    // return the output
+    return output;
 }
 
 /**

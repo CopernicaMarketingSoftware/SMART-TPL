@@ -35,6 +35,10 @@ private:
      */
     ShowTemplate *_function;
 
+    /**
+     *  The 'mode' function
+     */
+    const char *_mode;
 
 public:
     /**
@@ -50,10 +54,19 @@ public:
         if (!_handle) throw std::runtime_error(dlerror());
 
         // find the show_template symbol
-        _function = (ShowTemplate *)dlsym(_handle, "show_template");
+        _function = (ShowTemplate *) dlsym(_handle, "show_template");
 
         // function should exist
         if (!_function) throw std::runtime_error(dlerror());
+
+        // find the mode symbol
+        const char **mode_ptr = (const char **) dlsym(_handle, "mode");
+
+        // Pointer to mode should exist
+        if (!mode_ptr) throw std::runtime_error(dlerror());
+
+        // Turn the const char ** into const char *
+        _mode = *mode_ptr;
     }
 
     /**
@@ -80,6 +93,15 @@ public:
         // a shared library can not be turned into C code, because it
         // already has been compiled to native code
         return "";
+    }
+
+    /**
+     *  Retrieve what encoding the 'template' has natively
+     *  @return std::string
+     */
+    virtual std::string encoding() override
+    {
+        return std::string(_mode);
     }
 };
 

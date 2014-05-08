@@ -20,7 +20,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class SyntaxTree : protected TokenProcessor
+class SyntaxTree : public TokenProcessor
 {
 public:
     /**

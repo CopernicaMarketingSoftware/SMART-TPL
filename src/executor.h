@@ -43,6 +43,12 @@ public:
      */
     virtual std::string compile() = 0;
 
+    /**
+     *  Retrieve what encoding the 'template' has natively
+     *  @return std::string
+     */
+    virtual std::string encoding() = 0;
+
 };
 
 /**

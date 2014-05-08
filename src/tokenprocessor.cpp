@@ -25,7 +25,7 @@ namespace SmartTpl { namespace Internal {
  *  Constructor
  */
 TokenProcessor::TokenProcessor()
-{
+: _encoding(new Token("raw", 3)) {
     // allocate the the parser
     _resource = SmartTplParseAlloc(malloc);
 }
