@@ -117,3 +117,16 @@ TEST(Modifier, Escape)
     string expectedOutput("&lt;b&gt;This is bold&lt;/b&gt;");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
+
+TEST(Modifier, Indent)
+{
+    string input("{$var|indent:1:\"\t\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "Test");
+
+    string expectedOutput("\tTest");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}

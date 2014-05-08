@@ -20,6 +20,7 @@ static Internal::CountCharactersModifier count_characters;
 static Internal::CountParagraphsModifier count_paragraphs;
 static Internal::DefaultModifier         _default; // Underscore is purely because default is a keyword
 static Internal::EscapeModifier          escape;
+static Internal::IndentModifier          indent;
 
 /**
  *  Constructor
@@ -34,6 +35,7 @@ Data::Data()
     modifier("count_paragraphs", &count_paragraphs);
     modifier("default", &_default);
     modifier("escape", &escape);
+    modifier("indent", &indent);
 }
 
 /**

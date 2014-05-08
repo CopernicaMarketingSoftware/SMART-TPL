@@ -73,6 +73,7 @@
 #include "builtin/count_paragraphs.h"
 #include "builtin/default.h"
 #include "builtin/escape.h"
+#include "builtin/indent.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"
