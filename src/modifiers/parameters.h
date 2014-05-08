@@ -14,7 +14,6 @@ namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
- *  @todo Actually start using this class?
  */
 class Parameters
 {
