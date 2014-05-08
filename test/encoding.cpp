@@ -22,13 +22,3 @@ TEST(Encoding, Html)
     string expectedOutput("&lt;b&gt;This is bold&lt;/b&gt;");
     EXPECT_EQ(expectedOutput, tpl.process("html"));
 }
-
-TEST(Encoding, HtmlToRaw)
-{
-    string input("{mode=html}&lt;b&gt;This is bold&lt;/b&gt;");
-    Buffer buffer(input);
-    Template tpl(buffer);
-
-    string expectedOutput("<b>This is bold</b>");
-    EXPECT_EQ(expectedOutput, tpl.process("raw"));
-}

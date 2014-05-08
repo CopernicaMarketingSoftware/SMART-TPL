@@ -44,7 +44,7 @@ private:
      *
      *  @var std::string
      */
-    std::string _encoding;
+    std::string _encoding = "raw";
 
 public:
     /**

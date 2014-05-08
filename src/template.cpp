@@ -24,15 +24,15 @@ Template::Template(const Source& source)
     {
         // hey that's cool, we can create create a shard library
         _executor = new Internal::Library(source.name());
+
+        // Set the _encoding using the encoding() method on our executor
+        _encoding = _executor->encoding();
     }
     else
     {
         // it was not a shared library, we're going to compile it into bytecode ourselves
         _executor = new Internal::Bytecode(source);
     }
-
-    // Set the _encoding using the encoding() method on our executor
-    _encoding = _executor->encoding();
 }
 
 /**

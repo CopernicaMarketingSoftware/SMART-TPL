@@ -17,7 +17,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Map which maps the human readable names to the actual escapers
  */
-std::map<std::string, const Escaper*> _escapers;
+std::map<std::string, Escaper*> _escapers;
 
 /**
  *  Constructor, the escaper will automatically register itself in _escapers
@@ -40,7 +40,7 @@ static HtmlEscaper _html;
  *  @return A new Escape object, which you should manage yourself
  *  @todo   Do this is a more efficient way, enums? a map with strings to escapers?
  */
-const Escaper* Escaper::get(const std::string &encoding)
+Escaper* Escaper::get(const std::string &encoding)
 {
     // Look for the escaper with name encoding in _escapers
     auto iter = _escapers.find(encoding);
