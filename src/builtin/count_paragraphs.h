@@ -36,8 +36,8 @@ public:
         size_t len = input->size();
 
         // Init our output value
-        int output = 0;
-        for (int i = 0; i < len; ++i)
+        numeric_t output = 0;
+        for (size_t i = 0; i < len; ++i)
         {
             // We're really just counting the \n and \r's
             if (str[i] == '\n' || str[i] == '\r') ++output;
