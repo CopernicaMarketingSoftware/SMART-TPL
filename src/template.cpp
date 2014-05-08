@@ -78,7 +78,7 @@ std::string Template::process(const Data &data, const std::string &outencoding) 
     // generate the output string
     std::string output = handler.output();
 
-    if (outencoding != "null")
+    if (outencoding != "null" && _encoding != outencoding)
     {
         // Get the decoder for our current type
         const Internal::Escaper *decoder = Internal::Escaper::get(_encoding);
