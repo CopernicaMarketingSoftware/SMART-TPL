@@ -169,3 +169,16 @@ TEST(Modifier, Spacify)
     string expectedOutput("T^^e^^s^^t^^i^^n^^g^^ ^^1^^ ^^2^^ ^^3");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
+
+TEST(Modifier, Truncate)
+{
+    string input("{$var|truncate}\n{$var|truncate:13}\n{$var|truncate:13:\"\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "This is just a simple test sentence.");
+
+    string expectedOutput("This is just a simple test sentence.\nThis is ju...\nThis is just ");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}

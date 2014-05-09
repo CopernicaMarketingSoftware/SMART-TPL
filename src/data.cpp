@@ -24,6 +24,7 @@ static Internal::IndentModifier          indent;
 static Internal::ReplaceModifier         replace;
 static Internal::Nl2brModifier           nl2br;
 static Internal::SpacifyModifier         spacify;
+static Internal::TruncateModifier        truncate;
 
 /**
  *  Constructor
@@ -44,6 +45,7 @@ Data::Data()
     modifier("replace", &replace);
     modifier("nl2br", &nl2br);
     modifier("spacify", &spacify);
+    modifier("truncate", &truncate);
 }
 
 /**

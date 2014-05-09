@@ -77,6 +77,7 @@
 #include "builtin/replace.h"
 #include "builtin/nl2br.h"
 #include "builtin/spacify.h"
+#include "builtin/truncate.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"
