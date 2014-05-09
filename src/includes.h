@@ -76,6 +76,7 @@
 #include "builtin/indent.h"
 #include "builtin/replace.h"
 #include "builtin/nl2br.h"
+#include "builtin/spacify.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

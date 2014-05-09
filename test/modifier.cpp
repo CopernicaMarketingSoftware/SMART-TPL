@@ -156,3 +156,16 @@ TEST(Modifier, Nl2br)
     string expectedOutput("This is just a simple<br />test text.");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
+
+TEST(Modifier, Spacify)
+{
+    string input("{$var|spacify:\"^^\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "Testing 1 2 3");
+
+    string expectedOutput("T^^e^^s^^t^^i^^n^^g^^ ^^1^^ ^^2^^ ^^3");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}
