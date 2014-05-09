@@ -376,31 +376,6 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
 }
 
 /**
- *  Apply a modifier on a numeric type
- *  @param userdata     pointer to user-supplied data
- *  @param modifier     pointer to the modifier that should be applied
- *  @param value        the numeric type that should go through the modifier
- *  @todo Actually start using this method
- */
-void* smart_tpl_modify_numeric(void *userdata, void *modifier, long value)
-{
-    return nullptr;
-}
-
-/**
- *  Apply a modifier on a string
- *  @param userdata     pointer to user-supplied data
- *  @param modifier     pointer to the modifier that should be applied
- *  @param value        the string that should be modified
- *  @param size         the length of value
- *  @todo Actually start using this method
- */
-void* smart_tpl_modify_string(void *userdata, void *modifier, const char *value, size_t size)
-{
-    return nullptr;
-}
-
-/**
  *  Assign a numeric value to a local variable
  *  @param userdata        pointer to user-supplied data
  *  @param key             the key we would like to assign it to
