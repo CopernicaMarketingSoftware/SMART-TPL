@@ -130,3 +130,29 @@ TEST(Modifier, Indent)
     string expectedOutput("\tTest");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
+
+TEST(Modifier, Replace)
+{
+    string input("{$var|replace:\"Garden\":\"Vineyard\"}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "Child\'s Stool Great for Use in Garden.");
+
+    string expectedOutput("Child\'s Stool Great for Use in Vineyard.");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}
+
+TEST(Modifier, Nl2br)
+{
+    string input("{$var|nl2br}");
+    Buffer buffer(input);
+    Template tpl(buffer);
+
+    Data data;
+    data.assign("var", "This is just a simple\ntest text.");
+
+    string expectedOutput("This is just a simple<br />test text.");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}

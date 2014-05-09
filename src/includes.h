@@ -74,6 +74,8 @@
 #include "builtin/default.h"
 #include "builtin/escape.h"
 #include "builtin/indent.h"
+#include "builtin/replace.h"
+#include "builtin/nl2br.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"
