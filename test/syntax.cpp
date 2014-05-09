@@ -34,6 +34,13 @@ TEST(Syntax, SingleIf)
     compile(tpl);
 }
 
+TEST(Syntax, EndIf)
+{
+    string input("{if true}true{endif}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
 TEST(Syntax, IfElse)
 {
     string input("{if true}true{else}false{/if}");

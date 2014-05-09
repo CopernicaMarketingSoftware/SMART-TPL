@@ -69,6 +69,7 @@
 "{assign"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ASSIGN; }
 "{$"                { BEGIN(INSIDE_CURLY_BRACES); yyless(1); return TOKEN_EXPRESSION; }
 "{/if}"             { return TOKEN_ENDIF; }
+"{endif}"           { return TOKEN_ENDIF; }
 "{"                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 
     /**
