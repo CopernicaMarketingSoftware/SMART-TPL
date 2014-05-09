@@ -17,14 +17,14 @@ using namespace std;
 
 TEST(Modifier, ToUpper)
 {
-    string input("{$var|toupper}");
+    string input("{$var|toupper}\n{$var|upper}");
     Buffer buffer(input);
     Template tpl(buffer);
 
     Data data;
     data.assign("var", "VaRiAbLe");
 
-    string expectedOutput("VARIABLE");
+    string expectedOutput("VARIABLE\nVARIABLE");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
@@ -32,14 +32,14 @@ TEST(Modifier, ToUpper)
 
 TEST(Modifier, ToLower)
 {
-    string input("{$var|tolower}");
+    string input("{$var|tolower}\n{$var|lower}");
     Buffer buffer(input);
     Template tpl(buffer);
 
     Data data;
     data.assign("var", "VaRiAbLe");
 
-    string expectedOutput("variable");
+    string expectedOutput("variable\nvariable");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     compile(tpl);
@@ -120,14 +120,14 @@ TEST(Modifier, Escape)
 
 TEST(Modifier, Indent)
 {
-    string input("{$var|indent:1:\"\t\"}");
+    string input("{$var|indent}\n{$var|indent:1:\"\t\"}");
     Buffer buffer(input);
     Template tpl(buffer);
 
     Data data;
     data.assign("var", "Test");
 
-    string expectedOutput("\tTest");
+    string expectedOutput("    Test\n\tTest");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
 
@@ -159,14 +159,14 @@ TEST(Modifier, Nl2br)
 
 TEST(Modifier, Spacify)
 {
-    string input("{$var|spacify:\"^^\"}");
+    string input("{$var|spacify}\n{$var|spacify:\"^^\"}");
     Buffer buffer(input);
     Template tpl(buffer);
 
     Data data;
     data.assign("var", "Testing 1 2 3");
 
-    string expectedOutput("T^^e^^s^^t^^i^^n^^g^^ ^^1^^ ^^2^^ ^^3");
+    string expectedOutput("T e s t i n g   1   2   3\nT^^e^^s^^t^^i^^n^^g^^ ^^1^^ ^^2^^ ^^3");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
 
