@@ -14,7 +14,6 @@ namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
- *  @todo Multiline support?
  */
 class IndentModifier : public Modifier
 {
@@ -48,11 +47,24 @@ public:
         // initialize our output
         std::string output;
 
+        const char *str = input->toString();
+        size_t len = input->size();
+        output.reserve(len);
+
         // Append our indent character indent times
         for (int i = 0; i < indents; ++i) output.append(character);
 
-        // Append the input and return the output
-        return output.append(input->toString(), input->size());
+        for (int i = 0; i < len; ++i)
+        {
+            output += str[i];
+            if (str[i] == '\n')
+            {
+                for (int j = 0; j < indents; ++j) output.append(character);
+            }
+        }
+
+        // Return the output
+        return output;
     }
 };
 

@@ -113,13 +113,14 @@ TEST(Modifier, Escape)
 
 TEST(Modifier, Indent)
 {
-    string input("{$var|indent}\n{$var|indent:1:\"\t\"}");
+    string input("{$var|indent}\n-\n{$var|indent:1:\"\t\"}\n-\n{$var2|indent:1:\"\t\"}");
     Template tpl((Buffer(input)));
 
     Data data;
-    data.assign("var", "Test");
+    data.assign("var", "Test")
+        .assign("var2", "Testing\n1 2 3\ntest");
 
-    string expectedOutput("    Test\n\tTest");
+    string expectedOutput("    Test\n-\n\tTest\n-\n\tTesting\n\t1 2 3\n\ttest");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
 
