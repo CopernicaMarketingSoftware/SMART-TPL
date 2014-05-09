@@ -536,7 +536,7 @@ void smart_tpl_params_append_string(void *userdata, void *parameters, const char
  *  Append a boolean value to the parameters
  *  @param  userdata       Pointer to user-supplied data
  *  @param  parameters     Pointer to a SmartTpl::Parameters object
- *  @param  boolean        A 'boolean' value, 0 is 
+ *  @param  boolean        A 'boolean' value, 0 is false, everything else is true (C-style)
  */
 void smart_tpl_params_append_boolean(void *userdata, void *parameters, int boolean)
 {
