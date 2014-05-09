@@ -170,3 +170,17 @@ TEST(Modifier, Truncate)
     string expectedOutput("This is just a simple test sentence.\nThis is ju...\nThis is just ");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 }
+
+TEST(Modifier, Count)
+{
+    string input("{$var|count}");
+    Template tpl((Buffer(input)));
+
+    ListValue list;
+    for (int i = 0; i < 10; ++i) list.add(i);
+    Data data;
+    data.assign("var", &list);
+
+    string expectedOutput("10");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}

@@ -69,6 +69,7 @@
 #include "builtin/tolower.h"
 #include "builtin/toupper.h"
 #include "builtin/cat.h"
+#include "builtin/count.h"
 #include "builtin/count_characters.h"
 #include "builtin/count_paragraphs.h"
 #include "builtin/default.h"
