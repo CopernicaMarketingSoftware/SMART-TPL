@@ -34,6 +34,7 @@ public:
      *  Constructor
      */
     Variant();
+    Variant(std::nullptr_t null) : Variant() {};
     Variant(const char *value);
     Variant(const char *value, size_t size);
     Variant(const std::string &value);
