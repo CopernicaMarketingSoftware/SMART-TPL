@@ -18,8 +18,7 @@ using namespace std;
 TEST(Modifier, ToUpper)
 {
     string input("{$var|toupper}\n{$var|upper}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "VaRiAbLe");
@@ -33,8 +32,7 @@ TEST(Modifier, ToUpper)
 TEST(Modifier, ToLower)
 {
     string input("{$var|tolower}\n{$var|lower}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "VaRiAbLe");
@@ -48,8 +46,7 @@ TEST(Modifier, ToLower)
 TEST(Modifier, Cat)
 {
     string input("{$var|cat:\" 1 2 3\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "Testing");
@@ -63,8 +60,7 @@ TEST(Modifier, Cat)
 TEST(Modifier, CountCharacters)
 {
     string input("{$var|count_characters}\n{$var|count_characters:true}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "Cold Wave Linked to Temperatures.");
@@ -78,8 +74,7 @@ TEST(Modifier, CountCharacters)
 TEST(Modifier, CountParagraphs)
 {
     string input("{$var|count_paragraphs}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "War Dims Hope for Peace. Child's Death Ruins Couple's Holiday.\n\n"
@@ -94,8 +89,7 @@ TEST(Modifier, CountParagraphs)
 TEST(Modifier, Default)
 {
     string input("{$var|default:\"default string\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     EXPECT_EQ("default string", tpl.process());
     Data data;
@@ -108,8 +102,7 @@ TEST(Modifier, Default)
 TEST(Modifier, Escape)
 {
     string input("{$var|escape:\"html\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "<b>This is bold</b>");
@@ -121,8 +114,7 @@ TEST(Modifier, Escape)
 TEST(Modifier, Indent)
 {
     string input("{$var|indent}\n{$var|indent:1:\"\t\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "Test");
@@ -134,8 +126,7 @@ TEST(Modifier, Indent)
 TEST(Modifier, Replace)
 {
     string input("{$var|replace:\"Garden\":\"Vineyard\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "Child\'s Stool Great for Use in Garden.");
@@ -147,8 +138,7 @@ TEST(Modifier, Replace)
 TEST(Modifier, Nl2br)
 {
     string input("{$var|nl2br}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "This is just a simple\ntest text.");
@@ -160,8 +150,7 @@ TEST(Modifier, Nl2br)
 TEST(Modifier, Spacify)
 {
     string input("{$var|spacify}\n{$var|spacify:\"^^\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "Testing 1 2 3");
@@ -173,8 +162,7 @@ TEST(Modifier, Spacify)
 TEST(Modifier, Truncate)
 {
     string input("{$var|truncate}\n{$var|truncate:13}\n{$var|truncate:13:\"\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "This is just a simple test sentence.");

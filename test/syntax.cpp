@@ -1,29 +1,113 @@
 #include <gtest/gtest.h>
 #include <smarttpl.h>
 
+#include "ccode.h"
+
 using namespace SmartTpl;
 using namespace std;
 
-TEST(Syntax, WithoutElse) {
+TEST(Syntax, Empty)
+{
+    string input;
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, Mode)
+{
+    string input("{mode=html}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, Raw)
+{
+    string input("{$var}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, SingleIf)
+{
+    string input("{if true}true{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, IfElse)
+{
+    string input("{if true}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, ElseIf)
+{
+    string input("{if true}true{elseif true}also true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+// In a previous version you were unable to use elseif without putting an else block after it
+TEST(Syntax, WithoutElse)
+{
     string input("{if true}true{elseif true}true{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
-};
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
 
-TEST(Syntax, AssignTo) {
+TEST(Syntax, ForEach)
+{
+    string input("{foreach $var in $map}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, ForEachAs)
+{
+    string input("{foreach $map as $var}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, ForEachWithKeys)
+{
+    string input("{foreach $map as $key => $var}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, AssignTo)
+{
     string input("{assign 1 to $var}");
-    Buffer buffer(input);
-    Template tpl(buffer);
-};
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
 
-TEST(Syntax, Assign) {
+TEST(Syntax, Assign)
+{
     string input("{$var = 1}");
-    Buffer buffer(input);
-    Template tpl(buffer);
-};
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
 
-TEST(Syntax, AssignNoSpaces) {
+TEST(Syntax, AssignNoSpaces)
+{
     string input("{$var=1}");
-    Buffer buffer(input);
-    Template tpl(buffer);
-};
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, ArrayAccess)
+{
+    string input("{$var[0]}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, KeyArrayAccess)
+{
+    string input("{$var[\"key\"]}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}

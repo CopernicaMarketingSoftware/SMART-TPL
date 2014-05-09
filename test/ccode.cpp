@@ -18,8 +18,7 @@ using namespace std;
 TEST(CCode, ForEach)
 {
     string input("{foreach $key in $map}key: {$key}\n{/foreach}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\n"
@@ -38,8 +37,7 @@ TEST(CCode, ForEach)
 TEST(CCode, ForEachWithKeys)
 {
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\n"
@@ -60,8 +58,7 @@ TEST(CCode, ForEachWithKeys)
 TEST(CCode, SingleModifier)
 {
     string input("{$var|toupper}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nvoid *o = NULL;\n"
@@ -76,8 +73,7 @@ TEST(CCode, SingleModifier)
 TEST(CCode, ChainedModifiers)
 {
     string input("{$var|toupper|tolower|toupper|tolower}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nvoid *o = NULL;\n"
@@ -95,8 +91,7 @@ TEST(CCode, ChainedModifiers)
 TEST(CCode, IfElse)
 {
     string input("{if $variable}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -111,8 +106,7 @@ TEST(CCode, IfElse)
 TEST(CCode, ElseIf)
 {
     string input("{if $variable}first is true{elseif $othervariable}second is true{else}nothing is true{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -130,8 +124,7 @@ TEST(CCode, ElseIf)
 TEST(CCode, VarGreaterThen)
 {
     string input("{if $age > 18}You are over 18 years old.{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -146,8 +139,7 @@ TEST(CCode, VarGreaterThen)
 TEST(CCode, VarGreaterThenNegativeNumber)
 {
     string input("{if $age > -1}You are alive..{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -162,8 +154,7 @@ TEST(CCode, VarGreaterThenNegativeNumber)
 TEST(CCode, LiteralArrayAccess)
 {
     string input("{$map[0]}\n{$map.anothermember}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -179,8 +170,7 @@ TEST(CCode, LiteralArrayAccess)
 TEST(CCode, NumericComparison)
 {
     string input("{if 10 == 100}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -195,8 +185,7 @@ TEST(CCode, NumericComparison)
 TEST(CCode, BoolComparison)
 {
     string input("{if true == false}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -210,8 +199,7 @@ TEST(CCode, BoolComparison)
 TEST(CCode, StringComparison)
 {
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -226,8 +214,7 @@ TEST(CCode, StringComparison)
 TEST(CCode, StringComparisonNotEquals)
 {
     string input("{if \"string1\" != \"string2\"}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -249,8 +236,7 @@ TEST(CCode, CompareDifferentTypes)
 TEST(CCode, AssignValue)
 {
     string input("{assign \"string\" to $value}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -264,8 +250,7 @@ TEST(CCode, AssignValue)
 TEST(CCode, AssignValueIs)
 {
     string input("{$value = \"string\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -279,8 +264,7 @@ TEST(CCode, AssignValueIs)
 TEST(CCode, LiteralStringsWeirdCharacters)
 {
     string input("{if \"?_<test>\" == \"-\'/%#^&\"}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -295,8 +279,7 @@ TEST(CCode, LiteralStringsWeirdCharacters)
 TEST(CCode, LiteralEmptyString)
 {
     string input("{if \"\" == \"not empty\"}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -311,8 +294,7 @@ TEST(CCode, LiteralEmptyString)
 TEST(CCode, ModifierParameters)
 {
     string input("{$var|substring:1:5}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nvoid *o = NULL;\n"
@@ -331,8 +313,7 @@ TEST(CCode, ModifierParameters)
 TEST(CCode, Unicode)
 {
     string input("이것은 단순한 유니 테스트입니다 ..");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -348,8 +329,7 @@ TEST(CCode, Unicode)
 TEST(CCode, TemplateMode)
 {
     string input("{mode=test}{$var}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
@@ -364,8 +344,7 @@ TEST(CCode, TemplateMode)
 TEST(CCode, Encoded)
 {
     string input("{mode=html}<b>This is bold</b>");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"

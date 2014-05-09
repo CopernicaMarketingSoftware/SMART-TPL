@@ -16,8 +16,7 @@ using namespace std;
 TEST(Jit, ForEach)
 {
     string input("{foreach $item in $list}item: {$item}\n{/foreach}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     ListValue list;
     for (int i = 0; i < 5; ++i) list.add(i);
@@ -32,8 +31,7 @@ TEST(Jit, ForEach)
 TEST(Jit, ForEachWithKeys)
 {
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     MapValue map;
     map.assign("1", 1)
@@ -51,8 +49,7 @@ TEST(Jit, ForEachWithKeys)
 TEST(Jit, If)
 {
     string input("{if true}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("true");
     EXPECT_EQ(tpl.process(), expectedOutput);
@@ -61,8 +58,7 @@ TEST(Jit, If)
 TEST(Jit, StringComparisonEquals)
 {
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("false");
     EXPECT_EQ(tpl.process(), expectedOutput);
@@ -71,8 +67,7 @@ TEST(Jit, StringComparisonEquals)
 TEST(Jit, StringComparisonNotEquals)
 {
     string input("{if \"string1\" != \"string2\"}true{else}false{/if}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     string expectedOutput("true");
     EXPECT_EQ(tpl.process(), expectedOutput);

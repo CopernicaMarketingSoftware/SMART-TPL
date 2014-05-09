@@ -16,21 +16,19 @@ using namespace std;
 TEST(Callbacks, SimpleCallback)
 {
     string input("{$name}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.callback("name",[](){ return "Name"; });
 
     string expectedOutput("Name");
-    EXPECT_EQ(tpl.process(data), expectedOutput);
+    EXPECT_EQ(expectedOutput, tpl.process(data));
 }
 
 TEST(Callbacks, CallbackCaching)
 {
     string input("{$name} {$name}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     int counter = 0;
     Data data;
@@ -40,6 +38,6 @@ TEST(Callbacks, CallbackCaching)
       }, true);
 
     string expectedOutput("Name Name");
-    EXPECT_EQ(tpl.process(data), expectedOutput);
+    EXPECT_EQ(expectedOutput, tpl.process(data));
     EXPECT_EQ(counter, 1);
 }

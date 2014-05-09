@@ -17,8 +17,7 @@ using namespace std;
 
 TEST(Modifiers, ChainedModifiers) {
     string input("{$var|tolower|toupper|tolower}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "VaRiAbLe");
@@ -70,8 +69,7 @@ private:
 TEST(Modifiers, Parameters)
 {
     string input("{$var|test:0:1:2:3}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     TestModifier test(TestModifier::NumericMode);
     Data data;
@@ -86,8 +84,7 @@ TEST(Modifiers, Parameters)
 TEST(Modifiers, ParametersChainingNoParameters)
 {
     string input("{$var|toupper|test:0:1:2:3}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     TestModifier test(TestModifier::NumericMode);
     Data data;
@@ -102,8 +99,7 @@ TEST(Modifiers, ParametersChainingNoParameters)
 TEST(Modifiers, ParametersChainingParameters)
 {
     string input("{$var|test:0:1:2:3|test:0:1:2:3}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     TestModifier test(TestModifier::NumericMode);
     Data data;
@@ -118,8 +114,7 @@ TEST(Modifiers, ParametersChainingParameters)
 TEST(Modifiers, ParametersString)
 {
     string input("{$var|test:\"test\"}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     TestModifier test(TestModifier::StringMode);
     Data data;
@@ -135,8 +130,7 @@ TEST(Modifiers, ParametersString)
 TEST(Modifiers, ParametersBoolean)
 {
     string input("{$var|test:true:false:true}");
-    Buffer buffer(input);
-    Template tpl(buffer);
+    Template tpl((Buffer(input)));
 
     TestModifier test(TestModifier::BooleanMode);
     Data data;
