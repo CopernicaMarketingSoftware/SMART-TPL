@@ -39,18 +39,7 @@ private:
      *  All values, indexed by name
      *  @var    std::map
      */
-    std::map<const char *,Value*, cmp_str> _values;
-
-    /**
-     *  A list with all the interally created Values that
-     *  should simply be destroyed later on
-     */
-    std::vector<std::unique_ptr<Value>> _destroy_later;
-
-    /**
-     *  A vector with all the Values created to return as keys
-     */
-    std::vector<std::unique_ptr<Value>> _key_cache;
+    std::map<const char *,Variant, cmp_str> _values;
 
 public:
     /**
@@ -97,7 +86,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) override
     {
         // look it up in _values return nullptr if we didn't find it
         auto iter = _values.find(name);
@@ -115,14 +104,8 @@ public:
      */
     MapValue& assign(const char *name, numeric_t number)
     {
-        // Create the value
-        Value *value = new NumericValue(number);
-
         // append variable
-        _values[name] = value;
-
-        // and add it to our _destroy_later list
-        _destroy_later.push_back(std::unique_ptr<Value>(value));
+        _values[name] = number;
 
         // allow chaining
         return *this;
@@ -136,32 +119,12 @@ public:
      */
     MapValue& assign(const char *name, const std::string &str)
     {
-        // Create the value
-        Value *value = new StringValue(str);
-
         // append the variable
-        _values[name] = value;
-
-        // and add it to our _destroy_later list
-        _destroy_later.push_back(std::unique_ptr<Value>(value));
+        _values[name] = str;
 
         // allow chaining
         return *this;
     }
-
-    /**
-     *  Assign a new value in this map
-     *  @param  name        name of the value
-     *  @param  value       the actual value
-     *  @return MapValue    Same object for chaining
-     */
-    MapValue& assign(const char* name, Value* value) {
-        // Add to our values
-        _values[name] = value;
-
-        // Allow chaining
-        return *this;
-    };
 
     /**
      *  Get access to the amount of members this value has
@@ -176,7 +139,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *member(int position) override
+    virtual Variant member(int position) override
     {
         // If we're out of bounds just return nullptr
         if (position < 0 || position >= memberCount()) return nullptr;
@@ -199,7 +162,7 @@ public:
     virtual Variant key(int position) override
     {
         // If we're out of bounds just return nullptr
-        if (position < 0 || position >= memberCount()) return Variant();
+        if (position < 0 || position >= memberCount()) return nullptr;
 
         // get the iterator of _values
         auto iter = _values.begin();
@@ -226,7 +189,7 @@ public:
      */
     virtual Variant cache() override
     {
-        return Variant();
+        return nullptr;
     }
 };
 

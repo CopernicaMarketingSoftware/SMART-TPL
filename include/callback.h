@@ -102,7 +102,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) override
     {
         // callbacks only return scalar values without members
         return nullptr;
@@ -122,7 +122,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *member(int position) override
+    virtual Variant member(int position) override
     {
         // callbacks can only return scalar values, members will never
         // be retrieved
@@ -138,7 +138,7 @@ public:
     {
         // callbacks can only return simple scalar values, so retrieving
         // a key never happens
-        return Variant();
+        return nullptr;
     }
 
     /**

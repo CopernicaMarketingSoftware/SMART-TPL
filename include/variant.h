@@ -80,7 +80,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) override
     {
         return _value->member(name, size);
     }
@@ -98,7 +98,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Value *member(int position) override
+    virtual Variant member(int position) override
     {
         return _value->member(position);
     }

@@ -21,20 +21,13 @@ public:
     /**
      *  const_iterator typedef
      */
-    typedef std::vector<Value*>::const_iterator const_iterator;
+    typedef std::vector<Variant>::const_iterator const_iterator;
 private:
     /**
      *  The actual list with values
      *  @var std::vector
      */
-    std::vector<Value*> _list;
-
-    /**
-     *  A list with values that should be destroyed later on
-     *  mostly for Value objects created in place
-     *  @var std::set
-     */
-    std::set<std::unique_ptr<Value>> _destroy_later;
+    std::vector<Variant> _list;
 
 public:
     /**
@@ -81,7 +74,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Value *member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) override
     {
         // We don't support getting members using keys
         return nullptr;
@@ -94,14 +87,8 @@ public:
      */
     ListValue& add(numeric_t number)
     {
-        // Create the NumericValue
-        Value *value = new NumericValue(number);
-
         // Push it into the list
-        _list.push_back(value);
-
-        // Push it into our destroy later list
-        _destroy_later.insert(std::unique_ptr<Value>(value));
+        _list.push_back(number);
 
         // allow chaining
         return *this;
@@ -114,31 +101,12 @@ public:
      */
     ListValue& add(const std::string &str)
     {
-        // Create the StringValue
-        Value *value = new StringValue(str);
-
         // Push it into the list
-        _list.push_back(value);
-
-        // Push it into our destroy later list
-        _destroy_later.insert(std::unique_ptr<Value>(value));
+        _list.push_back(str);
 
         // allow chaining
         return *this;
     }
-
-    /**
-     *  Add data
-     *  @param  value        The actual value
-     *  @return ListValue    Same object for chaining
-     */
-    ListValue& add(Value* value) {
-        // Just add it to the list and we're done with it
-        _list.push_back(value);
-
-        // Allow chaining
-        return *this;
-    };
 
     /**
      *  Get access to the amount of members this value has
@@ -151,11 +119,11 @@ public:
     /**
      *  Get access to a member at a certain position
      *  @param position
-     *  @return Value or nullptr if not present
+     *  @return Value or empty value if not present
      */
-    virtual Value *member(int position) override
+    virtual Variant member(int position) override
     {
-        // If we're out of bounds just return nullptr
+        // If we're out of bounds just return Variant()
         if (position < 0 || position >= memberCount()) return nullptr;
 
         // Just return it using the [] operator
@@ -165,11 +133,11 @@ public:
     /**
      *  Get access to the key at a certain position
      *  @param position
-     *  @return The name of the key at position or nullptr otherwise
+     *  @return The name of the key at position or an empty value otherwise
      */
     virtual Variant key(int position) override
     {
-        return Variant();
+        return nullptr;
     }
 
     /**
@@ -187,7 +155,7 @@ public:
      */
     virtual Variant cache() override
     {
-        return Variant();
+        return nullptr;
     }
 
     /**

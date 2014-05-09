@@ -82,7 +82,7 @@ public:
      *      to create. what to do?
      * 
      */
-    virtual Value *member(const char *name, size_t size) = 0;
+    virtual Variant member(const char *name, size_t size) = 0;
 
     /**
      *  Get access to the amount of members this value has
@@ -95,7 +95,7 @@ public:
      *  @param  position
      *  @return Value       Value object, or a nullptr if not present
      */
-    virtual Value *member(int position) = 0;
+    virtual Variant member(int position) = 0;
 
     /**
      *  Get access to the key at a certain position

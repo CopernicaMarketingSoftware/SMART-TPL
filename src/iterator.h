@@ -81,7 +81,7 @@ public:
 
     /**
      *  Retrieve a pointer to the current key
-     *  @return void*
+     *  @return Variant
      */
     Variant key() const
     {
@@ -90,9 +90,9 @@ public:
 
     /**
      *  Retrieve pointer to the current member
-     *  @return void*
+     *  @return Variant
      */
-    void *value() const
+    Variant value() const
     {
         return _source->member(_pos);
     }

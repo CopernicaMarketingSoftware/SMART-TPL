@@ -91,10 +91,17 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t 
     auto *var = (Value *)variable;
 
     // fetch the member
-    auto *result = var->member(name, size);
+    auto member = var->member(name, size);
 
-    // ensure that we always return an object
-    return result ? result : &EmptyValue::get();
+    // Allocate it on the heap so we can return the pointer to it
+    auto *output = new Variant(member);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
 }
 
 /**
@@ -110,10 +117,17 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
     auto *var = (Value *)variable;
 
     // fetch the member
-    auto *result = var->member(position);
+    auto member = var->member(position);
 
-    // ensure that we always return an object
-    return result ? result : &EmptyValue::get();
+    // Allocate it on the heap so we can return the pointer to it
+    auto *output = new Variant(member);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
 }
 
 /**
@@ -201,8 +215,18 @@ void *smart_tpl_iterator_value(void *userdata, void *iterator)
     // cast to iterator
     auto *iter = (Iterator *)iterator;
 
-    // ask the iterator
-    return iter->value();
+    // fetch the value from the iterator
+    auto value = iter->value();
+
+    // Allocate it on the heap so we can return the pointer to it
+    auto *output = new Variant(value);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
 }
 
 /**
