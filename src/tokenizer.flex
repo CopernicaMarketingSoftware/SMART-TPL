@@ -95,7 +95,7 @@
     "="                         { return TOKEN_IS; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
-    "\""[^\"]*"\""              { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
+    \"([^"\\]|\\.)*\"           { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }

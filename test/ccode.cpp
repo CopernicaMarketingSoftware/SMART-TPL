@@ -263,7 +263,7 @@ TEST(CCode, AssignValueIs)
 
 TEST(CCode, LiteralStringsWeirdCharacters)
 {
-    string input("{if \"?_<test>\" == \"-\'/%#^&\"}true{else}false{/if}");
+    string input("{if \"?_\\\"<test>\" == \"-\'/%#^&\"}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
