@@ -268,7 +268,7 @@ TEST(CCode, LiteralStringsWeirdCharacters)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "if (callbacks->strcmp(userdata,\"?_<test>\",8,\"-\\'/%#^&\",7) == 0){\n"
+    "if (callbacks->strcmp(userdata,\"?_\\\"<test>\",9,\"-\\'/%#^&\",7) == 0){\n"
     "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
