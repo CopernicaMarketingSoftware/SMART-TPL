@@ -19,7 +19,7 @@ Variant::Variant(const char *value) : _value(new StringValue(value)) {};
 Variant::Variant(const char *value, size_t size) : _value(new StringValue(value, size)) {};
 Variant::Variant(const std::string &value) : _value(new StringValue(value)) {};
 Variant::Variant(numeric_t value) : _value(new NumericValue(value)) {};
-Variant::Variant(bool value) : _value(new BooleanValue(value)) {};
+Variant::Variant(bool value) : _value(BooleanValue::get(value)) {};
 
 /**
  *  End namespace

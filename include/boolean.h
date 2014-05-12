@@ -18,17 +18,20 @@ namespace SmartTpl {
 class BooleanValue : public Value
 {
 public:
-    static BooleanValue *get(bool b)
+    static std::shared_ptr<BooleanValue> get(bool b)
     {
-        if (b) return &_true;
-        return &_false;
+        if (b)
+        {
+            static std::shared_ptr<BooleanValue> _true(std::make_shared<BooleanValue>(true));
+            return _true;
+        }
+        else
+        {
+            static std::shared_ptr<BooleanValue> _false(std::make_shared<BooleanValue>(false));
+            return _false;
+        }
     }
 private:
-    /**
-     *  Static instances of BooleanValue, we really only need 2 you know
-     */
-    static BooleanValue _true;
-    static BooleanValue _false;
 
     /**
      *  The boolean value

@@ -150,7 +150,7 @@ public:
      */
     void assign(const char *key, size_t key_size, bool boolean)
     {
-        _local_values[key] = BooleanValue::get(boolean);
+        _local_values[key] = BooleanValue::get(boolean).get();
     }
 
     /**
