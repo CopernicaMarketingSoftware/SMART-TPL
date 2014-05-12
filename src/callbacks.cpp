@@ -259,7 +259,7 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
     auto *result = handler->variable(name, size);
 
     // ensure that we always return an object
-    return result ? result : &EmptyValue::get();
+    return result ? result : EmptyValue::instance().get();
 }
 
 /**
@@ -277,7 +277,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
     auto *result = var->toString();
 
     // ensure that a string is always returned
-    return result ? result : EmptyValue::get().toString();
+    return result ? result : EmptyValue::instance()->toString();
 }
 
 /**

@@ -14,7 +14,7 @@
  */
 namespace SmartTpl {
 
-Variant::Variant() : _value(new EmptyValue()) {};
+Variant::Variant() : _value(EmptyValue::instance()) {};
 Variant::Variant(const char *value) : _value(new StringValue(value)) {};
 Variant::Variant(const char *value, size_t size) : _value(new StringValue(value, size)) {};
 Variant::Variant(const std::string &value) : _value(new StringValue(value)) {};

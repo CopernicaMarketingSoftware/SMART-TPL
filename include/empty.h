@@ -20,10 +20,11 @@ class EmptyValue : public Value
 public:
     /**
      *  Get a static singleton of EmptyValue
+     *  @return std::shared_ptr<EmptyValue>
      */
-    static EmptyValue& get()
+    static std::shared_ptr<EmptyValue> &instance()
     {
-        static EmptyValue empty;
+        static std::shared_ptr<EmptyValue> empty(std::make_shared<EmptyValue>());
         return empty;
     }
 
