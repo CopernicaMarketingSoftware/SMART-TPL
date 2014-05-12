@@ -29,11 +29,11 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // Let's just convert our input to a C string
-        const char *str = input->toString();
-        size_t len = input->size();
+        const char *str = input.toString();
+        size_t len = input.size();
 
         // Init our output value
         numeric_t output = 0;

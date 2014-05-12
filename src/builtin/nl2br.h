@@ -29,10 +29,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // initialize our output
-        std::string output(input->toString(), input->size());
+        std::string output(input.toString(), input.size());
 
         // Replace the new lines with <br /> and return
         return replace(output, "\n", "<br />");

@@ -33,8 +33,9 @@ public:
      *  @param  input       Initial value
      *  @param  params      Parameters used for this modification
      *  @return Variant     A new value object
+     *  @todo   Attempt to make the Value a Variant here
      */
-    virtual Variant modify(Value *input, const Parameters *params) = 0;
+    virtual Variant modify(const Value &input, const Parameters &params) = 0;
 };
 
 /**

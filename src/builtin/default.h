@@ -29,16 +29,16 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // If the string size of our input is 0 that means that we are empty
-        if (input->size() == 0)
+        if (input.size() == 0)
         {
-            if (params) return params->get(0).toString();
+            if (params.size() >= 1) return params[0].toString();
         }
 
         // Return the output
-        return std::string(input->toString(), input->size());
+        return std::string(input.toString(), input.size());
     }
 };
 

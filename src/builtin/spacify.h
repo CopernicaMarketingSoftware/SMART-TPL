@@ -29,17 +29,17 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // By default we use one space as a seperator
         std::string seperator(" ");
 
         // If we have parameters we have at least one, then this is our custom seperator
-        if (params) seperator = std::string(params->get(0).toString(), params->get(0).size());
+        if (params.size() >= 1) seperator = std::string(params[0].toString(), params[0].size());
 
         // Let's just convert our input to a C string
-        const char *str = input->toString();
-        size_t len = input->size();
+        const char *str = input.toString();
+        size_t len = input.size();
 
         // Init our output value
         std::string output;
@@ -49,6 +49,8 @@ public:
         for (size_t i = 0; i < len; ++i)
         {
             output += str[i];
+
+            // If this is not our last character append the seperator
             if (i != (len - 1)) output.append(seperator);
         }
 

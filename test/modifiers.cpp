@@ -38,29 +38,29 @@ public:
     TestModifier(Mode mode) : Modifier(), _mode(mode) {};
     virtual ~TestModifier() {};
 
-    virtual Variant modify(Value *input, const Parameters *params) override
+    virtual Variant modify(const Value &input, const Parameters &params) override
     {
         switch (_mode) {
             case NumericMode:
-                EXPECT_EQ(4, params->size());
-                for (int i = 0; i < params->size(); ++i)
+                EXPECT_EQ(4, params.size());
+                for (int i = 0; i < params.size(); ++i)
                 {
-                    EXPECT_EQ(i, params->get(i).toNumeric());
+                    EXPECT_EQ(i, params[i].toNumeric());
                 }
                 break;
             case StringMode:
-                EXPECT_EQ(1, params->size());
-                EXPECT_STREQ("test", params->get(0).toString());
-                EXPECT_EQ(4, params->get(0).size());
+                EXPECT_EQ(1, params.size());
+                EXPECT_STREQ("test", params[0].toString());
+                EXPECT_EQ(4, params[0].size());
                 break;
             case BooleanMode:
-                EXPECT_EQ(3, params->size());
-                EXPECT_TRUE(params->get(0).toBoolean());
-                EXPECT_FALSE(params->get(1).toBoolean());
-                EXPECT_TRUE(params->get(2).toBoolean());
+                EXPECT_EQ(3, params.size());
+                EXPECT_TRUE(params[0].toBoolean());
+                EXPECT_FALSE(params[1].toBoolean());
+                EXPECT_TRUE(params[2].toBoolean());
                 break;
         };
-        return string(input->toString(), input->size());
+        return string(input.toString(), input.size());
     }
 private:
     const Mode _mode;

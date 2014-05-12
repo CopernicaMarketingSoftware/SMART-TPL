@@ -29,18 +29,18 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // We default to the html encoder
         std::string encoder("html");
 
         // But if we have at least 1 parameter the first argument is our encoding
-        if (params) encoder = params->get(0).toString();
+        if (params.size() >= 1) encoder = params[0].toString();
 
         const Escaper *escaper = Escaper::get(encoder);
 
         // Turn our input into a string
-        std::string output(input->toString(), input->size());
+        std::string output(input.toString(), input.size());
 
         // Call encode and return the output
         return escaper->encode(output);

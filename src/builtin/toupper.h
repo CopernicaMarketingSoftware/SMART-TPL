@@ -28,10 +28,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Variant
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // copy the entire string
-        std::string output(input->toString(), input->size());
+        std::string output(input.toString(), input.size());
 
         // convert all the characters to uppercase
         for (auto & c : output) c = toupper(c);

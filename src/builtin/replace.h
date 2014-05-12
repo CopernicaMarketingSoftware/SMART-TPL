@@ -54,16 +54,16 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // initialize our output
-        std::string output(input->toString(), input->size());
+        std::string output(input.toString(), input.size());
 
         // Check if we have at least 2 parameters
-        if (params && params->size() >= 2)
+        if (params.size() >= 2)
         {
             // If we do use them to execute the replace
-            output = replace(output, params->get(0).toString(), params->get(1).toString());
+            output = replace(output, params[0].toString(), params[1].toString());
         }
 
         // Replace the new lines with <br /> and return

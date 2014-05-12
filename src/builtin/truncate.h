@@ -31,27 +31,27 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // init our default settings
         int length = 80;
         std::string etc("...");
 
         // Let's parse our parameters
-        if (params)
+        if (params.size() >= 1)
         {
             // Turn the first parameter into a numeric value
-            length = params->get(0).toNumeric();
+            length = params[0].toNumeric();
 
             // If they requested a length of 0 the output will be "" no matter what
             if (length == 0) return "";
 
             // Turn the second parameter into the etc field
-            if (params->size() >= 2) etc = std::string(params->get(1).toString(), params->get(1).size());
+            if (params.size() >= 2) etc = std::string(params[1].toString(), params[1].size());
         }
 
         // initialize our output
-        std::string output(input->toString(), input->size());
+        std::string output(input.toString(), input.size());
 
         // If our input string is longer than our requested output we need to truncate it
         if (output.length() > length)

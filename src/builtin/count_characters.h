@@ -29,17 +29,17 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(Value *input, const SmartTpl::Parameters *params) override
+    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // By default we don't include whitespaces
         bool include_whitespaces = false;
 
         // If we have parameters we have at least one, this being the toggle for whitespaces/no whitespaces
-        if (params) include_whitespaces = params->get(0).toBoolean();
+        if (params.size() >= 1) include_whitespaces = params[0].toBoolean();
 
         // Let's just convert our input to a C string
-        const char *str = input->toString();
-        size_t len = input->size();
+        const char *str = input.toString();
+        size_t len = input.size();
 
         // Init our output value
         numeric_t output = 0;

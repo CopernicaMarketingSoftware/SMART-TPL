@@ -360,10 +360,13 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
     auto *value = (Value *) variable;
 
     // convert to Parameters object
-    auto *params = (SmartTpl::Parameters *) parameters;
+    auto *params_ptr = (SmartTpl::Parameters *) parameters;
+
+    // If params_ptr is valid use that one, create an empty one of the stack otherwise
+    SmartTpl::Parameters params = (params_ptr) ? *params_ptr : SmartTpl::Parameters();
 
     // Actually modify the value
-    auto variant = modifier->modify(value, params);
+    auto variant = modifier->modify(*value, params);
 
     // Convert the variant to a pointer so we can actually return it from C
     auto *output = new Variant(variant);
@@ -488,7 +491,7 @@ void smart_tpl_params_append_numeric(void *userdata, void *parameters, long valu
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the numeric value
-    params->add(value);
+    params->push_back(value);
 }
 
 /**
@@ -504,7 +507,7 @@ void smart_tpl_params_append_string(void *userdata, void *parameters, const char
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the string value
-    params->add(std::string(buf, len));
+    params->push_back(std::string(buf, len));
 }
 
 /**
@@ -519,7 +522,7 @@ void smart_tpl_params_append_boolean(void *userdata, void *parameters, int boole
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the boolean value to the parameters
-    params->add(boolean != 0);
+    params->push_back(boolean != 0);
 }
 
 /**
