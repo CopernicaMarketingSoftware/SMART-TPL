@@ -43,11 +43,12 @@
 %option outfile="src/tokenizer.cpp"
 
 /**
- *  Exclusive parser mode "INSIDE_CURLY_BRACES" and "IDENTIFIER". This is exclusive,
+ *  Exclusive parser mode "INSIDE_CURLY_BRACES" and "IDENTIFIER" and "STRING". This is exclusive,
  *  because other tokens are disabled when in one of these modes
  */
 %x INSIDE_CURLY_BRACES
 %x IDENTIFIER
+%x STRING
 
 /**
  *  The rules start here
@@ -95,7 +96,7 @@
     "="                         { return TOKEN_IS; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
-    "\""[^\"]*"\""              { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-2)); return TOKEN_STRING; }
+    "\""                        { BEGIN(STRING); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); }
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
@@ -121,6 +122,13 @@
 
 <IDENTIFIER>{
     [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
+}
+
+<STRING>{
+    [^\\\"]                     { yyextra->token()->append(yytext, yyleng); }
+    "\\\""                      { yyextra->token()->append("\"", 1); }
+    "\\"                        { yyextra->token()->append("\\", 1); }
+    "\""                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
 }
 
 %%

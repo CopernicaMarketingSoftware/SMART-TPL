@@ -74,6 +74,12 @@ public:
      *  Change the current token to newToken
      */
     void setCurrentToken(Token* newToken) { _token = newToken; };
+
+    /**
+     *  Returns the current token
+     *  @return Token*
+     */
+    Token* token() { return _token; };
 };
 
 /**

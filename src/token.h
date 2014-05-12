@@ -25,6 +25,7 @@ public:
      *  @param  size
      */
     Token(const char *buffer, size_t size) : std::string(buffer, size) {}
+    Token() : std::string() {};
 
     /**
      *  Destructor
