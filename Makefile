@@ -156,17 +156,17 @@ ${PROGRAM}: ${PROGRAM_OBJECTS}
 clean:
 	${RM} ${GENERATED} ${LIBRARY_OBJECTS} ${PROGRAM_OBJECTS} ${LIBRARY} ${PROGRAM}
 
-${TOKENIZER}:
+${TOKENIZER}: ${TOKENIZER:%.cpp=%.flex}
 	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
 
-${PARSER}:
+${PARSER}: ${PARSER:%.cpp=%.lemon}
 	${LEMON} ${LEMON_FLAGS} ${@:%.cpp=%.lemon}
 	${MV} ${PARSER:%.cpp=%.c} $@
 
-.cpp.o: 
+.cpp.o: ${@:%.o=%.cpp}
 	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.cpp}
 
-.c.o: 
+.c.o: ${@:%.o=%.c}
 	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.c}
 
 install:
