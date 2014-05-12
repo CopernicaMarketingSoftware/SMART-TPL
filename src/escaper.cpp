@@ -17,7 +17,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Map which maps the human readable names to the actual escapers
  */
-std::map<std::string, Escaper*> _escapers;
+static std::map<std::string, Escaper*> _escapers;
 
 /**
  *  Constructor, the escaper will automatically register itself in _escapers
