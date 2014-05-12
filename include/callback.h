@@ -50,14 +50,15 @@ private:
      *  The cached value, will only be used if _cacheable is set to true
      *  @var    std::unique_ptr<Variant>
      */
-    std::unique_ptr<Variant> _cache;
+    mutable std::unique_ptr<Variant> _cache;
 
     /**
      *  Check if we should cache and if we should if we are already cached
      *  and if we aren't cached we'll cache
      *  @return bool
+     *  @note This method is only const as it is called from const methods
      */
-    bool cache()
+    bool cache() const
     {
         if (_cacheable)
         {
@@ -84,7 +85,7 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual const char *toString() override
+    virtual const char *toString() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toString();
@@ -100,7 +101,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() override
+    virtual numeric_t toNumeric() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toNumeric();
@@ -116,7 +117,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() override
+    virtual bool toBoolean() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toBoolean();
@@ -135,7 +136,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Variant member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) const override
     {
         // callbacks only return scalar values without members
         return nullptr;
@@ -144,7 +145,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount() override
+    virtual size_t memberCount() const override
     {
         // callbacks only return scalar variables without members
         return 0;
@@ -155,7 +156,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Variant member(int position) override
+    virtual Variant member(int position) const override
     {
         // callbacks can only return scalar values, members will never
         // be retrieved
@@ -167,7 +168,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Variant key(int position) override
+    virtual Variant key(int position) const override
     {
         // callbacks can only return simple scalar values, so retrieving
         // a key never happens
@@ -179,7 +180,7 @@ public:
      * 
      *  @return size_t
      */
-    virtual size_t size() override
+    virtual size_t size() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->size();

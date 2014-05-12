@@ -27,12 +27,13 @@ private:
     /**
      *  Buffer that will hold the current output
      */
-    std::string _buffer;
+    mutable std::string _buffer;
 
     /**
      *  Put the current date/time in the _buffer
+     *  @note This method is only const as it is called from const methods
      */
-    void initializeDate()
+    void initializeDate() const
     {
         // Get the current time
         std::time_t time = std::time(NULL);
@@ -74,7 +75,7 @@ public:
      *  Convert the variable to a string
      *  @return const char *
      */
-    virtual const char *toString() override
+    virtual const char *toString() const override
     {
         // Put the current date/time in our buffer
         initializeDate();
@@ -87,7 +88,7 @@ public:
      *  Returns the current unix timestamp
      *  @return numeric
      */
-    virtual numeric_t toNumeric() override
+    virtual numeric_t toNumeric() const override
     {
         return time(NULL);
     }
@@ -96,7 +97,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() override
+    virtual bool toBoolean() const override
     {
         return false;
     }
@@ -108,7 +109,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Variant member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) const override
     {
         return nullptr;
     }
@@ -116,7 +117,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount() override
+    virtual size_t memberCount() const override
     {
         return 0;
     }
@@ -126,7 +127,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Variant member(int position) override
+    virtual Variant member(int position) const override
     {
         return nullptr;
     }
@@ -136,7 +137,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Variant key(int position) override
+    virtual Variant key(int position) const override
     {
         return nullptr;
     }
@@ -146,7 +147,7 @@ public:
      *
      *  @return int
      */
-    virtual size_t size() override
+    virtual size_t size() const override
     {
         // Put the current date/time in the buffer
         initializeDate();

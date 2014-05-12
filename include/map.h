@@ -61,7 +61,7 @@ public:
      *  Convert the variable to a string
      *  @return const char *
      */
-    virtual const char *toString() override
+    virtual const char *toString() const override
     {
         return "";
     }
@@ -70,7 +70,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() override
+    virtual numeric_t toNumeric() const override
     {
         return 0;
     }
@@ -79,7 +79,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() override
+    virtual bool toBoolean() const override
     {
         return false;
     }
@@ -91,7 +91,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Variant member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) const override
     {
         // look it up in _values return nullptr if we didn't find it
         auto iter = _values.find(name);
@@ -134,7 +134,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount() override
+    virtual size_t memberCount() const override
     {
         return _values.size();
     }
@@ -144,7 +144,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Variant member(int position) override
+    virtual Variant member(int position) const override
     {
         // If we're out of bounds just return nullptr
         if (position < 0 || position >= memberCount()) return nullptr;
@@ -164,7 +164,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Variant key(int position) override
+    virtual Variant key(int position) const override
     {
         // If we're out of bounds just return nullptr
         if (position < 0 || position >= memberCount()) return nullptr;
@@ -184,7 +184,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() override
+    virtual size_t size() const override
     {
         return 0;
     }

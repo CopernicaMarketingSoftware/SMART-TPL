@@ -39,19 +39,19 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual const char *toString() = 0;
+    virtual const char *toString() const = 0;
 
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() = 0;
+    virtual numeric_t toNumeric() const = 0;
 
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() = 0;
+    virtual bool toBoolean() const = 0;
 
     /**
      *  Get access to a member value
@@ -61,34 +61,34 @@ public:
      *  @return Value
      *
      */
-    virtual Variant member(const char *name, size_t size) = 0;
+    virtual Variant member(const char *name, size_t size) const = 0;
 
     /**
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    virtual size_t memberCount() = 0;
+    virtual size_t memberCount() const = 0;
 
     /**
      *  Get access to a member at a certain position
      *  @param  position
      *  @return Value       Value object, or a nullptr if not present
      */
-    virtual Variant member(int position) = 0;
+    virtual Variant member(int position) const = 0;
 
     /**
      *  Get access to the key at a certain position
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Variant key(int position) = 0;
+    virtual Variant key(int position) const = 0;
 
     /**
      *  String length of the variable
      * 
      *  @return size_t
      */
-    virtual size_t size() = 0;
+    virtual size_t size() const = 0;
 };
 
 /**

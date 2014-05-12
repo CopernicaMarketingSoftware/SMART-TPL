@@ -61,15 +61,15 @@ public:
      *  Cast operators to various types
      *  @return mixed
      */
-    operator numeric_t() { return toNumeric(); }
-    operator const char * () { return toString(); }
-    operator bool() { return toBoolean(); }
+    operator numeric_t() const { return toNumeric(); }
+    operator const char * () const { return toString(); }
+    operator bool() const { return toBoolean(); }
 
     /**
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual const char *toString() override
+    virtual const char *toString() const override
     {
         return _value->toString();
     }
@@ -78,7 +78,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() override
+    virtual numeric_t toNumeric() const override
     {
         return _value->toNumeric();
     }
@@ -87,7 +87,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() override
+    virtual bool toBoolean() const override
     {
         return _value->toBoolean();
     }
@@ -99,7 +99,7 @@ public:
      *  @param  size        size of the name
      *  @return Value
      */
-    virtual Variant member(const char *name, size_t size) override
+    virtual Variant member(const char *name, size_t size) const override
     {
         return _value->member(name, size);
     }
@@ -107,7 +107,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount() override
+    virtual size_t memberCount() const override
     {
         return _value->memberCount();
     }
@@ -117,7 +117,7 @@ public:
      *  @param position
      *  @return Value or nullptr if not present
      */
-    virtual Variant member(int position) override
+    virtual Variant member(int position) const override
     {
         return _value->member(position);
     }
@@ -127,7 +127,7 @@ public:
      *  @param position
      *  @return The name of the key at position or nullptr otherwise
      */
-    virtual Variant key(int position) override
+    virtual Variant key(int position) const override
     {
         return _value->key(position);
     }
@@ -137,7 +137,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() override
+    virtual size_t size() const override
     {
         return _value->size();
     }
