@@ -32,9 +32,11 @@ private:
 public:
     /**
      *  Constructor
+     *  @param value
      */
     Variant();
-    Variant(std::nullptr_t null) : Variant() {};
+    Variant(std::nullptr_t value) : Variant() {};
+    Variant(const std::shared_ptr<Value> &value) : _value(value) {};
     Variant(const char *value);
     Variant(const char *value, size_t size);
     Variant(const std::string &value);
@@ -45,6 +47,15 @@ public:
      *  Deconstructor
      */
     virtual ~Variant() {};
+
+    /**
+     *  Retrieve the underlying value object
+     *  @return std::shared_ptr<Value>
+     */
+    const std::shared_ptr<Value> &value() const
+    {
+        return _value;
+    }
 
     /**
      *  Convert the value to a string
