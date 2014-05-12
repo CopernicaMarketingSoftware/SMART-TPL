@@ -21,6 +21,11 @@
 %option noyywrap
 
 /**
+ *  We are no using the method this creates, only causes a unused function warning
+ */
+%option nounput
+
+/**
  *  We are not a big fan of global variable, hence we turn this into a reentrant
  *  tokenizer
  */
@@ -130,9 +135,6 @@ namespace SmartTpl { namespace Internal {
  */
 Tokenizer::Tokenizer()
 {
-    // Supress the unused function warning on yyunput
-    (void) yyunput;
-
     // initialize the scanner, and set the tokenizer as the user defined data
     yylex_init_extra(this, &_scanner);
     _line = 1; // We start at line 1, not 0
