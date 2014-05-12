@@ -326,6 +326,23 @@ TEST(CCode, Unicode)
     compile(tpl);
 }
 
+TEST(CCode, LiteralStringUnicode)
+{
+    string input("{if \"\" == \"이것은 단순한 유니 테스트입니다 ..\"}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "if (callbacks->strcmp(userdata,NULL,0,\"\xEC\x9D\xB4\xEA\xB2\x83\xEC\x9D\x80 "
+    "\xEB\x8B\xA8\xEC\x88\x9C\xED\x95\x9C \xEC\x9C\xA0\xEB\x8B\x88 \xED\x85\x8C\xEC"
+    "\x8A\xA4\xED\x8A\xB8\xEC\x9E\x85\xEB\x8B\x88\xEB\x8B\xA4 ..\",48) == 0){\n"
+    "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
+    "const char *mode = \"raw\";\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
+
+    compile(tpl);
+}
+
 TEST(CCode, TemplateMode)
 {
     string input("{mode=test}{$var}");
