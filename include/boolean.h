@@ -37,8 +37,6 @@ private:
 public:
     /**
      *  Constructor
-     *  Private as you should just use BooleanValue::get(bool) to get one of
-     *  the global ones.
      */
     BooleanValue(bool b) : _boolean(b) {};
 
@@ -121,14 +119,6 @@ public:
     virtual size_t size() override
     {
         return 0;
-    }
-
-    /**
-     *  Method used to get a instance of this value
-     */
-    virtual Variant cache() override
-    {
-        return Variant();
     }
 };
 

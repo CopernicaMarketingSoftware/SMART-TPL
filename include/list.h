@@ -151,14 +151,6 @@ public:
     }
 
     /**
-     *  Method used to get a instance of this value
-     */
-    virtual Variant cache() override
-    {
-        return nullptr;
-    }
-
-    /**
      *  Get the begin and end iterator
      */
     const_iterator begin() const { return _list.begin(); }

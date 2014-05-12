@@ -109,14 +109,6 @@ public:
     {
         return 0;
     }
-
-    /**
-     *  Method used to get a instance of this value
-     */
-    virtual Variant cache() override
-    {
-        return nullptr;
-    }
 };
 
 /**

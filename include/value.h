@@ -29,22 +29,11 @@ class Variant;
  */
 class Value
 {
-protected:
-    /**
-     *  Should this value be cached using cache() or not?
-     *  False by default
-     */
-    bool _cacheable = false;
 public:
     /**
      *  Destructor
      */
     virtual ~Value() {};
-
-    /**
-     *  Returns if this value is cachable or not
-     */
-    bool cacheable() const { return _cacheable; }
 
     /**
      *  Convert the value to a string
@@ -66,21 +55,11 @@ public:
 
     /**
      *  Get access to a member value
-     * 
+     *
      *  @param  name        name of the member
      *  @param  size        size of the name
      *  @return Value
-     * 
-     *  
-     *  @todo
-     * 
-     *      all the member functions that return a Value* could also
-     *      return a Variant object. This has as benefit that no memory
-     *      management is necessary for the user, and that creating your
-     *      own value classes becomes much simpler, but the downside is
-     *      that implementations that do 'return this' will be harder
-     *      to create. what to do?
-     * 
+     *
      */
     virtual Variant member(const char *name, size_t size) = 0;
 
@@ -110,11 +89,6 @@ public:
      *  @return size_t
      */
     virtual size_t size() = 0;
-
-    /**
-     *  Method used to get a instance of this value
-     */
-    virtual Variant cache() = 0;
 };
 
 /**

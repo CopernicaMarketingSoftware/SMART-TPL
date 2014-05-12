@@ -17,6 +17,11 @@ namespace SmartTpl {
  */
 class MapValue : public Value
 {
+public:
+    /**
+     *  const_iterator typedef
+     */
+    typedef std::map<const char *,Variant>::const_iterator const_iterator;
 private:
     /**
      *  Compare functor necessary for the map
@@ -185,12 +190,10 @@ public:
     }
 
     /**
-     *  Method used to get a instance of this value
+     *  Get the begin and end iterator
      */
-    virtual Variant cache() override
-    {
-        return nullptr;
-    }
+    const_iterator begin() const { return _values.begin(); }
+    const_iterator end() const { return _values.end(); }
 };
 
 /**

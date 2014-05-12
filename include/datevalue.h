@@ -154,14 +154,6 @@ public:
         // Returns the size of the buffer
         return _buffer.size();
     }
-
-    /**
-     *  Method used to get a instance of this value
-     */
-    virtual Variant cache() override
-    {
-        return Variant();
-    }
 };
 
 /**
