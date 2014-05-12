@@ -58,6 +58,14 @@ public:
     }
 
     /**
+     *  Cast operators to various types
+     *  @return mixed
+     */
+    operator numeric_t() { return toNumeric(); }
+    operator const char * () { return toString(); }
+    operator bool() { return toBoolean(); }
+
+    /**
      *  Convert the value to a string
      *  @return const char *
      */
