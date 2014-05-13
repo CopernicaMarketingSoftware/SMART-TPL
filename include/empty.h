@@ -65,7 +65,7 @@ public:
      * 
      *  @param  name        name of the member
      *  @param  size        size of the name
-     *  @return Value
+     *  @return Variant
      */
     virtual Variant member(const char *name, size_t size) const override
     {
@@ -82,8 +82,8 @@ public:
 
     /**
      *  Get access to a member at a certain position
-     *  @param position
-     *  @return Value or nullptr if not present
+     *  @param  position    Position of the item we want to retrieve
+     *  @return Variant
      */
     virtual Variant member(int position) const override
     {
@@ -92,8 +92,8 @@ public:
 
     /**
      *  Get access to the key at a certain position
-     *  @param position
-     *  @return The name of the key at position or nullptr otherwise
+     *  @param  position     Position of the key we want to retrieve
+     *  @return Variant      Variant object, probably a string
      */
     virtual Variant key(int position) const override
     {

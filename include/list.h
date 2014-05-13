@@ -72,7 +72,7 @@ public:
      *
      *  @param  name        name of the member
      *  @param  size        size of the name
-     *  @return Value
+     *  @return Variant
      */
     virtual Variant member(const char *name, size_t size) const override
     {
@@ -118,8 +118,8 @@ public:
 
     /**
      *  Get access to a member at a certain position
-     *  @param position
-     *  @return Value or empty value if not present
+     *  @param  position    Position of the item we want to retrieve
+     *  @return Variant
      */
     virtual Variant member(int position) const override
     {
@@ -132,8 +132,9 @@ public:
 
     /**
      *  Get access to the key at a certain position
-     *  @param position
-     *  @return The name of the key at position or an empty value otherwise
+     *  @param  position     Position of the key we want to retrieve
+     *  @return Variant      Variant object, probably a string
+     *  @todo   Maybe just return position here? As that technically is the key
      */
     virtual Variant key(int position) const override
     {

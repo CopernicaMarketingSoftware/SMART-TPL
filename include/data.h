@@ -29,8 +29,8 @@ private:
     {
         /** 
          *  Invoke operator
-         *  @param  a
-         *  @param  b
+         *  @param  a      First string for the comparison
+         *  @param  b      Second string for the comparison
          *  @return bool
          */
         bool operator()(char const *a, char const *b) const
@@ -103,7 +103,7 @@ public:
      *  @param  size        size of the name
      *  @return Modifier*   nullptr in case it isn't found
      */
-    Modifier *modifier(const char *name, size_t) const;
+    Modifier *modifier(const char *name, size_t size) const;
 };
 
 /**
