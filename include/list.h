@@ -134,11 +134,10 @@ public:
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
-     *  @todo   Maybe just return position here? As that technically is the key
      */
     virtual Variant key(int position) const override
     {
-        return nullptr;
+        return position;
     }
 
     /**
