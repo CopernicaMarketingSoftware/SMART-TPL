@@ -36,12 +36,13 @@ public:
      */
     Variant();
     Variant(std::nullptr_t value) : Variant() {};
+    explicit Variant(bool value);
     Variant(const std::shared_ptr<Value> &value) : _value(value) {};
     Variant(const char *value);
     Variant(const char *value, size_t size);
     Variant(const std::string &value);
     Variant(numeric_t value);
-    explicit Variant(bool value);
+    Variant(const Variant &copy) = default;
 
     /**
      *  Deconstructor

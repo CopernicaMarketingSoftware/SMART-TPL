@@ -177,10 +177,10 @@ TEST(Modifier, Count)
     string input("{$var|count}");
     Template tpl((Buffer(input)));
 
-    ListValue list;
-    for (int i = 0; i < 10; ++i) list.add(i);
+    ListValue *list = new ListValue;
+    for (int i = 0; i < 10; ++i) list->add(i);
     Data data;
-    data.assign("var", &list);
+    data.assign("var", std::shared_ptr<Value>(list));
 
     string expectedOutput("10");
     EXPECT_EQ(expectedOutput, tpl.process(data));

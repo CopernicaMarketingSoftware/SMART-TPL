@@ -43,13 +43,7 @@ private:
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<const char *, Value*, cmp_str> _variables;
-
-    /**
-     *  This will contain all the variables created internally, this is purely
-     *  to automatically clean them up afterwards.
-     */
-    std::list<std::unique_ptr<Value>> _managed_variables;
+    std::map<const char *, Variant, cmp_str> _variables;
 
     /**
      *  All modifiers
@@ -74,9 +68,7 @@ public:
      *  @param  value       Value of the variable
      *  @return Data        Same object for chaining
      */
-    Data &assign(const char *name, const std::string &value);
-    Data &assign(const char *name, numeric_t value);
-    Data &assign(const char *name, Value *value);
+    Data &assign(const char *name, const Variant &value);
 
     /**
      *  Assign a callback
@@ -101,9 +93,9 @@ public:
      *  Retrieve a variable pointer by name
      *  @param  name        the name
      *  @param  size        size of the name
-     *  @return Value*      nullptr in case it isn't found
+     *  @return Variant
      */
-    Value *value(const char *name, size_t size) const;
+    Variant value(const char *name, size_t size) const;
 
     /**
      *  Retrieve a modifier by name

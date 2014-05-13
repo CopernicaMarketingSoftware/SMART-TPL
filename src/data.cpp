@@ -51,54 +51,12 @@ Data::Data()
 }
 
 /**
- *  Assign data
- *  @param  name        Name of the variable
- *  @param  value       Value of the variable
- *  @return Data        Same object for chaining
- */
-Data &Data::assign(const char *name, const std::string &value)
-{
-    // construct variable
-    Value *v = new StringValue(value);
-
-    // store in the list of variables
-    _variables[name] = v;
-
-    // Make our newly allocated StringValue managed
-    _managed_variables.push_back(std::unique_ptr<Value>(v));
-
-    // allow chaining
-    return *this;
-}
-
-/**
- *  Assign data
- *  @param  name        Name of the variable
- *  @param  value       Value of the variable
- *  @return Data        Same object for chaining
- */
-Data &Data::assign(const char *name, numeric_t value)
-{
-    // construct variable
-    Value *v = new NumericValue(value);
-
-    // store in the list of variables
-    _variables[name] = v;
-
-    // Make our newly allocated NumericValue managed
-    _managed_variables.push_back(std::unique_ptr<Value>(v));
-
-    // allow chaining
-    return *this;
-}
-
-/**
  * Assign data
  * @param  name         Name of the variable
  * @param  value        Value of the variable
  * @return Data         Same object for chaining
  */
-Data &Data::assign(const char *name, Value* value)
+Data &Data::assign(const char *name, const Variant &value)
 {
     // append variable
     _variables[name] = value;
@@ -120,10 +78,7 @@ Data &Data::callback(const char *name, const Callback &callback, bool cache)
     Value *v = new CallbackValue(callback, cache);
 
     // store in the list of variables
-    _variables[name] = v;
-
-    // Make our newly allocated NumericValue managed
-    _managed_variables.push_back(std::unique_ptr<Value>(v));
+    _variables[name] = std::shared_ptr<Value>(v);
 
     // allow chaining
     return *this;
@@ -148,9 +103,9 @@ Data &Data::modifier(const char *name, Modifier* modifier)
  *  Retrieve a variable pointer by name
  *  @param  name        the name
  *  @param  size        size of the name
- *  @return Value*
+ *  @return Variant
  */
-Value *Data::value(const char *name, size_t size) const
+Variant Data::value(const char *name, size_t size) const
 {
     // look it up in _variables
     auto iter = _variables.find(name);

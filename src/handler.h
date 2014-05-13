@@ -53,7 +53,7 @@ private:
      *  assigned using "assign .. to ..", or the magic values inside
      *  foreach loops
      */
-    std::map<const char *, Value*, cmp_str> _local_values;
+    std::map<const char *, Variant, cmp_str> _local_values;
 
     /**
      *  Will contain the local values that were created just here and should
@@ -61,7 +61,7 @@ private:
      *
      *  Can also contain externally created Values that were made managed using manageValue(Value*)
      */
-    std::list<std::unique_ptr<Value>> _managed_local_values;
+    std::list<std::shared_ptr<Value>> _managed_local_values;
 
 
 public:
@@ -101,13 +101,10 @@ public:
     {
         // look through our local values first
         auto iter = _local_values.find(name);
-        if (iter != _local_values.end()) return iter->second;
+        if (iter != _local_values.end()) return iter->second.value().get();
 
         // didn't find it? get the variable from the data object
-        Value *value = _data->value(name, size);
-
-        // Return the hopefully found value
-        return value;
+        return _data->value(name, size).value().get();
     }
 
     /**
@@ -137,9 +134,23 @@ public:
      *  @param key         The name for our local variable
      *  @param key_size    The size of key
      */
-    void assign(const char *key, size_t key_size, Value *value)
+    void assign(const char *key, size_t key_size, const Variant &value)
     {
         _local_values[key] = value;
+    }
+
+    /**
+     *  Assign a just allocated Value to a specify key
+     *
+     *  @param  key         The name of our local variable
+     *  @param  key_size    The size of key
+     *  @param  value       The newly allocated value we would like to assign
+     */
+    void assign(const char *key, size_t key_size, Value *value)
+    {
+        std::shared_ptr<Value> ptr(value);
+        _local_values[key] = ptr;
+        _managed_local_values.push_back(ptr);
     }
 
     /**
@@ -150,7 +161,7 @@ public:
      */
     void assign(const char *key, size_t key_size, bool boolean)
     {
-        _local_values[key] = BooleanValue::get(boolean).get();
+        _local_values[key] = boolean;
     }
 
     /**
@@ -161,9 +172,7 @@ public:
      */
     void assign(const char *key, size_t key_size, long value)
     {
-        Value *v = new NumericValue(value);
-        _managed_local_values.push_back(std::unique_ptr<Value>(v));
-        _local_values[key] = v;
+        _local_values[key] = value;
     }
 
     /**
@@ -174,9 +183,7 @@ public:
      */
     void assign(const char *key, size_t key_size, const std::string &value)
     {
-        Value *v = new StringValue(value);
-        _managed_local_values.push_back(std::unique_ptr<Value>(v));
-        _local_values[key] = v;
+        _local_values[key] = value;
     }
 
     /**
@@ -185,7 +192,7 @@ public:
      */
     void manageValue(Variant *value)
     {
-        _managed_local_values.push_back(std::unique_ptr<Value>(value));
+        _managed_local_values.push_back(std::shared_ptr<Value>(value));
     }
 };
 
