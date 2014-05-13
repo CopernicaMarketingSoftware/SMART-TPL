@@ -31,7 +31,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Value &input, const SmartTpl::Parameters &params) override
+    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
     {
         // init our default settings
         int length = 80;

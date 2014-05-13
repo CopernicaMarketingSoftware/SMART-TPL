@@ -35,7 +35,7 @@ public:
      *  @return Variant     A new value object
      *  @todo   Attempt to make the Value a Variant here
      */
-    virtual Variant modify(const Value &input, const Parameters &params) = 0;
+    virtual Variant modify(const Variant &input, const Parameters &params) = 0;
 };
 
 /**

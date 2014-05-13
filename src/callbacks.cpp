@@ -342,14 +342,14 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
  */
 void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_ptr, void *parameters)
 {
-    // In case the modifier is a nullptr just return the original value
+    // In case the modifier or the input is a nullptr just return the original value
     if (modifier_ptr == nullptr || variable == nullptr) return variable;
 
     // convert to the Modifier
     auto *modifier = (Modifier *) modifier_ptr;
 
-    // convert to the Value object
-    auto *value = (Value *) variable;
+    // convert to the Variant object
+    auto *value = (Variant *) variable;
 
     // convert to Parameters object
     auto *params_ptr = (SmartTpl::Parameters *) parameters;
