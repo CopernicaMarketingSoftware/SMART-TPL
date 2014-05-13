@@ -76,6 +76,28 @@ TEST(RunTime, If)
     }
 }
 
+TEST(RunTime, IfElse)
+{
+    string input("{if $var}true{elseif $var1}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data1;
+    data1.assign("var", true);
+    Data data2;
+    data2.assign("var1", true);
+    EXPECT_EQ("", tpl.process());
+    EXPECT_EQ("true", tpl.process(data1));
+    EXPECT_EQ("false", tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("", library.process());
+        EXPECT_EQ("true", library.process(data1));
+        EXPECT_EQ("false", library.process(data2));
+    }
+}
+
 TEST(RunTime, StringComparisonEquals)
 {
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");

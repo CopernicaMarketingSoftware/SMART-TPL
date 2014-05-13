@@ -26,7 +26,11 @@ TEST(Modifier, ToUpper)
     string expectedOutput("VARIABLE\nVARIABLE");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
-    compile(tpl);
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, ToLower)
@@ -40,7 +44,11 @@ TEST(Modifier, ToLower)
     string expectedOutput("variable\nvariable");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
-    compile(tpl);
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Cat)
@@ -54,7 +62,11 @@ TEST(Modifier, Cat)
     string expectedOutput("Testing 1 2 3");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
-    compile(tpl);
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, CountCharacters)
@@ -68,7 +80,11 @@ TEST(Modifier, CountCharacters)
     string expectedOutput("29\n33");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
-    compile(tpl);
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, CountParagraphs)
@@ -83,7 +99,11 @@ TEST(Modifier, CountParagraphs)
     string expectedOutput("2");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
-    compile(tpl);
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Default)
@@ -96,7 +116,11 @@ TEST(Modifier, Default)
     data.assign("var", "string");
     EXPECT_EQ("string", tpl.process(data));
 
-    compile(tpl);
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("string", library.process(data));
+    }
 }
 
 TEST(Modifier, Escape)
@@ -109,6 +133,12 @@ TEST(Modifier, Escape)
 
     string expectedOutput("&lt;b&gt;This is bold&lt;/b&gt;");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Indent)
@@ -122,6 +152,12 @@ TEST(Modifier, Indent)
 
     string expectedOutput("    Test\n-\n\tTest\n-\n\tTesting\n\t1 2 3\n\ttest");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Replace)
@@ -134,6 +170,12 @@ TEST(Modifier, Replace)
 
     string expectedOutput("Child\'s Stool Great for Use in Vineyard.");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Nl2br)
@@ -146,6 +188,12 @@ TEST(Modifier, Nl2br)
 
     string expectedOutput("This is just a simple<br />test text.");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Spacify)
@@ -158,6 +206,12 @@ TEST(Modifier, Spacify)
 
     string expectedOutput("T e s t i n g   1   2   3\nT^^e^^s^^t^^i^^n^^g^^ ^^1^^ ^^2^^ ^^3");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Truncate)
@@ -170,6 +224,12 @@ TEST(Modifier, Truncate)
 
     string expectedOutput("This is just a simple test sentence.\nThis is ju...\nThis is just ");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, Count)
@@ -184,4 +244,10 @@ TEST(Modifier, Count)
 
     string expectedOutput("10");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
