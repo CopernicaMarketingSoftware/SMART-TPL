@@ -44,6 +44,7 @@ static struct smart_tpl_callbacks callbacks = {
     .delete_params         = smart_tpl_delete_params,
     .params_append_numeric = smart_tpl_params_append_numeric,
     .params_append_string  = smart_tpl_params_append_string,
+    .params_append_boolean = smart_tpl_params_append_boolean,
 };
 
 /**
