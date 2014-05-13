@@ -3,6 +3,8 @@ INC               += -I../ -I. -Igtest-1.7.0/include
 CC                := clang
 CXX               := clang++
 
+VALGRIND          := valgrind
+
 BINARY := test.out
 DEPS := $(patsubst %.cpp, %.o, $(shell find . -name \*.cpp -type f))
 
@@ -24,6 +26,11 @@ libgtest.a:
 
 test: $(BINARY)
 	./$(BINARY)
+
+.PHONY: valgrind
+
+valgrind: $(BINARY)
+	$(VALGRIND) $(VALGRIND_OPTS) ./$(BINARY)
 
 .PHONY: clean
 
