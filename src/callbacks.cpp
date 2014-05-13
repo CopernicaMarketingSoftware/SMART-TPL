@@ -360,6 +360,10 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
     // Actually modify the value
     auto variant = modifier->modify(*value, params);
 
+    // If we both have the same shared pointer to modifier probably just returned the input
+    // Returning the input value is faster and safer from this point on
+    if (variant.value() == value->value()) return value;
+
     // Convert the variant to a pointer so we can actually return it from C
     auto *output = new Variant(variant);
 

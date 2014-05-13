@@ -60,7 +60,7 @@ public:
                 EXPECT_TRUE(params[2].toBoolean());
                 break;
         };
-        return string(input.toString(), input.size());
+        return input;
     }
 private:
     const Mode _mode;
