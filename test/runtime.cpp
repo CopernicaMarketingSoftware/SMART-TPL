@@ -127,3 +127,89 @@ TEST(RunTime, StringComparisonNotEquals)
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
+
+TEST(RunTime, NumericComparison)
+{
+    string input("{if 1 == 1}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("true");
+    EXPECT_EQ(tpl.process(), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(library.process(), expectedOutput);
+    }
+}
+
+TEST(RunTime, BooleanComparison)
+{
+    string input("{if true == true}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("true");
+    EXPECT_EQ(tpl.process(), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(library.process(), expectedOutput);
+    }
+}
+
+TEST(RunTime, Assigning)
+{
+    string input("{$var}-{$var=1}-{$var}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("--1");
+    EXPECT_EQ(tpl.process(), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(library.process(), expectedOutput);
+    }
+}
+
+TEST(RunTime, ArrayAccess)
+{
+    string input("{$list[3]}");
+    Template tpl((Buffer(input)));
+
+    ListValue *list = new ListValue;
+    for (int i = 0; i < 5; ++i) list->add(i);
+
+    Data data;
+    data.assign("list", std::shared_ptr<Value>(list));
+
+    string expectedOutput("3");
+    EXPECT_EQ(tpl.process(data), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(library.process(data), expectedOutput);
+    }
+}
+
+TEST(RunTime, KeyArrayAccess)
+{
+    string input("{$map[\"key\"]}");
+    Template tpl((Buffer(input)));
+
+    MapValue *map = new MapValue;
+    map->assign("key", "test");
+    Data data;
+    data.assign("map", std::shared_ptr<Value>(map));
+
+    string expectedOutput("test");
+    EXPECT_EQ(tpl.process(data), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(library.process(data), expectedOutput);
+    }
+}
