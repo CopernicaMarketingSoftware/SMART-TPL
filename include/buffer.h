@@ -20,7 +20,7 @@
  *  Namespace
  */
 namespace SmartTpl {
-    
+
 /**
  *  Class definition
  */
@@ -31,8 +31,8 @@ private:
      *  The internal buffer
      *  @var std::string
      */
-    std::string _buffer;
-    
+    const std::string _buffer;
+
 public:
     /**
      *  Constructor
@@ -48,7 +48,7 @@ public:
      *  @param  buffer      Create buffer from a std::string
      */
     Buffer(const std::string &buffer) : _buffer(buffer) {}
-    
+
     /**
      *  Destructor
      */
@@ -68,7 +68,7 @@ public:
         // an in-memory buffer does not have a variable name, return an empty string instead
         return "";
     }
-    
+
     /**
      *  Returns a const char* to the start of the buffer, use size() to get the length
      *  of this buffer.
@@ -92,7 +92,7 @@ public:
         return _buffer.size();
     }
 };
-    
+
 /**
  *  End namespace
  */
