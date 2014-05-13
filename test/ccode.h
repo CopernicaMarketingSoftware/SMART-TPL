@@ -37,7 +37,7 @@ inline bool compile(const Template &tpl)
     int gccret = -1;
     int clangret = -1;
 
-    FILE *gccshell = popen("gcc -x c -Wall -Werror -fPIC -shared -o " SHARED_LIBRARY " -", "w");
+    FILE *gccshell = popen("gcc -x c -pipe -Wall -Werror -fPIC -shared -o " SHARED_LIBRARY " -", "w");
     EXPECT_TRUE(gccshell != NULL) << strerror(errno);
     if (gccshell)
     {
@@ -46,7 +46,7 @@ inline bool compile(const Template &tpl)
         EXPECT_EQ(0, gccret) << "gcc failed to compile this template";
     }
 
-    FILE *clangshell = popen("clang -x c -Wall -Werror -fPIC -shared -o " SHARED_LIBRARY " -", "w");
+    FILE *clangshell = popen("clang -x c -pipe -Wall -Werror -fPIC -shared -o " SHARED_LIBRARY " -", "w");
     EXPECT_TRUE(clangshell != NULL) << strerror(errno);
     if (clangshell)
     {

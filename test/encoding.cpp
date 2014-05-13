@@ -21,7 +21,16 @@ TEST(Encoding, Html)
     Template tpl((Buffer(input)));
 
     string expectedOutput("&lt;b&gt;This is bold&lt;/b&gt;");
+    string expectedOutputRaw("<b>This is bold</b>");
     EXPECT_EQ(expectedOutput, tpl.process("html"));
+    EXPECT_EQ(expectedOutputRaw, tpl.process("raw"));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process("html"));
+        EXPECT_EQ(expectedOutputRaw, library.process("raw"));
+    }
 }
 
 TEST(Encoding, HtmlToRaw)
@@ -34,6 +43,7 @@ TEST(Encoding, HtmlToRaw)
     "callbacks->write(userdata,\"&lt;b&gt;This is bold&lt;/b&gt;\",31);\n}\n"
     "const char *mode = \"html\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
+
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
