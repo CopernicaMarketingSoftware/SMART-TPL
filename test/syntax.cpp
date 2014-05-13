@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <smarttpl.h>
+#include <../smarttpl.h>
 
 #include "ccode.h"
 

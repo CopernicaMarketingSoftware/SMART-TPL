@@ -13,7 +13,7 @@
 #define SHARED_LIBRARY "/tmp/test.so"
 
 #include <gtest/gtest.h>
-#include <smarttpl.h>
+#include <../smarttpl.h>
 
 using namespace SmartTpl;
 using namespace std;
