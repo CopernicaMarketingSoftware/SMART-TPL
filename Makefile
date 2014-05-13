@@ -5,7 +5,7 @@
 #   all variable settings that you may alter to suit your own system, while at
 #   the bottom you will find instructions for the compiler in which you will
 #   probably not have to make any changes
-#   
+#
 
 #
 #   Installation directory
@@ -15,7 +15,7 @@
 #   library file in your system libraries directory. Most users set this to
 #   the regular /usr/include and /usr/lib directories, or /usr/local/include
 #   and /usr/local/lib. You can of course change it to whatever suits you best
-#   
+#
 
 INSTALL_PREFIX  =   /usr
 INSTALL_HEADERS =   ${INSTALL_PREFIX}/include
@@ -49,8 +49,8 @@ PROGRAM         =   smarttpl
 #   and "lemon" are being used. You may override them here
 #
 
-COMPILER        =   clang
-LINKER          =   g++
+COMPILER        =   clang++
+LINKER          =   clang++
 FLEX            =   flex
 LEMON           =   lemon
 
@@ -73,8 +73,8 @@ LEMON           =   lemon
 COMPILER_FLAGS  =   -Wall -c -I. -O0 -g -fpic -std=c++11
 LINKER_FLAGS    =   -L.
 DEPENDENCIES    =   -ljitplus -ljit -ldl
-FLEX_FLAGS      =   
-LEMON_FLAGS     =   
+FLEX_FLAGS      =
+LEMON_FLAGS     =
 
 
 #
@@ -166,13 +166,9 @@ ${PARSER}: ${PARSER:%.cpp=%.lemon}
 .cpp.o: ${@:%.o=%.cpp}
 	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.cpp}
 
-.c.o: ${@:%.o=%.c}
-	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.c}
-
 install:
 	${MKDIR} ${INSTALL_HEADERS}/smarttpl
 	${CP} smarttpl.h ${INSTALL_HEADERS}
 	${CP} include/*.h ${INSTALL_HEADERS}/smarttpl
 	${CP} ${LIBRARY} ${INSTALL_LIB}
 	${CP} ${PROGRAM} ${INSTALL_BIN}
-
