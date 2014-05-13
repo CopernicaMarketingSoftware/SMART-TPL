@@ -114,11 +114,13 @@ TEST(Modifier, Default)
     EXPECT_EQ("default string", tpl.process());
     Data data;
     data.assign("var", "string");
+    EXPECT_EQ("default string", tpl.process());
     EXPECT_EQ("string", tpl.process(data));
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("default string", library.process());
         EXPECT_EQ("string", library.process(data));
     }
 }
