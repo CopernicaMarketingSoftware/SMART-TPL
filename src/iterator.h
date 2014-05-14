@@ -1,8 +1,8 @@
 /**
  *  Iterator.h
- * 
+ *
  *  Class that internally keeps track of the status of a foreach loop
- *  
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
@@ -15,7 +15,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl {
+namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
@@ -62,11 +62,10 @@ public:
      */
     virtual ~Iterator()
     {
-        // @todo 
-        //      remove the key and value from the local variables??
+        // @todo remove the key and value from the local variables??
         //
-        //      (although i do not think it is disastrous if we keep
-        //      the loop-variables in scope after the loop if completed)
+        //       (although i do not think it is disastrous if we keep
+        //       the loop-variables in scope after the loop if completed)
     }
 
     /**
@@ -100,7 +99,7 @@ public:
     /**
      *  Move to the next position
      */
-    void next() 
+    void next()
     {
         // increment position
         ++_pos;
@@ -110,5 +109,4 @@ public:
 /**
  *  End of namespace
  */
-}
-
+}}
