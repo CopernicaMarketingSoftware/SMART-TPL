@@ -94,6 +94,7 @@
 #include "builtin/md5.h"
 #include "builtin/sha1.h"
 #include "builtin/sha256.h"
+#include "builtin/sha512.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

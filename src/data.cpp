@@ -36,6 +36,7 @@ static Internal::UrlencodeModifier       urlencode;
 static Internal::Md5Modifier             md5;
 static Internal::Sha1Modifier            sha1;
 static Internal::Sha256Modifier          sha256;
+static Internal::Sha512Modifier          sha512;
 
 /**
  *  Constructor
@@ -68,6 +69,7 @@ Data::Data()
     modifier("md5", &md5);
     modifier("sha1", &sha1);
     modifier("sha256", &sha256);
+    modifier("sha512", &sha512);
 }
 
 /**
