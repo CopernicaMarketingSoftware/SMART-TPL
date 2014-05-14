@@ -271,3 +271,21 @@ TEST(Modifier, CountWords)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, CountSentences)
+{
+    string input("{$var|count_sentences}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "Two Soviet Ships Collide - One Dies. Enraged Cow Injures Farmer with Axe.");
+
+    string expectedOutput("2");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
