@@ -26,10 +26,7 @@
 #include <algorithm>
 #include <set>
 #include <ctime>
-/**
- *  @todo Replace with std::regex once gcc fixed their crap
- */
-#include <boost/regex.hpp>
+#include <regex>
 
 /**
  *  Public includes
@@ -75,7 +72,6 @@
 #include "builtin/cat.h"
 #include "builtin/count.h"
 #include "builtin/count_words.h"
-#include "builtin/count_sentences.h"
 #include "builtin/count_characters.h"
 #include "builtin/count_paragraphs.h"
 #include "builtin/default.h"

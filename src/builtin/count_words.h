@@ -35,18 +35,18 @@ public:
         std::string str(input.toString(), input.size());
 
         // Split our input by whitespaces, newlines, etc
-        boost::regex rgx("\\s+");
-        boost::sregex_token_iterator iter(str.begin(), str.end(), rgx, -1);
+        std::regex rgx("\\s+");
+        std::sregex_token_iterator iter(str.begin(), str.end(), rgx, -1);
 
         // Init our output value
         numeric_t output = 0;
 
         // Count matches that contain alphanumerics
-        boost::regex word("[a-zA-Z0-9\\x80-\\xff]");
-        boost::sregex_token_iterator end;
+        std::regex word("[a-zA-Z0-9\\x80-\\xff]");
+        std::sregex_token_iterator end;
         for (; iter != end; ++iter)
         {
-            if (boost::regex_search(iter->str(), word)) ++output;
+            if (std::regex_search(iter->str(), word)) ++output;
         }
 
         // Return the output
