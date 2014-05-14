@@ -379,3 +379,21 @@ TEST(Modifier, Urlencode)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, MD5)
+{
+    string input("{$var|md5}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "Test string");
+
+    string expectedOutput("0fd3dbec9730101bff92acc820befc34");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

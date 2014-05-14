@@ -33,6 +33,7 @@ static Internal::RegexReplaceModifier    regex_replace;
 static Internal::SubStrModifier          substr;
 static Internal::StrStrModifier          strstr;
 static Internal::UrlencodeModifier       urlencode;
+static Internal::Md5Modifier             md5;
 
 /**
  *  Constructor
@@ -62,6 +63,7 @@ Data::Data()
     modifier("substr", &substr);
     modifier("strstr", &strstr);
     modifier("urlencode", &urlencode);
+    modifier("md5", &md5);
 }
 
 /**
