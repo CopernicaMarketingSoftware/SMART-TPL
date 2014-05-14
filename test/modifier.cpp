@@ -253,3 +253,21 @@ TEST(Modifier, Count)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, CountWords)
+{
+    string input("{$var|count_words}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "This is just a simple test sentence.");
+
+    string expectedOutput("7");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

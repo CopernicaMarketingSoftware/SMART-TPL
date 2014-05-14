@@ -16,6 +16,7 @@ namespace SmartTpl {
 static Internal::ToUpperModifier         toupper;
 static Internal::ToLowerModifier         tolower;
 static Internal::CatModifier             cat;
+static Internal::CountWordsModifier      count_words;
 static Internal::CountCharactersModifier count_characters;
 static Internal::CountParagraphsModifier count_paragraphs;
 static Internal::DefaultModifier         _default; // Underscore is purely because default is a keyword
@@ -38,6 +39,7 @@ Data::Data()
     modifier("tolower", &tolower);
     modifier("lower", &tolower);
     modifier("cat", &cat);
+    modifier("count_words", &count_words);
     modifier("count_characters", &count_characters);
     modifier("count_paragraphs", &count_paragraphs);
     modifier("default", &_default);
