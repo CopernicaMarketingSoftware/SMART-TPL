@@ -85,6 +85,7 @@
 #include "builtin/trim.h"
 #include "builtin/regex_replace.h"
 #include "builtin/substr.h"
+#include "builtin/strstr.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

@@ -343,3 +343,21 @@ TEST(Modifier, SubStr)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, StrStr)
+{
+    string input("{$var|strstr:\"@\"}\n{$var|strstr:\"@\":true}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "name@example.com");
+
+    string expectedOutput("@example.com\nname");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
