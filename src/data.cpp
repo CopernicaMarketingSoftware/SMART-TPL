@@ -28,6 +28,7 @@ static Internal::SpacifyModifier         spacify;
 static Internal::TruncateModifier        truncate;
 static Internal::CountModifier           count;
 static Internal::UcFirstModifier         ucfirst;
+static Internal::TrimModifier            trim;
 
 /**
  *  Constructor
@@ -52,6 +53,7 @@ Data::Data()
     modifier("truncate", &truncate);
     modifier("count", &count);
     modifier("ucfirst", &ucfirst);
+    modifier("trim", &trim);
 }
 
 /**

@@ -289,3 +289,21 @@ TEST(Modifier, UcFirst)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, Trim)
+{
+    string input("{$var|trim}\n{$var|trim:\" \"}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "  \tTest\n\t  ");
+
+    string expectedOutput("Test\n\tTest\n\t");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

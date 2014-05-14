@@ -82,6 +82,7 @@
 #include "builtin/spacify.h"
 #include "builtin/truncate.h"
 #include "builtin/ucfirst.h"
+#include "builtin/trim.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"
