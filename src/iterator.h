@@ -32,12 +32,11 @@ private:
     /**
      *  Current position
      *
-     *  @todo
-     *      other sort of iterator implementation, in which we are not forced
-     *      to use integers to keep the current index (which can be slow if 
-     *      the underlying object is for example a std::map or std::list),
-     *      the value class should have its own system for defining custom
-     *      iterators.
+     *  @todo other sort of iterator implementation, in which we are not forced
+     *        to use integers to keep the current index (which can be slow if
+     *        the underlying object is for example a std::map or std::list),
+     *        the value class should have its own system for defining custom
+     *        iterators.
      *
      *  @var int
      */
@@ -47,7 +46,7 @@ private:
      *  Maximum position
      *  @var int
      */
-    int _max;
+    const int _max;
 
 public:
     /**
