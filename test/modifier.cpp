@@ -325,3 +325,21 @@ TEST(Modifier, RegexReplace)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, SubStr)
+{
+    string input("{$var|substr:1}\n{$var|substr:1:3}\n{$var|substr:0:4}\n{$var|substr:0:8}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "abcdef");
+
+    string expectedOutput("bcdef\nbcd\nabcd\nabcdef");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

@@ -30,6 +30,7 @@ static Internal::CountModifier           count;
 static Internal::UcFirstModifier         ucfirst;
 static Internal::TrimModifier            trim;
 static Internal::RegexReplaceModifier    regex_replace;
+static Internal::SubStrModifier          substr;
 
 /**
  *  Constructor
@@ -56,6 +57,7 @@ Data::Data()
     modifier("ucfirst", &ucfirst);
     modifier("trim", &trim);
     modifier("regex_replace", &regex_replace);
+    modifier("substr", &substr);
 }
 
 /**

@@ -64,10 +64,13 @@ public:
         {
             // If we do use them to execute the replace
             output = replace(output, params[0].toString(), params[1].toString());
+
+            // Return the modified output
+            return output;
         }
 
-        // Replace the new lines with <br /> and return
-        return output;
+        // Simply return the input
+        return input;
     }
 };
 

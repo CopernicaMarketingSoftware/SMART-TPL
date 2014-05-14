@@ -33,7 +33,9 @@ public:
      *  @param  input       Initial value
      *  @param  params      Parameters used for this modification
      *  @return Variant     A new value object
-     *  @todo   Attempt to make the Value a Variant here
+     *  @note   In case you end up NOT modifying the input, just return input
+     *          instead of constructing a new string or whatever. Simply returning
+     *          the input is handled slightly more efficient internally.
      */
     virtual Variant modify(const Variant &input, const Parameters &params) = 0;
 };
