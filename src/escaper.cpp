@@ -33,6 +33,7 @@ Escaper::Escaper(const std::string &name)
  */
 static NullEscaper _null;
 static HtmlEscaper _html;
+static UrlEscaper _url;
 
 /**
  *  Return an Escaper based on the encoding

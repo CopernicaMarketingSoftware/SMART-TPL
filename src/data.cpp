@@ -32,6 +32,7 @@ static Internal::TrimModifier            trim;
 static Internal::RegexReplaceModifier    regex_replace;
 static Internal::SubStrModifier          substr;
 static Internal::StrStrModifier          strstr;
+static Internal::UrlencodeModifier       urlencode;
 
 /**
  *  Constructor
@@ -60,6 +61,7 @@ Data::Data()
     modifier("regex_replace", &regex_replace);
     modifier("substr", &substr);
     modifier("strstr", &strstr);
+    modifier("urlencode", &urlencode);
 }
 
 /**

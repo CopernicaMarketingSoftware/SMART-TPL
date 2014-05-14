@@ -361,3 +361,21 @@ TEST(Modifier, StrStr)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, Urlencode)
+{
+    string input("http://httpbin.org/get?{$var|urlencode}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "foo&bar=some/value");
+
+    string expectedOutput("http://httpbin.org/get?foo%26bar%3Dsome%2Fvalue");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
