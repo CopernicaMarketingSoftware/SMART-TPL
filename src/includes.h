@@ -30,6 +30,8 @@
 #include <iomanip>
 #include <openssl/md5.h>
 #include <openssl/sha.h>
+#include <openssl/bio.h>
+#include <openssl/evp.h>
 
 /**
  *  Public includes
@@ -95,6 +97,7 @@
 #include "builtin/sha1.h"
 #include "builtin/sha256.h"
 #include "builtin/sha512.h"
+#include "builtin/base64encode.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

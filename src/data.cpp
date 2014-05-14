@@ -37,6 +37,7 @@ static Internal::Md5Modifier             md5;
 static Internal::Sha1Modifier            sha1;
 static Internal::Sha256Modifier          sha256;
 static Internal::Sha512Modifier          sha512;
+static Internal::Base64EncodeModifier    base64_encode;
 
 /**
  *  Constructor
@@ -70,6 +71,7 @@ Data::Data()
     modifier("sha1", &sha1);
     modifier("sha256", &sha256);
     modifier("sha512", &sha512);
+    modifier("base64_encode", &base64_encode);
 }
 
 /**
