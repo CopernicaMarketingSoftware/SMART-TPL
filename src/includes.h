@@ -98,6 +98,7 @@
 #include "builtin/sha256.h"
 #include "builtin/sha512.h"
 #include "builtin/base64encode.h"
+#include "builtin/base64decode.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

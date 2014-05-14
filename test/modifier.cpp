@@ -469,3 +469,21 @@ TEST(Modifier, Base64Encoding)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, Base64Decoding)
+{
+    string input("{$var|base64_decode}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "dGVzdA==");
+
+    string expectedOutput("test");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
