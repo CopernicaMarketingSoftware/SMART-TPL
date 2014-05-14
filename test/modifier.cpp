@@ -415,3 +415,21 @@ TEST(Modifier, SHA1)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, SHA256)
+{
+    string input("{$var|sha256}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "Test string");
+
+    string expectedOutput("a3e49d843df13c2e2a7786f6ecd7e0d184f45d718d1ac1a8a63e570466e489dd");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
