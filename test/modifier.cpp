@@ -218,13 +218,13 @@ TEST(Modifier, Spacify)
 
 TEST(Modifier, Truncate)
 {
-    string input("{$var|truncate}\n{$var|truncate:13}\n{$var|truncate:13:\"\"}");
+    string input("{$var|truncate}\n{$var|truncate:13}\n{$var|truncate:13:\"\"}\n{$var|truncate:13:\"...\":true}");
     Template tpl((Buffer(input)));
 
     Data data;
     data.assign("var", "This is just a simple test sentence.");
 
-    string expectedOutput("This is just a simple test sentence.\nThis is ju...\nThis is just ");
+    string expectedOutput("This is just a simple test sentence.\nThis is...\nThis is just\nThis is ju...");
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     if (compile(tpl)) // This will compile the Template into a shared library

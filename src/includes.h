@@ -26,6 +26,10 @@
 #include <algorithm>
 #include <set>
 #include <ctime>
+/**
+ *  @todo Replace with std::regex once gcc fixed their crap
+ */
+#include <boost/regex.hpp>
 
 /**
  *  Public includes
