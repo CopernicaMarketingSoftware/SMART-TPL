@@ -307,3 +307,21 @@ TEST(Modifier, Trim)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, RegexReplace)
+{
+    string input("{$var|regex_replace:\"a|e|i|o|u\":\"*\"}\n{$var|regex_replace:\"a|e|i|o|u\":\"[$&]\"}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "Quick brown fox");
+
+    string expectedOutput("Q**ck br*wn f*x\nQ[u][i]ck br[o]wn f[o]x");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

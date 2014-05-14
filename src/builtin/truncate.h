@@ -68,7 +68,6 @@ public:
                 // https://code.google.com/p/smarty-php/source/browse/branches/Smarty2Dev/libs/plugins/modifier.truncate.php
                 output = output.substr(0, length + 1);
                 std::ostringstream stream;
-                // @todo Replace with std::regex asap
                 std::regex_replace(std::ostream_iterator<char>(stream)
                                     ,output.begin(), output.end(), std::regex("\\s+?(\\S+)?$"), "");
                 output = stream.str();
