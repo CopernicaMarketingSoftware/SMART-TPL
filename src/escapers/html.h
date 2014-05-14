@@ -40,6 +40,7 @@ public:
         replace(input, "<",  "&lt;");
         replace(input, ">",  "&gt;");
         replace(input, "\"", "&quot;");
+        replace(input, "\'", "&apos;");
 
         // Return the modified input
         return input;
@@ -57,6 +58,7 @@ public:
         replace(input, "&lt;",   "<");
         replace(input, "&gt;",   ">");
         replace(input, "&quot;", "\"");
+        replace(input, "&apos;", "\'");
         replace(input, "&amp;",  "&");
 
         // Return the modified input
