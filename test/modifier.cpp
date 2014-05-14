@@ -397,3 +397,21 @@ TEST(Modifier, MD5)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, SHA1)
+{
+    string input("{$var|sha1}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "Test string");
+
+    string expectedOutput("18af819125b70879d36378431c4e8d9bfa6a2599");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

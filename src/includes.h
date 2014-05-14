@@ -29,6 +29,7 @@
 #include <regex>
 #include <iomanip>
 #include <openssl/md5.h>
+#include <openssl/sha.h>
 
 /**
  *  Public includes
@@ -91,6 +92,7 @@
 #include "builtin/strstr.h"
 #include "builtin/urlencode.h"
 #include "builtin/md5.h"
+#include "builtin/sha1.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"
