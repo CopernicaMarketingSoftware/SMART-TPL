@@ -271,3 +271,21 @@ TEST(Modifier, CountWords)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, UcFirst)
+{
+    string input("{$var|ucfirst}.");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "sir");
+
+    string expectedOutput("Sir.");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}

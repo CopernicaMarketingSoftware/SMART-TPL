@@ -27,6 +27,7 @@ static Internal::Nl2brModifier           nl2br;
 static Internal::SpacifyModifier         spacify;
 static Internal::TruncateModifier        truncate;
 static Internal::CountModifier           count;
+static Internal::UcFirstModifier         ucfirst;
 
 /**
  *  Constructor
@@ -50,6 +51,7 @@ Data::Data()
     modifier("spacify", &spacify);
     modifier("truncate", &truncate);
     modifier("count", &count);
+    modifier("ucfirst", &ucfirst);
 }
 
 /**
