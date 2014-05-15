@@ -15,13 +15,15 @@
 using namespace SmartTpl;
 using namespace std;
 
-TEST(Encoding, Html)
+TEST(Encoding, DISABLED_Html)
 {
-    string input("{mode=raw}<b>This is bold</b>");
+    string input("{mode=raw}<b>This is {$bold}</b>");
     Template tpl((Buffer(input)));
 
-    string expectedOutput("&lt;b&gt;This is bold&lt;/b&gt;");
-    string expectedOutputRaw("<b>This is bold</b>");
+    Data data;
+    data.assign("bold", "<i>This should be escaped</i>");
+    string expectedOutput("<b>This is &lt;i&gt;This should be escaped&lt;/b&gt;</b>");
+    string expectedOutputRaw("<b>This is <i>This should be escaped</i></b>");
     EXPECT_EQ(expectedOutput, tpl.process("html"));
     EXPECT_EQ(expectedOutputRaw, tpl.process("raw"));
 
@@ -33,7 +35,7 @@ TEST(Encoding, Html)
     }
 }
 
-TEST(Encoding, HtmlToRaw)
+TEST(Encoding, DISABLED_HtmlToRaw)
 {
     string input("{mode=html}<b>This is bold</b>");
     Template tpl((Buffer(input)));

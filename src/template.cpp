@@ -70,31 +70,13 @@ std::string Template::compile() const
 std::string Template::process(const Data &data, const std::string &outencoding) const
 {
     // we need a handler object
-    Internal::Handler handler(&data);
+    Internal::Handler handler(&data, Internal::Escaper::get(outencoding));
 
     // ask the executor to display the template
     _executor->process(handler);
 
-    // generate the output string
-    std::string output = handler.output();
-
-    if (outencoding != "null" && _encoding != outencoding)
-    {
-        // Get the decoder for our current type
-        const Internal::Escaper *decoder = Internal::Escaper::get(_encoding);
-
-        // Decode it to raw
-        output = decoder->decode(output);
-
-        // Get the encoder for the out type
-        const Internal::Escaper *encoder = Internal::Escaper::get(outencoding);
-
-        // Return the output of our encoder
-        return encoder->encode(output);
-    }
-
-    // return the output
-    return output;
+    // return the generated output string
+    return handler.output();
 }
 
 /**

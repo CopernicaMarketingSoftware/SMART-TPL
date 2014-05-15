@@ -32,6 +32,12 @@ private:
     const Data *_data;
 
     /**
+     *  The encoder to use for variables
+     *  @var    Escaper
+     */
+    const Escaper *_encoder;
+
+    /**
      *  Compare functor necessary for the map
      */
     struct cmp_str
@@ -68,8 +74,9 @@ public:
     /**
      *  Constructor
      *  @param  data        pointer to the data
+     *  @param  escaper     the escaper to use for the printed variables
      */
-    Handler(const Data *data) : _data(data) 
+    Handler(const Data *data, const Escaper *escaper) : _data(data), _encoder(escaper)
     {
         // we reserve some space in the output buffer, so that it is not
         // necessary to reallocate all the time (which is slow)
@@ -219,6 +226,11 @@ public:
         _managed_local_values.push_back(std::shared_ptr<Value>(value));
         return true;
     }
+
+    /**
+     *  @return The escaper to use to print the variables
+     */
+    const Escaper *escaper() const { return _encoder; }
 };
 
 /**
