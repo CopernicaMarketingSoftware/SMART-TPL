@@ -19,9 +19,6 @@ namespace SmartTpl { namespace Internal {
  */
 CCode::CCode(const SyntaxTree &tree)
 {
-    // Retrieve the escaper to use for this template
-    _encoder = Escaper::get(tree.mode());
-
     // include headers
     _out << "#include <smarttpl/callbacks.h>" << std::endl;
 
@@ -55,14 +52,12 @@ CCode::CCode(const Source& source)
  */
 void CCode::raw(const std::string &data)
 {
-    std::string copy(data);
-    copy = _encoder->encode(copy);
     // quote newlines, null characters, etc in the string so that it can
     // be picked up by the compiler
-    QuotedString quoted(copy);
+    QuotedString quoted(data);
 
     // output the data
-    _out << "callbacks->write(userdata,\"" << quoted << "\"," << copy.size() << ");" << std::endl;
+    _out << "callbacks->write(userdata,\"" << quoted << "\"," << data.size() << ");" << std::endl;
 }
 
 /**

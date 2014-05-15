@@ -358,7 +358,7 @@ TEST(CCode, Encoded)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "callbacks->write(userdata,\"&lt;b&gt;This is bold&lt;/b&gt;\",31);\n}\n"
+    "callbacks->write(userdata,\"<b>This is bold</b>\",19);\n}\n"
     "const char *mode = \"html\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
     EXPECT_EQ("raw", tpl.encoding()); // The on runtime compiled one will always be raw!
