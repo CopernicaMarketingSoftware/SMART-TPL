@@ -213,3 +213,69 @@ TEST(RunTime, KeyArrayAccess)
         EXPECT_EQ(library.process(data), expectedOutput);
     }
 }
+
+TEST(RunTime, CompareVarConstantNumeric)
+{
+    string input("{if $var == 1}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data1;
+    data1.assign("var", 1);
+
+    Data data2;
+    data2.assign("var", 2);
+
+    EXPECT_EQ("true", tpl.process(data1));
+    EXPECT_EQ("false", tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("true", library.process(data1));
+        EXPECT_EQ("false", library.process(data2));
+    }
+}
+
+TEST(RunTime, CompareVarConstantBoolean)
+{
+    string input("{if $var == true}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data1;
+    data1.assign("var", true);
+
+    Data data2;
+    data2.assign("var", false);
+
+    EXPECT_EQ("true", tpl.process(data1));
+    EXPECT_EQ("false", tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("true", library.process(data1));
+        EXPECT_EQ("false", library.process(data2));
+    }
+}
+
+TEST(RunTime, CompareVarConstantString)
+{
+    string input("{if $var == \"string\"}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data1;
+    data1.assign("var", "string");
+
+    Data data2;
+    data2.assign("var", "false string");
+
+    EXPECT_EQ("true", tpl.process(data1));
+    EXPECT_EQ("false", tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("true", library.process(data1));
+        EXPECT_EQ("false", library.process(data2));
+    }
+}

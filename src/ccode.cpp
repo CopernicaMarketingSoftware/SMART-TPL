@@ -19,7 +19,9 @@ namespace SmartTpl { namespace Internal {
  */
 CCode::CCode(const SyntaxTree &tree)
 {
+    // Retrieve the escaper to use for this template
     _encoder = Escaper::get(tree.mode());
+
     // include headers
     _out << "#include <smarttpl/callbacks.h>" << std::endl;
 
@@ -38,6 +40,7 @@ CCode::CCode(const SyntaxTree &tree)
     // Quote the string from mode() just in case
     QuotedString quoted(tree.mode());
 
+    // And write the string from mode() after the const char *mode declaration
     _out << "\"" << quoted << "\";" << std::endl;
 }
 
@@ -371,41 +374,41 @@ void CCode::multiply(const Expression *left, const Expression *right)   { left->
  */
 void CCode::equals(const Expression *left, const Expression *right)
 {
-    if (left->type() == Expression::Type::Numeric && right->type() == Expression::Type::Numeric)
+    if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
         left->numeric(this); _out << "=="; right->numeric(this);
     }
-    else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
+    else if (left->type() == Expression::Type::String || right->type() == Expression::Type::String)
     {
         _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") == 0";
     }
-    else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
+    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
         left->boolean(this); _out << "=="; right->boolean(this);
     }
-    else
+    else if (left->type() == Expression::Type::Value && right->type() == Expression::Type::Value)
     {
-        throw std::runtime_error("Comparison between different types is currently not supported.");
+        throw std::runtime_error("Comparing 2 variables with each other is currently not supported.");
     }
 }
 
 void CCode::notEquals(const Expression *left, const Expression *right)
 {
-    if (left->type() == Expression::Type::Numeric && right->type() == Expression::Type::Numeric)
+    if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
         left->numeric(this); _out << "!="; right->numeric(this);
     }
-    else if (left->type() == Expression::Type::String && right->type() == Expression::Type::String)
+    else if (left->type() == Expression::Type::String || right->type() == Expression::Type::String)
     {
         _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") != 0";
     }
-    else if (left->type() == Expression::Type::Boolean && right->type() == Expression::Type::Boolean)
+    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
         left->boolean(this); _out << "!="; right->boolean(this);
     }
-    else
+    else if (left->type() == Expression::Type::Value && right->type() == Expression::Type::Value)
     {
-        throw std::runtime_error("Comparison between different types is currently not supported.");
+        throw std::runtime_error("Comparing 2 variables with each other is currently not supported.");
     }
 }
 void CCode::greater(const Expression *left, const Expression *right)        { left->numeric(this); _out << ">" ; right->numeric(this); }

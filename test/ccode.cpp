@@ -226,13 +226,6 @@ TEST(CCode, StringComparisonNotEquals)
     compile(tpl);
 }
 
-TEST(CCode, CompareDifferentTypes)
-{
-    string input("{if true == 1}true{else}false{/if}");
-    Buffer buffer(input);
-    EXPECT_THROW(Template tpl(buffer);, std::runtime_error);
-}
-
 TEST(CCode, AssignValue)
 {
     string input("{assign \"string\" to $value}");
