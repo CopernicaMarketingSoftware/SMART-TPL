@@ -53,7 +53,7 @@ public:
      */
     virtual const char *toString() const override
     {
-        return "";
+        return _boolean ? "true" : "false";
     }
 
     /**
@@ -121,7 +121,7 @@ public:
      */
     virtual size_t size() const override
     {
-        return 0;
+        return _boolean ? 4 : 5; // "true" is 4 characters long, "false" is 5 characters long
     }
 };
 
