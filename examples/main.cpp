@@ -1,8 +1,8 @@
 /**
  *  Main.cpp
- * 
+ *
  *  Example program that shows how to use a template
- * 
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
@@ -26,20 +26,19 @@ int main(int argc, const char *argv[])
         SmartTpl::Data data;
 
         // assign variables
-        SmartTpl::MapValue map;
-        map.assign("member", "Test")
+        SmartTpl::MapValue *map = new SmartTpl::MapValue;
+        map->assign("member", "Test")
             .assign("anothermember", "Testing 1 2 3..");
-        SmartTpl::DateValue date("%A %d %B %Y %T");
-        data.assign("map", &map)
-            .callback("name", []() { return "Toon"; })
-            .assign("date", &date)
+        SmartTpl::DateValue *date = new SmartTpl::DateValue("%A %d %B %Y %T");
+        data.assign("map", std::shared_ptr<SmartTpl::Value>(map))
+            .callback("name", []() { return "TOON"; })
+            .assign("date", std::shared_ptr<SmartTpl::Value>(date))
             .assign("x", "Mr. x");
         // do a number of attempts
         for (int x=0; x<10; x++)
         {
             // output the template
             std::cout << tpl.process(data) << std::endl;
-            //tpl.process(data);
         }
     }
 }

@@ -2,9 +2,8 @@
     <body>
         {$date}
         This is an example template.
-        With a {$name|toupper|tolower}!
 
-        hallo {$x|toupper}
+        Hello {$name|toupper|tolower|ucfirst}.
 
         {if true}
             And a conditional text
