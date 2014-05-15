@@ -70,7 +70,7 @@ std::string Template::compile() const
 std::string Template::process(const Data &data, const std::string &outencoding) const
 {
     // we need a handler object
-    Handler handler(&data);
+    Internal::Handler handler(&data);
 
     // ask the executor to display the template
     _executor->process(handler);
