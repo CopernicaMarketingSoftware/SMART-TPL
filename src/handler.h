@@ -206,11 +206,18 @@ public:
 
     /**
      *  Make this value object managed by the handler
-     *  @param value    The value object to make managed
+     *  @param  value    The value object to make managed
+     *  @return True if we created a new shared pointer
      */
-    void manageValue(Variant *value)
+    bool manageValue(Variant *value)
     {
+        for (auto v : _managed_local_values)
+        {
+            // In case we found it that means that we are already managed
+            if (v.get() == value) return false;
+        }
         _managed_local_values.push_back(std::shared_ptr<Value>(value));
+        return true;
     }
 };
 
