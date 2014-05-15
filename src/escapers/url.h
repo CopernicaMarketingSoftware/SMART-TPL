@@ -77,10 +77,27 @@ public:
      *  It is probably a good idea to directly modify the input instead of making
      *  a copy and modifying that.
      *  @param input
-     *  @todo Implement url decoding
      */
     virtual std::string &decode(std::string &input) const override
     {
+        std::string output;
+        for (unsigned int i = 0; i < input.length(); ++i)
+        {
+            unsigned char ch = input[i];
+            if (ch == '%' && (i + 2) < input.length() && std::isxdigit(input[i + 1]) && std::isxdigit(input[i + 2]))
+            {
+                if (std::isdigit(input[i + 1])) ch = (unsigned char) ((input[i + 1] - '0') << 4);
+                else ch = (unsigned char) ((std::tolower(input[i + 1]) - 'a' + 10) << 4);
+
+                if (std::isdigit(input[i + 2])) ch |= (unsigned char) (input[i + 2] - '0');
+                else ch |= (unsigned char) (std::tolower(input[i + 2]) - 'a' + 10);
+
+                i += 2;
+            }
+            else if (input[i] == '+') ch = ' ';
+            output += ch;
+        }
+        std::swap(input, output);
         return input;
     }
 

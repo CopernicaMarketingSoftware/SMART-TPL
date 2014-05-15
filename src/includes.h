@@ -93,6 +93,7 @@
 #include "builtin/substr.h"
 #include "builtin/strstr.h"
 #include "builtin/urlencode.h"
+#include "builtin/urldecode.h"
 #include "builtin/md5.h"
 #include "builtin/sha1.h"
 #include "builtin/sha256.h"

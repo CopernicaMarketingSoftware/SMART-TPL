@@ -380,6 +380,24 @@ TEST(Modifier, Urlencode)
     }
 }
 
+TEST(Modifier, Urldecode)
+{
+    string input("{$var|urldecode}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "foo%26bar%3Dsome%2Fvalue");
+
+    string expectedOutput("foo&bar=some/value");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
 TEST(Modifier, MD5)
 {
     string input("{$var|md5}");
