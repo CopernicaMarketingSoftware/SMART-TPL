@@ -94,6 +94,7 @@ outexpr(A)          ::= expr(B) PIPE modifiers(C) .                             
 expr(A)             ::= variable(B) .                                           { A = B; }
 expr(A)             ::= literal(B) .                                            { A = B; }
 expr(A)             ::= LPAREN expr(B) RPAREN .                                 { A = B; }
+expr(A)             ::= .                                                       { A = nullptr; }
 expr(A)             ::= expr(B) PLUS expr(C) .                                  { A = new SmartTpl::Internal::BinaryPlusOperator(B, C); }
 expr(A)             ::= expr(B) MINUS expr(C) .                                 { A = new SmartTpl::Internal::BinaryMinusOperator(B, C); }
 expr(A)             ::= expr(B) MULTIPLY expr(C) .                              { A = new SmartTpl::Internal::BinaryMultiplyOperator(B, C); }

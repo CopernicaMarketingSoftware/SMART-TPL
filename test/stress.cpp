@@ -46,7 +46,7 @@ TEST(Stress, ChainedModifiers)
 TEST(Stress, ElseIfStatements)
 {
     string input("{if true}echo");
-    for (int i = 0; i < 10000; ++i) input.append("{elseif true}echo");
+    for (int i = 0; i < 10000; ++i) input.append("{elseif true}");
     input.append("{/if}");
     EXPECT_THROW(Template tpl((Buffer(input))), std::runtime_error);
 }
@@ -54,7 +54,7 @@ TEST(Stress, ElseIfStatements)
 TEST(Stress, InnerForEachLoops)
 {
     string input;
-    for (int i = 0; i < 10000; ++i) input.append("{foreach $map as $key => $value}echo");
+    for (int i = 0; i < 10000; ++i) input.append("{foreach $map as $key => $value}");
     for (int i = 0; i < 10000; ++i) input.append("{/foreach}");
     EXPECT_THROW(Template tpl((Buffer(input))), std::runtime_error);
 }
