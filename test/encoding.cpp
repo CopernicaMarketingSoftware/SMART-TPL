@@ -15,23 +15,23 @@
 using namespace SmartTpl;
 using namespace std;
 
-TEST(Encoding, DISABLED_Html)
+TEST(Encoding, Html)
 {
     string input("{mode=raw}<b>This is {$bold}</b>");
     Template tpl((Buffer(input)));
 
     Data data;
     data.assign("bold", "<i>This should be escaped</i>");
-    string expectedOutput("<b>This is &lt;i&gt;This should be escaped&lt;/b&gt;</b>");
+    string expectedOutput("<b>This is &lt;i&gt;This should be escaped&lt;/i&gt;</b>");
     string expectedOutputRaw("<b>This is <i>This should be escaped</i></b>");
-    EXPECT_EQ(expectedOutput, tpl.process("html"));
-    EXPECT_EQ(expectedOutputRaw, tpl.process("raw"));
+    EXPECT_EQ(expectedOutput, tpl.process(data, "html"));
+    EXPECT_EQ(expectedOutputRaw, tpl.process(data, "raw"));
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, library.process("html"));
-        EXPECT_EQ(expectedOutputRaw, library.process("raw"));
+        EXPECT_EQ(expectedOutput, library.process(data, "html"));
+        EXPECT_EQ(expectedOutputRaw, library.process(data, "raw"));
     }
 }
 

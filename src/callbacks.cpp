@@ -74,7 +74,7 @@ void smart_tpl_output(void *userdata, void *variable)
     auto *var = (Value *)variable;
 
     // output the variable
-    handler->write(var->toString(), var->size());
+    handler->output(var);
 }
 
 /**

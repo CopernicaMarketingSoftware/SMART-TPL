@@ -99,6 +99,17 @@ public:
     }
 
     /**
+     *  Output the Value object and most importantly, encode it if needed
+     *  @param  value
+     */
+    void output(Value *value)
+    {
+        std::string work(value->toString(), value->size());
+        work = _encoder->encode(work);
+        _buffer.append(work);
+    }
+
+    /**
      *  Get access to a variable
      *  @param  name
      *  @param  size
