@@ -173,6 +173,27 @@ TEST(RunTime, Assigning)
     }
 }
 
+TEST(RunTime, AssigningInForEach)
+{
+    string input("{foreach $item in $list}{$output=$item}{/foreach}{$output}");
+    Template tpl((Buffer(input)));
+
+    ListValue *list = new ListValue;
+    for (int i = 0; i < 5; ++i) list->add(i);
+
+    Data data;
+    data.assign("list", std::shared_ptr<Value>(list));
+
+    string expectedOutput("4");
+    EXPECT_EQ(tpl.process(data), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(library.process(data), expectedOutput);
+    }
+}
+
 TEST(RunTime, ArrayAccess)
 {
     string input("{$list[3]}");

@@ -148,9 +148,27 @@ public:
      */
     void assign(const char *key, size_t key_size, Value *value)
     {
-        std::shared_ptr<Value> ptr(value);
-        _local_values[key] = ptr;
-        _managed_local_values.push_back(ptr);
+        // Look manually through our _managed_local_values for value
+        // This has to be done manually because you can't compare shared pointers directly with pointers :(
+        bool found = false;
+        for (auto v : _managed_local_values)
+        {
+            if (v.get() == value)
+            {
+                // In case we found it we just assign the already existing shared pointer to _local_values
+                // And we set the found flag to true
+                found = true;
+                _local_values[key] = v;
+                break;
+            }
+        }
+        // If we did not find it in the _managed_local_values just create a new shared pointer
+        if (found == false)
+        {
+            std::shared_ptr<Value> ptr(value);
+            _managed_local_values.push_back(ptr);
+            _local_values[key] = ptr;
+        }
     }
 
     /**

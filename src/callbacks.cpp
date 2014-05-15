@@ -435,11 +435,11 @@ void smart_tpl_assign(void *userdata, const char *key, size_t keysize, void *var
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
 
-    // Convert value to type Value
-    auto value = (Value *) variable;
+    // Convert value to type Variant
+    auto *variant = (Variant *) variable;
 
     // Assign value to key
-    handler->assign(key, keysize, value);
+    handler->assign(key, keysize, variant);
 }
 
 /**
