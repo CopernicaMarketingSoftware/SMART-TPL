@@ -118,9 +118,3 @@ TEST(Syntax, KeyArrayAccess)
     Template tpl((Buffer(input)));
     compile(tpl);
 }
-
-TEST(String, CompareTwoVariables)
-{
-    string input("{if $var1 == $var2}true{/if}");
-    EXPECT_THROW(Template tpl((Buffer(input))), std::runtime_error);
-}

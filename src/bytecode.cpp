@@ -503,7 +503,16 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         // Compare them and push it to the stack
         _stack.push(l == r);
     }
-    else if (left->type() == Expression::Type::String || right->type() == Expression::Type::String)
+    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
+    {
+        // Convert both expressions too boolean values
+        jit_value l = boolean(left);
+        jit_value r = boolean(right);
+
+        // Compare them and push it to the stack
+        _stack.push(l == r);
+    }
+    else
     {
         // Convert both expressions to strings
         left->string(this);
@@ -518,19 +527,6 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         numeric(0);
         jit_value tru = pop();
         _stack.push(cmp == tru);
-    }
-    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
-    {
-        // Convert both expressions too boolean values
-        jit_value l = boolean(left);
-        jit_value r = boolean(right);
-
-        // Compare them and push it to the stack
-        _stack.push(l == r);
-    }
-    else if (left->type() == Expression::Type::Value && right->type() == Expression::Type::Value)
-    {
-        throw std::runtime_error("Comparing 2 variables with each other is currently not supported.");
     }
 }
 
@@ -551,7 +547,16 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         // Compare them and push it to the stack
         _stack.push(l != r);
     }
-    else if (left->type() == Expression::Type::String || right->type() == Expression::Type::String)
+    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
+    {
+        // Convert both expressions too boolean values
+        jit_value l = boolean(left);
+        jit_value r = boolean(right);
+
+        // Compare them and push it to the stack
+        _stack.push(l != r);
+    }
+    else
     {
         // Convert both expressions to strings
         left->string(this);
@@ -566,19 +571,6 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         numeric(0);
         jit_value tru = pop();
         _stack.push(cmp != tru);
-    }
-    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
-    {
-        // Convert both expressions too boolean values
-        jit_value l = boolean(left);
-        jit_value r = boolean(right);
-
-        // Compare them and push it to the stack
-        _stack.push(l != r);
-    }
-    else if (left->type() == Expression::Type::Value && right->type() == Expression::Type::Value)
-    {
-        throw std::runtime_error("Comparing 2 variables with each other is currently not supported.");
     }
 }
 

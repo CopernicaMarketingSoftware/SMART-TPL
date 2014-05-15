@@ -279,3 +279,27 @@ TEST(RunTime, CompareVarConstantString)
         EXPECT_EQ("false", library.process(data2));
     }
 }
+
+TEST(RunTime, CompareVarVar)
+{
+    string input("{if $var1 == $var2}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data1;
+    data1.assign("var1", "string")
+         .assign("var2", "string");
+
+    Data data2;
+    data2.assign("var1", "string")
+         .assign("var2", "other string");
+
+    EXPECT_EQ("true", tpl.process(data1));
+    EXPECT_EQ("false", tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("true", library.process(data1));
+        EXPECT_EQ("false", library.process(data2));
+    }
+}

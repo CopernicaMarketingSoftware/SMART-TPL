@@ -378,17 +378,13 @@ void CCode::equals(const Expression *left, const Expression *right)
     {
         left->numeric(this); _out << "=="; right->numeric(this);
     }
-    else if (left->type() == Expression::Type::String || right->type() == Expression::Type::String)
-    {
-        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") == 0";
-    }
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
         left->boolean(this); _out << "=="; right->boolean(this);
     }
-    else if (left->type() == Expression::Type::Value && right->type() == Expression::Type::Value)
+    else
     {
-        throw std::runtime_error("Comparing 2 variables with each other is currently not supported.");
+        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") == 0";
     }
 }
 
@@ -398,17 +394,13 @@ void CCode::notEquals(const Expression *left, const Expression *right)
     {
         left->numeric(this); _out << "!="; right->numeric(this);
     }
-    else if (left->type() == Expression::Type::String || right->type() == Expression::Type::String)
-    {
-        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") != 0";
-    }
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
         left->boolean(this); _out << "!="; right->boolean(this);
     }
-    else if (left->type() == Expression::Type::Value && right->type() == Expression::Type::Value)
+    else
     {
-        throw std::runtime_error("Comparing 2 variables with each other is currently not supported.");
+        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") != 0";
     }
 }
 void CCode::greater(const Expression *left, const Expression *right)        { left->numeric(this); _out << ">" ; right->numeric(this); }
