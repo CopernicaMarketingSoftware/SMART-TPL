@@ -85,7 +85,7 @@
 
 <INSIDE_CURLY_BRACES>{
     [ \t]
-    "$"[a-zA-Z][a-zA-Z0-9]*     { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
+    "$"[a-zA-Z][a-zA-Z0-9_-]*   { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
     "true"                      { return TOKEN_TRUE; }
     "false"                     { return TOKEN_FALSE; }
     "and"                       { return TOKEN_AND; }
