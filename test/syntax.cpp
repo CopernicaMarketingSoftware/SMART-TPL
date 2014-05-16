@@ -65,21 +65,21 @@ TEST(Syntax, WithoutElse)
 
 TEST(Syntax, ForEach)
 {
-    string input("{foreach $var in $map}");
+    string input("{foreach $var in $map}loop{/foreach}");
     Template tpl((Buffer(input)));
     compile(tpl);
 }
 
 TEST(Syntax, ForEachAs)
 {
-    string input("{foreach $map as $var}");
+    string input("{foreach $map as $var}loop{/foreach}");
     Template tpl((Buffer(input)));
     compile(tpl);
 }
 
 TEST(Syntax, ForEachWithKeys)
 {
-    string input("{foreach $map as $key => $var}");
+    string input("{foreach $map as $key => $var}loop{/foreach}");
     Template tpl((Buffer(input)));
     compile(tpl);
 }
