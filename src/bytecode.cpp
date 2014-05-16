@@ -198,6 +198,7 @@ void Bytecode::output(const Variable *variable)
     // get a pointer to the variable
     variable->pointer(this);
 
+    // Declare a jit_value saying if we should escape or not, which we always should from here
     jit_value escape = _function.new_constant(1);
 
     // pop the value variable->pointer(this); pushed to the stack from the stack
@@ -216,6 +217,7 @@ void Bytecode::output(const Filter *filter)
     // Call the string method on the filter which will call the modifiers() on our generator
     filter->string(this);
 
+    // Declare a jit_value saying if we should escape or not based on filter->escape()
     jit_value escape = _function.new_constant(filter->escape() ? 1 : 0);
 
     // Pop the value that modifiers() left us
