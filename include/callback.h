@@ -132,7 +132,7 @@ public:
 
     /**
      *  Get access to a member value
-     * 
+     *
      *  @param  name        name of the member
      *  @param  size        size of the name
      *  @return Variant
@@ -178,7 +178,7 @@ public:
 
     /**
      *  String length of the variable
-     * 
+     *
      *  @return size_t
      */
     virtual size_t size() const override

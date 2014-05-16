@@ -1,8 +1,8 @@
 /**
  *  Template.cpp
- * 
+ *
  *  Implementation of the Template class
- * 
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
@@ -45,10 +45,10 @@ Template::~Template()
 }
 
 /**
- *  Get the template representation in C that can be compiled into a shared 
- *  object. This method only works for templates that were not already a 
+ *  Get the template representation in C that can be compiled into a shared
+ *  object. This method only works for templates that were not already a
  *  shared library.
- * 
+ *
  *  @return std::string
  */
 std::string Template::compile() const
@@ -58,11 +58,11 @@ std::string Template::compile() const
 
 /**
  *  Process the template, given a certain data source
- * 
- *  The data object that needs to be passed to this method is an object 
+ *
+ *  The data object that needs to be passed to this method is an object
  *  that contains the values of all variables that can be user inside the
  *  template.
- * 
+ *
  *  @param  data         Data source
  *  @param  outencoding  The encoding that should be used for the output
  *  @return std::string

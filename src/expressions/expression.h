@@ -6,7 +6,7 @@
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
- 
+
 /**
  *  Set up namespace
  */
@@ -32,8 +32,8 @@ public:
 protected:
     /**
      *  Constructor
-     * 
-     *  The constructor is protected, because an expression is always 
+     *
+     *  The constructor is protected, because an expression is always
      *  implemented by one of its derived classes.
      */
     Expression() {}

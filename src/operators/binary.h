@@ -32,7 +32,7 @@ protected:
 
 
 public:
-    /** 
+    /**
      *  Protected constructor because this is just a base class
      *  @param  left
      *  @param  right

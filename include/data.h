@@ -2,7 +2,7 @@
  *  Data.h
  *
  *  When you process a template, you need to pass in a data object. This data
- *  object is filled with all the variables that can be used inside the 
+ *  object is filled with all the variables that can be used inside the
  *  template.
  *
  *  In this header file this data class is defined.
@@ -27,7 +27,7 @@ private:
      */
     struct cmp_str
     {
-        /** 
+        /**
          *  Invoke operator
          *  @param  a      First string for the comparison
          *  @param  b      Second string for the comparison

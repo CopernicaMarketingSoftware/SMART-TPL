@@ -1,8 +1,8 @@
 /**
  *  Library.cpp
- * 
+ *
  *  Implementation file for the Library class
- * 
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */

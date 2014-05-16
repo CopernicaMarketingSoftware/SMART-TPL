@@ -122,6 +122,7 @@ jit_value Bytecode::pop()
 {
     // let's check if the stack is empty and throw an error if it is instead of crashing
     if (_stack.empty()) throw std::runtime_error("_stack is empty");
+
     // get the value from the stack
     jit_value value = _stack.top();
 
@@ -432,7 +433,7 @@ void Bytecode::stringToNumeric(const Expression *expression)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::plus(const Expression *left, const Expression *right) 
+void Bytecode::plus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -448,7 +449,7 @@ void Bytecode::plus(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::minus(const Expression *left, const Expression *right) 
+void Bytecode::minus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -464,7 +465,7 @@ void Bytecode::minus(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::divide(const Expression *left, const Expression *right) 
+void Bytecode::divide(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -480,7 +481,7 @@ void Bytecode::divide(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::multiply(const Expression *left, const Expression *right) 
+void Bytecode::multiply(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -496,7 +497,7 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::equals(const Expression *left, const Expression *right) 
+void Bytecode::equals(const Expression *left, const Expression *right)
 {
     if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
@@ -540,7 +541,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::notEquals(const Expression *left, const Expression *right) 
+void Bytecode::notEquals(const Expression *left, const Expression *right)
 {
     if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
@@ -584,7 +585,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::greater(const Expression *left, const Expression *right) 
+void Bytecode::greater(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -600,7 +601,7 @@ void Bytecode::greater(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::greaterEquals(const Expression *left, const Expression *right) 
+void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -616,7 +617,7 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::lesser(const Expression *left, const Expression *right) 
+void Bytecode::lesser(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = numeric(left);
@@ -648,7 +649,7 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::booleanAnd(const Expression *left, const Expression *right) 
+void Bytecode::booleanAnd(const Expression *left, const Expression *right)
 {
     // construct the result value
     jit_value result = _function.new_value(jit_type_sys_int);
@@ -692,7 +693,7 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::booleanOr(const Expression *left, const Expression *right) 
+void Bytecode::booleanOr(const Expression *left, const Expression *right)
 {
     // construct the result value
     jit_value result = _function.new_value(jit_type_sys_int);
@@ -744,7 +745,7 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
     {
         jit_value null = _function.new_constant(NULL, jit_type_void_ptr);
         variable->pointer(this);
-        for (auto &modifier : *modifiers)
+        for (const auto &modifier : *modifiers)
         {
             string(modifier.get()->token());
 

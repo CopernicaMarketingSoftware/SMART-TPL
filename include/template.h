@@ -34,7 +34,7 @@ private:
      *
      *  This is a different object depending whether you constructed the template
      *  with a shared object (*.so file) or with a template source file (*.tpl)
-     * 
+     *
      *  @var    Executor
      */
     Internal::Executor *_executor = nullptr;
@@ -65,8 +65,8 @@ public:
     virtual ~Template();
 
     /**
-     *  Get the template representation in C that can be compiled into a shared 
-     *  object. This method only works for templates that were not already a 
+     *  Get the template representation in C that can be compiled into a shared
+     *  object. This method only works for templates that were not already a
      *  shared library.
      *
      *  @return std::string
@@ -76,7 +76,7 @@ public:
     /**
      *  Process the template, given a certain data source
      *
-     *  The data object that needs to be passed to this method is an object 
+     *  The data object that needs to be passed to this method is an object
      *  that contains the values of all variables that can be user inside the
      *  template.
      *

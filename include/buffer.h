@@ -3,15 +3,15 @@
  *
  *  Template source that can be used for templates that are fetched from
  *  memory.
- * 
+ *
  *  Explanation: when you instantiate a Template object, you need to pass
  *  a Source object to it to tell the Template object where it can be found.
  *  This Buffer class is one of the available Source objects that can be used
  *  for templates that are already in memory.
- *  
+ *
  *  Important: the buffer that is passed to the constructor should be valid
  *  for as long as the Memory object exists!
- * 
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
@@ -36,7 +36,7 @@ private:
 public:
     /**
      *  Constructor
-     *  
+     *
      *  @param  buffer      Pointer to the buffer
      *  @param  size        Size of the buffer
      */
@@ -56,11 +56,11 @@ public:
 
     /**
      *  Name of the source
-     * 
+     *
      *  This is the name by which the template is identifier. For file-templates
      *  this could be the filename, and for templates from other sources this
      *  could be a different name.
-     * 
+     *
      *  @return const char*
      */
     virtual const char *name() const override

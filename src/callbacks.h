@@ -241,9 +241,9 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
-            buffer.raw(), 
-            size.raw() 
+            userdata.raw(),
+            buffer.raw(),
+            size.raw()
         };
 
         // create the instruction
@@ -261,7 +261,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             variable.raw(),
             escape.raw(),
         };
@@ -283,7 +283,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             variable.raw(),
             name.raw(),
             size.raw()
@@ -438,7 +438,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             name.raw(),
             size.raw()
         };
@@ -458,7 +458,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             variable.raw()
         };
 
@@ -477,7 +477,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             variable.raw()
         };
 
@@ -496,7 +496,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             variable.raw()
         };
 
@@ -515,7 +515,7 @@ public:
     {
         // construct the arguments
         jit_value_t args[] = {
-            userdata.raw(), 
+            userdata.raw(),
             variable.raw()
         };
 

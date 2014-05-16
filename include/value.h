@@ -85,7 +85,7 @@ public:
 
     /**
      *  String length of the variable
-     * 
+     *
      *  @return size_t
      */
     virtual size_t size() const = 0;

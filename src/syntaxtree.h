@@ -4,8 +4,8 @@
  *  Class representing the abstract syntax tree that describes the entire
  *  template.tpl file.
  *
- *  The private base class of the SyntaxTree is the TokenProcessor class, so 
- *  that it is possible to pass an instance of the syntax tree class to the 
+ *  The private base class of the SyntaxTree is the TokenProcessor class, so
+ *  that it is possible to pass an instance of the syntax tree class to the
  *  tokenizer.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>

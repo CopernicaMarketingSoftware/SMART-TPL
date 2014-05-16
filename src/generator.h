@@ -2,10 +2,10 @@
  *  Generator.h
  *
  *  After a template file is parsed, it is turned into a SyntaxTree, which is
- *  then either turned into a shared library by the template compiler, or into 
+ *  then either turned into a shared library by the template compiler, or into
  *  a JIT compiled executable memory buffer.
  *
- *  This is the abstract base class of both the shared-library-compiler, and 
+ *  This is the abstract base class of both the shared-library-compiler, and
  *  the JIT-compiler.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>

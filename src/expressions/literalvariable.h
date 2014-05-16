@@ -29,7 +29,7 @@ public:
      *  Constructor
      *  @param  token
      */
-    LiteralVariable(Token *token) : 
+    LiteralVariable(Token *token) :
         _name(token) {}
 
     /**

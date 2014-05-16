@@ -1,8 +1,8 @@
 /**
  *  TokenProcessor.h
  *
- *  Class that is used internally to process token found in a template file. 
- *  The constructor is protected - you should create an instance of SyntaxTree 
+ *  Class that is used internally to process token found in a template file.
+ *  The constructor is protected - you should create an instance of SyntaxTree
  *  to get the syntax tree of a template.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
@@ -120,7 +120,7 @@ public:
         return *_encoding;
     }
 };
- 
+
 /**
  *  End namespace
  */

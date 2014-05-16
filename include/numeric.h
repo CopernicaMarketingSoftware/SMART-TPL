@@ -40,7 +40,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~NumericValue() 
+    virtual ~NumericValue()
     {
         if (_str) delete _str;
     }
@@ -76,7 +76,7 @@ public:
 
     /**
      *  Get access to a member variable
-     * 
+     *
      *  @param  name        name of the member
      *  @param  size        size of the name
      *  @return Variant
@@ -116,7 +116,7 @@ public:
 
     /**
      *  String length of the variable
-     * 
+     *
      *  @return int
      */
     virtual size_t size() const override

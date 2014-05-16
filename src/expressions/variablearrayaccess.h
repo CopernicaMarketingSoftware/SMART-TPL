@@ -31,7 +31,7 @@ public:
      *  @param  variable
      *  @param  key
      */
-    VariableArrayAccess(Variable *variable, Expression *key) : 
+    VariableArrayAccess(Variable *variable, Expression *key) :
         ArrayAccess(variable),
         _key(std::unique_ptr<Expression>(key)) {}
 

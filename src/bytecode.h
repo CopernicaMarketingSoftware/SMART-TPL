@@ -1,8 +1,8 @@
 /**
  *  Bytecode.h
- * 
+ *
  *  A generator class that creates a LLVM representation of a template.
- * 
+ *
  *  This class overrides from the Generator class to generate the code that
  *  can be passed to a LLVM virtual machine.
  *

@@ -6,7 +6,7 @@
  *
  *      File        File from the local filesystem
  *      Buffer      In-memory buffer holding the template
- * 
+ *
  *  You can create your own derived classes if you for example want to create
  *  template that are fetched from a database or from any other source.
  *
@@ -27,7 +27,7 @@ class Source
 protected:
     /**
      *  Constructor
-     * 
+     *
      *  The constructor is protected, you should create an instance of File,
      *  Buffer or an implementation of the Source class that you create yourself.
      */
@@ -38,25 +38,25 @@ public:
      *  Destructor
      */
     virtual ~Source() {}
-    
+
     /**
      *  Name of the source
-     * 
+     *
      *  This is the name by which the template is identifier. For file-templates
      *  this could be the filename, and for templates from other sources this
      *  could be a different name.
-     * 
+     *
      *  @return const char*
      */
     virtual const char *name() const = 0;
-    
+
     /**
      *  Is this a shared library?
-     * 
+     *
      *  When the source represents a shared library, it means that that it could
      *  be opened by a call to dlopen(), and it is stored as a .so file on the
      *  system. The name() method should return the path to the shared library.
-     * 
+     *
      *  @return bool
      */
     virtual bool library() const
@@ -79,7 +79,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const = 0;    
+    virtual size_t size() const = 0;
 
 };
 

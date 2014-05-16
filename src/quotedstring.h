@@ -25,7 +25,7 @@ public:
      */
     QuotedString(const std::string &input)
     {
-        // we reserve plenty of space (normally not more that two or three 
+        // we reserve plenty of space (normally not more that two or three
         // extra characters are necessary
         reserve(input.size() + 20);
 

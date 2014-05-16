@@ -53,7 +53,7 @@ private:
         // if the file extension is .so, we assume that it is a shared library
         _library = extension && strcasecmp(extension, ".so") == 0;
 
-        // and if this is a shared library, we're not going to read the contents 
+        // and if this is a shared library, we're not going to read the contents
         // because it most likely is binary code that we do not understand anyway
         if (_library) return;
 
@@ -73,7 +73,7 @@ public:
      *  @param  name               Name of the file
      *  @throws std::runtime_error If the file doesn't seem to exist or some other IO operation failed
      */
-    File(const char *name) : _name(name) 
+    File(const char *name) : _name(name)
     {
         // initialize the object
         initialize();
@@ -97,14 +97,14 @@ public:
 
     /**
      *  Name of the source
-     * 
+     *
      *  This is the name by which the template is identifier. For file-templates
      *  this could be the filename, and for templates from other sources this
      *  could be a different name.
-     * 
+     *
      *  @return const char*
      */
-    virtual const char *name() const override 
+    virtual const char *name() const override
     {
         // return the filename
         return _name.c_str();
@@ -112,11 +112,11 @@ public:
 
     /**
      *  Is this a shared library?
-     * 
+     *
      *  When the source represents a shared library, it means that that it could
      *  be opened by a call to dlopen(), and it is stored as a .so file on the
      *  system. The name() method should return the path to the shared library.
-     * 
+     *
      *  @return bool
      */
     virtual bool library() const override

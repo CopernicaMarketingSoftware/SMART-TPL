@@ -31,7 +31,7 @@ public:
      *  @param  variable
      *  @param  key
      */
-    LiteralArrayAccess(Variable *variable, Token *token) : 
+    LiteralArrayAccess(Variable *variable, Token *token) :
         ArrayAccess(variable),
         _key(token) {}
 

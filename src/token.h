@@ -1,9 +1,9 @@
 /**
  *  Token.h
  *
- *  Structure that holds the current token that is being processed by the 
+ *  Structure that holds the current token that is being processed by the
  *  Tokenizer. Note that the Tokenizer is implemented in Tokenizer.yy
- *  
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */

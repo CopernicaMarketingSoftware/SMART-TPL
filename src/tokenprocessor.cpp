@@ -2,7 +2,7 @@
  *  Parser.cpp
  *
  *  Implementation file for the Parser class.
- * 
+ *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */

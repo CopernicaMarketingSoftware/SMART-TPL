@@ -6,7 +6,7 @@
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
  */
- 
+
 /**
  *  Namespace
  */
@@ -15,7 +15,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class ToLowerModifier : public Modifier 
+class ToLowerModifier : public Modifier
 {
 public:
     /**

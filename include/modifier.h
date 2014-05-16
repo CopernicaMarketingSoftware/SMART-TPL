@@ -27,9 +27,9 @@ public:
 
     /**
      *  Modify a variable value, and convert it into a different value
-     * 
+     *
      *  This method is called if the initial value object may not be modified!
-     * 
+     *
      *  @param  input       Initial value
      *  @param  params      Parameters used for this modification
      *  @return Variant     A new value object
