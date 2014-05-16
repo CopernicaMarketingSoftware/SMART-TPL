@@ -843,6 +843,21 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
     jit_label label_while = _function.new_label();
     jit_label label_after_while = _function.new_label();
 
+    if (else_statements)
+    {
+        // Call the valid_iterator callback to begin with
+        auto valid = _callbacks.valid_iterator(_userdata, iterator);
+
+        // Jump to the start of the actual while loop if we are valid
+        _function.insn_branch_if(valid, label_while);
+
+        // Otherwise just fall through and cal the else_statements
+        else_statements->generate(this);
+
+        // Then just jump over the while loop entirely
+        _function.insn_branch(label_after_while);
+    }
+
     // we insert our label_while at the start
     _function.insn_label(label_while);
 
