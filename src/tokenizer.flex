@@ -79,6 +79,7 @@
 "{endif}"           { return TOKEN_ENDIF; }
 "{foreachelse}"     { return TOKEN_FOREACH_ELSE; }
 "{"                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
+"{"[a-zA-Z]*"}"     { return -1; };
 
     /**
      *  When in expression mode, we are tokenizing an expression inside an {if}
@@ -178,14 +179,28 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
     // keep fetching tokens
     while ((id = yylex(_scanner)) != 0)
     {
+        // If the token id is -1 we know we got ourself an unknown token, so we error out
+        if (id == -1)
+        {
+            // Set the error state to "Unknown token"
+            parent->error("Unknown token");
+
+            // clean up the buffer
+            yy_delete_buffer(state, _scanner);
+
+            // And error out
+            return false;
+        }
         // pass token to the parser
-        if (parent->process(id, _token) == false)
+        else if (parent->process(id, _token) == false)
         {
             // Delete our current token, if there is one
             if (_token) delete _token;
 
             // clean up the buffer
             yy_delete_buffer(state, _scanner);
+
+            // And error out
             return false;
         }
 

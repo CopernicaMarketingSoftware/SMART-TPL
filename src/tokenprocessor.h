@@ -105,6 +105,14 @@ public:
     }
 
     /**
+     *  Allows us to set an error string from somewhere else
+     */
+    void error(const std::string &str)
+    {
+        _error << str;
+    }
+
+    /**
      *  Set the encoding mode, will be called from lemon
      */
     void mode(Token *token)

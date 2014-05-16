@@ -139,3 +139,9 @@ TEST(Syntax, KeyArrayAccess)
     Template tpl((Buffer(input)));
     compile(tpl);
 }
+
+TEST(Syntax, NotExistingFunction)
+{
+    string input("{invalid}");
+    EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
+}
