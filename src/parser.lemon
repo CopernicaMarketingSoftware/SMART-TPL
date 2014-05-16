@@ -62,6 +62,7 @@
 }
 
 start               ::= MODE IDENTIFIER(A) statements(B) .                      { parent->mode(A); parent->add(B); }
+start               ::= ESCAPE statements(A) .                                  { parent->mode(new SmartTpl::Internal::Token("html")); parent->add(A); }
 start               ::= statements(A) .                                         { parent->add(A); }
 statements(A)       ::= statements(B) statement(C) .                            { A = B; A->add(C); }
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Internal::Statements(B); }

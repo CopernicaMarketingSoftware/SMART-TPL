@@ -17,7 +17,7 @@ using namespace std;
 
 TEST(Encoding, Html)
 {
-    string input("{mode=raw}<b>This is {$bold}</b>");
+    string input("<b>This is {$bold}</b>");
     Template tpl((Buffer(input)));
 
     Data data;
@@ -37,7 +37,7 @@ TEST(Encoding, Html)
 
 TEST(Encoding, HtmlToRaw)
 {
-    string input("{mode=html}<b>This is {$bold}</b>");
+    string input("{escape}<b>This is {$bold}</b>");
     Template tpl((Buffer(input)));
 
     Data data;

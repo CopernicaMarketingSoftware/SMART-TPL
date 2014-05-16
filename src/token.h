@@ -24,7 +24,8 @@ public:
      *  @param  buffer
      *  @param  size
      */
-    Token(const char *buffer, size_t size) : std::string(buffer, size) {}
+    Token(const char *buffer, size_t size) : std::string(buffer, size) {};
+    Token(const std::string &str) : std::string(str) {};
     Token() : std::string() {};
 
     /**
