@@ -49,6 +49,9 @@ TEST(Encoding, HtmlToRaw)
     "callbacks->write(userdata,\"</b>\",4);\n}\nconst char *mode = \"html\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
+    EXPECT_EQ("<b>This is &lt;i&gt;This should be escaped&lt;/i&gt;</b>", tpl.process(data));
+    EXPECT_EQ("<b>This is <i>This should be escaped</i></b>", tpl.process(data, "raw"));
+
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library

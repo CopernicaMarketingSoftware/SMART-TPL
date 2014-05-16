@@ -346,7 +346,7 @@ TEST(CCode, TemplateMode)
     "callbacks->output(userdata,callbacks->variable(userdata,\"var\",3));\n}\n"
     "const char *mode = \"test\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
-    EXPECT_EQ("raw", tpl.encoding()); // The on runtime compiled one will always be raw!
+    EXPECT_EQ("test", tpl.encoding());
 
     compile(tpl);
 }
@@ -361,7 +361,7 @@ TEST(CCode, Encoded)
     "callbacks->write(userdata,\"<b>This is bold</b>\",19);\n}\n"
     "const char *mode = \"html\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
-    EXPECT_EQ("raw", tpl.encoding()); // The on runtime compiled one will always be raw!
+    EXPECT_EQ("html", tpl.encoding());
 
     compile(tpl);
 }
