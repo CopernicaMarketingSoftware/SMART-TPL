@@ -66,15 +66,14 @@ public:
      */
     bool escape() const
     {
-        // Loop through all the modifiers
-        for (auto iter = _modifiers->begin(); iter != _modifiers->end(); ++iter)
-        {
-            // If one of them is named "raw" we know that we should not escape our output
-            if (iter->get()->token() == "raw") return false;
-        }
+        // Look for a modifier named "raw"
+        auto iter = std::find_if(_modifiers->begin(), _modifiers->end()
+                                ,[](const std::unique_ptr<const ModifierExpression> &mod) {
+            return mod.get()->token() == "raw";
+        });
 
-        // We didn't find the "raw" modifier, so we know we should escape
-        return true;
+        // Return whether we found the "raw" modifier or not
+        return iter == _modifiers->end();
     }
 };
 
