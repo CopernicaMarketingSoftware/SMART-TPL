@@ -83,7 +83,7 @@ public:
     virtual void generate(Generator *generator) const override
     {
         // call the generator
-        generator->foreach(_source.get(), _key ? *_key.get() : std::string(""), *_value.get(), _statements.get());
+        generator->foreach(_source.get(), _key ? *_key.get() : std::string(""), *_value.get(), _statements.get(), _else_statements.get());
     }
 };
 

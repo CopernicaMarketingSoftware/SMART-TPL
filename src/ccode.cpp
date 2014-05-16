@@ -542,8 +542,9 @@ void CCode::parameters(const Parameters *parameters)
  *  @param key              The magic variable name for the keys
  *  @param value            The magic variable name for the values
  *  @param statements       The statements to execute on each iteration
+ *  @param else_statements  The statements to execute if there was nothing to loop through
  */
-void CCode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements)
+void CCode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements)
 {
     // foreach loops are implemented inside a seperate block to create
     // a local variable scope
@@ -554,6 +555,19 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
 
     // pointer to the variable
     variable->pointer(this); _out << ");" << std::endl;
+
+    // In case we have else statements write the code to execute them if needed
+    if (else_statements)
+    {
+        // Check if our iterator is invalid (no data) before the actual loop
+        _out << "if (!callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
+
+        // If it indeed is invalid execute the else statements
+        else_statements->generate(this);
+
+        // Turns out it was valid, guess we'll just loop then
+        _out << "} else {" << std::endl;
+    }
 
     // construct the loop
     _out << "while (callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
@@ -568,8 +582,11 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
     // proceed the iterator
     _out << "callbacks->iterator_next(userdata,iterator);" << std::endl;
 
-    // end of the whilte loop
+    // end of the while loop
     _out << "}" << std::endl;
+
+    // End our else block if we have an else block that is
+    if (else_statements) _out << "}" << std::endl;
 
     // clean up the iterator
     _out << "callbacks->delete_iterator(userdata,iterator);" << std::endl;

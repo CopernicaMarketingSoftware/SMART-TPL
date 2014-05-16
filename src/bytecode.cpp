@@ -827,8 +827,9 @@ void Bytecode::parameters(const Parameters *parameters)
  *  @param key              The magic variable name for the keys
  *  @param value            The magic variable name for the values
  *  @param statements       The statements to execute on each iteration
+ *  @param else_statements  The statements to execute if there was nothing to loop through
  */
-void Bytecode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements)
+void Bytecode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements)
 {
     // convert our variable to a jit_value
     variable->pointer(this);

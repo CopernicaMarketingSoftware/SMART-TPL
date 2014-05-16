@@ -147,8 +147,9 @@ private:
      *  @param key              The magic variable name for the keys
      *  @param value            The magic variable name for the values
      *  @param statements       The statements to execute on each iteration
+     *  @param else_statements  The statements to execute if there was nothing to loop through
      */
-    virtual void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements) override;
+    virtual void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements) override;
 
     /**
      *  Generate the code to assign the output of an expression to a key

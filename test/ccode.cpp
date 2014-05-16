@@ -55,6 +55,26 @@ TEST(CCode, ForEachWithKeys)
     compile(tpl);
 }
 
+TEST(CCode, ForEachElse)
+{
+    string input("{foreach $key in $map}key: {$key}\n{foreachelse}else{/foreach}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\n"
+    "void *iterator = callbacks->create_iterator(userdata,callbacks->variable(userdata,\"map\",3));\n"
+    "if (!callbacks->valid_iterator(userdata,iterator)) {\ncallbacks->write(userdata,\"else\",4);\n} else {\n"
+    "while (callbacks->valid_iterator(userdata,iterator)) {\n"
+    "callbacks->assign(userdata,\"key\",3,callbacks->iterator_value(userdata,iterator));\n"
+    "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3),1);\n"
+    "callbacks->write(userdata,\"\\n\",1);\ncallbacks->iterator_next(userdata,iterator);\n}\n}\n"
+    "callbacks->delete_iterator(userdata,iterator);\n}\n}\n"
+    "const char *mode = \"raw\";\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
+
+    compile(tpl);
+}
+
 TEST(CCode, SingleModifier)
 {
     string input("{$var|toupper}");
