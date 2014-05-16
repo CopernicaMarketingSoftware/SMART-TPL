@@ -84,6 +84,27 @@ TEST(Syntax, ForEachWithKeys)
     compile(tpl);
 }
 
+TEST(Syntax, ForEachElse)
+{
+    string input("{foreach $var in $map}loop{foreachelse}else{/foreach}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, ForEachAsElse)
+{
+    string input("{foreach $map as $var}loop{foreachelse}else{/foreach}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, ForEachWithKeysElse)
+{
+    string input("{foreach $map as $key => $var}loop{foreachelse}else{/foreach}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
 TEST(Syntax, AssignTo)
 {
     string input("{assign 1 to $var}");

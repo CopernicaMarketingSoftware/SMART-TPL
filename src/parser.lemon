@@ -78,6 +78,9 @@ statement(A)        ::= foreachStatement(B) .                                   
 foreachStatement(A) ::= FOREACH VARIABLE(B) IN variable(C) statements(D) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(C, B, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) statements(D) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) ASSIGN_FOREACH VARIABLE(D) statements(E) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E); }
+foreachStatement(A) ::= FOREACH VARIABLE(B) IN variable(C) statements(D) FOREACH_ELSE statements(E) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(C, B, D, E); }
+foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) statements(D) FOREACH_ELSE statements(E) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E); }
+foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) ASSIGN_FOREACH VARIABLE(D) statements(E) FOREACH_ELSE statements(F) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E, F); }
 statement(A)        ::= assignStatement(B) .                                    { A = B; }
 assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) .                         { A = new SmartTpl::Internal::AssignStatement(B, C); }
 assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) .                     { A = new SmartTpl::Internal::AssignStatement(C, B); }

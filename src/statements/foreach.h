@@ -43,25 +43,33 @@ private:
      */
     std::unique_ptr<Statements> _statements;
 
+    /**
+     *  The statements to execute when there are no elements to loop through
+     *  @var Statements
+     */
+    std::unique_ptr<Statements> _else_statements;
+
 public:
     /**
      *  Constructor
-     *  @param  target      The variable to loop through
-     *  @param  value       Name of the value variable
-     *  @param  statements  The statements to execute in the foreach loop
+     *  @param  target          The variable to loop through
+     *  @param  value           Name of the value variable
+     *  @param  statements      The statements to execute in the foreach loop
+     *  @param  else_statements The statements to be executed if there is nothing to loop through
      */
-    ForEachStatement(Variable *source, Token *value, Statements *statements) : 
-        _source(source), _value(value), _statements(statements) {}
+    ForEachStatement(Variable *source, Token *value, Statements *statements, Statements *else_statements = nullptr) :
+        _source(source), _value(value), _statements(statements), _else_statements(else_statements) {}
 
     /**
      *  Constructor
-     *  @param  target      The variable to loop through
-     *  @param  key         Name of the key variable
-     *  @param  value       Name of the value variable
-     *  @param  statements  The statements to execute in the foreach loop
+     *  @param  target          The variable to loop through
+     *  @param  key             Name of the key variable
+     *  @param  value           Name of the value variable
+     *  @param  statements      The statements to execute in the foreach loop
+     *  @param  else_statements The statements to be executed if there is nothing to loop through
      */
-    ForEachStatement(Variable *source, Token *key, Token *value, Statements *statements) : 
-        _source(source), _key(key), _value(value), _statements(statements) {}
+    ForEachStatement(Variable *source, Token *key, Token *value, Statements *statements, Statements *else_statements = nullptr) : 
+        _source(source), _key(key), _value(value), _statements(statements), _else_statements(else_statements) {}
 
     /**
      *  Destructor
