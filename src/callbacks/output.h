@@ -27,7 +27,8 @@ public:
         // parameters that are supported
         jit_type_t params[] = {
             jit_type_void_ptr,
-            jit_type_void_ptr
+            jit_type_void_ptr,
+            jit_type_sys_int,
         };
 
         // create the signature

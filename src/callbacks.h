@@ -18,7 +18,7 @@ namespace SmartTpl { namespace Internal {
  *  Signatures of the global callback functions
  */
 void        smart_tpl_write(void *userdata, const char *data, size_t size);
-void        smart_tpl_output(void *userdata, void *variable);
+void        smart_tpl_output(void *userdata, void *variable, int escape);
 void       *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size);
 void       *smart_tpl_member_at(void *userdata, void *variable, long position);
 void       *smart_tpl_create_iterator(void *userdata, void *variable);
@@ -254,14 +254,16 @@ public:
      *  Call the output function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  variable        Pointer to the variable
+     *  @param  escape          Boolean whether we should escape the output or not
      *  @see    smart_tpl_output
      */
-    void output(const jit_value &userdata, const jit_value &variable)
+    void output(const jit_value &userdata, const jit_value &variable, const jit_value &escape)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(), 
-            variable.raw()
+            variable.raw(),
+            escape.raw(),
         };
 
         // create the instruction

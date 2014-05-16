@@ -101,11 +101,17 @@ public:
     /**
      *  Output the Value object and most importantly, encode it if needed
      *  @param  value
+     *  @param  escape
      */
-    void output(Value *value)
+    void output(Value *value, bool escape)
     {
+        // Turn the value into a string
         std::string work(value->toString(), value->size());
-        work = _encoder->encode(work);
+
+        // Should we escape the value?
+        if (escape) work = _encoder->encode(work);
+
+        // Append it to our buffer
         _buffer.append(work);
     }
 

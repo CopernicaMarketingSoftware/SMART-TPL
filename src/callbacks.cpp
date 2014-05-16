@@ -64,8 +64,9 @@ void smart_tpl_write(void *userdata, const char *data, size_t size)
  *  Function to output a variable
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to the variable
+ *  @param  escape          Whether we should be escaping or not
  */
-void smart_tpl_output(void *userdata, void *variable)
+void smart_tpl_output(void *userdata, void *variable, int escape)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
@@ -74,7 +75,7 @@ void smart_tpl_output(void *userdata, void *variable)
     auto *var = (Value *)variable;
 
     // output the variable
-    handler->output(var);
+    handler->output(var, escape != 0);
 }
 
 /**

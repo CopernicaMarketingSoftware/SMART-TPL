@@ -73,7 +73,7 @@ void CCode::output(const Variable* variable)
     variable->pointer(this);
 
     // end of the function
-    _out << ");" << std::endl;
+    _out << ",1);" << std::endl;
 }
 
 /**
@@ -92,7 +92,13 @@ void CCode::output(const Filter *filter)
     filter->string(this);
 
     // Now let's actually call the output callback
-    _out << "callbacks->output(userdata,o);" << std::endl;
+    _out << "callbacks->output(userdata,o,";
+
+    // Let's write the escape flag
+    _out << (filter->escape() ? 1 : 0);
+
+    // And end the output statement
+    _out << ");" << std::endl;
 
     // End our block
     _out << "}" << std::endl;

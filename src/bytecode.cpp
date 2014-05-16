@@ -197,11 +197,13 @@ void Bytecode::output(const Variable *variable)
     // get a pointer to the variable
     variable->pointer(this);
 
+    jit_value escape = _function.new_constant(1);
+
     // pop the value variable->pointer(this); pushed to the stack from the stack
     auto var = pop();
 
     // output the variable using the output callback
-    _callbacks.output(_userdata, var);
+    _callbacks.output(_userdata, var, escape);
 }
 
 /**
@@ -213,11 +215,13 @@ void Bytecode::output(const Filter *filter)
     // Call the string method on the filter which will call the modifiers() on our generator
     filter->string(this);
 
+    jit_value escape = _function.new_constant(filter->escape() ? 1 : 0);
+
     // Pop the value that modifiers() left us
     auto var = pop();
 
     // output this value
-    _callbacks.output(_userdata, var);
+    _callbacks.output(_userdata, var, escape);
 }
 
 /**
@@ -886,6 +890,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
     // insert our label_after_while at the end
     _function.insn_label(label_after_while);
 
+    // Call the delete_iterator callback
     _callbacks.delete_iterator(_userdata, iterator);
 }
 

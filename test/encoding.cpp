@@ -45,7 +45,7 @@ TEST(Encoding, HtmlToRaw)
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "callbacks->write(userdata,\"<b>This is \",11);\n"
-    "callbacks->output(userdata,callbacks->variable(userdata,\"bold\",4));\n"
+    "callbacks->output(userdata,callbacks->variable(userdata,\"bold\",4),1);\n"
     "callbacks->write(userdata,\"</b>\",4);\n}\nconst char *mode = \"html\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
@@ -57,5 +57,34 @@ TEST(Encoding, HtmlToRaw)
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
         EXPECT_EQ("<b>This is &lt;i&gt;This should be escaped&lt;/i&gt;</b>", library.process(data)); // We compiled it in html mode so default is html
         EXPECT_EQ("<b>This is <i>This should be escaped</i></b>", library.process(data, "raw")); // We request raw mode, so it decodes it for us
+    }
+}
+
+/**
+ *  This will test if we can override the global html escaping using the raw modifier
+ */
+TEST(Encoding, HtmlEncodingRawOverride)
+{
+    string input("{escape}<b>This is {$bold|raw}</b>");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("bold", "<i>This shouldn't be escaped!</i>");
+
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->write(userdata,\"<b>This is \",11);\n{\nvoid *o = NULL;\n"
+    "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"bold\",4),callbacks->modifier(userdata,\"raw\",3),NULL);\n"
+    "callbacks->output(userdata,o,0);\n}\ncallbacks->write(userdata,\"</b>\",4);\n}\nconst char *mode = \"html\";\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
+
+    EXPECT_EQ("<b>This is <i>This shouldn't be escaped!</i></b>", tpl.process(data));
+    EXPECT_EQ("<b>This is <i>This shouldn't be escaped!</i></b>", tpl.process(data, "raw"));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("<b>This is <i>This shouldn't be escaped!</i></b>", library.process(data));
+        EXPECT_EQ("<b>This is <i>This shouldn't be escaped!</i></b>", library.process(data, "raw"));
     }
 }

@@ -58,6 +58,24 @@ public:
     {
         _modifiers.get()->generate(generator, _expression.get());
     }
+
+    /**
+     *  Retrieve whether we should escape or not, this method will simply check
+     *  for the "raw" modifier
+     *  @return false if we shouldn't escape, true otherwise
+     */
+    bool escape() const
+    {
+        // Loop through all the modifiers
+        for (auto iter = _modifiers->begin(); iter != _modifiers->end(); ++iter)
+        {
+            // If one of them is named "raw" we know that we should not escape our output
+            if (iter->get()->token() == "raw") return false;
+        }
+
+        // We didn't find the "raw" modifier, so we know we should escape
+        return true;
+    }
 };
 
 /**
