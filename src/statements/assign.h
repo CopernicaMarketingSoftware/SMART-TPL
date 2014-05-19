@@ -36,8 +36,12 @@ public:
      *  @throws std::runtime_error In case the variable is not of type LiteralVariable
      */
     AssignStatement(Expression *expression, Token *var)
-    : _var(var)
-    , _expression(expression) {
+    : _expression(expression) {
+        // Make sure the expression is actually valid
+        if (expression == nullptr) throw std::runtime_error("Invalid expression to assign");
+
+        // If it is valid it is save to take ownership over the token
+        _var = std::unique_ptr<Token>(var);
     }
 
     /**

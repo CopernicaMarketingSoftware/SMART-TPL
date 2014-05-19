@@ -6,12 +6,6 @@
 using namespace SmartTpl;
 using namespace std;
 
-TEST(Syntax, Empty)
-{
-    string input;
-    EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
-}
-
 TEST(Syntax, Mode)
 {
     string input("{mode=html}echo"); // echo is purely there as we do at least need 1 statement
@@ -150,16 +144,4 @@ TEST(Syntax, NotExistingFunction)
 {
     string input("{invalid}");
     EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
-}
-
-TEST(Syntax, UnclosedIf)
-{
-    string input("{if true}");
-    EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
-}
-
-TEST(Syntax, UnclosedForeach)
-{
-    string input("{foreach $map as $key => $var}");
-    EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
 }
