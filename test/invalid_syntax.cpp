@@ -54,12 +54,6 @@ TEST(InvalidSyntax, ForEachNoEndForEach)
     EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
 }
 
-TEST(InvalidSyntax, ForEachNoKey)
-{
-    string input("{foreach $map as }loop{/foreach}");
-    EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
-}
-
 TEST(InvalidSyntax, ForEachAsNoEndForEach)
 {
     string input("{foreach $map as $var}loop");
@@ -106,4 +100,34 @@ TEST(InvalidSyntax, NotExistingFunction)
 {
     string input("{invalid}");
     EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
+}
+
+/**
+ *  Break down tests will simply start removing characters up until some point and
+ *  expect them to fail on pretty much everything on their way.
+ */
+
+TEST(InvalidSyntax, BreakDownForEach)
+{
+    string input("{foreach $map as $key => $var}{/foreach}");
+    std::string::size_type len = input.size();
+    for (std::string::size_type i = len; i > 8; --i) // Anything lower than 8 will succeed to compile as it'll just contain "{foreach"
+    {
+        string tpl(input.substr(0, i));
+        EXPECT_THROW(Template((Buffer(tpl))), std::runtime_error)
+                     << "The following template didn't fail to compile:" << std::endl << std::endl << tpl << std::endl;
+    }
+}
+
+TEST(InvalidSyntax, BreakDownAssign)
+{
+    string input("{assign 5 to $five}");
+    EXPECT_NO_THROW(Template((Buffer(input))));
+    std::string::size_type len = input.size() - 1;
+    for (std::string::size_type i = len; i > 7; --i) // Anything lower than 7 will succeed to compile as it'll just contain "{assign"
+    {
+        string tpl(input.substr(0, i));
+        EXPECT_THROW(Template((Buffer(tpl))), std::runtime_error)
+                     << "The following template didn't fail to compile:" << std::endl << std::endl << tpl << std::endl;
+    }
 }
