@@ -10,7 +10,11 @@
  */
 #include "includes.h"
 
+// Defining YY_NO_INPUT here stops flex from generating (and emiting) the unused yyinput() function
 #define YY_NO_INPUT
+
+// Defining ECHO here stops flex from sometimes printing failed to tokenize characters to stdout
+#define ECHO
 
 %}
 
