@@ -54,6 +54,12 @@ TEST(InvalidSyntax, ForEachNoEndForEach)
     EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
 }
 
+TEST(InvalidSyntax, ForEachNoKey)
+{
+    string input("{foreach $map as }loop{/foreach}");
+    EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
+}
+
 TEST(InvalidSyntax, ForEachAsNoEndForEach)
 {
     string input("{foreach $map as $var}loop");

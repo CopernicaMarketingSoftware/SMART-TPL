@@ -120,7 +120,7 @@
     "||"                        { return TOKEN_OR; }
     "|"                         { BEGIN(IDENTIFIER); return TOKEN_PIPE; }
     ":"                         { return TOKEN_COLON; }
-    "}"                         { BEGIN(INITIAL); }
+    "}"                         { BEGIN(INITIAL); return TOKEN_END_BRACES; }
 }
 
 <IDENTIFIER>{
