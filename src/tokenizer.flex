@@ -208,12 +208,11 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
         _token = nullptr;
     }
 
-    // pass the end-of-file to the parser
-    parent->process(0, nullptr);
-
     // clean up the buffer
     yy_delete_buffer(state, _scanner);
-    return true;
+
+    // pass the end-of-file to the parser and return the result
+    return parent->process(0, nullptr);
 }
 
 /**
