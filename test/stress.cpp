@@ -45,8 +45,8 @@ TEST(Stress, ChainedModifiers)
  */
 TEST(Stress, ElseIfStatements)
 {
-    string input("{if true}echo");
-    for (int i = 0; i < 10000; ++i) input.append("{elseif true}");
+    string input("{if true}\necho\n");
+    for (int i = 0; i < 10000; ++i) input.append("{elseif true}\n");
     input.append("{/if}");
     EXPECT_THROW(Template tpl((Buffer(input))), std::runtime_error);
 }

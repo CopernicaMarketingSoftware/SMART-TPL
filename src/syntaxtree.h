@@ -49,8 +49,8 @@ public:
 
     /**
      *  Generate the source code
-     *  @param  generator
-     *  @return bool
+     *  @param  generator The generator to use
+     *  @return bool      False if we didn't have any statements to generate
      */
     bool generate(Generator *generator) const
     {
