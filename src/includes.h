@@ -73,6 +73,7 @@
 #include "escapers/null.h"
 #include "escapers/html.h"
 #include "escapers/url.h"
+#include "escapers/base64.h"
 #include "builtin/tolower.h"
 #include "builtin/toupper.h"
 #include "builtin/cat.h"

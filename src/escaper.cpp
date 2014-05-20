@@ -34,6 +34,7 @@ Escaper::Escaper(const std::string &name)
 static NullEscaper _null;
 static HtmlEscaper _html;
 static UrlEscaper _url;
+static Base64Escaper _base64;
 
 /**
  *  Return an Escaper based on the encoding
