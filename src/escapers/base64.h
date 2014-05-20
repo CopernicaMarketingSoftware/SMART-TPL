@@ -118,13 +118,23 @@ public:
         input.clear();
 
         // Read chunks of data from the base64 BIO into our output string
-        // @todo Some form of error handling?
         char buf[1024 * 8];
         int ret = 0;
         do {
             ret = BIO_read(base64, buf, sizeof(buf));
-            if (ret > 0) input.append(buf, ret);
-        } while (ret > 0);
+            if (ret == 0) break; // end of data stream
+            else if (ret > 0) input.append(buf, ret);
+            else if (ret < 0)
+            {
+                if (BIO_should_retry(base64)) continue; // If we should retry just pop back to the start of the loop
+                else
+                {
+                    // We shouldn't retry, cleanup and return original value
+                    BIO_free_all(base64);
+                    return input;
+                }
+            }
+        } while (true);
 
         // Now free the BIO
         BIO_free_all(base64);
