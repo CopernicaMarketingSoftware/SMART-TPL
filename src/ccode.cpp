@@ -386,31 +386,6 @@ void CCode::booleanAnd(const Expression *left, const Expression *right) { left->
 void CCode::booleanOr(const Expression *left, const Expression *right)  { left->boolean(this); _out << "||"; right->boolean(this); }
 
 /**
- *  Apply one modifier to the expression
- *  @param  expression
- *  @param  modifier
- *  @todo Actually implement it using the ideas described in the comments here
- */
-/*void CCode::modifier(const Expression *expression, const Modifier *modifier)
-{
-    // check the expression type, because we are going to call a different
-    // apply_to_*** function depending on the expression type
-    switch (expression->type()) {
-        case Type::Numeric:
-            // call the apply_to_numeric function
-            _out << "callbacks->apply_to_numeric(userdata,";
-
-            // convert the expression into a literal numeric value
-            expression->numeric(this);
-
-            // fetch the modifier
-            _out << "callbacks->modifier(" << modifier->name() << "," << modifier->size() << ")";
-            break;
-
-}*/
-
-
-/**
  *  Generate the code to apply a set of modifiers on an expression
  *  @param  modifiers          The set of modifiers to apply
  *  @param  expression         The expression to apply to modifiers on

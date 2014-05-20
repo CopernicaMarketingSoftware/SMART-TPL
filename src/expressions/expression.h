@@ -20,7 +20,6 @@ class Expression
 public:
     /**
      *  The supported expression types
-     *  @todo Start actually properly using these values
      */
     enum class Type : std::int8_t {
         Numeric = 0,            // numeric type
