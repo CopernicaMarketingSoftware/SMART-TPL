@@ -108,14 +108,6 @@ public:
     virtual void variable(const Variable *variable) = 0;
 
     /**
-     *  Create a string literal from an expression that is known to return a numeric value,
-     *  and a method to do this in the other direction
-     *  @param  expression
-     */
-    virtual void numericToString(const Expression *expression) = 0;
-    virtual void stringToNumeric(const Expression *expression) = 0;
-
-    /**
      *  Arithmetric operations
      *  @param  left
      *  @param  right

@@ -29,16 +29,6 @@ public:
      *  Destructor
      */
     virtual ~BinaryArithmetricOperator() {}
-
-    /**
-     *  Generate the code to get the const char * to the expression
-     *  @param  generator
-     */
-    virtual void string(Generator *generator) const override
-    {
-        // this needs to be casted to a string
-        generator->numericToString(this);
-    }
 };
 
 /**

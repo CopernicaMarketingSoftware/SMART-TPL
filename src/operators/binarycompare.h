@@ -29,16 +29,6 @@ public:
      *  Destructor
      */
     virtual ~BinaryCompareOperator() {}
-
-    /**
-     *  Generate the code to get the const char * to the expression
-     *  @param  generator
-     */
-    virtual void string(Generator *generator) const override
-    {
-        // this is an operator that evaluates to numeric
-        generator->numericToString(this);
-    }
 };
 
 /**

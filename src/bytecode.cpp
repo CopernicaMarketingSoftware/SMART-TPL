@@ -405,28 +405,7 @@ void Bytecode::boolean(const Variable *variable)
 
 void Bytecode::variable(const Variable* variable)
 {
-    // @todo
     string(variable);
-}
-
-/**
- *  Create a string literal from an expression that is known to return a numeric value,
- *  and a method to do this in the other direction
- *  @param  expression
- */
-void Bytecode::numericToString(const Expression *expression)
-{
-    // @todo implementation
-}
-
-/**
- *  Create a string literal from an expression that is known to return a numeric value,
- *  and a method to do this in the other direction
- *  @param  expression
- */
-void Bytecode::stringToNumeric(const Expression *expression)
-{
-    // @todo implementation
 }
 
 /**

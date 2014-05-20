@@ -325,38 +325,6 @@ void CCode::variable(const Variable* variable)
 }
 
 /**
- *  Create a string value from an expression that is known to return a numeric value
- *  @param  expression
- */
-void CCode::numericToString(const Expression *expression)
-{
-    // we have a special function for this
-    _out << "numeric_to_string(";
-
-    // output the expression to numeric
-    expression->numeric(this);
-
-    // end of function
-    _out << ")";
-}
-
-/**
- *  Create a numeric value from an expression that is known to return a string
- *  @param  expression
- */
-void CCode::stringToNumeric(const Expression *expression)
-{
-    // we have a special function for this
-    _out << "string_to_numeric(";
-
-    // output the expression
-    expression->string(this);
-
-    // end of function
-    _out << ")";
-}
-
-/**
  *  Arithmetric operations
  *  @param  left
  *  @param  right
