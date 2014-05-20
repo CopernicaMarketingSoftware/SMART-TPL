@@ -46,25 +46,25 @@ public:
         const char *data = input.toString();
         size_t len = input.size();
 
-        // Keep looping as long as we are not done
-        bool done = false;
-        int res = 0;
-        while (done == false)
+        // Keep looping as long as we still have bytes to write
+        size_t wrote = 0;
+        for (size_t pos = 0; pos < len; pos += wrote)
         {
-            // If this write goes correctly we are done
-            res = BIO_write(base64, data, len);
-            if (res <= 0)
+            if ((wrote = BIO_write(base64, data + pos, len - pos)) <= 0)
             {
-                // Should we retry? Just jump back to the start of the while loop then
-                if (BIO_should_retry(base64)) continue;
+                // If the BIO_write method fails let's check if we should retry or not
+                if (BIO_should_retry(base64))
+                {
+                    wrote = 0;
+                    continue;
+                }
                 else
                 {
-                    // Free all the BIOs and return the original input
+                    // We shouldn't retry, cleanup and return original value
                     BIO_free_all(base64);
                     return input;
                 }
             }
-            else done = true;
         }
 
         // Flush the base64 BIO to make sure everything is written

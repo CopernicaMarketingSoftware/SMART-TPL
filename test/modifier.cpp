@@ -488,6 +488,24 @@ TEST(Modifier, Base64Encoding)
     }
 }
 
+TEST(Modifier, Base64EncodingBig)
+{
+    string input("{$var|base64_encode}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    std::string str(1024 * 1024 * 16, 'a'); // 16MB string
+    data.assign("var", str);
+
+    EXPECT_GT(tpl.process(data).size(), str.size());
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_GT(library.process(data).size(), str.size());
+    }
+}
+
 TEST(Modifier, Base64Decoding)
 {
     string input("{$var|base64_decode}");
