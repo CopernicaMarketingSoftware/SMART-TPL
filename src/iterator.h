@@ -24,29 +24,11 @@ class Iterator
 {
 private:
     /**
-     *  The value object that is being iterated over
-     *  @var Value*
-     */
-    Value *_source;
-
-    /**
-     *  Current position
+     *  Iterator
      *
-     *  @todo other sort of iterator implementation, in which we are not forced
-     *        to use integers to keep the current index (which can be slow if
-     *        the underlying object is for example a std::map or std::list),
-     *        the value class should have its own system for defining custom
-     *        iterators.
-     *
-     *  @var int
+     *  @var SmartTpl::Iterator
      */
-    int _pos = 0;
-
-    /**
-     *  Maximum position
-     *  @var int
-     */
-    const int _max;
+    std::unique_ptr<SmartTpl::Iterator> _iterator;
 
 public:
     /**
@@ -54,7 +36,7 @@ public:
      *  @param  source      The source value object to iterate over
      */
     Iterator(Value *source) :
-        _source(source), _max(source->memberCount()) {}
+        _iterator(std::unique_ptr<SmartTpl::Iterator>(source->iterator())) {}
 
     /**
      *  Destructor
@@ -73,8 +55,11 @@ public:
      */
     bool valid() const
     {
-        // check if we have not yet reached the max
-        return _pos < _max;
+        // if we have a valid _iterator call the valid() method on it
+        if (_iterator) return _iterator->valid();
+
+        // Otherwise we'll be invalid
+        return false;
     }
 
     /**
@@ -83,7 +68,7 @@ public:
      */
     Variant key() const
     {
-        return _source->key(_pos);
+        return _iterator->key();
     }
 
     /**
@@ -92,7 +77,7 @@ public:
      */
     Variant value() const
     {
-        return _source->member(_pos);
+        return _iterator->value();
     }
 
     /**
@@ -101,7 +86,7 @@ public:
     void next()
     {
         // increment position
-        ++_pos;
+        _iterator->next();
     }
 };
 

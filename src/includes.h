@@ -41,6 +41,7 @@
 #include "include/file.h"
 #include "include/buffer.h"
 
+#include "include/iterator.h"
 #include "include/value.h"
 #include "include/variant.h"
 #include "include/string.h"
@@ -178,3 +179,5 @@
 #include "executor.h"
 #include "bytecode.h"
 #include "library.h"
+#include "list_iterator.h"
+#include "map_iterator.h"

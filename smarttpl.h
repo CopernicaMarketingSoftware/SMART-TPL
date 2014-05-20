@@ -39,6 +39,8 @@
 #include "smarttpl/file.h"
 #include "smarttpl/buffer.h"
 
+#include "smarttpl/iterator.h"
+
 #include "smarttpl/value.h"
 #include "smarttpl/variant.h"
 #include "smarttpl/string.h"

@@ -125,6 +125,18 @@ public:
         _str = new std::string(std::to_string(_value));
         return _str->size();
     }
+
+    /**
+     *  Create a new iterator that allows you to iterate over the subvalues
+     *  feel free to return nullptr from here in case memberCount returns 0
+     *  as this method won't ever get called in that case anyway.
+     *
+     *  @return Newly allocated Iterator
+     */
+    virtual Iterator *iterator() const override
+    {
+        return nullptr;
+    }
 };
 
 /**
