@@ -25,10 +25,7 @@ using Callback = std::function<Variant()>;
 
 /**
  *  Class definition
- *  @todo    when a string value is retrieved, the next call is often
- *           directly a size() call (or is it the other way around??)
- *           it would be better to call the _callback only once in
- *           such situations
+ *  @note This class is NOT thread-safe.
  */
 class CallbackValue : public Value
 {
@@ -51,6 +48,16 @@ private:
      *  @var    std::unique_ptr<Variant>
      */
     mutable std::unique_ptr<Variant> _cache;
+
+    /**
+     *  This variable will be used to temporarily cache the size value so we
+     *  won't have to execute the callback twice in the case of string values.
+     *  This does however assume that size() will always be called after toString()
+     *  codewise this is true, but the compiler is allowed to change this order in
+     *  some cases!
+     *  @var      size_t
+     */
+    mutable size_t _size_cache;
 
     /**
      *  Check if we should cache and if we should if we are already cached
@@ -93,6 +100,9 @@ public:
 
         // call the callback to find out the actual value
         Variant value(_callback());
+
+        // Set the size cache
+        _size_cache = value.size();
 
         // retrieve the string value
         return value.toString();
@@ -186,11 +196,8 @@ public:
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->size();
 
-        // call the callback to find out the actual value
-        Variant value(_callback());
-
-        // retrieve the size
-        return value.size();
+        // Return the cached size
+        return _size_cache;
     }
 
     /**
