@@ -111,7 +111,7 @@ TEST(InvalidSyntax, BreakDownForEach)
 {
     string input("{foreach $map as $key => $var}{/foreach}");
     std::string::size_type len = input.size();
-    for (std::string::size_type i = len; i > 8; --i) // Anything lower than 8 will succeed to compile as it'll just contain "{foreach"
+    for (std::string::size_type i = len; i > 0; --i)
     {
         string tpl(input.substr(0, i));
         EXPECT_THROW(Template((Buffer(tpl))), std::runtime_error)
@@ -124,7 +124,7 @@ TEST(InvalidSyntax, BreakDownAssign)
     string input("{assign 5 to $five}");
     EXPECT_NO_THROW(Template((Buffer(input))));
     std::string::size_type len = input.size() - 1;
-    for (std::string::size_type i = len; i > 7; --i) // Anything lower than 7 will succeed to compile as it'll just contain "{assign"
+    for (std::string::size_type i = len; i > 0; --i)
     {
         string tpl(input.substr(0, i));
         EXPECT_THROW(Template((Buffer(tpl))), std::runtime_error)
