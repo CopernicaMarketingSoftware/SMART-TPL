@@ -15,7 +15,6 @@ namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
- *  @todo Should the return type of this really be jit_type_sys_int?
  */
 class SizeCallback : public BaseCallback
 {
@@ -24,7 +23,7 @@ public:
      *  Constructor
      */
     SizeCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_int)
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_ulong)
     {
     }
 

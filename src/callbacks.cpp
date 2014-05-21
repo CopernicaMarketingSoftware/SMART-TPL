@@ -279,7 +279,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-size_t smart_tpl_to_numeric(void *userdata, void *variable)
+int smart_tpl_to_numeric(void *userdata, void *variable)
 {
     // convert the variable to a value object
     auto *var = (Value *)variable;

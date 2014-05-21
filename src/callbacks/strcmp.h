@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     StrCmpCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_int, jit_type_void_ptr, jit_type_sys_int }, jit_type_sys_int)
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong, jit_type_void_ptr, jit_type_ulong }, jit_type_sys_int)
     {
     }
 
