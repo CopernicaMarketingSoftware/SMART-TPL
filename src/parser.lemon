@@ -70,19 +70,19 @@
     parent->stackOverflow();
 }
 
-start               ::= MODE IDENTIFIER(A) END_BRACES statements(B) .                      { parent->mode(A); parent->add(B); }
+start               ::= MODE IDENTIFIER(A) END_BRACES statements(B) .           { parent->mode(A); parent->add(B); }
 start               ::= ESCAPE statements(A) .                                  { parent->mode(new SmartTpl::Internal::Token("html")); parent->add(A); }
 start               ::= statements(A) .                                         { parent->add(A); }
 statements(A)       ::= statements(B) statement(C) .                            { A = B; A->add(C); }
 statements(A)       ::= statement(B) .                                          { A = new SmartTpl::Internal::Statements(B); }
 statement(A)        ::= ifStatement(B) .                                        { A = B; }
 statement(A)        ::= RAW(B) .                                                { A = new SmartTpl::Internal::RawStatement(B); }
-statement(A)        ::= EXPRESSION outexpr(B) END_BRACES .                                 { A = new SmartTpl::Internal::VarStatement(B); }
-ifStatement(A)      ::= IF boolexpr(B) END_BRACES statements(C) elseStatement(D) .         { A = new SmartTpl::Internal::IfStatement(B,C,D); }
-ifStatement(A)      ::= IF boolexpr(B) END_BRACES statements(C) ENDIF .                    { A = new SmartTpl::Internal::IfStatement(B, C); }
+statement(A)        ::= EXPRESSION outexpr(B) END_BRACES .                      { A = new SmartTpl::Internal::VarStatement(B); }
+ifStatement(A)      ::= IF boolexpr(B) END_BRACES statements(C) elseStatement(D) . { A = new SmartTpl::Internal::IfStatement(B,C,D); }
+ifStatement(A)      ::= IF boolexpr(B) END_BRACES statements(C) ENDIF .         { A = new SmartTpl::Internal::IfStatement(B, C); }
 elseStatement(A)    ::= ELSE statements(B) ENDIF .                              { A = B; }
-elseStatement(A)    ::= ELSEIF boolexpr(B) END_BRACES statements(C) elseStatement(D) .     { A = new SmartTpl::Internal::Statements(new SmartTpl::Internal::IfStatement(B,C,D)); }
-elseStatement(A)    ::= ELSEIF boolexpr(B) END_BRACES statements(C) ENDIF .                { A = new SmartTpl::Internal::Statements(new SmartTpl::Internal::IfStatement(B, C)); }
+elseStatement(A)    ::= ELSEIF boolexpr(B) END_BRACES statements(C) elseStatement(D) . { A = new SmartTpl::Internal::Statements(new SmartTpl::Internal::IfStatement(B,C,D)); }
+elseStatement(A)    ::= ELSEIF boolexpr(B) END_BRACES statements(C) ENDIF .     { A = new SmartTpl::Internal::Statements(new SmartTpl::Internal::IfStatement(B, C)); }
 statement(A)        ::= foreachStatement(B) .                                   { A = B; }
 foreachStatement(A) ::= FOREACH VARIABLE(B) IN variable(C) END_BRACES statements(D) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(C, B, D); }
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) END_BRACES statements(D) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D); }
@@ -91,8 +91,8 @@ foreachStatement(A) ::= FOREACH VARIABLE(B) IN variable(C) END_BRACES statements
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) END_BRACES statements(D) FOREACH_ELSE statements(E) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E); }
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) ASSIGN_FOREACH VARIABLE(D) END_BRACES statements(E) FOREACH_ELSE statements(F) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E, F); }
 statement(A)        ::= assignStatement(B) .                                    { A = B; }
-assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) END_BRACES .                         { A = new SmartTpl::Internal::AssignStatement(B, C); }
-assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) END_BRACES .                     { A = new SmartTpl::Internal::AssignStatement(C, B); }
+assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) END_BRACES .              { A = new SmartTpl::Internal::AssignStatement(B, C); }
+assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) END_BRACES .          { A = new SmartTpl::Internal::AssignStatement(C, B); }
 boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
 boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::Internal::BinaryEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) NE outexpr(C) .                              { A = new SmartTpl::Internal::BinaryNotEqualsOperator(B, C); }
