@@ -23,16 +23,8 @@ public:
      *  Constructor
      */
     ModifierCallback()
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong }, jit_type_void_ptr)
     {
-        // parameters that are supported
-        jit_type_t params[] = {
-            jit_type_void_ptr,
-            jit_type_void_ptr,
-            jit_type_ulong
-        };
-
-        // create the signature
-        _signature = jit_type_create_signature(jit_abi_cdecl, jit_type_void_ptr, params, sizeof(params)/sizeof(jit_type_t), 1);
     }
 
     /**

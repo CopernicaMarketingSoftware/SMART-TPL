@@ -15,6 +15,7 @@ namespace SmartTpl { namespace Internal {
 
 /**
  *  Class definition
+ *  @todo Should the return type of this really be jit_type_sys_int?
  */
 class SizeCallback : public BaseCallback
 {
@@ -23,15 +24,8 @@ public:
      *  Constructor
      */
     SizeCallback()
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_int)
     {
-        // parameters that are supported
-        jit_type_t params[] = {
-            jit_type_void_ptr,
-            jit_type_void_ptr
-        };
-
-        // create the signature
-        _signature = jit_type_create_signature(jit_abi_cdecl, jit_type_sys_int, params, sizeof(params)/sizeof(jit_type_t), 1);
     }
 
     /**

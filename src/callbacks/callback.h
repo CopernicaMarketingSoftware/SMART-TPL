@@ -28,7 +28,8 @@ public:
     /**
      *  Constructor
      */
-    BaseCallback() {}
+    BaseCallback(std::vector<jit_type_t> params, jit_type_t return_type = jit_type_void)
+    : _signature(jit_type_create_signature(jit_abi_cdecl, return_type, params.data(), params.size(), 1)) {}
 
     /**
      *  Destructor
