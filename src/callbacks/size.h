@@ -16,14 +16,14 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class SizeCallback : public BaseCallback
+class SizeCallback : public VariableBaseCallback
 {
 public:
     /**
      *  Constructor
      */
     SizeCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_ulong)
+    : VariableBaseCallback(jit_type_ulong)
     {
     }
 

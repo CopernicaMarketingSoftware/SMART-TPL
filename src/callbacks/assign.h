@@ -16,14 +16,14 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class AssignCallback : public BaseCallback
+class AssignCallback : public AssignBaseCallback
 {
 public:
     /**
      *  Constructor
      */
     AssignCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong, jit_type_void_ptr })
+    : AssignBaseCallback(jit_type_void_ptr)
     {
     }
 

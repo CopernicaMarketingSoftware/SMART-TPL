@@ -16,14 +16,14 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class ValidIteratorCallback : public BaseCallback
+class ValidIteratorCallback : public IteratorBaseCallback
 {
 public:
     /**
      *  Constructor
      */
     ValidIteratorCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_int)
+    : IteratorBaseCallback(jit_type_sys_int)
     {
     }
 

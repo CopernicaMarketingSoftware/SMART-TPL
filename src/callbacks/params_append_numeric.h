@@ -16,14 +16,14 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class ParamsAppendNumericCallback : public BaseCallback
+class ParamsAppendNumericCallback : public ParameterAppendBaseCallback
 {
 public:
     /**
      *  Constructor
      */
     ParamsAppendNumericCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_long })
+    : ParameterAppendBaseCallback(jit_type_long)
     {
     }
 

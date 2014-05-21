@@ -16,14 +16,14 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class DeleteIteratorCallback : public BaseCallback
+class DeleteIteratorCallback : public IteratorBaseCallback
 {
 public:
     /**
      *  Constructor
      */
     DeleteIteratorCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr })
+    : IteratorBaseCallback()
     {
     }
 

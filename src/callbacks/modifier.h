@@ -16,22 +16,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class ModifierCallback : public BaseCallback
-{
-public:
-    /**
-     *  Constructor
-     */
-    ModifierCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong }, jit_type_void_ptr)
-    {
-    }
-
-    /**
-     *  Destructor
-     */
-    virtual ~ModifierCallback() {}
-};
+using ModifierCallback = StringToObjectCallback;
 
 /**
  *  End namespace
