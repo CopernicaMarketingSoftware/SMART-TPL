@@ -35,7 +35,7 @@ public:
         {
             try {
                 // initialize our settings based on the provided parameters
-                std::regex regex(std::string(params[0].toString(), params[0].size()));
+                boost::regex regex(std::string(params[0].toString(), params[0].size()));
                 std::string replace_text(params[1].toString(), params[1].size());
 
                 // initialize our input string
@@ -43,12 +43,12 @@ public:
 
                 // Do the actual regex replace into stream
                 std::ostringstream stream;
-                std::regex_replace(std::ostream_iterator<char>(stream)
+                boost::regex_replace(std::ostream_iterator<char>(stream)
                                     ,input_str.begin(), input_str.end(), regex, replace_text);
 
                 // Turn stream into a string and return it
                 return stream.str();
-            } catch (const std::regex_error &error) {
+            } catch (const boost::regex_error &error) {
                 std::cerr << error.what() << std::endl;
                 // Return the original input in case of a failure
                 return input;

@@ -72,7 +72,7 @@ LEMON           =   lemon
 
 COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -std=c++11 -Wno-deprecated-register
 LINKER_FLAGS    =   -L.
-DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto
+DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex
 FLEX_FLAGS      =
 LEMON_FLAGS     =
 
