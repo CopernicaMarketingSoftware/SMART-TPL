@@ -1,7 +1,6 @@
 override CXXFLAGS += -Wall -g -O0 -pipe -std=c++11
 INC               += -I../ -I. -Igtest-1.7.0/include
-CC                := clang
-CXX               := clang++
+CXX               := c++
 
 VALGRIND          := valgrind
 

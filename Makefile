@@ -49,8 +49,8 @@ PROGRAM         =   smarttpl
 #   and "lemon" are being used. You may override them here
 #
 
-COMPILER        =   clang++
-LINKER          =   clang++
+COMPILER        =   c++
+LINKER          =   c++
 FLEX            =   flex
 LEMON           =   lemon
 
@@ -70,7 +70,7 @@ LEMON           =   lemon
 #   "-undefined dynamic_lookup" to the linker flags
 #
 
-COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -std=c++11 -Wno-deprecated-register
+COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -std=c++11
 LINKER_FLAGS    =   -L.
 DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex
 FLEX_FLAGS      =
