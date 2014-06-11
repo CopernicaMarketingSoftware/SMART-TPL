@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <set>
 #include <ctime>
+#include <variant.h>
 
 #include "smarttpl/source.h"
 #include "smarttpl/file.h"

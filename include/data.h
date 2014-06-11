@@ -57,6 +57,8 @@ public:
      */
     Data();
 
+    Data(const ::Variant::Value& value);
+
     /**
      *  Destructor
      */
@@ -69,6 +71,7 @@ public:
      *  @return Data        Same object for chaining
      */
     Data &assign(const char *name, const Variant &value);
+    Data &assign(const std::string &name, const Variant &value) { return assign(name.c_str(), value); }
 
     /**
      *  Assign a callback
@@ -80,6 +83,7 @@ public:
      *  @return Data        Same object for chaining
      */
     Data &callback(const char *name, const Callback &callback, bool cache = false);
+    Data &callback(const std::string &name, const Callback &call, bool cache = false) { return callback(name.c_str(), call, cache); }
 
     /**
      *  Register a modifier
@@ -87,7 +91,8 @@ public:
      *  @param  modifier    Pointer to the modifier object
      *  @return Data        Same object for chaining
      */
-    Data &modifier(const char *name, Modifier* modifier);
+    Data &modifier(const char *name, Modifier *modifier);
+    Data &modifier(const std::string &name, Modifier *mod) { return modifier(name.c_str(), mod); }
 
     /**
      *  Retrieve a variable pointer by name

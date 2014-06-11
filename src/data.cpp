@@ -78,6 +78,24 @@ Data::Data()
     modifier("base64_decode", &base64_decode);
 }
 
+Data::Data(const ::Variant::Value &value)
+: Data()
+{
+    std::map<std::string, ::Variant::Value> map = value;
+    for (auto iter = map.begin(); iter != map.end(); ++iter)
+    {
+        switch (iter->second.type()) {
+            case ::Variant::ValueType::ValueNullType: assign(iter->first, nullptr); break;
+            case ::Variant::ValueType::ValueBoolType: assign(iter->first, (bool) iter->second); break;
+            case ::Variant::ValueType::ValueIntType:  assign(iter->first, (int) iter->second); break;
+            case ::Variant::ValueType::ValueLongType: assign(iter->first, (long) iter->second); break;
+            case ::Variant::ValueType::ValueDoubleType: assign(iter->first, (double) iter->second); break;
+            case ::Variant::ValueType::ValueStringType: assign(iter->first, (std::string) iter->second); break;
+            default: break;
+        }
+    }
+}
+
 /**
  * Assign data
  * @param  name         Name of the variable
