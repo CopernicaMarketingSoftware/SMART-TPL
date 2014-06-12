@@ -26,7 +26,7 @@ Iterator *VariantValue::iterator() const
     if (_value->type() == Variant::ValueType::ValueVectorType) return new Internal::VectorIterator(*_value);
 
     // In case we're a map we'll return a map iterator
-    //if (_value->type() == Variant::ValueType::ValueMapType) return new Interal::MapIterator(_value);
+    if (_value->type() == Variant::ValueType::ValueMapType) return new Internal::MapIterator(*_value);
 
     // In case we're neither a map or a vector we'll just not return a iterator..
     return nullptr;

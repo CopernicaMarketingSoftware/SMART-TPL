@@ -180,3 +180,4 @@
 #include "bytecode.h"
 #include "library.h"
 #include "vector_iterator.h"
+#include "map_iterator.h"
