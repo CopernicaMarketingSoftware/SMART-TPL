@@ -67,7 +67,7 @@ std::string Template::compile() const
  *  @param  outencoding  The encoding that should be used for the output
  *  @return std::string
  */
-std::string Template::process(const Data &data, const std::string &outencoding) const
+std::string Template::process(Data &data, const std::string &outencoding) const
 {
     // we need a handler object
     Internal::Handler handler(&data, Internal::Escaper::get(outencoding));

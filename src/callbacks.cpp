@@ -44,6 +44,10 @@ AssignBooleanCallback       Callbacks::_assign_boolean;
 AssignNumericCallback       Callbacks::_assign_numeric;
 AssignStringCallback        Callbacks::_assign_string;
 
+/**
+ *  A static empty value
+ */
+VariantValue                _empty;
 
 /**
  *  Function to write raw data
@@ -95,7 +99,7 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t 
     auto member = var->member(name, size);
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(member);
+    auto *output = new VariantValue(member);
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -121,7 +125,7 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
     auto member = var->member(position);
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(member);
+    auto *output = new VariantValue(member);
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -195,7 +199,7 @@ void *smart_tpl_iterator_key(void *userdata, void *iterator)
     auto key = iter->key();
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(key);
+    auto *output = new VariantValue(key);
 
     // Return the pointer
     return output;
@@ -216,7 +220,7 @@ void *smart_tpl_iterator_value(void *userdata, void *iterator)
     auto value = iter->value();
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(value);
+    auto *output = new VariantValue(value);
 
     // return the output
     return output;
@@ -252,7 +256,7 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
     auto *result = handler->variable(name, size);
 
     // ensure that we always return an object
-    return result ? result : EmptyValue::instance().get();
+    return result ? result : &_empty;
 }
 
 /**
@@ -270,7 +274,7 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
     auto *result = var->toString();
 
     // ensure that a string is always returned
-    return result ? result : EmptyValue::instance()->toString();
+    return result ? result : _empty.toString();
 }
 
 /**
@@ -350,7 +354,7 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
     auto *modifier = (Modifier *) modifier_ptr;
 
     // convert to the Variant object
-    auto *value = (Variant *) variable;
+    auto *value = (VariantValue *) variable;
 
     // convert to Parameters object
     auto *params_ptr = (SmartTpl::Parameters *) parameters;
@@ -363,10 +367,10 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
 
     // If we both have the same shared pointer to modifier probably just returned the input
     // Returning the input value is faster and safer from this point on
-    if (variant.value() == value->value()) return value;
+    if (variant == *value) return value;
 
     // Convert the variant to a pointer so we can actually return it from C
-    auto *output = new Variant(variant);
+    auto *output = new VariantValue(variant);
 
     // Give it to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -437,7 +441,7 @@ void smart_tpl_assign(void *userdata, const char *key, size_t keysize, void *var
     auto handler = (Handler *) userdata;
 
     // Convert value to type Variant
-    auto *variant = (Variant *) variable;
+    auto *variant = (VariantValue *) variable;
 
     // Assign value to key
     handler->assign(key, keysize, variant);

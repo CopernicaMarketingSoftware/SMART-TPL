@@ -78,7 +78,7 @@ Data::Data()
     modifier("base64_decode", &base64_decode);
 }
 
-Data::Data(const ::Variant::Value &value)
+Data::Data(const Variant::Value &value)
 : Data()
 {
     std::map<std::string, ::Variant::Value> map = value;
@@ -102,7 +102,7 @@ Data::Data(const ::Variant::Value &value)
  * @param  value        Value of the variable
  * @return Data         Same object for chaining
  */
-Data &Data::assign(const char *name, const Variant &value)
+Data &Data::assign(const char *name, const VariantValue &value)
 {
     // append variable
     _variables[name] = value;
@@ -123,8 +123,10 @@ Data &Data::callback(const char *name, const Callback &callback, bool cache)
     // construct variable
     Value *v = new CallbackValue(callback, cache);
 
-    // store in the list of variables
-    _variables[name] = std::shared_ptr<Value>(v);
+    // make our Value managed
+    _managed_values.push_back(std::shared_ptr<Value>(v));
+    // and store in the list of variables
+    _variables[name] = v;
 
     // allow chaining
     return *this;
@@ -150,12 +152,15 @@ Data &Data::modifier(const char *name, Modifier* modifier)
  *  @param  name        the name
  *  @param  size        size of the name
  *  @return Variant
+ *  @note This method should be const as we don't actually modify data here, this
+ *        however means that the compiler will try to convert "const VariantValue*"
+ *        to "VariantValue*" which of course doesn't quite work.
  */
-Variant Data::value(const char *name, size_t size) const
+VariantValue *Data::value(const char *name, size_t size)
 {
     // look it up in _variables
     auto iter = _variables.find(name);
-    if (iter != _variables.end()) return iter->second;
+    if (iter != _variables.end()) return &iter->second;
 
     // return nullptr if we found nothing
     return nullptr;

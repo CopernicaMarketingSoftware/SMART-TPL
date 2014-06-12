@@ -43,7 +43,12 @@ private:
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<const char *, Variant, cmp_str> _variables;
+    std::map<const char *, VariantValue, cmp_str> _variables;
+
+    /**
+     *  All managed values that should be cleaned up upon destruction
+     */
+    std::list<std::shared_ptr<Value>> _managed_values;
 
     /**
      *  All modifiers
@@ -57,7 +62,7 @@ public:
      */
     Data();
 
-    Data(const ::Variant::Value& value);
+    Data(const Variant::Value& value);
 
     /**
      *  Destructor
@@ -70,8 +75,8 @@ public:
      *  @param  value       Value of the variable
      *  @return Data        Same object for chaining
      */
-    Data &assign(const char *name, const Variant &value);
-    Data &assign(const std::string &name, const Variant &value) { return assign(name.c_str(), value); }
+    Data &assign(const char *name, const VariantValue &value);
+    Data &assign(const std::string &name, const VariantValue &value) { return assign(name.c_str(), value); }
 
     /**
      *  Assign a callback
@@ -99,8 +104,11 @@ public:
      *  @param  name        the name
      *  @param  size        size of the name
      *  @return Variant
+     *  @note This method should be const as we don't actually modify data here, this
+     *        however means that the compiler will try to convert "const VariantValue*"
+     *        to "VariantValue*" which of course doesn't quite work.
      */
-    Variant value(const char *name, size_t size) const;
+    VariantValue *value(const char *name, size_t size);
 
     /**
      *  Retrieve a modifier by name

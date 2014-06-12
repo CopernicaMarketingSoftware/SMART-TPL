@@ -29,7 +29,7 @@ private:
      *  The underlying data
      *  @var    Data
      */
-    const Data *_data;
+    Data *_data;
 
     /**
      *  The encoder to use for variables
@@ -59,7 +59,7 @@ private:
      *  assigned using "assign .. to ..", or the magic values inside
      *  foreach loops
      */
-    std::map<const char *, Variant, cmp_str> _local_values;
+    std::map<const char *, Value*, cmp_str> _local_values;
 
     /**
      *  Will contain the local values that were created just here and should
@@ -76,7 +76,7 @@ public:
      *  @param  data        pointer to the data
      *  @param  escaper     the escaper to use for the printed variables
      */
-    Handler(const Data *data, const Escaper *escaper) : _data(data), _encoder(escaper)
+    Handler(Data *data, const Escaper *escaper) : _data(data), _encoder(escaper)
     {
         // we reserve some space in the output buffer, so that it is not
         // necessary to reallocate all the time (which is slow)
@@ -125,10 +125,10 @@ public:
     {
         // look through our local values first
         auto iter = _local_values.find(name);
-        if (iter != _local_values.end()) return iter->second.value().get();
+        if (iter != _local_values.end()) return iter->second;
 
         // didn't find it? get the variable from the data object
-        return _data->value(name, size).value().get();
+        return _data->value(name, size);
     }
 
     /**
@@ -158,9 +158,11 @@ public:
      *  @param key         The name for our local variable
      *  @param key_size    The size of key
      */
-    void assign(const char *key, size_t key_size, const Variant &value)
+    void assign(const char *key, size_t key_size, const VariantValue &value)
     {
-        _local_values[key] = value;
+        VariantValue *copy = new VariantValue(value);
+        manageValue(copy);
+        _local_values[key] = copy;
     }
 
     /**
@@ -172,27 +174,8 @@ public:
      */
     void assign(const char *key, size_t key_size, Value *value)
     {
-        // Look manually through our _managed_local_values for value
-        // This has to be done manually because you can't compare shared pointers directly with pointers :(
-        bool found = false;
-        for (auto v : _managed_local_values)
-        {
-            if (v.get() == value)
-            {
-                // In case we found it we just assign the already existing shared pointer to _local_values
-                // And we set the found flag to true
-                found = true;
-                _local_values[key] = v;
-                break;
-            }
-        }
-        // If we did not find it in the _managed_local_values just create a new shared pointer
-        if (found == false)
-        {
-            std::shared_ptr<Value> ptr(value);
-            _managed_local_values.push_back(ptr);
-            _local_values[key] = ptr;
-        }
+        manageValue(value);
+        _local_values[key] = value;
     }
 
     /**
@@ -203,7 +186,7 @@ public:
      */
     void assign(const char *key, size_t key_size, bool boolean)
     {
-        _local_values[key] = boolean;
+        assign(key, key_size, VariantValue(boolean));
     }
 
     /**
@@ -214,7 +197,7 @@ public:
      */
     void assign(const char *key, size_t key_size, long value)
     {
-        _local_values[key] = value;
+        assign(key, key_size, VariantValue(value));
     }
 
     /**
@@ -225,7 +208,7 @@ public:
      */
     void assign(const char *key, size_t key_size, const std::string &value)
     {
-        _local_values[key] = value;
+        assign(key, key_size, VariantValue(value));
     }
 
     /**
@@ -233,7 +216,7 @@ public:
      *  @param  value    The value object to make managed
      *  @return True if we created a new shared pointer
      */
-    bool manageValue(Variant *value)
+    bool manageValue(Value *value)
     {
         for (auto v : _managed_local_values)
         {

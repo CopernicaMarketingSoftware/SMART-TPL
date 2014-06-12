@@ -38,7 +38,7 @@ public:
     TestModifier(Mode mode) : Modifier(), _mode(mode) {};
     virtual ~TestModifier() {};
 
-    virtual SmartTpl::Variant modify(const SmartTpl::Variant &input, const Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const Parameters &params) override
     {
         switch (_mode) {
             case NumericMode:

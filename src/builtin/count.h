@@ -29,10 +29,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // Simply return the member count
-        return input.memberCount();
+        return (int) input.memberCount();
     }
 };
 

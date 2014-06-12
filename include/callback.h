@@ -21,7 +21,7 @@ namespace SmartTpl {
 /**
  *  Definition of the callback
  */
-using Callback = std::function<Variant()>;
+using Callback = std::function<VariantValue()>;
 
 /**
  *  Class definition
@@ -45,9 +45,9 @@ private:
 
     /**
      *  The cached value, will only be used if _cacheable is set to true
-     *  @var    std::unique_ptr<Variant>
+     *  @var    std::unique_ptr<VariantValue>
      */
-    mutable std::unique_ptr<Variant> _cache;
+    mutable std::unique_ptr<VariantValue> _cache;
 
     /**
      *  This variable will be used to temporarily cache the size value so we
@@ -69,7 +69,7 @@ private:
     {
         if (_cacheable)
         {
-            if (!_cache) _cache = std::unique_ptr<Variant>(new Variant(_callback()));
+            if (!_cache) _cache = std::unique_ptr<VariantValue>(new VariantValue(_callback()));
         }
         return _cacheable;
     }
@@ -99,7 +99,7 @@ public:
         if (cache()) return _cache->toString();
 
         // call the callback to find out the actual value
-        Variant value(_callback());
+        VariantValue value(_callback());
 
         // Set the size cache
         _size_cache = value.size();
@@ -118,7 +118,7 @@ public:
         if (cache()) return _cache->toNumeric();
 
         // call the callback to find out the actual value
-        Variant value(_callback());
+        VariantValue value(_callback());
 
         // retrieve the numeric value
         return value.toNumeric();
@@ -134,7 +134,7 @@ public:
         if (cache()) return _cache->toBoolean();
 
         // call the callback to find out the actual value
-        Variant value(_callback());
+        VariantValue value(_callback());
 
         // retrieve the boolean value
         return value.toBoolean();
@@ -145,9 +145,9 @@ public:
      *
      *  @param  name        name of the member
      *  @param  size        size of the name
-     *  @return Variant
+     *  @return VariantValue
      */
-    virtual Variant member(const char *name, size_t size) const override
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         // callbacks only return scalar values without members
         return nullptr;
@@ -165,9 +165,9 @@ public:
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
-     *  @return Variant
+     *  @return VariantValue
      */
-    virtual Variant member(int position) const override
+    virtual VariantValue member(int position) const override
     {
         // callbacks can only return scalar values, members will never
         // be retrieved
@@ -177,9 +177,9 @@ public:
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
-     *  @return Variant      Variant object, probably a string
+     *  @return VariantValue      VariantValue object, probably a string
      */
-    virtual Variant key(int position) const override
+    virtual VariantValue key(int position) const override
     {
         // callbacks can only return simple scalar values, so retrieving
         // a key never happens

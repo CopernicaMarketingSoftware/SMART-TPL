@@ -16,7 +16,7 @@ namespace SmartTpl {
 /**
  *  Forward declarations
  */
-class Variant;
+class VariantValue;
 
 /**
  *  Class definition
@@ -24,7 +24,6 @@ class Variant;
 class Iterator
 {
 protected:
-    protected:
     /**
      *  Constructor
      *
@@ -53,13 +52,13 @@ public:
      *  Retrieve pointer to the current member
      *  @return Variant
      */
-    virtual Variant value() const = 0;
+    virtual VariantValue value() const = 0;
 
     /**
      *  Retrieve a pointer to the current key
      *  @return Variant
      */
-    virtual Variant key() const = 0;
+    virtual VariantValue key() const = 0;
 };
 
 /**

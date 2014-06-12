@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // initialize our output
         unsigned char digest[MD5_DIGEST_LENGTH];

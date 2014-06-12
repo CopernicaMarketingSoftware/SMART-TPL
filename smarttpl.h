@@ -43,13 +43,7 @@
 #include "smarttpl/iterator.h"
 
 #include "smarttpl/value.h"
-#include "smarttpl/variant.h"
-#include "smarttpl/string.h"
-#include "smarttpl/numeric.h"
-#include "smarttpl/empty.h"
-#include "smarttpl/map.h"
-#include "smarttpl/list.h"
-#include "smarttpl/boolean.h"
+#include "smarttpl/variantvalue.h"
 #include "smarttpl/datevalue.h"
 
 #include "smarttpl/callbacks.h"
