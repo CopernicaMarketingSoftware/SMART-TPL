@@ -179,3 +179,4 @@
 #include "executor.h"
 #include "bytecode.h"
 #include "library.h"
+#include "vector_iterator.h"

@@ -55,19 +55,19 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual const char *toString() const { return ((std::string) *_value).c_str(); };
+    virtual const char *toString() const override { return ((std::string) *_value).c_str(); };
 
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() const { return (numeric_t) *_value; };
+    virtual numeric_t toNumeric() const override { return (numeric_t) *_value; };
 
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const { return (bool) *_value; };
+    virtual bool toBoolean() const override { return (bool) *_value; };
 
     /**
      *  Get access to a member value
@@ -77,7 +77,7 @@ public:
      *  @return Variant
      *
      */
-    virtual VariantValue member(const char *name, size_t size) const
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         return (*_value)[name].value();
     }
@@ -86,7 +86,7 @@ public:
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    virtual size_t memberCount() const
+    virtual size_t memberCount() const override
     {
         if (_value->type() == Variant::ValueType::ValueVectorType)
         {
@@ -108,7 +108,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual VariantValue member(int position) const
+    virtual VariantValue member(int position) const override
     {
         // If we're out of bounds just return VariantValue()
         if (position < 0 || position >= memberCount()) return nullptr;
@@ -139,7 +139,7 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual VariantValue key(int position) const
+    virtual VariantValue key(int position) const override
     {
         // In case we're a vector we'll just return the position as our key
         if (_value->type() == Variant::ValueType::ValueVectorType) return position;
@@ -168,7 +168,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const
+    virtual size_t size() const override
     {
         return ((std::string) *_value).size();
     }
@@ -180,11 +180,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const
-    {
-        // @todo
-        return nullptr;
-    }
+    virtual Iterator *iterator() const override;
 
     /**
      *  Equals and not equals to operators
