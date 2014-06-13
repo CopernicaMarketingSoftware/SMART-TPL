@@ -70,7 +70,7 @@ LEMON           =   lemon
 #   "-undefined dynamic_lookup" to the linker flags
 #
 
-COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -std=c++11
+COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -pipe -std=c++11
 LINKER_FLAGS    =   -L.
 DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex
 FLEX_FLAGS      =
