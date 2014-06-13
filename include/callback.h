@@ -167,7 +167,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual Variant member(int position) const override
+    virtual Variant member(size_t position) const override
     {
         // callbacks can only return scalar values, members will never
         // be retrieved
@@ -179,7 +179,7 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual Variant key(int position) const override
+    virtual Variant key(size_t position) const override
     {
         // callbacks can only return simple scalar values, so retrieving
         // a key never happens

@@ -119,7 +119,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual Variant member(int position) const override
+    virtual Variant member(size_t position) const override
     {
         return _value->member(position);
     }
@@ -129,7 +129,7 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual Variant key(int position) const override
+    virtual Variant key(size_t position) const override
     {
         return _value->key(position);
     }

@@ -144,10 +144,10 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual Variant member(int position) const override
+    virtual Variant member(size_t position) const override
     {
         // If we're out of bounds just return nullptr
-        if (position < 0 || position >= memberCount()) return nullptr;
+        if (position >= memberCount()) return nullptr;
 
         // get the iterator of _values
         auto iter = _values.begin();
@@ -164,10 +164,10 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual Variant key(int position) const override
+    virtual Variant key(size_t position) const override
     {
         // If we're out of bounds just return nullptr
-        if (position < 0 || position >= memberCount()) return nullptr;
+        if (position >= memberCount()) return nullptr;
 
         // get the iterator of _values
         auto iter = _values.begin();

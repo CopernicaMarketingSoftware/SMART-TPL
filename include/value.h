@@ -74,14 +74,14 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual Variant member(int position) const = 0;
+    virtual Variant member(size_t position) const = 0;
 
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual Variant key(int position) const = 0;
+    virtual Variant key(size_t position) const = 0;
 
     /**
      *  String length of the variable
