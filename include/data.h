@@ -66,7 +66,8 @@ public:
      *  Contructor
      *  @param  value    Use this Variant::Value (map assumed) to initialize your Data object
      */
-    Data(const Variant::Value& value);
+    Data(const Variant::Value &value);
+    Data(Variant::Value &&value);
 
     /**
      *  Destructor
@@ -81,8 +82,17 @@ public:
      */
     Data &assign(const char *name, const VariantValue &value);
     Data &assign(const std::string &name, const VariantValue &value) { return assign(name.c_str(), value); }
-    Data &assign(const char *name, Value *value);
-    Data &assign(const std::string &name, Value *value) { return assign(name.c_str(), value); }
+    Data &assign(const char *name, VariantValue &&value);
+    Data &assign(const std::string &name, VariantValue &&value) { return assign(name.c_str(), value); }
+
+    /**
+     *  Assign custom values
+     *  @param  name       Name of the variable
+     *  @param  value      Pointer to your custom value object
+     *  @return Data       Same object for chaining
+     */
+    Data &assignValue(const char *name, Value *value);
+    Data &assignValue(const std::string &name, Value *value) { return assign(name.c_str(), value); }
 
     /**
      *  Assign data, ownership will be taken!

@@ -44,7 +44,7 @@ public:
     VariantValue(std::map<std::string, Variant::Value>&& value) : _value(new Variant::Value(value)) {}
     VariantValue(const std::initializer_list<std::map<std::string, Variant::Value>::value_type>& value) : _value(new Variant::Value(value)) {}
 
-    VariantValue(const Variant::Value& value) : _value(new Variant::Value(value)) {}
+    VariantValue(const Variant::Value &value) : _value(new Variant::Value(value)) {}
     VariantValue(const VariantValue &that) : _value(that._value) {}
 
     /**

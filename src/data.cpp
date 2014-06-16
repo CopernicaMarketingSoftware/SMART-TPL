@@ -85,10 +85,20 @@ Data::Data(const Variant::Value &value)
 : Data() // Call the default constructor so all the modifiers are still registered
 {
     // Turn our Variant::Value into a map
-    std::map<std::string, ::Variant::Value> map = value;
+    std::map<std::string, Variant::Value> map = value;
 
     // Loop through the map and assign all the elements
     for (auto iter = map.begin(); iter != map.end(); ++iter) assign(iter->first, iter->second);
+}
+
+Data::Data(Variant::Value &&value)
+: Data() // Call the default Contructor so all the modifiers are still registered
+{
+    // Turn our Variant::Value into a map
+    std::map<std::string, Variant::Value> map = value;
+
+    // Loop through the map and assign all the elements
+    for (auto iter = map.begin(); iter != map.end(); ++iter) assign(iter->first, std::move(iter->second));
 }
 
 /**
@@ -109,7 +119,19 @@ Data &Data::assign(const char *name, const VariantValue &value)
  * @param  value        Value of the variable
  * @return Data         Same object for chaining
  */
-Data &Data::assign(const char *name, Value *value)
+Data &Data::assign(const char *name, VariantValue &&value)
+{
+    // Create a copy of value and make it managed using assignManaged
+    return assignManaged(name, new VariantValue(std::move(value)));
+}
+
+/**
+ *  Assign custom values
+ *  @param  name       Name of the variable
+ *  @param  value      Pointer to your custom value object
+ *  @return Data       Same object for chaining
+ */
+Data &Data::assignValue(const char *name, Value *value)
 {
     // append value
     _variables[name] = value;
