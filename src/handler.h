@@ -59,7 +59,7 @@ private:
      *  assigned using "assign .. to ..", or the magic values inside
      *  foreach loops
      */
-    std::map<const char *, Value*, cmp_str> _local_values;
+    std::map<const char *, const Value*, cmp_str> _local_values;
 
     /**
      *  Will contain the local values that were created just here and should
@@ -67,7 +67,7 @@ private:
      *
      *  Can also contain externally created Values that were made managed using manageValue(Value*)
      */
-    std::list<std::shared_ptr<Value>> _managed_local_values;
+    std::list<std::shared_ptr<const Value>> _managed_local_values;
 
 
 public:
@@ -172,7 +172,7 @@ public:
      *  @param  key_size    The size of key
      *  @param  value       The newly allocated value we would like to assign
      */
-    void assign(const char *key, size_t key_size, Value *value)
+    void assign(const char *key, size_t key_size, const Value *value)
     {
         manageValue(value);
         _local_values[key] = value;
@@ -216,14 +216,19 @@ public:
      *  @param  value    The value object to make managed
      *  @return True if we created a new shared pointer
      */
-    bool manageValue(Value *value)
+    bool manageValue(const Value *value)
     {
+        // Check if someone is already managing value or not
         for (auto v : _managed_local_values)
         {
             // In case we found it that means that we are already managed
             if (v.get() == value) return false;
         }
-        _managed_local_values.push_back(std::shared_ptr<Value>(value));
+
+        // If they are not we start managing it
+        _managed_local_values.push_back(std::shared_ptr<const Value>(value));
+
+        // Return true to indicate that we are now managing value
         return true;
     }
 

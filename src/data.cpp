@@ -79,23 +79,13 @@ Data::Data()
 }
 
 Data::Data(const Variant::Value &value)
-: Data()
+: Data() // Call the default constructor so all the modifiers are still registered
 {
+    // Turn out Variant::Value into a map
     std::map<std::string, ::Variant::Value> map = value;
-    for (auto iter = map.begin(); iter != map.end(); ++iter)
-    {
-        std::shared_ptr<VariantValue> value;
-        switch (iter->second.type()) {
-            case Variant::ValueType::ValueNullType:   value = std::make_shared<VariantValue>(nullptr); break;
-            case Variant::ValueType::ValueBoolType:   value = std::make_shared<VariantValue>((bool) iter->second); break;
-            case Variant::ValueType::ValueIntType:    value = std::make_shared<VariantValue>((int) iter->second); break;
-            case Variant::ValueType::ValueLongType:   value = std::make_shared<VariantValue>((long) iter->second); break;
-            case Variant::ValueType::ValueDoubleType: value = std::make_shared<VariantValue>((double) iter->second); break;
-            case Variant::ValueType::ValueStringType: value = std::make_shared<VariantValue>((std::string) iter->second); break;
-            default: break;
-        }
-        if (value) assignManaged(iter->first, value);
-    }
+
+    // Loop through the map and assign all the elements
+    for (auto iter = map.begin(); iter != map.end(); ++iter) assign(iter->first, iter->second);
 }
 
 /**
