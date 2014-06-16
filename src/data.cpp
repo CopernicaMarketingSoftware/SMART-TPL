@@ -45,37 +45,36 @@ static Internal::Base64DecodeModifier    base64_decode;
  *  Constructor
  */
 Data::Data()
+: _modifiers({{"toupper",          &toupper}
+             ,{"upper",            &toupper}
+             ,{"tolower",          &tolower}
+             ,{"lower",            &tolower}
+             ,{"cat",              &cat}
+             ,{"count_words",      &count_words}
+             ,{"count_characters", &count_characters}
+             ,{"count_paragraphs", &count_paragraphs}
+             ,{"default",          &_default}
+             ,{"escape",           &escape}
+             ,{"indent",           &indent}
+             ,{"replace",          &replace}
+             ,{"nl2br",            &nl2br}
+             ,{"spacify",          &spacify}
+             ,{"truncate",         &truncate}
+             ,{"count",            &count}
+             ,{"ucfirst",          &ucfirst}
+             ,{"trim",             &trim}
+             ,{"regex_replace",    &regex_replace}
+             ,{"substr",           &substr}
+             ,{"strstr",           &strstr}
+             ,{"urlencode",        &urlencode}
+             ,{"urldecode",        &urldecode}
+             ,{"md5",              &md5}
+             ,{"sha1",             &sha1}
+             ,{"sha256",           &sha256}
+             ,{"sha512",           &sha512}
+             ,{"base64_encode",    &base64_encode}
+             ,{"base64_decode",    &base64_decode}}) // register built-in modifiers
 {
-    // register built-in modifiers
-    modifier("toupper", &toupper);
-    modifier("upper", &toupper);
-    modifier("tolower", &tolower);
-    modifier("lower", &tolower);
-    modifier("cat", &cat);
-    modifier("count_words", &count_words);
-    modifier("count_characters", &count_characters);
-    modifier("count_paragraphs", &count_paragraphs);
-    modifier("default", &_default);
-    modifier("escape", &escape);
-    modifier("indent", &indent);
-    modifier("replace", &replace);
-    modifier("nl2br", &nl2br);
-    modifier("spacify", &spacify);
-    modifier("truncate", &truncate);
-    modifier("count", &count);
-    modifier("ucfirst", &ucfirst);
-    modifier("trim", &trim);
-    modifier("regex_replace", &regex_replace);
-    modifier("substr", &substr);
-    modifier("strstr", &strstr);
-    modifier("urlencode", &urlencode);
-    modifier("urldecode", &urldecode);
-    modifier("md5", &md5);
-    modifier("sha1", &sha1);
-    modifier("sha256", &sha256);
-    modifier("sha512", &sha512);
-    modifier("base64_encode", &base64_encode);
-    modifier("base64_decode", &base64_decode);
 }
 
 Data::Data(const Variant::Value &value)
