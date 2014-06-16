@@ -31,7 +31,7 @@ public:
     virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // copy the entire string
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // convert all the characters to uppercase
         for (auto & c : output) c = toupper(c);

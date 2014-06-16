@@ -37,9 +37,9 @@ public:
 
     /**
      *  Convert the value to a string
-     *  @return const char *
+     *  @return std::string
      */
-    virtual const char *toString() const = 0;
+    virtual std::string toString() const = 0;
 
     /**
      *  Convert the variable to a numeric value

@@ -84,7 +84,7 @@ public:
      *  @param  outencoding  The encoding that should be used for the output
      *  @return std::string
      */
-    std::string process(Data &data, const std::string &outencoding) const;
+    std::string process(const Data &data, const std::string &outencoding) const;
 
     /**
      *  Process the template, without any input, but a custom encoding
@@ -95,8 +95,7 @@ public:
     std::string process(const std::string &outencoding) const
     {
         // start with an empty data object
-        Data data;
-        return process(data, outencoding);
+        return process(Data(), outencoding);
     }
 
     /**
@@ -104,7 +103,7 @@ public:
      *  @param  data        Data source
      *  @return std::string
      */
-    std::string process(Data &data) const
+    std::string process(const Data &data) const
     {
         return process(data, _encoding);
     }
@@ -116,8 +115,7 @@ public:
      */
     std::string process() const
     {
-        Data data;
-        return process(data, _encoding);
+        return process(Data(), _encoding);
     }
 
     /**

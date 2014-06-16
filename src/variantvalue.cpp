@@ -22,6 +22,7 @@ namespace SmartTpl {
  */
 Iterator *VariantValue::iterator() const
 {
+    std::cerr << "value = " << _value.get() << " type = " << _value->type() << std::endl;
     // In case we're a vector we'll return a vector iterator
     if (_value->type() == Variant::ValueType::ValueVectorType) return new Internal::VectorIterator(*_value);
 

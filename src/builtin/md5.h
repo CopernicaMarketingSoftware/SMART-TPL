@@ -34,8 +34,9 @@ public:
         // initialize our output
         unsigned char digest[MD5_DIGEST_LENGTH];
 
+        std::string str(input.toString());
         // Call the openssl md5 method
-        MD5((unsigned char*) input.toString(), input.size(), (unsigned char*) &digest);
+        MD5((unsigned char*) str.c_str(), str.size(), (unsigned char*) &digest);
 
         std::ostringstream stream;
         stream << std::setfill('0') << std::hex;

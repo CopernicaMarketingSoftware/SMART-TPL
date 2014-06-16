@@ -21,7 +21,7 @@ private:
     /**
      *  The Variant::Value from VARIANT-CPP that we are wrapping around
      */
-    mutable std::shared_ptr<Variant::Value> _value;
+    std::shared_ptr<Variant::Value> _value;
 
 public:
     /**
@@ -45,6 +45,7 @@ public:
     VariantValue(const std::initializer_list<std::map<std::string, Variant::Value>::value_type>& value) : _value(new Variant::Value(value)) {}
 
     VariantValue(const Variant::Value& value) : _value(new Variant::Value(value)) {}
+    VariantValue(const VariantValue &that) : _value(that._value) {}
 
     /**
      *  Destructor
@@ -53,9 +54,9 @@ public:
 
     /**
      *  Convert the value to a string
-     *  @return const char *
+     *  @return std::string
      */
-    virtual const char *toString() const override { return ((std::string) *_value).c_str(); };
+    virtual std::string toString() const override { return *_value; };
 
     /**
      *  Convert the variable to a numeric value
@@ -88,19 +89,7 @@ public:
      */
     virtual size_t memberCount() const override
     {
-        if (_value->type() == Variant::ValueType::ValueVectorType)
-        {
-            std::vector<Variant::Value> output = *_value;
-            return output.size();
-        }
-        else if (_value->type() == Variant::ValueType::ValueMapType)
-        {
-            std::map<std::string, Variant::Value> output = *_value;
-            return output.size();
-        }
-
-        // In case we aren't a map or a vector just return 0
-        return 0;
+        return _value->size();
     }
 
     /**
@@ -110,28 +99,7 @@ public:
      */
     virtual VariantValue member(int position) const override
     {
-        // If we're out of bounds just return VariantValue()
-        if (position < 0 || position >= memberCount()) return nullptr;
-
-        if (_value->type() == Variant::ValueType::ValueVectorType)
-        {
-            std::vector<Variant::Value> vector = *_value;
-            return vector[position];
-        }
-        else if (_value->type() == Variant::ValueType::ValueMapType)
-        {
-            // get the iterator of the underlying map
-            auto iter = ((std::map<std::string, Variant::Value>) *_value).begin();
-
-            // advance it by position
-            std::advance(iter, position);
-
-            // return the Value in the iterator
-            return iter->second;
-        }
-
-        // We shouldn't reach this, but in case we do we'll just return nullptr
-        return nullptr;
+        return (*_value)[position].value();
     }
 
     /**
@@ -170,7 +138,8 @@ public:
      */
     virtual size_t size() const override
     {
-        return ((std::string) *_value).size();
+        std::string str = *_value;
+        return str.size();
     }
 
     /**

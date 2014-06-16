@@ -50,7 +50,7 @@ public:
                 break;
             case StringMode:
                 EXPECT_EQ(1, params.size());
-                EXPECT_STREQ("test", params[0].toString());
+                EXPECT_EQ("test", params[0].toString());
                 EXPECT_EQ(4, params[0].size());
                 break;
             case BooleanMode:

@@ -93,7 +93,7 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual const char *toString() const override
+    virtual std::string toString() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toString();

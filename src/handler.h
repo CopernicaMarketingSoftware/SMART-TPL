@@ -29,7 +29,7 @@ private:
      *  The underlying data
      *  @var    Data
      */
-    Data *_data;
+    const Data *_data;
 
     /**
      *  The encoder to use for variables
@@ -76,7 +76,7 @@ public:
      *  @param  data        pointer to the data
      *  @param  escaper     the escaper to use for the printed variables
      */
-    Handler(Data *data, const Escaper *escaper) : _data(data), _encoder(escaper)
+    Handler(const Data *data, const Escaper *escaper) : _data(data), _encoder(escaper)
     {
         // we reserve some space in the output buffer, so that it is not
         // necessary to reallocate all the time (which is slow)
@@ -103,10 +103,10 @@ public:
      *  @param  value
      *  @param  escape
      */
-    void output(Value *value, bool escape)
+    void output(const Value *value, bool escape)
     {
         // Turn the value into a string
-        std::string work(value->toString(), value->size());
+        std::string work = value->toString();
 
         // Should we escape the value?
         if (escape) work = _encoder->encode(work);
@@ -121,7 +121,7 @@ public:
      *  @param  size
      *  @return Value
      */
-    Value *variable(const char *name, size_t size)
+    const Value *variable(const char *name, size_t size) const
     {
         // look through our local values first
         auto iter = _local_values.find(name);

@@ -35,7 +35,7 @@ public:
         const Escaper *escaper = Escaper::get("base64");
 
         // Turn our input into a string
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // Call decode and return the output
         return escaper->decode(output);

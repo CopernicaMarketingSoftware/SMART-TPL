@@ -47,8 +47,9 @@ public:
         // initialize our output
         std::string output;
 
-        const char *str = input.toString();
-        size_t len = input.size();
+        std::string str = input.toString();
+        const char *cstr = str.c_str();
+        size_t len = str.size();
         output.reserve(len);
 
         // Append our indent character indent times
@@ -57,8 +58,8 @@ public:
         // Loop through all the characters of our input
         for (int i = 0; i < len; ++i)
         {
-            output += str[i];
-            if (str[i] == '\n')
+            output += cstr[i];
+            if (cstr[i] == '\n')
             {
                 // if we happen to see a new line add some indentation
                 for (int j = 0; j < indents; ++j) output.append(character);

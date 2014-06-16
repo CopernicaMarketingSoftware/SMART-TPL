@@ -34,7 +34,7 @@ public:
         if (params.size() >= 1)
         {
             // initialize our output
-            std::string output(input.toString(), input.size());
+            std::string output(input.toString());
 
             // Turn the second parameter into the substr len parameter
             size_t len = std::string::npos;

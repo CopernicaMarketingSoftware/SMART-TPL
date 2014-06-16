@@ -46,14 +46,14 @@ public:
             if (length == 0) return "";
 
             // Turn the second parameter into the etc field
-            if (params.size() >= 2) etc = std::string(params[1].toString(), params[1].size());
+            if (params.size() >= 2) etc = params[1].toString();
 
             // Turns the third parameter into the break_words flag
             if (params.size() >= 3) break_words = params[2].toBoolean();
         }
 
         // initialize our output
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // If our input string is longer than our requested output we need to truncate it
         if (output.length() > length)

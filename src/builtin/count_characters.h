@@ -38,15 +38,16 @@ public:
         if (params.size() >= 1) include_whitespaces = params[0].toBoolean();
 
         // Let's just convert our input to a C string
-        const char *str = input.toString();
-        size_t len = input.size();
+        std::string str = input.toString();
+        const char *cstr = str.c_str();
+        size_t len = str.size();
 
         // Init our output value
         numeric_t output = 0;
         for (size_t i = 0; i < len; ++i)
         {
             // Are we a whitespace?
-            if (std::isspace(str[i]))
+            if (std::isspace(cstr[i]))
             {
                 // Yes we are, should we include whitespaces?
                 if (include_whitespaces) ++output;

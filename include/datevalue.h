@@ -73,15 +73,15 @@ public:
 
     /**
      *  Convert the variable to a string
-     *  @return const char *
+     *  @return std::string
      */
-    virtual const char *toString() const override
+    virtual std::string toString() const override
     {
         // Put the current date/time in our buffer
         initializeDate();
 
         // return the buffer as a C String
-        return _buffer.c_str();
+        return _buffer;
     }
 
     /**

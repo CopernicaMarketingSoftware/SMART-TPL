@@ -32,7 +32,7 @@ public:
     virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // initialize our output
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // Replace the new lines with <br /> and return
         return replace(output, "\n", "<br />");

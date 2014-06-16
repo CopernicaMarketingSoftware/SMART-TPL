@@ -33,10 +33,10 @@ public:
     {
         // initialize our characters to trim
         std::string to_trim(" \t\n\r\0\x0B");
-        if (params.size() >= 1) to_trim = std::string(params[0].toString(), params[0].size());
+        if (params.size() >= 1) to_trim = params[0].toString();
 
         // initialize our output
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // First we trim the left side
         size_t i = output.find_first_not_of(to_trim);

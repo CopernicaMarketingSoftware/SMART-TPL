@@ -38,7 +38,7 @@ public:
         }
 
         // Return the output
-        return std::string(input.toString(), input.size());
+        return std::string(input.toString());
     }
 };
 

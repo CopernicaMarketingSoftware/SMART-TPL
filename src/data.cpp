@@ -84,15 +84,17 @@ Data::Data(const Variant::Value &value)
     std::map<std::string, ::Variant::Value> map = value;
     for (auto iter = map.begin(); iter != map.end(); ++iter)
     {
+        std::shared_ptr<VariantValue> value;
         switch (iter->second.type()) {
-            case ::Variant::ValueType::ValueNullType: assign(iter->first, nullptr); break;
-            case ::Variant::ValueType::ValueBoolType: assign(iter->first, (bool) iter->second); break;
-            case ::Variant::ValueType::ValueIntType:  assign(iter->first, (int) iter->second); break;
-            case ::Variant::ValueType::ValueLongType: assign(iter->first, (long) iter->second); break;
-            case ::Variant::ValueType::ValueDoubleType: assign(iter->first, (double) iter->second); break;
-            case ::Variant::ValueType::ValueStringType: assign(iter->first, (std::string) iter->second); break;
+            case Variant::ValueType::ValueNullType:   value = std::make_shared<VariantValue>(nullptr); break;
+            case Variant::ValueType::ValueBoolType:   value = std::make_shared<VariantValue>((bool) iter->second); break;
+            case Variant::ValueType::ValueIntType:    value = std::make_shared<VariantValue>((int) iter->second); break;
+            case Variant::ValueType::ValueLongType:   value = std::make_shared<VariantValue>((long) iter->second); break;
+            case Variant::ValueType::ValueDoubleType: value = std::make_shared<VariantValue>((double) iter->second); break;
+            case Variant::ValueType::ValueStringType: value = std::make_shared<VariantValue>((std::string) iter->second); break;
             default: break;
         }
+        if (value) assignManaged(iter->first, value);
     }
 }
 
@@ -104,8 +106,23 @@ Data::Data(const Variant::Value &value)
  */
 Data &Data::assign(const char *name, const VariantValue &value)
 {
+    // Create a copy of value and make it managed using assignManaged
+    return assignManaged(name, std::shared_ptr<VariantValue>(new VariantValue(value)));
+}
+
+/**
+ *  Assign data that is managed by a shared pointer and keep managing it
+ *  @param  name        Name of the variable
+ *  @param  value       A shared pointer to a VariantValue
+ *  @return Data        Same object for chaining
+ */
+Data &Data::assignManaged(const char *name, std::shared_ptr<VariantValue> value)
+{
     // append variable
-    _variables[name] = value;
+    _variables[name] = value.get();
+
+    // make it managed
+    _managed_values.push_back(value);
 
     // allow chaining
     return *this;
@@ -152,15 +169,12 @@ Data &Data::modifier(const char *name, Modifier* modifier)
  *  @param  name        the name
  *  @param  size        size of the name
  *  @return Variant
- *  @note This method should be const as we don't actually modify data here, this
- *        however means that the compiler will try to convert "const VariantValue*"
- *        to "VariantValue*" which of course doesn't quite work.
  */
-VariantValue *Data::value(const char *name, size_t size)
+const Value *Data::value(const char *name, size_t size) const
 {
     // look it up in _variables
     auto iter = _variables.find(name);
-    if (iter != _variables.end()) return &iter->second;
+    if (iter != _variables.end()) return iter->second;
 
     // return nullptr if we found nothing
     return nullptr;

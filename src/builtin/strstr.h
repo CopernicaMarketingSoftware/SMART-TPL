@@ -34,12 +34,12 @@ public:
         if (params.size() >= 1)
         {
             // initialize the needle and the before_needle flag
-            std::string needle(params[0].toString(), params[0].size());
+            std::string needle(params[0].toString());
             bool before_needle = false;
             if (params.size() >= 2) before_needle = params[1].toBoolean();
 
             // initialize our haystack
-            std::string haystack(input.toString(), input.size());
+            std::string haystack(input.toString());
 
             // Look for the needle in our haystack
             size_t pos = haystack.find_first_of(needle);

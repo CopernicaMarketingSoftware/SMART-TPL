@@ -35,7 +35,7 @@ public:
         const Escaper *escaper = Escaper::get("url");
 
         // Turn our input into a string
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // Call encode and return the output
         return escaper->encode(output);
