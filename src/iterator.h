@@ -35,7 +35,7 @@ public:
      *  Constructor
      *  @param  source      The source value object to iterate over
      */
-    Iterator(Value *source) :
+    Iterator(const Value *source) :
         _iterator(std::unique_ptr<SmartTpl::Iterator>(source->iterator())) {}
 
     /**
@@ -66,7 +66,7 @@ public:
      *  Retrieve a pointer to the current key
      *  @return Variant
      */
-    Variant key() const
+    VariantValue key() const
     {
         return _iterator->key();
     }
@@ -75,7 +75,7 @@ public:
      *  Retrieve pointer to the current member
      *  @return Variant
      */
-    Variant value() const
+    VariantValue value() const
     {
         return _iterator->value();
     }

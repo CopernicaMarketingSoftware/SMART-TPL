@@ -1,7 +1,7 @@
 /**
- *  Map_Iterator.h
+ *  Vector_Iterator.h
  *
- *  Iterator for Maps
+ *  Iterator for Vectors
  *
  *  @author Toon Schoenmakers <toon.schonemakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -15,34 +15,34 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class MapIterator : public SmartTpl::Iterator
+class VectorIterator : public SmartTpl::Iterator
 {
 private:
-    const std::map<std::string, Variant::Value> _map;
+    const std::vector<Variant::Value> _vector;
     /**
      *  Iterator to the current position in our vector
      */
-    std::map<std::string, Variant::Value>::const_iterator _iter;
+    std::vector<Variant::Value>::const_iterator _iter;
 
     /**
      *  End iterator which indicates where we should stop
      */
-    const std::map<std::string, Variant::Value>::const_iterator _end;
+    const std::vector<Variant::Value>::const_iterator _end;
 
 public:
     /**
      *  Constructor
      */
-    MapIterator(const std::map<std::string, Variant::Value> &value)
-    : _map(value)
-    , _iter(_map.begin())
-    , _end(_map.end())
+    VectorIterator(const std::vector<Variant::Value> &value)
+    : _vector(value)
+    , _iter(_vector.begin())
+    , _end(_vector.end())
     {}
 
     /**
      *  Deconstructor
      */
-    virtual ~MapIterator() {}
+    virtual ~VectorIterator() {}
 
     /**
      *  Check if the iterator is still valid
@@ -67,7 +67,7 @@ public:
      */
     virtual VariantValue value() const override
     {
-        return _iter->second;
+        return *_iter;
     }
 
     /**
@@ -76,7 +76,7 @@ public:
      */
     virtual VariantValue key() const override
     {
-        return _iter->first;
+        return nullptr;
     }
 };
 

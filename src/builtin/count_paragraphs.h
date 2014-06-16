@@ -29,18 +29,19 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // Let's just convert our input to a C string
-        const char *str = input.toString();
-        size_t len = input.size();
+        std::string str = input.toString();
+        const char *cstr = str.c_str();
+        size_t len = str.size();
 
         // Init our output value
         numeric_t output = 0;
         for (size_t i = 0; i < len; ++i)
         {
             // We're really just counting the \n and \r's
-            if (str[i] == '\n' || str[i] == '\r') ++output;
+            if (cstr[i] == '\n' || cstr[i] == '\r') ++output;
         }
 
         // Return the output

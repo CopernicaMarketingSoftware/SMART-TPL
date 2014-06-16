@@ -29,17 +29,17 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         if (params.size() >= 2)
         {
             try {
                 // initialize our settings based on the provided parameters
-                boost::regex regex(std::string(params[0].toString(), params[0].size()));
-                std::string replace_text(params[1].toString(), params[1].size());
+                boost::regex regex(std::string(params[0].toString()));
+                std::string replace_text(params[1].toString());
 
                 // initialize our input string
-                std::string input_str(input.toString(), input.size());
+                std::string input_str(input.toString());
 
                 // Do the actual regex replace into stream
                 std::ostringstream stream;

@@ -22,7 +22,7 @@ typedef int numeric_t;
 /**
  *  Forward declaration of Variant so we can return Variant
  */
-class Variant;
+class VariantValue;
 
 /**
  *  Class definition
@@ -37,9 +37,9 @@ public:
 
     /**
      *  Convert the value to a string
-     *  @return const char *
+     *  @return std::string
      */
-    virtual const char *toString() const = 0;
+    virtual std::string toString() const = 0;
 
     /**
      *  Convert the variable to a numeric value
@@ -61,7 +61,7 @@ public:
      *  @return Variant
      *
      */
-    virtual Variant member(const char *name, size_t size) const = 0;
+    virtual VariantValue member(const char *name, size_t size) const = 0;
 
     /**
      *  Get access to the amount of members this value has
@@ -74,14 +74,14 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual Variant member(size_t position) const = 0;
+    virtual VariantValue member(size_t position) const = 0;
 
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual Variant key(size_t position) const = 0;
+    virtual VariantValue key(size_t position) const = 0;
 
     /**
      *  String length of the variable
@@ -104,4 +104,3 @@ public:
  *  End namespace
  */
 }
-

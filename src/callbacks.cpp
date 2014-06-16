@@ -44,6 +44,10 @@ AssignBooleanCallback       Callbacks::_assign_boolean;
 AssignNumericCallback       Callbacks::_assign_numeric;
 AssignStringCallback        Callbacks::_assign_string;
 
+/**
+ *  A static empty value
+ */
+VariantValue                _empty;
 
 /**
  *  Function to write raw data
@@ -66,13 +70,13 @@ void smart_tpl_write(void *userdata, const char *data, size_t size)
  *  @param  variable        pointer to the variable
  *  @param  escape          Whether we should be escaping or not
  */
-void smart_tpl_output(void *userdata, void *variable, int escape)
+void smart_tpl_output(void *userdata, const void *variable, int escape)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
 
     // convert the variable to a variable object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // output the variable
     handler->output(var, escape != 0);
@@ -86,16 +90,16 @@ void smart_tpl_output(void *userdata, void *variable, int escape)
  *  @param  size            size of the variable
  *  @return                 pointer to a new variable
  */
-void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t size)
+const void *smart_tpl_member(void *userdata, const void *variable, const char *name, size_t size)
 {
     // convert the variable to a variable object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // fetch the member
     auto member = var->member(name, size);
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(member);
+    auto *output = new VariantValue(member);
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -112,16 +116,16 @@ void *smart_tpl_member(void *userdata, void *variable, const char *name, size_t 
  *  @param  position        what position would we like
  *  @return                 pointer to a new variable
  */
-void* smart_tpl_member_at(void* userdata, void* variable, long position)
+const void* smart_tpl_member_at(void* userdata, const void* variable, long position)
 {
     // convert the variable to a value object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // fetch the member
     auto member = var->member(position);
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(member);
+    auto *output = new VariantValue(member);
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -136,10 +140,10 @@ void* smart_tpl_member_at(void* userdata, void* variable, long position)
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to the variable that is being iterated
  */
-void *smart_tpl_create_iterator(void *userdata, void *variable)
+void *smart_tpl_create_iterator(void *userdata, const void *variable)
 {
     // cast to actual value object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // construct a new iterator
     //  @todo can we allocate this on the heap instead of allocating with new?
@@ -186,7 +190,7 @@ int smart_tpl_valid_iterator(void *userdata, void *iterator)
  *  @param  iterator        pointer to the iterator returned by smart_tpl_create_iterator
  *  @return                 pointer to the current key object
  */
-void *smart_tpl_iterator_key(void *userdata, void *iterator)
+const void *smart_tpl_iterator_key(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
@@ -195,7 +199,7 @@ void *smart_tpl_iterator_key(void *userdata, void *iterator)
     auto key = iter->key();
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(key);
+    auto *output = new VariantValue(key);
 
     // Return the pointer
     return output;
@@ -207,7 +211,7 @@ void *smart_tpl_iterator_key(void *userdata, void *iterator)
  *  @param  iterator        pointer to the iterator returned by smart_tpl_create_iterator
  *  @return                 pointer to the current value object
  */
-void *smart_tpl_iterator_value(void *userdata, void *iterator)
+const void *smart_tpl_iterator_value(void *userdata, void *iterator)
 {
     // cast to iterator
     auto *iter = (Iterator *)iterator;
@@ -216,7 +220,7 @@ void *smart_tpl_iterator_value(void *userdata, void *iterator)
     auto value = iter->value();
 
     // Allocate it on the heap so we can return the pointer to it
-    auto *output = new Variant(value);
+    auto *output = new VariantValue(value);
 
     // return the output
     return output;
@@ -243,7 +247,7 @@ void smart_tpl_iterator_next(void *userdata, void *iterator)
  *  @param  size            size of the variable
  *  @return                 pointer to a new variable
  */
-void *smart_tpl_variable(void *userdata, const char *name, size_t size)
+const void *smart_tpl_variable(void *userdata, const char *name, size_t size)
 {
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
@@ -252,7 +256,7 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
     auto *result = handler->variable(name, size);
 
     // ensure that we always return an object
-    return result ? result : EmptyValue::instance().get();
+    return result ? result : &_empty;
 }
 
 /**
@@ -261,16 +265,16 @@ void *smart_tpl_variable(void *userdata, const char *name, size_t size)
  *  @param  variable        pointer to variable
  *  @return                 string buffer
  */
-const char *smart_tpl_to_string(void *userdata, void *variable)
+const char *smart_tpl_to_string(void *userdata, const void *variable)
 {
     // convert the variable to a value object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *) variable;
 
     // convert to string
-    auto *result = var->toString();
+    auto result = var->toString();
 
-    // ensure that a string is always returned
-    return result ? result : EmptyValue::instance()->toString();
+    // return the string
+    return result.c_str();
 }
 
 /**
@@ -279,10 +283,10 @@ const char *smart_tpl_to_string(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-int smart_tpl_to_numeric(void *userdata, void *variable)
+int smart_tpl_to_numeric(void *userdata, const void *variable)
 {
     // convert the variable to a value object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // convert to numeric
     return var->toNumeric();
@@ -294,10 +298,10 @@ int smart_tpl_to_numeric(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-int smart_tpl_to_boolean(void *userdata, void *variable)
+int smart_tpl_to_boolean(void *userdata, const void *variable)
 {
     // convert the variable to a value object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // convert to bool
     return var->toBoolean();
@@ -309,10 +313,10 @@ int smart_tpl_to_boolean(void *userdata, void *variable)
  *  @param  variable        pointer to variable
  *  @return                 string length
  */
-size_t smart_tpl_size(void *userdata, void *variable)
+size_t smart_tpl_size(void *userdata, const void *variable)
 {
     // convert the variable to a value object
-    auto *var = (Value *)variable;
+    auto *var = (const Value *)variable;
 
     // return the size
     return var->size();
@@ -341,7 +345,7 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
  *  @param modifier_ptr   pointer to the modifier that should be applied
  *  @param parameters     pointer to a Parameters object
  */
-void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_ptr, void *parameters)
+const void* smart_tpl_modify_variable(void *userdata, const void *variable, void *modifier_ptr, void *parameters)
 {
     // In case the modifier or the input is a nullptr just return the original value
     if (modifier_ptr == nullptr || variable == nullptr) return variable;
@@ -350,7 +354,7 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
     auto *modifier = (Modifier *) modifier_ptr;
 
     // convert to the Variant object
-    auto *value = (Variant *) variable;
+    auto *value = (const VariantValue *) variable;
 
     // convert to Parameters object
     auto *params_ptr = (SmartTpl::Parameters *) parameters;
@@ -363,10 +367,10 @@ void* smart_tpl_modify_variable(void *userdata, void *variable, void *modifier_p
 
     // If we both have the same shared pointer to modifier probably just returned the input
     // Returning the input value is faster and safer from this point on
-    if (variant.value() == value->value()) return value;
+    if (variant == *value) return value;
 
     // Convert the variant to a pointer so we can actually return it from C
-    auto *output = new Variant(variant);
+    auto *output = new VariantValue(variant);
 
     // Give it to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -431,13 +435,13 @@ void smart_tpl_assign_string(void *userdata, const char *key, size_t keysize, co
  *  @param keysize              the size of key
  *  @param variable             the variable object we would like to assign
  */
-void smart_tpl_assign(void *userdata, const char *key, size_t keysize, void *variable)
+void smart_tpl_assign(void *userdata, const char *key, size_t keysize, const void *variable)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
 
     // Convert value to type Variant
-    auto *variant = (Variant *) variable;
+    auto *variant = (const VariantValue *) variable;
 
     // Assign value to key
     handler->assign(key, keysize, variant);

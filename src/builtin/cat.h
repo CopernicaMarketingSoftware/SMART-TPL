@@ -29,18 +29,15 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // copy the entire string
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // Loop through the parameters and add all of them to the output string
-        if (params.size() >= 1)
-        {
-            for (auto param : params) output.append(param.toString(), param.size());
-        }
+        for (auto param : params) output.append(param.toString());
 
-        // return it wrapped into a new StringValue
+        // return the output
         return output;
     }
 };

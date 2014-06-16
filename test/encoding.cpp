@@ -73,7 +73,7 @@ TEST(Encoding, HtmlEncodingRawOverride)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "callbacks->write(userdata,\"<b>This is \",11);\n{\nvoid *o = NULL;\n"
+    "callbacks->write(userdata,\"<b>This is \",11);\n{\nconst void *o = NULL;\n"
     "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"bold\",4),callbacks->modifier(userdata,\"raw\",3),NULL);\n"
     "callbacks->output(userdata,o,0);\n}\ncallbacks->write(userdata,\"</b>\",4);\n}\nconst char *mode = \"html\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());

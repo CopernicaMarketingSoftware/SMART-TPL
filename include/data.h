@@ -43,7 +43,12 @@ private:
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<const char *, Variant, cmp_str> _variables;
+    std::map<const char *, const Value*, cmp_str> _variables;
+
+    /**
+     *  All managed values that should be cleaned up upon destruction
+     */
+    std::list<std::shared_ptr<Value>> _managed_values;
 
     /**
      *  All modifiers
@@ -57,6 +62,8 @@ public:
      */
     Data();
 
+    Data(const Variant::Value& value);
+
     /**
      *  Destructor
      */
@@ -68,7 +75,17 @@ public:
      *  @param  value       Value of the variable
      *  @return Data        Same object for chaining
      */
-    Data &assign(const char *name, const Variant &value);
+    Data &assign(const char *name, const VariantValue &value);
+    Data &assign(const std::string &name, const VariantValue &value) { return assign(name.c_str(), value); }
+
+    /**
+     *  Assign data that is managed by a shared pointer and keep managing it
+     *  @param  name        Name of the variable
+     *  @param  value       A shared pointer to a VariantValue
+     *  @return Data        Same object for chaining
+     */
+    Data &assignManaged(const char *name, std::shared_ptr<VariantValue> value);
+    Data &assignManaged(const std::string &name, std::shared_ptr<VariantValue> value) { return assignManaged(name.c_str(), value); }
 
     /**
      *  Assign a callback
@@ -80,6 +97,7 @@ public:
      *  @return Data        Same object for chaining
      */
     Data &callback(const char *name, const Callback &callback, bool cache = false);
+    Data &callback(const std::string &name, const Callback &call, bool cache = false) { return callback(name.c_str(), call, cache); }
 
     /**
      *  Register a modifier
@@ -87,15 +105,16 @@ public:
      *  @param  modifier    Pointer to the modifier object
      *  @return Data        Same object for chaining
      */
-    Data &modifier(const char *name, Modifier* modifier);
+    Data &modifier(const char *name, Modifier *modifier);
+    Data &modifier(const std::string &name, Modifier *mod) { return modifier(name.c_str(), mod); }
 
     /**
      *  Retrieve a variable pointer by name
      *  @param  name        the name
      *  @param  size        size of the name
-     *  @return Variant
+     *  @return Value
      */
-    Variant value(const char *name, size_t size) const;
+    const Value *value(const char *name, size_t size) const;
 
     /**
      *  Retrieve a modifier by name

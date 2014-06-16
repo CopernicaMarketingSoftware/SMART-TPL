@@ -29,10 +29,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // copy the entire string
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // convert all the characters to lowercase
         for (auto & c : output) c = tolower(c);

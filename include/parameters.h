@@ -15,7 +15,7 @@ namespace SmartTpl {
 /**
  *  Internally, the parameters are just a vector of variants
  */
-using Parameters = std::vector<Variant>;
+using Parameters = std::vector<VariantValue>;
 
 /**
  *  End namespace

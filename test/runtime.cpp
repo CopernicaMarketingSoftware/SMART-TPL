@@ -21,11 +21,11 @@ TEST(RunTime, ForEach)
     string input("{foreach $item in $list}item: {$item}\n{/foreach}");
     Template tpl((Buffer(input)));
 
-    ListValue *list = new ListValue;
-    for (int i = 0; i < 5; ++i) list->add(i);
+    std::vector<Variant::Value> list;
+    for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
-    data.assign("list", std::shared_ptr<Value>(list));
+    data.assign("list", list);
 
     string expectedOutput("item: 0\nitem: 1\nitem: 2\nitem: 3\nitem: 4\n");
     EXPECT_EQ(expectedOutput, tpl.process(data));
@@ -42,14 +42,14 @@ TEST(RunTime, ForEachWithKeys)
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
     Template tpl((Buffer(input)));
 
-    MapValue *map = new MapValue;
-    map->assign("1", 1)
-       .assign("2", 2)
-       .assign("3", 3)
-       .assign("4", 4)
-       .assign("5", 5);
+    std::map<std::string, Variant::Value> map;
+    map["1"] = 1;
+    map["2"] = 2;
+    map["3"] = 3;
+    map["4"] = 4;
+    map["5"] = 5;
     Data data;
-    data.assign("map", std::shared_ptr<Value>(map));
+    data.assign("map", map);
 
     string expectedOutput("key: 1\nvalue: 1key: 2\nvalue: 2key: 3\nvalue: 3key: 4\nvalue: 4key: 5\nvalue: 5");
     EXPECT_EQ(expectedOutput, tpl.process(data));
@@ -66,11 +66,11 @@ TEST(RunTime, ForEachElse)
     string input("{foreach $item in $list}item: {$item}\n{foreachelse}else{/foreach}");
     Template tpl((Buffer(input)));
 
-    ListValue *list = new ListValue;
-    for (int i = 0; i < 5; ++i) list->add(i);
+    std::vector<Variant::Value> list;
+    for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
-    data.assign("list", std::shared_ptr<Value>(list));
+    data.assign("list", list);
 
     Data data1;
     data1.assign("list", "Not loopable");
@@ -92,14 +92,14 @@ TEST(RunTime, ForEachWithKeysElse)
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{foreachelse}else{/foreach}");
     Template tpl((Buffer(input)));
 
-    MapValue *map = new MapValue;
-    map->assign("1", 1)
-       .assign("2", 2)
-       .assign("3", 3)
-       .assign("4", 4)
-       .assign("5", 5);
+    std::map<std::string, Variant::Value> map;
+    map["1"] = 1;
+    map["2"] = 2;
+    map["3"] = 3;
+    map["4"] = 4;
+    map["5"] = 5;
     Data data;
-    data.assign("map", std::shared_ptr<Value>(map));
+    data.assign("map", map);
 
     Data data1;
     data1.assign("map", "Not loopable");
@@ -233,11 +233,11 @@ TEST(RunTime, AssigningInForEach)
     string input("{foreach $item in $list}{$output=$item}{/foreach}{$output}");
     Template tpl((Buffer(input)));
 
-    ListValue *list = new ListValue;
-    for (int i = 0; i < 5; ++i) list->add(i);
+    std::vector<Variant::Value> list;
+    for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
-    data.assign("list", std::shared_ptr<Value>(list));
+    data.assign("list", list);
 
     string expectedOutput("4");
     EXPECT_EQ(tpl.process(data), expectedOutput);
@@ -254,11 +254,11 @@ TEST(RunTime, ArrayAccess)
     string input("{$list[3]}");
     Template tpl((Buffer(input)));
 
-    ListValue *list = new ListValue;
-    for (int i = 0; i < 5; ++i) list->add(i);
+    std::vector<Variant::Value> list;
+    for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
-    data.assign("list", std::shared_ptr<Value>(list));
+    data.assign("list", list);
 
     string expectedOutput("3");
     EXPECT_EQ(tpl.process(data), expectedOutput);
@@ -275,10 +275,10 @@ TEST(RunTime, KeyArrayAccess)
     string input("{$map[\"key\"]}");
     Template tpl((Buffer(input)));
 
-    MapValue *map = new MapValue;
-    map->assign("key", "test");
+    std::map<std::string, Variant::Value> map;
+    map["key"] = "test";
     Data data;
-    data.assign("map", std::shared_ptr<Value>(map));
+    data.assign("map", map);
 
     string expectedOutput("test");
     EXPECT_EQ(tpl.process(data), expectedOutput);

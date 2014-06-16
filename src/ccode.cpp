@@ -86,7 +86,7 @@ void CCode::output(const Filter *filter)
     _out << "{" << std::endl;
 
     // Let's first of all declare our output variable
-    _out << "void *o = NULL;" << std::endl;
+    _out << "const void *o = NULL;" << std::endl;
 
     // call the string method on our filter, which writes all the filtering code for us
     filter->string(this);

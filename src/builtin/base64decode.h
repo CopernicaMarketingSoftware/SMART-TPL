@@ -29,13 +29,13 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // Get the base64 encoder
         const Escaper *escaper = Escaper::get("base64");
 
         // Turn our input into a string
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // Call decode and return the output
         return escaper->decode(output);

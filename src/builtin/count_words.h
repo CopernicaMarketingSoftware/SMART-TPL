@@ -29,10 +29,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // Let's just convert our input to a C string
-        std::string str(input.toString(), input.size());
+        std::string str(input.toString());
 
         // Split our input by whitespaces, newlines, etc
         boost::regex rgx("\\s+");

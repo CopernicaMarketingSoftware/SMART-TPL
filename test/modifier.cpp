@@ -239,10 +239,11 @@ TEST(Modifier, Count)
     string input("{$var|count}");
     Template tpl((Buffer(input)));
 
-    ListValue *list = new ListValue;
-    for (int i = 0; i < 10; ++i) list->add(i);
+    std::vector<Variant::Value> list;
+    for (int i = 0; i < 10; ++i) list.push_back(i);
+
     Data data;
-    data.assign("var", std::shared_ptr<Value>(list));
+    data.assign("var", list);
 
     string expectedOutput("10");
     EXPECT_EQ(expectedOutput, tpl.process(data));

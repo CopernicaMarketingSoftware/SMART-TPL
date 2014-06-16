@@ -73,15 +73,15 @@ public:
 
     /**
      *  Convert the variable to a string
-     *  @return const char *
+     *  @return std::string
      */
-    virtual const char *toString() const override
+    virtual std::string toString() const override
     {
         // Put the current date/time in our buffer
         initializeDate();
 
         // return the buffer as a C String
-        return _buffer.c_str();
+        return _buffer;
     }
 
     /**
@@ -107,9 +107,9 @@ public:
      *
      *  @param  name        name of the member
      *  @param  size        size of the name
-     *  @return Value
+     *  @return VariantValue
      */
-    virtual Variant member(const char *name, size_t size) const override
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         return nullptr;
     }
@@ -125,9 +125,9 @@ public:
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
-     *  @return Variant
+     *  @return VariantValue
      */
-    virtual Variant member(size_t position) const override
+    virtual VariantValue member(size_t position) const override
     {
         return nullptr;
     }
@@ -135,9 +135,9 @@ public:
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
-     *  @return Variant      Variant object, probably a string
+     *  @return VariantValue VariantValue object, probably a string
      */
-    virtual Variant key(size_t position) const override
+    virtual VariantValue key(size_t position) const override
     {
         return nullptr;
     }

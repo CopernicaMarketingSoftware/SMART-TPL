@@ -78,16 +78,41 @@ Data::Data()
     modifier("base64_decode", &base64_decode);
 }
 
+Data::Data(const Variant::Value &value)
+: Data() // Call the default constructor so all the modifiers are still registered
+{
+    // Turn out Variant::Value into a map
+    std::map<std::string, ::Variant::Value> map = value;
+
+    // Loop through the map and assign all the elements
+    for (auto iter = map.begin(); iter != map.end(); ++iter) assign(iter->first, iter->second);
+}
+
 /**
  * Assign data
  * @param  name         Name of the variable
  * @param  value        Value of the variable
  * @return Data         Same object for chaining
  */
-Data &Data::assign(const char *name, const Variant &value)
+Data &Data::assign(const char *name, const VariantValue &value)
+{
+    // Create a copy of value and make it managed using assignManaged
+    return assignManaged(name, std::shared_ptr<VariantValue>(new VariantValue(value)));
+}
+
+/**
+ *  Assign data that is managed by a shared pointer and keep managing it
+ *  @param  name        Name of the variable
+ *  @param  value       A shared pointer to a VariantValue
+ *  @return Data        Same object for chaining
+ */
+Data &Data::assignManaged(const char *name, std::shared_ptr<VariantValue> value)
 {
     // append variable
-    _variables[name] = value;
+    _variables[name] = value.get();
+
+    // make it managed
+    _managed_values.push_back(value);
 
     // allow chaining
     return *this;
@@ -105,8 +130,10 @@ Data &Data::callback(const char *name, const Callback &callback, bool cache)
     // construct variable
     Value *v = new CallbackValue(callback, cache);
 
-    // store in the list of variables
-    _variables[name] = std::shared_ptr<Value>(v);
+    // make our Value managed
+    _managed_values.push_back(std::shared_ptr<Value>(v));
+    // and store in the list of variables
+    _variables[name] = v;
 
     // allow chaining
     return *this;
@@ -133,7 +160,7 @@ Data &Data::modifier(const char *name, Modifier* modifier)
  *  @param  size        size of the name
  *  @return Variant
  */
-Variant Data::value(const char *name, size_t size) const
+const Value *Data::value(const char *name, size_t size) const
 {
     // look it up in _variables
     auto iter = _variables.find(name);

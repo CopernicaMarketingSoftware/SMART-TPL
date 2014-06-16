@@ -59,7 +59,7 @@ private:
      *  assigned using "assign .. to ..", or the magic values inside
      *  foreach loops
      */
-    std::map<const char *, Variant, cmp_str> _local_values;
+    std::map<const char *, const Value*, cmp_str> _local_values;
 
     /**
      *  Will contain the local values that were created just here and should
@@ -67,7 +67,7 @@ private:
      *
      *  Can also contain externally created Values that were made managed using manageValue(Value*)
      */
-    std::list<std::shared_ptr<Value>> _managed_local_values;
+    std::list<std::shared_ptr<const Value>> _managed_local_values;
 
 
 public:
@@ -103,10 +103,10 @@ public:
      *  @param  value
      *  @param  escape
      */
-    void output(Value *value, bool escape)
+    void output(const Value *value, bool escape)
     {
         // Turn the value into a string
-        std::string work(value->toString(), value->size());
+        std::string work = value->toString();
 
         // Should we escape the value?
         if (escape) work = _encoder->encode(work);
@@ -121,14 +121,14 @@ public:
      *  @param  size
      *  @return Value
      */
-    Value *variable(const char *name, size_t size)
+    const Value *variable(const char *name, size_t size) const
     {
         // look through our local values first
         auto iter = _local_values.find(name);
-        if (iter != _local_values.end()) return iter->second.value().get();
+        if (iter != _local_values.end()) return iter->second;
 
         // didn't find it? get the variable from the data object
-        return _data->value(name, size).value().get();
+        return _data->value(name, size);
     }
 
     /**
@@ -158,9 +158,11 @@ public:
      *  @param key         The name for our local variable
      *  @param key_size    The size of key
      */
-    void assign(const char *key, size_t key_size, const Variant &value)
+    void assign(const char *key, size_t key_size, const VariantValue &value)
     {
-        _local_values[key] = value;
+        VariantValue *copy = new VariantValue(value);
+        manageValue(copy);
+        _local_values[key] = copy;
     }
 
     /**
@@ -170,29 +172,10 @@ public:
      *  @param  key_size    The size of key
      *  @param  value       The newly allocated value we would like to assign
      */
-    void assign(const char *key, size_t key_size, Value *value)
+    void assign(const char *key, size_t key_size, const Value *value)
     {
-        // Look manually through our _managed_local_values for value
-        // This has to be done manually because you can't compare shared pointers directly with pointers :(
-        bool found = false;
-        for (auto v : _managed_local_values)
-        {
-            if (v.get() == value)
-            {
-                // In case we found it we just assign the already existing shared pointer to _local_values
-                // And we set the found flag to true
-                found = true;
-                _local_values[key] = v;
-                break;
-            }
-        }
-        // If we did not find it in the _managed_local_values just create a new shared pointer
-        if (found == false)
-        {
-            std::shared_ptr<Value> ptr(value);
-            _managed_local_values.push_back(ptr);
-            _local_values[key] = ptr;
-        }
+        manageValue(value);
+        _local_values[key] = value;
     }
 
     /**
@@ -203,7 +186,7 @@ public:
      */
     void assign(const char *key, size_t key_size, bool boolean)
     {
-        _local_values[key] = boolean;
+        assign(key, key_size, VariantValue(boolean));
     }
 
     /**
@@ -214,7 +197,7 @@ public:
      */
     void assign(const char *key, size_t key_size, long value)
     {
-        _local_values[key] = value;
+        assign(key, key_size, VariantValue(value));
     }
 
     /**
@@ -225,7 +208,7 @@ public:
      */
     void assign(const char *key, size_t key_size, const std::string &value)
     {
-        _local_values[key] = value;
+        assign(key, key_size, VariantValue(value));
     }
 
     /**
@@ -233,14 +216,19 @@ public:
      *  @param  value    The value object to make managed
      *  @return True if we created a new shared pointer
      */
-    bool manageValue(Variant *value)
+    bool manageValue(const Value *value)
     {
+        // Check if someone is already managing value or not
         for (auto v : _managed_local_values)
         {
             // In case we found it that means that we are already managed
             if (v.get() == value) return false;
         }
-        _managed_local_values.push_back(std::shared_ptr<Value>(value));
+
+        // If they are not we start managing it
+        _managed_local_values.push_back(std::shared_ptr<const Value>(value));
+
+        // Return true to indicate that we are now managing value
         return true;
     }
 

@@ -32,6 +32,7 @@
 #include <openssl/sha.h>
 #include <openssl/bio.h>
 #include <openssl/evp.h>
+#include <variant.h>
 
 /**
  *  Public includes
@@ -43,14 +44,8 @@
 
 #include "include/iterator.h"
 #include "include/value.h"
-#include "include/variant.h"
-#include "include/string.h"
-#include "include/numeric.h"
+#include "include/variantvalue.h"
 #include "include/callback.h"
-#include "include/empty.h"
-#include "include/map.h"
-#include "include/list.h"
-#include "include/boolean.h"
 #include "include/datevalue.h"
 
 #include "include/callbacks.h"
@@ -184,5 +179,5 @@
 #include "executor.h"
 #include "bytecode.h"
 #include "library.h"
-#include "list_iterator.h"
+#include "vector_iterator.h"
 #include "map_iterator.h"

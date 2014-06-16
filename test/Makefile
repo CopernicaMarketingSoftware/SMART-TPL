@@ -13,7 +13,7 @@ all: $(BINARY)
 	$(CXX) $(CXXFLAGS) $(DEFINES) $(INC) -c $< -o $@
 
 $(BINARY): $(DEPS) $(MODS) main.cpp
-	$(CXX) $(CXXFLAGS) $(DEFINES) $(INC) -o $(BINARY) $(DEPS) libgtest.a -pthread ../libsmarttpl.so
+	$(CXX) $(CXXFLAGS) $(DEFINES) $(INC) -o $(BINARY) $(DEPS) libgtest.a -pthread ../libsmarttpl.so -lvariant
 
 libgtest.a:
 	wget -q http://googletest.googlecode.com/files/gtest-1.7.0.zip

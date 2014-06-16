@@ -25,19 +25,15 @@ protected:
      *  @param  newStr      The replacement string
      *  @return std::string It will return the modified input
      */
-    std::string &replace(std::string &input, const char *oldStr, const char *newStr) const
+    std::string &replace(std::string &input, const std::string &oldStr, const std::string &newStr) const
     {
-        // First we take the length of both replace strings
-        const size_t oldStrLen = std::strlen(oldStr);
-        const size_t newStrLen = std::strlen(newStr);
-
         size_t pos = 0;
         // As long as find doesn't return std::string::npos we found what we were looking for
         while ((pos = input.find(oldStr, pos)) != std::string::npos)
         {
             // Replace that what we were looking for with newStr
-            input.replace(pos, oldStrLen, newStr);
-            pos += newStrLen;
+            input.replace(pos, oldStr.size(), newStr);
+            pos += newStr.size();
         }
         return input;
     }
@@ -54,10 +50,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual Variant modify(const Variant &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // initialize our output
-        std::string output(input.toString(), input.size());
+        std::string output(input.toString());
 
         // Check if we have at least 2 parameters
         if (params.size() >= 2)
