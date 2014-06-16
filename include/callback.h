@@ -93,7 +93,7 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    virtual std::string toString() const override
+    std::string toString() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toString();
@@ -112,7 +112,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() const override
+    numeric_t toNumeric() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toNumeric();
@@ -128,7 +128,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const override
+    bool toBoolean() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toBoolean();
@@ -147,7 +147,7 @@ public:
      *  @param  size        size of the name
      *  @return VariantValue
      */
-    virtual VariantValue member(const char *name, size_t size) const override
+    VariantValue member(const char *name, size_t size) const override
     {
         // callbacks only return scalar values without members
         return nullptr;
@@ -156,7 +156,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount() const override
+    size_t memberCount() const override
     {
         // callbacks only return scalar variables without members
         return 0;
@@ -167,7 +167,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return VariantValue
      */
-    virtual VariantValue member(size_t position) const override
+    VariantValue member(size_t position) const override
     {
         // callbacks can only return scalar values, members will never
         // be retrieved
@@ -179,7 +179,7 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return VariantValue      VariantValue object, probably a string
      */
-    virtual VariantValue key(size_t position) const override
+    VariantValue key(size_t position) const override
     {
         // callbacks can only return simple scalar values, so retrieving
         // a key never happens
@@ -191,7 +191,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const override
+    size_t size() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->size();
@@ -207,7 +207,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const override
+    Iterator *iterator() const override
     {
         return nullptr;
     }

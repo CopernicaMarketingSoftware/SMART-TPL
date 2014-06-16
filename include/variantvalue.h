@@ -56,19 +56,19 @@ public:
      *  Convert the value to a string
      *  @return std::string
      */
-    virtual std::string toString() const override { return *_value; };
+    std::string toString() const override { return *_value; };
 
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() const override { return (numeric_t) *_value; };
+    numeric_t toNumeric() const override { return (numeric_t) *_value; };
 
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const override { return (bool) *_value; };
+    bool toBoolean() const override { return (bool) *_value; };
 
     /**
      *  Get access to a member value
@@ -78,7 +78,7 @@ public:
      *  @return Variant
      *
      */
-    virtual VariantValue member(const char *name, size_t size) const override
+    VariantValue member(const char *name, size_t size) const override
     {
         return (*_value)[name].value();
     }
@@ -87,7 +87,7 @@ public:
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    virtual size_t memberCount() const override
+    size_t memberCount() const override
     {
         return _value->size();
     }
@@ -97,7 +97,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    virtual VariantValue member(size_t position) const override
+    VariantValue member(size_t position) const override
     {
         return (*_value)[position].value();
     }
@@ -107,7 +107,7 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return Variant      Variant object, probably a string
      */
-    virtual VariantValue key(size_t position) const override
+    VariantValue key(size_t position) const override
     {
         // In case we're a vector we'll just return the position as our key
         if (_value->type() == Variant::ValueType::ValueVectorType) return std::to_string(position);
@@ -136,7 +136,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const override
+    size_t size() const override
     {
         std::string str = *_value;
         return str.size();
@@ -149,7 +149,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const override;
+    Iterator *iterator() const override;
 
     /**
      *  Equals and not equals to operators
