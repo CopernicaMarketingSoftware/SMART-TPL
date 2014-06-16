@@ -48,7 +48,7 @@ private:
     /**
      *  All managed values that should be cleaned up upon destruction
      */
-    std::list<std::shared_ptr<Value>> _managed_values;
+    std::list<std::unique_ptr<Value>> _managed_values;
 
     /**
      *  All modifiers
@@ -62,6 +62,10 @@ public:
      */
     Data();
 
+    /**
+     *  Contructor
+     *  @param  value    Use this Variant::Value (map assumed) to initialize your Data object
+     */
     Data(const Variant::Value& value);
 
     /**
@@ -77,15 +81,17 @@ public:
      */
     Data &assign(const char *name, const VariantValue &value);
     Data &assign(const std::string &name, const VariantValue &value) { return assign(name.c_str(), value); }
+    Data &assign(const char *name, Value *value);
+    Data &assign(const std::string &name, Value *value) { return assign(name.c_str(), value); }
 
     /**
-     *  Assign data that is managed by a shared pointer and keep managing it
+     *  Assign data, ownership will be taken!
      *  @param  name        Name of the variable
-     *  @param  value       A shared pointer to a VariantValue
+     *  @param  value       A unique pointer to a VariantValue
      *  @return Data        Same object for chaining
      */
-    Data &assignManaged(const char *name, std::shared_ptr<VariantValue> value);
-    Data &assignManaged(const std::string &name, std::shared_ptr<VariantValue> value) { return assignManaged(name.c_str(), value); }
+    Data &assignManaged(const char *name, Value *value);
+    Data &assignManaged(const std::string &name, Value *value) { return assignManaged(name.c_str(), value); }
 
     /**
      *  Assign a callback

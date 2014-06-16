@@ -77,10 +77,14 @@ Data::Data()
 {
 }
 
+/**
+ *  Contructor
+ *  @param  value    Use this Variant::Value (map assumed) to initialize your Data object
+ */
 Data::Data(const Variant::Value &value)
 : Data() // Call the default constructor so all the modifiers are still registered
 {
-    // Turn out Variant::Value into a map
+    // Turn our Variant::Value into a map
     std::map<std::string, ::Variant::Value> map = value;
 
     // Loop through the map and assign all the elements
@@ -96,22 +100,37 @@ Data::Data(const Variant::Value &value)
 Data &Data::assign(const char *name, const VariantValue &value)
 {
     // Create a copy of value and make it managed using assignManaged
-    return assignManaged(name, std::shared_ptr<VariantValue>(new VariantValue(value)));
+    return assignManaged(name, new VariantValue(value));
 }
 
 /**
- *  Assign data that is managed by a shared pointer and keep managing it
+ * Assign data
+ * @param  name         Name of the variable
+ * @param  value        Value of the variable
+ * @return Data         Same object for chaining
+ */
+Data &Data::assign(const char *name, Value *value)
+{
+    // append value
+    _variables[name] = value;
+
+    // allow chaining
+    return *this;
+}
+
+/**
+ *  Assign data that is managed by a unique pointer and keep managing it
  *  @param  name        Name of the variable
- *  @param  value       A shared pointer to a VariantValue
+ *  @param  value       A unique pointer to a VariantValue
  *  @return Data        Same object for chaining
  */
-Data &Data::assignManaged(const char *name, std::shared_ptr<VariantValue> value)
+Data &Data::assignManaged(const char *name, Value *value)
 {
     // append variable
-    _variables[name] = value.get();
+    _variables[name] = value;
 
     // make it managed
-    _managed_values.push_back(value);
+    _managed_values.emplace_back(value);
 
     // allow chaining
     return *this;
@@ -130,7 +149,7 @@ Data &Data::callback(const char *name, const Callback &callback, bool cache)
     Value *v = new CallbackValue(callback, cache);
 
     // make our Value managed
-    _managed_values.push_back(std::shared_ptr<Value>(v));
+    _managed_values.emplace_back(v);
     // and store in the list of variables
     _variables[name] = v;
 
