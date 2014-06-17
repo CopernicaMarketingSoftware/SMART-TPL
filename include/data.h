@@ -83,7 +83,7 @@ public:
     Data &assign(const char *name, const VariantValue &value);
     Data &assign(const std::string &name, const VariantValue &value) { return assign(name.c_str(), value); }
     Data &assign(const char *name, VariantValue &&value);
-    Data &assign(const std::string &name, VariantValue &&value) { return assign(name.c_str(), value); }
+    Data &assign(const std::string &name, VariantValue &&value) { return assign(name.c_str(), std::move(value)); }
 
     /**
      *  Assign custom values

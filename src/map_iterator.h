@@ -34,9 +34,9 @@ public:
      *  Constructor
      */
     MapIterator(const std::map<std::string, Variant::Value> &value)
-    : _map(value)
-    , _iter(_map.begin())
-    , _end(_map.end())
+    : _map(value),
+      _iter(_map.begin()),
+      _end(_map.end())
     {}
 
     /**

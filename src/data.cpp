@@ -45,35 +45,35 @@ static Internal::Base64DecodeModifier    base64_decode;
  *  Constructor
  */
 Data::Data()
-: _modifiers({{"toupper",          &toupper}
-             ,{"upper",            &toupper}
-             ,{"tolower",          &tolower}
-             ,{"lower",            &tolower}
-             ,{"cat",              &cat}
-             ,{"count_words",      &count_words}
-             ,{"count_characters", &count_characters}
-             ,{"count_paragraphs", &count_paragraphs}
-             ,{"default",          &_default}
-             ,{"escape",           &escape}
-             ,{"indent",           &indent}
-             ,{"replace",          &replace}
-             ,{"nl2br",            &nl2br}
-             ,{"spacify",          &spacify}
-             ,{"truncate",         &truncate}
-             ,{"count",            &count}
-             ,{"ucfirst",          &ucfirst}
-             ,{"trim",             &trim}
-             ,{"regex_replace",    &regex_replace}
-             ,{"substr",           &substr}
-             ,{"strstr",           &strstr}
-             ,{"urlencode",        &urlencode}
-             ,{"urldecode",        &urldecode}
-             ,{"md5",              &md5}
-             ,{"sha1",             &sha1}
-             ,{"sha256",           &sha256}
-             ,{"sha512",           &sha512}
-             ,{"base64_encode",    &base64_encode}
-             ,{"base64_decode",    &base64_decode}}) // register built-in modifiers
+: _modifiers({{"toupper",          &toupper},
+              {"upper",            &toupper},
+              {"tolower",          &tolower},
+              {"lower",            &tolower},
+              {"cat",              &cat},
+              {"count_words",      &count_words},
+              {"count_characters", &count_characters},
+              {"count_paragraphs", &count_paragraphs},
+              {"default",          &_default},
+              {"escape",           &escape},
+              {"indent",           &indent},
+              {"replace",          &replace},
+              {"nl2br",            &nl2br},
+              {"spacify",          &spacify},
+              {"truncate",         &truncate},
+              {"count",            &count},
+              {"ucfirst",          &ucfirst},
+              {"trim",             &trim},
+              {"regex_replace",    &regex_replace},
+              {"substr",           &substr},
+              {"strstr",           &strstr},
+              {"urlencode",        &urlencode},
+              {"urldecode",        &urldecode},
+              {"md5",              &md5},
+              {"sha1",             &sha1},
+              {"sha256",           &sha256},
+              {"sha512",           &sha512},
+              {"base64_encode",    &base64_encode},
+              {"base64_decode",    &base64_decode}}) // register built-in modifiers
 {
 }
 

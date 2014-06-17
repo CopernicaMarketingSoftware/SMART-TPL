@@ -35,7 +35,7 @@ public:
         std::string output(input.toString());
 
         // Loop through the parameters and add all of them to the output string
-        for (auto param : params) output.append(param.toString());
+        for (auto &param : params) output.append(param.toString());
 
         // return the output
         return output;

@@ -166,6 +166,20 @@ public:
     }
 
     /**
+     *  Assign an existing value to a local variable
+     *
+     *  @param value       The value we would like to assign
+     *  @param key         The name for our local variable
+     *  @param key_size    The size of key
+     */
+    void assign(const char *key, size_t key_size, VariantValue &&value)
+    {
+        VariantValue *copy = new VariantValue(std::move(value));
+        manageValue(copy);
+        _local_values[key] = copy;
+    }
+
+    /**
      *  Assign a just allocated Value to a specify key
      *
      *  @param  key         The name of our local variable

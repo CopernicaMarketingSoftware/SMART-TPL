@@ -34,9 +34,9 @@ public:
      *  Constructor
      */
     VectorIterator(const std::vector<Variant::Value> &value)
-    : _vector(value)
-    , _iter(_vector.begin())
-    , _end(_vector.end())
+    : _vector(value),
+      _iter(_vector.begin()),
+      _end(_vector.end())
     {}
 
     /**

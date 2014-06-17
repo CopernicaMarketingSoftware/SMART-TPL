@@ -37,6 +37,9 @@ public:
         // If we have parameters we have at least one, this being the toggle for whitespaces/no whitespaces
         if (params.size() >= 1) include_whitespaces = params[0].toBoolean();
 
+        // If we include whitespaces we might as well just return the size
+        if (include_whitespaces) return (long) input.size();
+
         // Let's just convert our input to a C string
         std::string str = input.toString();
         const char *cstr = str.c_str();
@@ -46,16 +49,8 @@ public:
         numeric_t output = 0;
         for (size_t i = 0; i < len; ++i)
         {
-            // Are we a whitespace?
-            if (std::isspace(cstr[i]))
-            {
-                // Yes we are, should we include whitespaces?
-                if (include_whitespaces) ++output;
-            }
-            else
-            {
-                ++output;
-            }
+            // Are we not a whitespace?
+            if (!std::isspace(cstr[i])) ++output;
         }
 
         // Return the output
