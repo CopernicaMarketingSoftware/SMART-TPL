@@ -45,7 +45,7 @@ public:
 
         // Init our output value
         numeric_t output = 0;
-        for (auto &c : str) {
+        for (auto c : str) {
             // Are we not a whitespace?
             if (!std::isspace(c)) ++output;
         }

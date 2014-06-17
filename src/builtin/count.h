@@ -32,7 +32,7 @@ public:
     virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // Simply return the member count
-        return (int) input.memberCount();
+        return (long) input.memberCount();
     }
 };
 

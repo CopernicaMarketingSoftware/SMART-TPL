@@ -39,7 +39,7 @@ public:
         const char hex[] = "0123456789ABCDEF";
 
         // Start looping through the input string
-        for (int i = 0; i < input.length(); ++i)
+        for (size_t i = 0; i < input.length(); ++i)
         {
             // Grab a reference to the current character so that we can easily overwrite it
             char &ch = input[i];

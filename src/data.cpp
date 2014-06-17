@@ -107,7 +107,7 @@ Data::Data(Variant::Value &&value)
  * @param  value        Value of the variable
  * @return Data         Same object for chaining
  */
-Data &Data::assign(const char *name, const VariantValue &value)
+Data &Data::assign(const std::string &name, const VariantValue &value)
 {
     // Create a copy of value and make it managed using assignManaged
     return assignManaged(name, new VariantValue(value));
@@ -119,7 +119,7 @@ Data &Data::assign(const char *name, const VariantValue &value)
  * @param  value        Value of the variable
  * @return Data         Same object for chaining
  */
-Data &Data::assign(const char *name, VariantValue &&value)
+Data &Data::assign(const std::string &name, VariantValue &&value)
 {
     // Create a copy of value and make it managed using assignManaged
     return assignManaged(name, new VariantValue(std::move(value)));
@@ -131,7 +131,7 @@ Data &Data::assign(const char *name, VariantValue &&value)
  *  @param  value      Pointer to your custom value object
  *  @return Data       Same object for chaining
  */
-Data &Data::assignValue(const char *name, Value *value)
+Data &Data::assignValue(const std::string &name, Value *value)
 {
     // append value
     _variables[name] = value;
@@ -146,7 +146,7 @@ Data &Data::assignValue(const char *name, Value *value)
  *  @param  value       A unique pointer to a VariantValue
  *  @return Data        Same object for chaining
  */
-Data &Data::assignManaged(const char *name, Value *value)
+Data &Data::assignManaged(const std::string &name, Value *value)
 {
     // append variable
     _variables[name] = value;
@@ -165,7 +165,7 @@ Data &Data::assignManaged(const char *name, Value *value)
  *  @param  cache       Should we cache calls to your callback?
  *  @return Data        Same object for chaining
  */
-Data &Data::callback(const char *name, const Callback &callback, bool cache)
+Data &Data::callback(const std::string &name, const Callback &callback, bool cache)
 {
     // construct variable
     Value *v = new CallbackValue(callback, cache);
@@ -185,7 +185,7 @@ Data &Data::callback(const char *name, const Callback &callback, bool cache)
  *  @param  modifier    Pointer to the modifier object
  *  @return Data
  */
-Data &Data::modifier(const char *name, Modifier* modifier)
+Data &Data::modifier(const std::string &name, Modifier* modifier)
 {
     // assign variable
     _modifiers[name] = modifier;

@@ -59,7 +59,7 @@ public:
         output.append(indent);
 
         // Loop through all the characters of our input
-        for (auto &c : str)
+        for (auto c : str)
         {
             output += c;
 

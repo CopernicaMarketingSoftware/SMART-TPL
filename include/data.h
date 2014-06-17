@@ -23,27 +23,10 @@ class Data
 {
 private:
     /**
-     *  Compare functor necessary for the map
-     */
-    struct cmp_str
-    {
-        /**
-         *  Invoke operator
-         *  @param  a      First string for the comparison
-         *  @param  b      Second string for the comparison
-         *  @return bool
-         */
-        bool operator()(char const *a, char const *b) const
-        {
-            return std::strcmp(a, b) < 0;
-        }
-    };
-
-    /**
      *  All variables, indexed by name
      *  @var    std::map
      */
-    std::map<const char *, const Value*, cmp_str> _variables;
+    std::map<std::string, const Value*> _variables;
 
     /**
      *  All managed values that should be cleaned up upon destruction
@@ -54,7 +37,7 @@ private:
      *  All modifiers
      *  @var std::map
      */
-    std::map<const char *, Modifier*, cmp_str> _modifiers;
+    std::map<std::string, Modifier*> _modifiers;
 
 public:
     /**
@@ -80,10 +63,8 @@ public:
      *  @param  value       Value of the variable
      *  @return Data        Same object for chaining
      */
-    Data &assign(const char *name, const VariantValue &value);
-    Data &assign(const std::string &name, const VariantValue &value) { return assign(name.c_str(), value); }
-    Data &assign(const char *name, VariantValue &&value);
-    Data &assign(const std::string &name, VariantValue &&value) { return assign(name.c_str(), std::move(value)); }
+    Data &assign(const std::string &name, const VariantValue &value);
+    Data &assign(const std::string &name, VariantValue &&value);
 
     /**
      *  Assign custom values
@@ -91,8 +72,7 @@ public:
      *  @param  value      Pointer to your custom value object
      *  @return Data       Same object for chaining
      */
-    Data &assignValue(const char *name, Value *value);
-    Data &assignValue(const std::string &name, Value *value) { return assign(name.c_str(), value); }
+    Data &assignValue(const std::string &name, Value *value);
 
     /**
      *  Assign data, ownership will be taken!
@@ -100,8 +80,7 @@ public:
      *  @param  value       A pointer to a Value
      *  @return Data        Same object for chaining
      */
-    Data &assignManaged(const char *name, Value *value);
-    Data &assignManaged(const std::string &name, Value *value) { return assignManaged(name.c_str(), value); }
+    Data &assignManaged(const std::string &name, Value *value);
 
     /**
      *  Assign a callback
@@ -112,8 +91,7 @@ public:
      *  @param  cache       Should we cache calls to your callback?
      *  @return Data        Same object for chaining
      */
-    Data &callback(const char *name, const Callback &callback, bool cache = false);
-    Data &callback(const std::string &name, const Callback &call, bool cache = false) { return callback(name.c_str(), call, cache); }
+    Data &callback(const std::string &name, const Callback &call, bool cache = false);
 
     /**
      *  Register a modifier
@@ -121,8 +99,7 @@ public:
      *  @param  modifier    Pointer to the modifier object
      *  @return Data        Same object for chaining
      */
-    Data &modifier(const char *name, Modifier *modifier);
-    Data &modifier(const std::string &name, Modifier *mod) { return modifier(name.c_str(), mod); }
+    Data &modifier(const std::string &name, Modifier *mod);
 
     /**
      *  Retrieve a variable pointer by name

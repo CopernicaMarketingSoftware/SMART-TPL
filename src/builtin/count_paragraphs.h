@@ -36,7 +36,7 @@ public:
 
         // Init our output value
         numeric_t output = 0;
-        for (auto &c : str)
+        for (auto c : str)
         {
             // We're really just counting the \n and \r's
             if (c == '\n' || c == '\r') ++output;
