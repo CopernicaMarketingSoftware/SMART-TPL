@@ -25,6 +25,12 @@ private:
     const std::string _format;
 
     /**
+     *  The timestamp to format, in case this is 0 we'll print the current time
+     *  @var   std::time_t
+     */
+    const std::time_t _timestamp;
+
+    /**
      *  Buffer that will hold the current output
      */
     mutable std::string _buffer;
@@ -36,7 +42,12 @@ private:
     void initializeDate() const
     {
         // Get the current time
-        std::time_t time = std::time(NULL);
+        std::time_t time = _timestamp;
+
+        // If time is 0 we want to current time
+        if (time == 0) time = std::time(NULL);
+        // if our buffer isn't empty and our time was already set we have everything we need so we return
+        else if (!_buffer.empty()) return;
 
         // Convert it to our local time
         std::tm *timeinfo = std::localtime(&time);
@@ -80,8 +91,9 @@ public:
      *                documentation regarding the format please head over to
      *                http://en.cppreference.com/w/cpp/chrono/c/strftime
      */
-    DateValue(const std::string &format)
-    : _format(format) {
+    DateValue(const std::string &format, const std::time_t timestamp = 0)
+    : _format(format)
+    , _timestamp(timestamp) {
         _buffer.reserve(_format.size());
         if (_format.empty()) throw std::runtime_error("A DateValue with an empty format is undefined");
     }
