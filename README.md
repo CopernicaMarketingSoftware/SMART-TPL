@@ -16,7 +16,7 @@ Templates are stored in *.tpl files, and contain HTML code mixed with special
 <html>
  <body>
   Hello {$name}!
-  
+
   {if $age > 18}
     You are older than 18.
   {/if}
@@ -99,7 +99,7 @@ void example1()
 
     // create the template object
     SmartTpl::Template tpl(source);
-    
+
     // output the template to stdout
     std::cout << tpl;
 }
@@ -109,10 +109,10 @@ void example2()
 {
     // use a template available in mempory
     SmartTpl::Buffer source("<html>....</html>", 12345);
-    
+
     // create the template object
     SmartTpl::Template tpl(source);
-    
+
     // output the template to stdout
     std::cout << tpl;
 }
@@ -125,7 +125,7 @@ void example3()
 
     // create the template object
     SmartTpl::Template tpl(source);
-    
+
     // output the template to stdout
     std::cout << tpl;
 }
@@ -150,14 +150,14 @@ void example()
 {
     // create a template
     SmartTpl::Template tpl(SmartTpl::File("mytemplate.tpl"));
-    
+
     // create a data object
     SmartTpl::Data data;
-    
+
     // assign data
     data.assign("name", "John Doe")
         .assign("age", 32);
-    
+
     // show the template
     std::cout << tpl.process(data);
 }
@@ -179,20 +179,19 @@ void example()
 {
     // create a template
     SmartTpl::Template tpl(SmartTpl::File("mytemplate.tpl"));
-    
+
     // create a data object
     SmartTpl::Data data;
-    
+
     // assign data
-    data.assignCallback("name", []() -> const char * {
-    
-        // @todo 
-        //      find out the value of the name, for example by starting
-        //      a database query
-    
+    data.callback("name", []() -> const char * {
+
+        // @todo find out the value of the name, for example by starting
+        //       a database query
+
         return name;
     });
-    
+
     // show the template
     std::cout << tpl.process(data);
 }
@@ -225,33 +224,42 @@ public:
      *
      *  @return const char *
      */
-    virtual const char *toString() override
+    virtual std::string toString() const override
     {
         return "abcd";
     }
-    
+
     /**
      *  Method that returns the size of the variable (which is the length of
      *  the string).
      *
      *  @return size_t
      */
-    virtual size_t size() override
+    virtual size_t size() const override
     {
         return 4;
     }
-    
+
     /**
      *  Method that gets called when the variable is used in a numeric 
      *  context, to turn the variable into an integer
      *
-     *  @return int
+     *  @return numeric_t
      */
-    virtual int toNumeric() override
+    virtual numeric_t toNumeric() const override
     {
         return 0;
     }
-    
+
+    /**
+     *  Convert the variable to a boolean value
+     *  @return bool
+     */
+    virtual bool toBoolean() const override
+    {
+        return false;
+    }
+
     /**
      *  Method that gets called when a member is accessed. This is called
      *  when the variable is accessed in the template as {$var.x} or {$var[$x]}
@@ -259,16 +267,61 @@ public:
      *  This method should return a SmartTpl::Value object.
      *
      *  @param  name        name of the member
+     *  @param  size        size of name
      *  @return Value       Pointer to a new value
      */
-    virtual SmartTpl::Value member(const char *name) override
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         // check the name
         if (strcmp(name, "x") == 0) return SomeOtherValue();
         if (strcmp(name, "self") == 0) return this;
-        
+
         // not found
         return nullptr;
+    }
+
+    /**
+     *  Get access to the amount of members this value has
+     *  @return size_t
+     */
+    virtual size_t memberCount() const override
+    {
+        return 1;
+    }
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param  position    Position of the item we want to retrieve
+     *  @return Variant
+     */
+    virtual VariantValue member(size_t position) const override
+    {
+        // Not implemented, always return empty values
+        return nullptr;
+    }
+
+    /**
+     *  Get access to the key at a certain position
+     *  @param  position     Position of the key we want to retrieve
+     *  @return Variant      Variant object, probably a string
+     */
+    virtual VariantValue key(size_t position) const override
+    {
+        // Not implemented, always return empty values
+        return nullptr;
+    }
+
+    /**
+     *  Create a new iterator that allows you to iterate over the subvalues
+     *  feel free to return nullptr from here in case memberCount returns 0
+     *  as this method won't ever get called in that case anyway.
+     *
+     *  @return Newly allocated Iterator
+     */
+    virtual Iterator *iterator() const override
+    {
+        // Return a custom implementation of Iterator
+        return new CustomIterator(this);
     }
 };
 
@@ -277,13 +330,13 @@ void example()
 {
     // create a template
     SmartTpl::Template tpl(SmartTpl::File("mytemplate.tpl"));
-    
+
     // create a data object
     SmartTpl::Data data;
-    
+
     // assign data
-    data.assign("name", new MyValue());
-    
+    data.assignManaged("name", new MyValue());
+
     // show the template
     std::cout << tpl.process(data);
 }
