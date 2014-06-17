@@ -46,6 +46,8 @@ public:
 
     VariantValue(const Variant::Value &value) : _value(new Variant::Value(value)) {}
     VariantValue(const VariantValue &that) : _value(that._value) {}
+    VariantValue(Variant::Value &&value) : _value(new Variant::Value(std::move(value))) {}
+    VariantValue(VariantValue &&value) = default;
 
     /**
      *  Destructor
