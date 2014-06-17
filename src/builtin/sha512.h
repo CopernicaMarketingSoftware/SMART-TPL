@@ -41,7 +41,7 @@ public:
         std::ostringstream stream;
         stream << std::setfill('0') << std::hex;
 
-        for (int i = 0; i < sizeof(digest); ++i) stream << std::setw(2) << ((unsigned int) digest[i]);
+        for (size_t i = 0; i < sizeof(digest); ++i) stream << std::setw(2) << ((unsigned int) digest[i]);
 
         // Return our stream as a string
         return stream.str();

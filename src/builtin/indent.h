@@ -48,22 +48,23 @@ public:
         std::string output;
 
         std::string str = input.toString();
-        const char *cstr = str.c_str();
-        size_t len = str.size();
-        output.reserve(len);
+        output.reserve(str.size());
 
-        // Append our indent character indent times
-        for (int i = 0; i < indents; ++i) output.append(character);
+        // Build our final ident
+        std::string indent;
+        indent.reserve(indents * character.size());
+        for (int i = 0; i < indents; ++i) indent.append(character);
+
+        // prepend the indent to the output
+        output.append(indent);
 
         // Loop through all the characters of our input
-        for (int i = 0; i < len; ++i)
+        for (auto &c : str)
         {
-            output += cstr[i];
-            if (cstr[i] == '\n')
-            {
-                // if we happen to see a new line add some indentation
-                for (int j = 0; j < indents; ++j) output.append(character);
-            }
+            output += c;
+
+            // everytime we hit a new line we append an indent
+            if (c == '\n') output.append(indent);
         }
 
         // Return the output

@@ -35,25 +35,26 @@ public:
         std::string seperator(" ");
 
         // If we have parameters we have at least one, then this is our custom seperator
-        if (params.size() >= 1) seperator = std::string(params[0].toString());
+        if (params.size() >= 1) seperator = params[0].toString();
 
         // Let's just convert our input to a C string
         std::string str(input.toString());
-        const char *cstr = str.c_str();
-        size_t len = str.size();
 
         // Init our output value
         std::string output;
 
         // Reserve the amount of space we'll need which is the original length * (length of seperator + 1)
-        output.reserve(len * (seperator.length() + 1));
-        for (size_t i = 0; i < len; ++i)
+        output.reserve(str.size() * (seperator.length() + 1));
+        for (auto &c : str)
         {
-            output += cstr[i];
+            output += c;
 
-            // If this is not our last character append the seperator
-            if (i != (len - 1)) output.append(seperator);
+            // append the seperator
+            output.append(seperator);
         }
+
+        // Simply erase the last seperator
+        output.erase(output.size() - seperator.size());
 
         // Return the output
         return output;

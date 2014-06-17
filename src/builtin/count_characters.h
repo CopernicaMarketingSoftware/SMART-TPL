@@ -42,15 +42,12 @@ public:
 
         // Let's just convert our input to a C string
         std::string str = input.toString();
-        const char *cstr = str.c_str();
-        size_t len = str.size();
 
         // Init our output value
         numeric_t output = 0;
-        for (size_t i = 0; i < len; ++i)
-        {
+        for (auto &c : str) {
             // Are we not a whitespace?
-            if (!std::isspace(cstr[i])) ++output;
+            if (!std::isspace(c)) ++output;
         }
 
         // Return the output
