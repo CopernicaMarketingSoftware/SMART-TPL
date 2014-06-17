@@ -43,13 +43,33 @@ private:
 
         // Print it into _buffer using strftime
         // http://en.cppreference.com/w/cpp/chrono/c/strftime
-        std::size_t len = std::strftime(&_buffer[0], _buffer.capacity(), _format.c_str(), timeinfo);
+        // First declare a char buffer
+        char buf[_buffer.capacity()];
+
+        // Then print into our character buffer
+        std::size_t len = std::strftime(buf, _buffer.capacity(), _format.c_str(), timeinfo);
+
+        // as long as len is 0 we failed printing it, so increase our _buffer and redeclare a char buffer
         while (len == 0)
         {
-            // if strftime failed increase the buffer capacity and try again
+            // reserve more space in _buffer
             _buffer.reserve(_buffer.capacity() * 2);
-            len = std::strftime(&_buffer[0], _buffer.capacity(), _format.c_str(), timeinfo);
+
+            // declare a new char buffer
+            char nbuf[_buffer.capacity()];
+
+            // call strftime again
+            len = std::strftime(nbuf, _buffer.capacity(), _format.c_str(), timeinfo);
+            if (len > 0)
+            {
+                // if std::strftime returned more than 0 assign nbuf to _buffer and return
+                _buffer = nbuf;
+                return;
+            }
         }
+
+        // If we reach this we never entered the loop, so just assign the original buf
+        _buffer = buf;
     }
 
 public:

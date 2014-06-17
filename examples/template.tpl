@@ -8,7 +8,7 @@
         {if true}
             And a conditional text
         {/if}
-        {$variable.member[0]}
+        {$variable.member}
         {foreach $key in $variable}
             {$key}
         {/foreach}

@@ -97,7 +97,7 @@ public:
     /**
      *  Assign data, ownership will be taken!
      *  @param  name        Name of the variable
-     *  @param  value       A unique pointer to a VariantValue
+     *  @param  value       A pointer to a Value
      *  @return Data        Same object for chaining
      */
     Data &assignManaged(const char *name, Value *value);

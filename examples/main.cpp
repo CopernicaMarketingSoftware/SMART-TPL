@@ -26,20 +26,17 @@ int main(int argc, const char *argv[])
         SmartTpl::Data data;
 
         // assign variables
-        SmartTpl::MapValue *map = new SmartTpl::MapValue;
-        map->assign("member", "Test")
-            .assign("anothermember", "Testing 1 2 3..");
-        SmartTpl::DateValue *date = new SmartTpl::DateValue("%A %d %B %Y %T");
-        data.assign("map", std::shared_ptr<SmartTpl::Value>(map))
-            .callback("name", []() { return "TOON"; })
-            .assign("date", std::shared_ptr<SmartTpl::Value>(date))
+        Variant::Value map;
+        map["member"] = "Test";
+        map["anothermember"] = "Testing 1 2 3..";
+        SmartTpl::DateValue date("%A %d %B %Y %T");
+        data.assign("variable", map)
+            .callback("name", []() { return "naam"; })
+            .assignValue("date", &date)
             .assign("x", "Mr. x");
-        // do a number of attempts
-        for (int x=0; x<10; x++)
-        {
-            // output the template
-            std::cout << tpl.process(data) << std::endl;
-        }
+
+        // output the template
+        std::cout << tpl.process(data) << std::endl;
     }
 }
 
