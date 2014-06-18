@@ -53,6 +53,12 @@ public:
     Data(Variant::Value &&value);
 
     /**
+     *  Deleted copy and move constructor
+     */
+    Data(const Data &that) = delete;
+    Data(Data&& that) = delete;
+
+    /**
      *  Destructor
      */
     virtual ~Data() {}
