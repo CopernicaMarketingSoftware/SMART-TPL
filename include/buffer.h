@@ -48,6 +48,7 @@ public:
      *  @param  buffer      Create buffer from a std::string
      */
     Buffer(const std::string &buffer) : _buffer(buffer) {}
+    Buffer(std::string &&buffer) : _buffer(std::move(buffer)) {}
 
     /**
      *  Destructor
