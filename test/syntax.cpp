@@ -145,3 +145,10 @@ TEST(Syntax, NotExistingFunction)
     string input("{invalid}");
     EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
 }
+
+TEST(Syntax, LiteralContentSpace)
+{
+    string input("{ width=100;}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}

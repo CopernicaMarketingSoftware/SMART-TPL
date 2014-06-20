@@ -82,6 +82,7 @@
 "{/if}"             { return TOKEN_ENDIF; }
 "{endif}"           { return TOKEN_ENDIF; }
 "{foreachelse}"     { return TOKEN_FOREACH_ELSE; }
+"{ "[^}]*"}"        { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{"                 { BEGIN(INSIDE_CURLY_BRACES); }
 "{"[a-zA-Z]*"}"     { return -1; };
 
