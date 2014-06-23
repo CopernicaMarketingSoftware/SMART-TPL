@@ -79,7 +79,7 @@ public:
      *  Returns the current token
      *  @return Token*
      */
-    Token* token() { return _token; };
+    Token* token() const { return _token; };
 };
 
 /**

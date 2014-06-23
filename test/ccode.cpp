@@ -385,3 +385,17 @@ TEST(CCode, Encoded)
 
     compile(tpl);
 }
+
+TEST(CCode, LiteralBlock)
+{
+    string input("{literal}{width=100;}{$var}{if}1 2 3{/literal}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->write(userdata,\"{width=100;}{$var}{if}1 2 3\",27);\n}\n"
+    "const char *mode = \"raw\";\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
+
+    compile(tpl);
+}

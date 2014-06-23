@@ -53,6 +53,7 @@
 %x INSIDE_CURLY_BRACES
 %x IDENTIFIER
 %x STRING
+%x LITERAL
 
 /**
  *  The rules start here
@@ -82,6 +83,7 @@
 "{/if}"             { return TOKEN_ENDIF; }
 "{endif}"           { return TOKEN_ENDIF; }
 "{foreachelse}"     { return TOKEN_FOREACH_ELSE; }
+"{literal}"         { BEGIN(LITERAL); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it later
 "{ "[^}]*"}"        { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{"                 { BEGIN(INSIDE_CURLY_BRACES); }
 "{"[a-zA-Z]*"}"     { return -1; };
@@ -104,7 +106,7 @@
     "="                         { return TOKEN_IS; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
-    "\""                        { BEGIN(STRING); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); }
+    "\""                        { BEGIN(STRING); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
@@ -137,6 +139,13 @@
     "\\\""                      { yyextra->token()->append("\"", 1); }
     "\\"                        { yyextra->token()->append("\\", 1); }
     "\""                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
+}
+
+<LITERAL>{
+    "\n"                        { yyextra->increaseLine(); yyextra->token()->append("\n"); }
+    [^{\n]+                     { yyextra->token()->append(yytext, yyleng); }
+    "{"                         { yyextra->token()->append("{"); }
+    "{/literal}"                { BEGIN(INITIAL); return TOKEN_RAW; }
 }
 
 %%

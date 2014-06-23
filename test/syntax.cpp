@@ -152,3 +152,10 @@ TEST(Syntax, LiteralContentSpace)
     Template tpl((Buffer(input)));
     compile(tpl);
 }
+
+TEST(Syntax, LiteralBlock)
+{
+    string input("{literal}{width=100;}{$test}1 2 3{/literal}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
