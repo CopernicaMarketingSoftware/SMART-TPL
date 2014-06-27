@@ -16,7 +16,7 @@ $(BINARY): $(DEPS) $(MODS) main.cpp
 	$(CXX) $(CXXFLAGS) $(DEFINES) $(INC) -o $(BINARY) $(DEPS) libgtest.a -pthread ../libsmarttpl.so -lvariant
 
 libgtest.a:
-	wget -q http://googletest.googlecode.com/files/gtest-1.7.0.zip
+	wget -q https://googletest.googlecode.com/files/gtest-1.7.0.zip
 	unzip -qq gtest-1.7.0.zip
 	$(CXX) $(CXXFLAGS) -I gtest-1.7.0/include -I gtest-1.7.0 -c gtest-1.7.0/src/gtest-all.cc
 	ar -rv libgtest.a gtest-all.o
