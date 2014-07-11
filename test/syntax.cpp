@@ -159,3 +159,45 @@ TEST(Syntax, LiteralBlock)
     Template tpl((Buffer(input)));
     compile(tpl);
 }
+
+TEST(Syntax, Equals)
+{
+    string input("{if true eq true}true{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, NotEquals)
+{
+    string input("{if true ne false}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, GreaterThan)
+{
+    string input("{if 1 gt 2}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, GreaterThanElse)
+{
+    string input("{if 1 ge 1}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, LessThan)
+{
+    string input("{if 1 lt 2}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
+TEST(Syntax, LessThanEquals)
+{
+    string input("{if 1 le 2}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}

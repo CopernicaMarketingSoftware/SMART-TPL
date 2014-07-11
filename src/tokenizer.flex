@@ -117,12 +117,18 @@
     "*"                         { return TOKEN_MULTIPLY; }
     "/"                         { return TOKEN_DIVIDE; }
     "=="                        { return TOKEN_EQ; }
+    " eq "                      { return TOKEN_EQ; }
     "!="                        { return TOKEN_NE; }
     "<>"                        { return TOKEN_NE; }
+    " ne "                      { return TOKEN_NE; }
     ">"                         { return TOKEN_GT; }
+    " gt "                      { return TOKEN_GT; }
     "<"                         { return TOKEN_LT; }
+    " lt "                      { return TOKEN_LT; }
     ">="                        { return TOKEN_GE; }
+    " ge "                      { return TOKEN_GE; }
     "<="                        { return TOKEN_LE; }
+    " le "                      { return TOKEN_LE; }
     "&&"                        { return TOKEN_AND; }
     "||"                        { return TOKEN_OR; }
     "|"                         { BEGIN(IDENTIFIER); return TOKEN_PIPE; }
