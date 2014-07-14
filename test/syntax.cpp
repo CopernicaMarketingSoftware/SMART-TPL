@@ -176,7 +176,7 @@ TEST(Syntax, NotEquals)
 
 TEST(Syntax, GreaterThan)
 {
-    string input("{if 1 \tgte 2 or 2 gt 1}true{else}false{/if}");
+    string input("{if 1 \tgte 2 OR 2 gt 1}true{else}false{/if}");
     Template tpl((Buffer(input)));
     compile(tpl);
 }
