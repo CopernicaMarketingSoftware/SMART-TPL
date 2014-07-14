@@ -148,7 +148,7 @@
 }
 
 <LITERAL>{
-    "\n"                        { yyextra->increaseLine(); yyextra->token()->append("\n"); }
+    "\n"                        { yyextra->increaseLine(); yyextra->token()->push_back('\n'); }
     [^{\n]+                     { yyextra->token()->append(yytext, yyleng); }
     "{"                         { yyextra->token()->append("{"); }
     "{/literal}"                { BEGIN(INITIAL); return TOKEN_RAW; }
