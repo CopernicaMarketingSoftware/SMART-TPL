@@ -134,6 +134,7 @@
     "|"                         { BEGIN(IDENTIFIER); return TOKEN_PIPE; }
     ":"                         { return TOKEN_COLON; }
     "}"                         { BEGIN(INITIAL); return TOKEN_END_BRACES; }
+    .                           { return -1; }
 }
 
 <IDENTIFIER>{

@@ -201,3 +201,9 @@ TEST(Syntax, LessThanEquals)
     Template tpl((Buffer(input)));
     compile(tpl);
 }
+
+TEST(Syntax, NonExistingOperator)
+{
+    string input("{if 1 notanoperator 2}true{else}false{/if}");
+    EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
+}
