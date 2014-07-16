@@ -41,7 +41,7 @@ private:
      */
     void initializeDate() const
     {
-        // Get the current time
+        // Get the current timestamp
         std::time_t time = _timestamp;
 
         // If time is 0 we want to current time
@@ -122,7 +122,14 @@ public:
      */
     virtual numeric_t toNumeric() const override
     {
-        return time(NULL);
+        // Get the current timestamp
+        std::time_t time = _timestamp;
+
+        // If time is 0 we want to current time
+        if (time == 0) time = std::time(NULL);
+
+        // return the timestamp
+        return time;
     }
 
     /**
