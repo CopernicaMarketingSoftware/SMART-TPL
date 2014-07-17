@@ -67,7 +67,7 @@ private:
      *
      *  Can also contain externally created Values that were made managed using manageValue(Value*)
      */
-    std::list<std::shared_ptr<const Value>> _managed_local_values;
+    std::list<std::unique_ptr<const Value>> _managed_local_values;
 
 
 public:
@@ -233,7 +233,7 @@ public:
     bool manageValue(const Value *value)
     {
         // Check if someone is already managing value or not
-        for (auto v : _managed_local_values)
+        for (auto &v : _managed_local_values)
         {
             // In case we found it that means that we are already managed
             if (v.get() == value) return false;
