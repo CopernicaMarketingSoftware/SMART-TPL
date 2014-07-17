@@ -88,3 +88,28 @@ TEST(Encoding, HtmlEncodingRawOverride)
         EXPECT_EQ("<b>This is <i>This shouldn't be escaped!</i></b>", library.process(data, "raw"));
     }
 }
+
+TEST(Encoding, HtmlToRawUnicode)
+{
+    string input("{escape}{$test} ( ͡° ͜ʖ ͡°)");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("test", "( ͡° ͜ʖ ͡°)");
+    string expectedOutput("#include <smarttpl/callbacks.h>\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->output(userdata,callbacks->variable(userdata,\"test\",4),1);\n"
+    "callbacks->write(userdata,\" ( \xCD\xA1\xC2\xB0 \xCD\x9C\xCA\x96 \xCD\xA1\xC2\xB0)\",18);\n}\n"
+    "const char *mode = \"html\";\n");
+    EXPECT_EQ(expectedOutput, tpl.compile());
+
+    EXPECT_EQ("( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°)", tpl.process(data));
+    EXPECT_EQ("( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°)", tpl.process(data, "raw"));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°)", library.process(data)); // We compiled it in html mode so default is html
+        EXPECT_EQ("( ͡° ͜ʖ ͡°) ( ͡° ͜ʖ ͡°)", library.process(data, "raw")); // We request raw mode, so it decodes it for us
+    }
+}

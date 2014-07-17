@@ -41,11 +41,6 @@
     #define YYSTACKDEPTH 1000
 }
 
-%parse_accept
-{
-    // code that is executed when the file was accepted
-}
-
 %parse_failure
 {
     parent->parseFailure();
