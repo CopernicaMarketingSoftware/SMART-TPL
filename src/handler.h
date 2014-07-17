@@ -240,7 +240,7 @@ public:
         }
 
         // If they are not we start managing it
-        _managed_local_values.push_back(std::shared_ptr<const Value>(value));
+        _managed_local_values.emplace_back(value);
 
         // Return true to indicate that we are now managing value
         return true;

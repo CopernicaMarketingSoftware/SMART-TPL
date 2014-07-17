@@ -47,7 +47,7 @@ public:
     void add(Statement *statement)
     {
         // add first statement
-        _statements.push_back(std::unique_ptr<Statement>(statement));
+        _statements.emplace_back(statement);
     }
 
     /**

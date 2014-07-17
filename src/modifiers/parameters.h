@@ -51,7 +51,7 @@ public:
      */
     void add(const Expression *expression)
     {
-        _parameters.push_back(std::unique_ptr<const Expression>(expression));
+        _parameters.emplace_back(expression);
     }
 
     /**

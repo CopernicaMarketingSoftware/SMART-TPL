@@ -51,7 +51,7 @@ public:
      */
     void add(const ModifierExpression *modifier)
     {
-        _modifiers.push_back(std::unique_ptr<const ModifierExpression>(modifier));
+        _modifiers.emplace_back(modifier);
     }
 
     /**
