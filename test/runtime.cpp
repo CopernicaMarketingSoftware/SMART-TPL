@@ -379,3 +379,20 @@ TEST(RunTime, CompareVarVar)
         EXPECT_EQ("false", library.process(data2));
     }
 }
+
+TEST(RunTime, Int64)
+{
+    string input("{if $int64 > 2147483647}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("int64", 922337203685477580);
+
+    EXPECT_EQ("true", tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ("true", tpl.process(data));
+    }
+}
