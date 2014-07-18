@@ -258,7 +258,7 @@ void CCode::numeric(numeric_t value)
  *  Create a string constant for a variable
  *  @param  variable
  */
-void CCode::string(const Variable *variable)
+void CCode::stringVariable(const Variable *variable)
 {
     // call the to_string method
     _out << "callbacks->to_string(userdata,";
@@ -280,7 +280,7 @@ void CCode::string(const Variable *variable)
  *  Create a string or numeric constant for a variable
  *  @param  variable
  */
-void CCode::numeric(const Variable *variable)
+void CCode::numericVariable(const Variable *variable)
 {
     // call the to_numeric method
     _out << "callbacks->to_numeric(userdata,";
@@ -296,7 +296,7 @@ void CCode::numeric(const Variable *variable)
  *  Create a boolean constant for a variable
  *  @param  variable
  */
-void CCode::boolean(const Variable *variable)
+void CCode::booleanVariable(const Variable *variable)
 {
     // call the to_numeric method
     _out << "callbacks->to_boolean(userdata,";

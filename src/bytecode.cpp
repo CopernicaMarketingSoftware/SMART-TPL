@@ -140,8 +140,8 @@ jit_value Bytecode::pop()
 void Bytecode::raw(const std::string &data)
 {
     // we need a constant of the buffer, and the buffer size
-    jit_value buffer = _function.new_constant((void *)data.c_str(), jit_type_void_ptr);
-    jit_value size = _function.new_constant(data.size(), jit_type_sys_int);
+    jit_value buffer = _function.new_constant((void *)data.data(), jit_type_void_ptr);
+    jit_value size = _function.new_constant(data.size(), jit_type_sys_ulonglong);
 
     // call the write function
     _callbacks.write(_userdata, buffer, size);
@@ -166,7 +166,7 @@ jit_value Bytecode::pointer(const Variable *variable)
  *  @param  expression
  *  @return jit_value
  */
-jit_value Bytecode::numeric(const Expression *expression)
+jit_value Bytecode::numericExpression(const Expression *expression)
 {
     // create on the stack
     expression->numeric(this);
@@ -180,7 +180,7 @@ jit_value Bytecode::numeric(const Expression *expression)
  *  @param  expression
  *  @return jit_value
  */
-jit_value Bytecode::boolean(const Expression *expression)
+jit_value Bytecode::booleanExpression(const Expression *expression)
 {
     // create on the stack
     expression->boolean(this);
@@ -258,7 +258,7 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
     jit_label endlabel = _function.new_label();
 
     // branche to the label if the expression is not valid
-    _function.insn_branch_if_not(boolean(expression), elselabel);
+    _function.insn_branch_if_not(booleanExpression(expression), elselabel);
 
     // now we should create the if statements
     ifstatements->generate(this);
@@ -285,8 +285,8 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
 void Bytecode::varPointer(const Variable *parent, const std::string &name)
 {
     // we need a constant of the name, and the name size
-    jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
-    jit_value namesize = _function.new_constant(name.size(), jit_type_sys_int);
+    jit_value namevalue = _function.new_constant((void *)name.data(), jit_type_void_ptr);
+    jit_value namesize = _function.new_constant(name.size(), jit_type_sys_ulonglong);
 
     // call the native function to retrieve the member of a variable, and store the pointer
     // to the variable on the stack
@@ -336,8 +336,8 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 void Bytecode::varPointer(const std::string &name)
 {
     // we need a constant of the name, and the name size
-    jit_value namevalue = _function.new_constant((void *)name.c_str(), jit_type_void_ptr);
-    jit_value namesize = _function.new_constant(name.size(), jit_type_sys_int);
+    jit_value namevalue = _function.new_constant((void *)name.data(), jit_type_void_ptr);
+    jit_value namesize = _function.new_constant(name.size(), jit_type_sys_ulonglong);
 
     // push the variable on the stack
     _stack.push(_callbacks.variable(_userdata, namevalue, namesize));
@@ -351,8 +351,8 @@ void Bytecode::varPointer(const std::string &name)
 void Bytecode::string(const std::string &value)
 {
     // push buffer and size
-    _stack.push(_function.new_constant((void *)value.c_str(), jit_type_void_ptr));
-    _stack.push(_function.new_constant(value.size(), jit_type_sys_int));
+    _stack.push(_function.new_constant((void *)value.data(), jit_type_void_ptr));
+    _stack.push(_function.new_constant(value.size(), jit_type_sys_ulonglong));
 }
 
 /**
@@ -363,7 +363,7 @@ void Bytecode::string(const std::string &value)
 void Bytecode::numeric(numeric_t value)
 {
     // push value
-    _stack.push(_function.new_constant(value, jit_type_sys_int));
+    _stack.push(_function.new_constant(value, jit_type_sys_longlong));
 }
 
 /**
@@ -371,7 +371,7 @@ void Bytecode::numeric(numeric_t value)
  *  @param  variable
  *  @note   +2 on the stack
  */
-void Bytecode::string(const Variable *variable)
+void Bytecode::stringVariable(const Variable *variable)
 {
     // first we need a pointer to the variable
     jit_value var = pointer(variable);
@@ -386,7 +386,7 @@ void Bytecode::string(const Variable *variable)
  *  @param  variable
  *  @note   +1 on the stack
  */
-void Bytecode::numeric(const Variable *variable)
+void Bytecode::numericVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
     _stack.push(_callbacks.to_numeric(_userdata, pointer(variable)));
@@ -397,7 +397,7 @@ void Bytecode::numeric(const Variable *variable)
  *  @param  variable
  *  @note   +1 on the stack
  */
-void Bytecode::boolean(const Variable *variable)
+void Bytecode::booleanVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
     _stack.push(_callbacks.to_boolean(_userdata, pointer(variable)));
@@ -405,7 +405,7 @@ void Bytecode::boolean(const Variable *variable)
 
 void Bytecode::variable(const Variable* variable)
 {
-    string(variable);
+    stringVariable(variable);
 }
 
 /**
@@ -417,8 +417,8 @@ void Bytecode::variable(const Variable* variable)
 void Bytecode::plus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l + r);
@@ -433,8 +433,8 @@ void Bytecode::plus(const Expression *left, const Expression *right)
 void Bytecode::minus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l - r);
@@ -449,8 +449,8 @@ void Bytecode::minus(const Expression *left, const Expression *right)
 void Bytecode::divide(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l / r);
@@ -465,8 +465,8 @@ void Bytecode::divide(const Expression *left, const Expression *right)
 void Bytecode::multiply(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l * r);
@@ -483,8 +483,8 @@ void Bytecode::equals(const Expression *left, const Expression *right)
     if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
         // Convert both expressions to numeric values
-        jit_value l = numeric(left);
-        jit_value r = numeric(right);
+        jit_value l = numericExpression(left);
+        jit_value r = numericExpression(right);
 
         // Compare them and push it to the stack
         _stack.push(l == r);
@@ -492,8 +492,8 @@ void Bytecode::equals(const Expression *left, const Expression *right)
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
         // Convert both expressions too boolean values
-        jit_value l = boolean(left);
-        jit_value r = boolean(right);
+        jit_value l = booleanExpression(left);
+        jit_value r = booleanExpression(right);
 
         // Compare them and push it to the stack
         _stack.push(l == r);
@@ -527,8 +527,8 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
     if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
         // Convert both expressions to numeric values
-        jit_value l = numeric(left);
-        jit_value r = numeric(right);
+        jit_value l = numericExpression(left);
+        jit_value r = numericExpression(right);
 
         // Compare them and push it to the stack
         _stack.push(l != r);
@@ -536,8 +536,8 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
         // Convert both expressions too boolean values
-        jit_value l = boolean(left);
-        jit_value r = boolean(right);
+        jit_value l = booleanExpression(left);
+        jit_value r = booleanExpression(right);
 
         // Compare them and push it to the stack
         _stack.push(l != r);
@@ -569,8 +569,8 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
 void Bytecode::greater(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l > r);
@@ -585,8 +585,8 @@ void Bytecode::greater(const Expression *left, const Expression *right)
 void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l >= r);
@@ -601,8 +601,8 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 void Bytecode::lesser(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l < r);
@@ -617,8 +617,8 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
 void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numeric(left);
-    jit_value r = numeric(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l <= r);
@@ -641,7 +641,7 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
     jit_label endlabel = _function.new_label();
 
     // calculate the left value
-    jit_value l = boolean(left);
+    jit_value l = booleanExpression(left);
 
     // branche to the right label if the expression is true
     _function.insn_branch_if(l, rightlabel);
@@ -656,7 +656,7 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
     _function.insn_label(rightlabel);
 
     // calculate the right value
-    jit_value r = boolean(right);
+    jit_value r = booleanExpression(right);
 
     // left part already evaluates to true, store r result in the result
     _function.store(result, r);
@@ -685,7 +685,7 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
     jit_label endlabel = _function.new_label();
 
     // calculate the left value
-    jit_value l = boolean(left);
+    jit_value l = booleanExpression(left);
 
     // branche to the right label if the expression is not valid
     _function.insn_branch_if_not(l, rightlabel);
@@ -700,7 +700,7 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
     _function.insn_label(rightlabel);
 
     // calculate the right value
-    jit_value r = boolean(right);
+    jit_value r = booleanExpression(right);
 
     // left part evaluated to false, store right result in the result
     _function.store(result, r);
@@ -724,7 +724,7 @@ void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expressio
     const Variable* variable = dynamic_cast<const Variable*>(expression);
     if (variable)
     {
-        jit_value null = _function.new_constant(NULL, jit_type_void_ptr);
+        jit_value null = _function.new_constant(nullptr, jit_type_void_ptr);
         variable->pointer(this);
         for (const auto &modifier : *modifiers)
         {
@@ -774,11 +774,11 @@ void Bytecode::parameters(const Parameters *parameters)
         switch (param->type()) {
         case Expression::Type::Boolean:
             // Convert the expression to a boolean value and append it using params_append_boolean
-            _callbacks.params_append_boolean(_userdata, params, boolean(param.get()));
+            _callbacks.params_append_boolean(_userdata, params, booleanExpression(param.get()));
             break;
         case Expression::Type::Numeric:
             // Convert the expression to a numeric value and append it using params_append_numeric
-            _callbacks.params_append_numeric(_userdata, params, numeric(param.get()));
+            _callbacks.params_append_numeric(_userdata, params, numericExpression(param.get()));
             break;
         case Expression::Type::String: {
             // Convert the expression to a string value and append it using params_append_string

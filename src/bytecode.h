@@ -97,14 +97,14 @@ private:
      *  @param  expression
      *  @return jit_value
      */
-    jit_value numeric(const Expression *expression);
+    jit_value numericExpression(const Expression *expression);
 
     /**
      *  Retrieve the boolean representation of an expression
      *  @param  expression
      *  @return jit_value
      */
-    jit_value boolean(const Expression *expression);
+    jit_value booleanExpression(const Expression *expression);
 
     /**
      *  Generate code to output raw data
@@ -162,9 +162,9 @@ private:
      *  Create a string or numeric constant for a variable
      *  @param  variable
      */
-    virtual void string(const Variable *variable) override;
-    virtual void numeric(const Variable *variable) override;
-    virtual void boolean(const Variable *variable) override;
+    virtual void stringVariable(const Variable *variable) override;
+    virtual void numericVariable(const Variable *variable) override;
+    virtual void booleanVariable(const Variable *variable) override;
     virtual void variable(const Variable *variable) override;
 
     /**

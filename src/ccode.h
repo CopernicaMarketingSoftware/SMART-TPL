@@ -84,9 +84,9 @@ private:
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
-    virtual void string(const Variable *variable) override;
-    virtual void numeric(const Variable *variable) override;
-    virtual void boolean(const Variable *variable) override;
+    virtual void stringVariable(const Variable *variable) override;
+    virtual void numericVariable(const Variable *variable) override;
+    virtual void booleanVariable(const Variable *variable) override;
     virtual void variable(const Variable *variable) override;
 
     /**

@@ -102,9 +102,9 @@ public:
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
-    virtual void string(const Variable *variable) = 0;
-    virtual void numeric(const Variable *variable) = 0;
-    virtual void boolean(const Variable *variable) = 0;
+    virtual void stringVariable(const Variable *variable) = 0;
+    virtual void numericVariable(const Variable *variable) = 0;
+    virtual void booleanVariable(const Variable *variable) = 0;
     virtual void variable(const Variable *variable) = 0;
 
     /**

@@ -41,7 +41,7 @@ public:
      */
     virtual void numeric(Generator *generator) const override
     {
-        generator->numeric(this);
+        generator->numericVariable(this);
     }
 
     /**
@@ -50,7 +50,7 @@ public:
      */
     virtual void boolean(Generator *generator) const override
     {
-        generator->boolean(this);
+        generator->booleanVariable(this);
     }
 
     /**
@@ -59,7 +59,7 @@ public:
      */
     virtual void string(Generator *generator) const override
     {
-        generator->string(this);
+        generator->stringVariable(this);
     }
 };
 

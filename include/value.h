@@ -17,7 +17,7 @@ namespace SmartTpl {
  *  Typedef for a general numeric type, if we ever decide to change it we'll just
  *  have to modify this.
  */
-typedef int numeric_t;
+typedef int64_t numeric_t;
 
 /**
  *  Forward declaration of Variant so we can return Variant
