@@ -510,8 +510,12 @@ void Bytecode::equals(const Expression *left, const Expression *right)
 
         // Call the strcmp callback and push the result to the stack
         jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
+
+        // Declare a jit_value of 0 as that's what we need to compare the output of strcmp against
         numeric(0);
         jit_value tru = pop();
+
+        // Compare against the 0 we just declared and push the result to the stack
         _stack.push(cmp == tru);
     }
 }
@@ -632,40 +636,12 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
  */
 void Bytecode::booleanAnd(const Expression *left, const Expression *right)
 {
-    // construct the result value
-    jit_value result = _function.new_value(jit_type_sys_int);
-
-    // we need a label for the right part that only has to be evaluated if
-    // the left part is true (otherwise the result is false anyway)
-    jit_label rightlabel = _function.new_label();
-    jit_label endlabel = _function.new_label();
-
-    // calculate the left value
+    // calculate the values
     jit_value l = booleanExpression(left);
-
-    // branche to the right label if the expression is true
-    _function.insn_branch_if(l, rightlabel);
-
-    // left part already evaluates to false, store false in the result
-    _function.store(result, l);
-
-    // go to the end label
-    _function.insn_branch(endlabel);
-
-    // the right label starts here
-    _function.insn_label(rightlabel);
-
-    // calculate the right value
     jit_value r = booleanExpression(right);
 
-    // left part already evaluates to true, store r result in the result
-    _function.store(result, r);
-
-    // the end-label starts here
-    _function.insn_label(endlabel);
-
-    // push the result on the stack
-    _stack.push(result);
+    // insert a boolean and on the left and right expression
+    _stack.push(_function.insn_and(l, r));
 }
 
 /**
@@ -676,40 +652,12 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
  */
 void Bytecode::booleanOr(const Expression *left, const Expression *right)
 {
-    // construct the result value
-    jit_value result = _function.new_value(jit_type_sys_int);
-
-    // we need a label for the right part that only has to be evaluated if
-    // the left part is false (otherwise the result is true anyway)
-    jit_label rightlabel = _function.new_label();
-    jit_label endlabel = _function.new_label();
-
-    // calculate the left value
+    // calculate the values
     jit_value l = booleanExpression(left);
-
-    // branche to the right label if the expression is not valid
-    _function.insn_branch_if_not(l, rightlabel);
-
-    // left part already evaluates to true, store a 1 in the result
-    _function.store(result, l);
-
-    // go to the end label
-    _function.insn_branch(endlabel);
-
-    // the right label starts here
-    _function.insn_label(rightlabel);
-
-    // calculate the right value
     jit_value r = booleanExpression(right);
 
-    // left part evaluated to false, store right result in the result
-    _function.store(result, r);
-
-    // the end-label starts here
-    _function.insn_label(endlabel);
-
-    // push the result on the stack
-    _stack.push(result);
+    // insert a boolean or on the left and right expression
+    _stack.push(_function.insn_or(l, r));
 }
 
 /**
