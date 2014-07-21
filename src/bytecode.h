@@ -64,7 +64,7 @@ private:
 
     /**
      *  The user-data that is passed to the function
-     *  @var    jit_value_t
+     *  @var    jit_value
      */
     jit_value _userdata;
 

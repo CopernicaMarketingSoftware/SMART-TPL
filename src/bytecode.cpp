@@ -70,29 +70,30 @@ void* Bytecode::jit_exception_handler(int exception_type)
  */
 Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, _function_signature),
-    _callbacks(&_function)
+    _callbacks(&_function),
+    _userdata(_function.get_param(0))
 {
     // set our jit_exception_handler as the exception handler for jit
-    auto original = jit_exception_set_handler(Bytecode::jit_exception_handler);
+    auto original_handler = jit_exception_set_handler(Bytecode::jit_exception_handler);
 
     // start building the function
     _context.build_start();
 
-    // read in the one and only parameter into _userdata
-    _userdata = _function.get_param(0);
-
-    try {
+    try
+    {
         // generate the libjit code
         _tree.generate(this);
 
         // compile the function
         _function.compile();
-    } catch (const std::runtime_error &error) {
+    }
+    catch (const std::runtime_error &error)
+    {
         // we caught a compile error while generating/compiling, cleanup libjit
         _context.build_end();
 
         // Set the jit_exception_handler back to the original handler
-        jit_exception_set_handler(original);
+        jit_exception_set_handler(original_handler);
 
         // rethrow
         throw;
@@ -105,7 +106,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _closure = (ShowTemplate *)_function.closure();
 
     // Set the jit_exception_handler back to the original handler
-    jit_exception_set_handler(original);
+    jit_exception_set_handler(original_handler);
 }
 
 /**
