@@ -49,14 +49,8 @@ bool TokenProcessor::process(int id, Token *token)
     // call the global Parse() function
     SmartTplParse(_resource, id, token, this);
 
-    // check if there is something in _error by moving to the end and looking up that position
-    if (_error.seekg(0, _error.end).tellg() > 0)
-    {
-        // If there is something in _error move back to the begin and return false
-        _error.seekg(0, _error.beg);
-        return false;
-    }
-    return true;
+    // return true if there was no error (empty), false otherwise
+    return _error.empty();
 }
 
 /**

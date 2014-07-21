@@ -44,7 +44,7 @@ protected:
      *  This will contain any form of human readable errors in case there is
      *  something in _error we should stop parsing as soon as possible!
      */
-    std::stringstream _error;
+    std::string _error;
 
     /**
      *  This will contain the mode of the eventual template, set through {mode=raw}
@@ -85,22 +85,22 @@ public:
      */
     void syntaxError(const std::vector<std::string> &expectedTokens)
     {
-        _error << "Syntax error";
+        _error.append("Syntax error");
 
         // If we have any expected tokens append them to the error
         if (expectedTokens.empty() == false)
         {
-            _error << ", expected one of the following tokens [";
+            _error.append(", expected one of the following tokens [");
 
             for (auto iter = expectedTokens.begin(); iter != expectedTokens.end(); ++iter)
             {
-                _error << *iter;
+                _error.append(*iter);
 
                 // for every token that is not our last token (end iter - 1) we append a space for readability
-                if (iter != expectedTokens.end() - 1) _error << " ";
+                if (iter != expectedTokens.end() - 1) _error.push_back(' ');
             }
 
-            _error << "]";
+            _error.push_back(']');
         }
     }
 
@@ -109,7 +109,7 @@ public:
      */
     void parseFailure()
     {
-        _error << "Parse failure";
+        _error = "Parse failure";
     }
 
     /**
@@ -117,7 +117,7 @@ public:
      */
     void stackOverflow()
     {
-        _error << "Stack overflow";
+        _error = "Stack overflow";
     }
 
     /**
@@ -125,7 +125,7 @@ public:
      */
     void error(const std::string &str)
     {
-        _error << str;
+        _error = str;
     }
 
     /**
