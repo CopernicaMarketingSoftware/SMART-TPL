@@ -492,7 +492,7 @@ void smart_tpl_params_append_numeric(void *userdata, void *parameters, int64_t v
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the numeric value
-    params->push_back(value);
+    params->emplace_back(value);
 }
 
 /**
@@ -508,7 +508,7 @@ void smart_tpl_params_append_string(void *userdata, void *parameters, const char
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the string value
-    params->push_back(std::string(buf, len));
+    params->emplace_back(std::string(buf, len));
 }
 
 /**
@@ -523,7 +523,7 @@ void smart_tpl_params_append_boolean(void *userdata, void *parameters, int boole
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the boolean value to the parameters
-    params->push_back(boolean != 0);
+    params->emplace_back(boolean != 0);
 }
 
 /**
