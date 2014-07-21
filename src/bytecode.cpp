@@ -659,18 +659,18 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  */
 void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
-    jit_value null = _function.new_constant(nullptr, jit_type_void_ptr);
     variable->pointer(this);
+
     for (const auto &modifier : *modifiers)
     {
+        // Push the token of the modifier (so the name of it) to the stack
         string(modifier.get()->token());
 
         // pop the buffer and size from the stack (in reverse order) to get the modifier name
         auto size = pop();
         auto buffer = pop();
 
-        // call the native function to save the modifier
-        // to the variable on the stack
+        // call the native function to save the modifier to the variable on the stack
         _stack.push(_callbacks.modifier(_userdata, buffer, size));
 
         // pop the modifier
@@ -682,7 +682,9 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         const Parameters *params = modifier->parameters();
         if (params) parameters(params);
 
-        auto jitparams = (params) ? pop() : null;
+        // Turn our possibly just created parameters into a jit_value
+        // We're using _false here for a nullptr
+        jit_value jitparams = (params) ? pop() : _false;
 
         // let's apply the modifier and push the new result of it to the stack
         _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
