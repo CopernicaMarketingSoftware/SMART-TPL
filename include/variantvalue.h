@@ -114,9 +114,10 @@ public:
         // In case we're a vector we'll just return the position as our key
         if (_value->type() == Variant::ValueType::ValueVectorType) return std::to_string(position);
 
-        // If we're out of bounds just return VariantValue()
+        // If we're out of bounds just return nullptr
         if (position >= memberCount()) return nullptr;
 
+        // If we're a map we'll have to move an iterator to position
         if (_value->type() == Variant::ValueType::ValueMapType)
         {
             // get the iterator of the underlying map
