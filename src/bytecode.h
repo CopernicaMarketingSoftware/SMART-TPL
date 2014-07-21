@@ -69,6 +69,18 @@ private:
     jit_value _userdata;
 
     /**
+     *  A jit value constant of 1 which is just here so we can reuse it over and over again
+     *  @var    jit_value
+     */
+    jit_value _true;
+
+    /**
+     *  A jit value constant of 0 which is just here so we can reuse it over and over again
+     *  @var    jit_value
+     */
+    jit_value _false;
+
+    /**
      *  Stack with temporary values
      *  @var    std::stack
      */

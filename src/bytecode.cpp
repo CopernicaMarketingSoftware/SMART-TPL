@@ -71,7 +71,9 @@ void* Bytecode::jit_exception_handler(int exception_type)
 Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, _function_signature),
     _callbacks(&_function),
-    _userdata(_function.get_param(0))
+    _userdata(_function.get_param(0)),
+    _true(_function.new_constant(1)),
+    _false(_function.new_constant(0))
 {
     // set our jit_exception_handler as the exception handler for jit
     auto original_handler = jit_exception_set_handler(Bytecode::jit_exception_handler);
@@ -199,14 +201,11 @@ void Bytecode::output(const Variable *variable)
     // get a pointer to the variable
     variable->pointer(this);
 
-    // Declare a jit_value saying if we should escape or not, which we always should from here
-    jit_value escape = _function.new_constant(1);
-
     // pop the value variable->pointer(this); pushed to the stack from the stack
     auto var = pop();
 
     // output the variable using the output callback
-    _callbacks.output(_userdata, var, escape);
+    _callbacks.output(_userdata, var, _true);
 }
 
 /**
@@ -218,14 +217,11 @@ void Bytecode::output(const Filter *filter)
     // Call the string method on the filter which will call the modifiers() on our generator
     filter->string(this);
 
-    // Declare a jit_value saying if we should escape or not based on filter->escape()
-    jit_value escape = _function.new_constant(filter->escape() ? 1 : 0);
-
     // Pop the value that modifiers() left us
     auto var = pop();
 
     // output this value
-    _callbacks.output(_userdata, var, escape);
+    _callbacks.output(_userdata, var, filter->escape() ? _true : _false);
 }
 
 /**
@@ -512,12 +508,8 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         // Call the strcmp callback and push the result to the stack
         jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
 
-        // Declare a jit_value of 0 as that's what we need to compare the output of strcmp against
-        numeric(0);
-        jit_value tru = pop();
-
-        // Compare against the 0 we just declared and push the result to the stack
-        _stack.push(cmp == tru);
+        // Compare against the constant _false which is just a 0
+        _stack.push(cmp == _false);
     }
 }
 
@@ -559,9 +551,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
 
         // Call the strcmp callback and push the result to the stack
         jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
-        numeric(0);
-        jit_value tru = pop();
-        _stack.push(cmp != tru);
+        _stack.push(cmp != _false);
     }
 }
 
