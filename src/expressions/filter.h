@@ -20,9 +20,9 @@ class Filter : public Expression
 private:
     /**
      *  The base expression
-     *  @var    Expression
+     *  @var    Variable
      */
-    std::unique_ptr<const Expression> _expression;
+    std::unique_ptr<const Variable> _variable;
 
     /**
      *  The modifiers that should be applied
@@ -36,8 +36,8 @@ public:
      *  @param  expression
      *  @param  modifiers
      */
-    Filter(const Expression *expression, const Modifiers *modifiers) :
-        _expression(expression), _modifiers(modifiers) {}
+    Filter(const Variable *variable, const Modifiers *modifiers) :
+        _variable(variable), _modifiers(modifiers) {}
 
     /**
      *  Destructor
@@ -56,7 +56,7 @@ public:
      */
     virtual void string(Generator *generator) const override
     {
-        _modifiers.get()->generate(generator, _expression.get());
+        _modifiers.get()->generate(generator, _variable.get());
     }
 
     /**

@@ -214,7 +214,7 @@ private:
      *  @param  modifiers          The set of modifiers to apply
      *  @param  expression         The expression to apply to modifiers on
      */
-    virtual void modifiers(const Modifiers* modifiers, const Expression *expression) override;
+    virtual void modifiers(const Modifiers *modifiers, const Variable *variable) override;
 
     /**
      *  Generate the code to construct the following parameters

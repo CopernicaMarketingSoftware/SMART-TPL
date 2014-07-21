@@ -98,7 +98,7 @@ boolexpr(A)         ::= outexpr(B) LE outexpr(C) .                              
 boolexpr(A)         ::= boolexpr(B) AND boolexpr(C) .                           { A = new SmartTpl::Internal::BinaryAndOperator(B, C); }
 boolexpr(A)         ::= boolexpr(B) OR boolexpr(C) .                            { A = new SmartTpl::Internal::BinaryOrOperator(B, C); }
 outexpr(A)          ::= expr(B) .                                               { A = B; }
-outexpr(A)          ::= expr(B) PIPE modifiers(C) .                             { A = new SmartTpl::Internal::Filter(B, C); }
+outexpr(A)          ::= variable(B) PIPE modifiers(C) .                         { A = new SmartTpl::Internal::Filter(B, C); }
 expr(A)             ::= variable(B) .                                           { A = B; }
 expr(A)             ::= literal(B) .                                            { A = B; }
 expr(A)             ::= LPAREN expr(B) RPAREN .                                 { A = B; }

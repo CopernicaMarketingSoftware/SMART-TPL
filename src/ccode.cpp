@@ -390,55 +390,50 @@ void CCode::booleanOr(const Expression *left, const Expression *right)  { left->
  *  @param  modifiers          The set of modifiers to apply
  *  @param  expression         The expression to apply to modifiers on
  */
-void CCode::modifiers(const Modifiers* modifiers, const Expression *expression)
+void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
-    // @todo This call currently only supports Expressions of the type Variable
-    const Variable* variable = dynamic_cast<const Variable*>(expression);
-    if (variable)
+    for (auto iter = modifiers->begin(); iter != modifiers->end(); ++iter)
     {
-        for (auto iter = modifiers->begin(); iter != modifiers->end(); ++iter)
+        // Retrieve the parameters
+        const Parameters *params = (*iter)->parameters();
+        // Start our own private block if we have parameters
+        if (params)
         {
-            // Retrieve the parameters
-            const Parameters *params = (*iter)->parameters();
-            // Start our own private block if we have parameters
-            if (params)
-            {
-                _out << "{" << std::endl;
+            _out << "{" << std::endl;
 
-                // Generate the parameters
-                params->generate(this);
-            }
+            // Generate the parameters
+            params->generate(this);
+        }
 
-            // Call the modify_variable callback
-            _out << "o = callbacks->modify_variable(userdata,";
-            if (iter == modifiers->begin())
-            {
-                variable->pointer(this);
-                _out << ",";
-            }
-            else
-            {
-                _out << "o,";
-            }
+        // Call the modify_variable callback
+        _out << "o = callbacks->modify_variable(userdata,";
+        if (iter == modifiers->begin())
+        {
+            variable->pointer(this);
+            _out << ",";
+        }
+        else
+        {
+            _out << "o,";
+        }
 
-            // Write the get modifier callback
-            _out << "callbacks->modifier(userdata,";
-            string((*iter)->token());
-            _out << "),";
+        // Write the get modifier callback
+        _out << "callbacks->modifier(userdata,";
+        string((*iter)->token());
+        _out << "),";
 
-            // If there are parameters write our local variable here, NULL otherwise
-            if (params) _out << "p";
-            else _out << "NULL";
-            _out << ");" << std::endl;
+        // If there are parameters write our local variable here, NULL otherwise
+        if (params) _out << "p";
+        else _out << "NULL";
+        _out << ");" << std::endl;
 
-            if (params)
-            {
-                // Deconstruct our parameters
-                _out << "callbacks->delete_params(userdata,p);" << std::endl;
+        if (params)
+        {
+            // Deconstruct our parameters
+            _out << "callbacks->delete_params(userdata,p);" << std::endl;
 
-                // End our private block
-                _out << "}" << std::endl;
-            }
+            // End our private block
+            _out << "}" << std::endl;
         }
     }
 }

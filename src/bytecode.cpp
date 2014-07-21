@@ -657,43 +657,38 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  *  @param  expression         The expression to apply to modifiers on
  *  @note   +1 on the stack
  */
-void Bytecode::modifiers(const Modifiers* modifiers, const Expression *expression)
+void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
-    // @todo This call currently only supports Expressions of the type Variable
-    const Variable* variable = dynamic_cast<const Variable*>(expression);
-    if (variable)
+    jit_value null = _function.new_constant(nullptr, jit_type_void_ptr);
+    variable->pointer(this);
+    for (const auto &modifier : *modifiers)
     {
-        jit_value null = _function.new_constant(nullptr, jit_type_void_ptr);
-        variable->pointer(this);
-        for (const auto &modifier : *modifiers)
-        {
-            string(modifier.get()->token());
+        string(modifier.get()->token());
 
-            // pop the buffer and size from the stack (in reverse order) to get the modifier name
-            auto size = pop();
-            auto buffer = pop();
+        // pop the buffer and size from the stack (in reverse order) to get the modifier name
+        auto size = pop();
+        auto buffer = pop();
 
-            // call the native function to save the modifier
-            // to the variable on the stack
-            _stack.push(_callbacks.modifier(_userdata, buffer, size));
+        // call the native function to save the modifier
+        // to the variable on the stack
+        _stack.push(_callbacks.modifier(_userdata, buffer, size));
 
-            // pop the modifier
-            auto mod = pop();
-            // pop the latest value from the stack
-            auto var = pop();
+        // pop the modifier
+        auto mod = pop();
+        // pop the latest value from the stack
+        auto var = pop();
 
-            // Let's retrieve our parameters and if we have them generate them
-            const Parameters *params = modifier->parameters();
-            if (params) parameters(params);
+        // Let's retrieve our parameters and if we have them generate them
+        const Parameters *params = modifier->parameters();
+        if (params) parameters(params);
 
-            auto jitparams = (params) ? pop() : null;
+        auto jitparams = (params) ? pop() : null;
 
-            // let's apply the modifier and push the new result of it to the stack
-            _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
+        // let's apply the modifier and push the new result of it to the stack
+        _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
 
-            // If we actually constructed parameters let's deconstruct them again
-            if (params) _callbacks.delete_params(_userdata, jitparams);
-        }
+        // If we actually constructed parameters let's deconstruct them again
+        if (params) _callbacks.delete_params(_userdata, jitparams);
     }
 }
 

@@ -58,9 +58,9 @@ public:
      *  Generate the output of these modifiers
      *  @param  generator
      */
-    void generate(Generator *generator, const Expression *expression) const
+    void generate(Generator *generator, const Variable *variable) const
     {
-        generator->modifiers(this, expression);
+        generator->modifiers(this, variable);
     }
 
     /**
