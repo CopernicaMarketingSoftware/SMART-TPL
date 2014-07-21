@@ -53,7 +53,7 @@ public:
      *  The name of the modifier
      *  @return const std::string
      */
-    const std::string token() const { return *_name.get(); };
+    const std::string token() const { return *_name; };
 
     /**
      *  Returns the internal Parameters object

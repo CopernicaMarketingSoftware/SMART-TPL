@@ -56,7 +56,7 @@ public:
      */
     virtual void string(Generator *generator) const override
     {
-        _modifiers.get()->generate(generator, _variable.get());
+        _modifiers->generate(generator, _variable.get());
     }
 
     /**
@@ -69,11 +69,20 @@ public:
         // Look for a modifier named "raw"
         auto iter = std::find_if(_modifiers->begin(), _modifiers->end()
                                 ,[](const std::unique_ptr<const ModifierExpression> &mod) {
-            return mod.get()->token() == "raw";
+            return mod->token() == "raw";
         });
 
         // Return whether we found the "raw" modifier or not
         return iter == _modifiers->end();
+    }
+
+    /**
+     *  Generate the expression to output ourself
+     *  @param  generator
+     */
+    virtual void output(Generator *generator) const override
+    {
+        generator->output(this);
     }
 };
 

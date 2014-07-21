@@ -36,7 +36,7 @@ public:
      *  @param  source      The source value object to iterate over
      */
     Iterator(const Value *source) :
-        _iterator(std::unique_ptr<SmartTpl::Iterator>(source->iterator())) {}
+        _iterator(source->iterator()) {}
 
     /**
      *  Destructor

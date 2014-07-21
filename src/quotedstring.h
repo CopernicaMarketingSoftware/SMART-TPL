@@ -44,7 +44,7 @@ public:
             case '"' :  append("\\\""); break;
             case '\'':  append("\\\'"); break;
             case '\\':  append("\\\\"); break;
-            default:    append(&c, 1); break;
+            default:    push_back(c); break;
             }
         }
     }

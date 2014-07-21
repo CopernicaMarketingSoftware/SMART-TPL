@@ -61,6 +61,15 @@ public:
     {
         generator->stringVariable(this);
     }
+
+    /**
+     *  Generate the expression to output ourself
+     *  @param  generator
+     */
+    virtual void output(Generator *generator) const override
+    {
+        generator->output(this);
+    }
 };
 
 /**

@@ -124,18 +124,17 @@ public:
      *  Used to retrieve what encoding this template is in, natively
      */
     const std::string encoding() const { return _encoding; };
-
-    /**
-     *  Operator to quickly print the current template onto an output stream
-     *  @param      os      The output stream to print to
-     *  @param      tpl     The template to actually process, you can't process it with any data here
-     */
-    friend std::ostream& operator<<(std::ostream &os, const Template &tpl)
-    {
-        os << tpl.process();
-        return os;
-    }
 };
+
+/**
+ *  Operator to quickly print the current template onto an output stream
+ *  @param      os      The output stream to print to
+ *  @param      tpl     The template to actually process, you can't process it with any data here
+ */
+inline std::ostream &operator<<(std::ostream &stream, const Template &tpl)
+{
+    return stream << tpl.process();
+}
 
 /**
  *  End namespace

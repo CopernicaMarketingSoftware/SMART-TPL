@@ -101,7 +101,7 @@ public:
      */
     virtual std::string encoding() override
     {
-        return std::string(_mode);
+        return _mode;
     }
 };
 

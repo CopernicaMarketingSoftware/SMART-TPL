@@ -49,7 +49,7 @@ public:
     virtual void string(Generator *generator) const override
     {
         // generate our actual value
-        generator->string(*_value.get());
+        generator->string(*_value);
     }
 
     /**

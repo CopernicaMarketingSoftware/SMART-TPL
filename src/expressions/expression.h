@@ -66,6 +66,15 @@ public:
      *  @param  generator
      */
     virtual void string(Generator *generator) const {};
+
+    /**
+     *  Generate the expression to output ourself
+     *  @param  generator
+     */
+    virtual void output(Generator *generator) const
+    {
+        generator->write(this);
+    }
 };
 
 /**

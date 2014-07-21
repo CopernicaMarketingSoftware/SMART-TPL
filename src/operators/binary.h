@@ -38,8 +38,8 @@ public:
      *  @param  right
      */
     BinaryOperator(Expression *left, Expression *right) :
-        _left(std::unique_ptr<Expression>(left)),
-        _right(std::unique_ptr<Expression>(right)) {}
+        _left(left),
+        _right(right) {}
 
     /**
      *  Destructor
