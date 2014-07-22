@@ -102,6 +102,12 @@ TEST(InvalidSyntax, NotExistingFunction)
     EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
 }
 
+TEST(InvalidSyntax, InvalidExpression)
+{
+    string input("{$1 + 3}");
+    EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
+}
+
 /**
  *  Break down tests will simply start removing characters up until some point and
  *  expect them to fail on pretty much everything on their way.

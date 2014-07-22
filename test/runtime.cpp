@@ -474,3 +474,44 @@ TEST(RunTime, Modulo)
         EXPECT_EQ(expectedOutput, tpl.process());
     }
 }
+
+TEST(RunTime, AssignMath)
+{
+    string input("{assign $var*11 to $test}{$test}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", 456);
+
+    string expectedOutput("5016");;
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process(data));
+    }
+}
+
+TEST(RunTime, MathIf)
+{
+    string input("{if $var%3 == 1}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", 10);
+    Data data2;
+    data2.assign("var", 11);
+
+    string expectedOutput("true");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+    string expectedOutput2("false");
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process(data));
+        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+    }
+}
