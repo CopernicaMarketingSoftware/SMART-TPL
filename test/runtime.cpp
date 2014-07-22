@@ -401,16 +401,62 @@ TEST(RunTime, OutputMath)
 {
     // Spaces here after the + and the - are purely required so that the parser
     // actually knows what is a part of the number and what isn't
-    string input("1+3-2*10={1+ 3- 2*10}");
+    string input("1+3-2*10={1+ 3- 2*10}\n(1+3-2)*10={(1+ 3- 2)*10}");
     Template tpl((Buffer(input)));
 
-    string expectedOutput("1+3-2*10=-16");
+    string expectedOutput("1+3-2*10=-16\n(1+3-2)*10=20");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
         EXPECT_EQ(expectedOutput, tpl.process());
+    }
+}
+
+TEST(RunTime, OutputMathVariables)
+{
+    string input("10*var={10*$var}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", 200);
+    Data data2;
+    data2.assign("var", 22);
+
+    string expectedOutput("10*var=2000");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+    string expectedOutput2("10*var=220");
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process(data));
+        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+    }
+}
+
+TEST(RunTime, OutputMathOnlyVariables)
+{
+    string input("var*var={$var*$var}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", 200);
+    Data data2;
+    data2.assign("var", 22);
+
+    string expectedOutput("var*var=40000");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+    string expectedOutput2("var*var=484");
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process(data));
+        EXPECT_EQ(expectedOutput2, tpl.process(data2));
     }
 }
 
