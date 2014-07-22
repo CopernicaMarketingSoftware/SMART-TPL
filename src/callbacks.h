@@ -19,6 +19,7 @@ namespace SmartTpl { namespace Internal {
  */
 void        smart_tpl_write                 (void *userdata, const char *data, size_t size);
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
+void        smart_tpl_output_numeric        (void *userdata, int64_t number);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, uint32_t position);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);
@@ -68,6 +69,12 @@ private:
      *  @var    OutputCallback
      */
     static OutputCallback _output;
+
+    /**
+     *  Signature fo the output numeric callback
+     *  @var    OutputNumericCallback
+     */
+    static OutputNumericCallback _output_numeric;
 
     /**
      *  Signature of the member callback
@@ -268,6 +275,24 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_output", (void *)smart_tpl_output, _output.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the output numeric function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  number          Number to output
+     *  @see    smart_tpl_output_numeric
+     */
+    void output_numeric(const jit_value &userdata, const jit_value &number)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            number.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_output_numeric", (void *)smart_tpl_output_numeric, _output_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

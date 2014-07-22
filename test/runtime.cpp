@@ -396,3 +396,20 @@ TEST(RunTime, Int64)
         EXPECT_EQ("true", tpl.process(data));
     }
 }
+
+TEST(RunTime, OutputMath)
+{
+    // Spaces here after the + and the - are purely required so that the parser
+    // actually knows what is a part of the number and what isn't
+    string input("1+3-2*10={1+ 3- 2*10}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("1+3-2*10=-16");
+    EXPECT_EQ(expectedOutput, tpl.process());
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process());
+    }
+}

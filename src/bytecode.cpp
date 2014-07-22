@@ -230,15 +230,26 @@ void Bytecode::output(const Filter *filter)
  */
 void Bytecode::write(const Expression *expression)
 {
-    // convert the expression to a string (this pushes two values on the stack
-    expression->string(this);
+    if (expression->type() == Expression::Type::Numeric)
+    {
+        expression->numeric(this);
 
-    // pop the buffer and size from the stack (in reverse order)
-    auto size = pop();
-    auto buffer = pop();
+        auto number = pop();
 
-    // call the write function
-    _callbacks.write(_userdata, buffer, size);
+        _callbacks.output_numeric(_userdata, number);
+    }
+    else
+    {
+        // convert the expression to a string (this pushes two values on the stack
+        expression->string(this);
+
+        // pop the buffer and size from the stack (in reverse order)
+        auto size = pop();
+        auto buffer = pop();
+
+        // call the write function
+        _callbacks.write(_userdata, buffer, size);
+    }
 }
 
 /**

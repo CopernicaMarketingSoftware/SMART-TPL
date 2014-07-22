@@ -29,6 +29,12 @@ public:
      *  Destructor
      */
     virtual ~BinaryArithmetricOperator() {}
+
+    /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const { return Type::Numeric; }
 };
 
 /**

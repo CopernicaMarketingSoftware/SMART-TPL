@@ -143,6 +143,7 @@
 #include "callbacks/params_append_callback.h"
 #include "callbacks/write.h"
 #include "callbacks/output.h"
+#include "callbacks/output_numeric.h"
 #include "callbacks/member.h"
 #include "callbacks/member_at.h"
 #include "callbacks/create_iterator.h"

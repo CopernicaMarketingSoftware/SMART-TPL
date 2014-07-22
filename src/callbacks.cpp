@@ -18,6 +18,7 @@ namespace SmartTpl { namespace Internal {
  */
 WriteCallback               Callbacks::_write;
 OutputCallback              Callbacks::_output;
+OutputNumericCallback       Callbacks::_output_numeric;
 MemberCallback              Callbacks::_member;
 MemberAtCallback            Callbacks::_member_at;
 CreateIteratorCallback      Callbacks::_create_iterator;
@@ -80,6 +81,20 @@ void smart_tpl_output(void *userdata, const void *variable, int escape)
 
     // output the variable
     handler->output(var, escape != 0);
+}
+
+/**
+ *  Function to output a numeric value
+ *  @param  userdata       pointer to user-supplied data
+ *  @param  number         the number to output
+ */
+void smart_tpl_output_numeric(void *userdata, int64_t number)
+{
+    // Convert the userdata to our handler object
+    auto *handler = (Handler*) userdata;
+
+    // Call the output numeric method on the handler with our number
+    handler->outputNumeric(number);
 }
 
 /**

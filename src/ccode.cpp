@@ -110,14 +110,25 @@ void CCode::output(const Filter *filter)
  */
 void CCode::write(const Expression *expression)
 {
-    // we're going to call the write function
-    _out << "callbacks->write(userdata,";
+    if (expression->type() == Expression::Type::Numeric)
+    {
+        _out << "callbacks->output_numeric(userdata,";
 
-    // convert the expression to a string
-    expression->string(this);
+        expression->numeric(this);
 
-    // end of the function
-    _out << ");" << std::endl;
+        _out << ");" << std::endl;
+    }
+    else
+    {
+        // we're going to call the write function
+        _out << "callbacks->write(userdata,";
+
+        // convert the expression to a string
+        expression->string(this);
+
+        // end of the function
+        _out << ");" << std::endl;
+    }
 }
 
 /**

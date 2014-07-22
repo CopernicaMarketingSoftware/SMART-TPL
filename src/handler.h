@@ -116,6 +116,15 @@ public:
     }
 
     /**
+     *  Output a numeric value
+     *  @param  number   The numberic value to output
+     */
+    void outputNumeric(numeric_t number)
+    {
+        _buffer.append(std::to_string(number));
+    }
+
+    /**
      *  Get access to a variable
      *  @param  name
      *  @param  size

@@ -20,6 +20,7 @@ namespace SmartTpl { namespace Internal {
 static struct smart_tpl_callbacks callbacks = {
     .write                 = smart_tpl_write,
     .output                = smart_tpl_output,
+    .output_numeric        = smart_tpl_output_numeric,
     .member                = smart_tpl_member,
     .member_at             = smart_tpl_member_at,
     .create_iterator       = smart_tpl_create_iterator,

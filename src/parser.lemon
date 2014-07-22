@@ -33,12 +33,13 @@
 %left PIPE.
 %left DOT LBRACK RBRACK.
 
-%include 
+%stack_size 1000
+
+%include
 {
     #include "includes.h"
     #include <iostream>
     #include <assert.h>
-    #define YYSTACKDEPTH 1000
 }
 
 %parse_failure
@@ -46,7 +47,7 @@
     parent->parseFailure();
 }
 
-%syntax_error 
+%syntax_error
 {
     // Build up a vector of expected tokens
     // Mostly based on the following SO post, but we instead put it in a std::vector
@@ -100,13 +101,13 @@ boolexpr(A)         ::= boolexpr(B) OR boolexpr(C) .                            
 outexpr(A)          ::= expr(B) .                                               { A = B; }
 outexpr(A)          ::= variable(B) PIPE modifiers(C) .                         { A = new SmartTpl::Internal::Filter(B, C); }
 expr(A)             ::= variable(B) .                                           { A = B; }
-expr(A)             ::= literal(B) .                                            { A = B; }
 expr(A)             ::= LPAREN expr(B) RPAREN .                                 { A = B; }
 expr(A)             ::= .                                                       { A = nullptr; }
 expr(A)             ::= expr(B) PLUS expr(C) .                                  { A = new SmartTpl::Internal::BinaryPlusOperator(B, C); }
 expr(A)             ::= expr(B) MINUS expr(C) .                                 { A = new SmartTpl::Internal::BinaryMinusOperator(B, C); }
 expr(A)             ::= expr(B) MULTIPLY expr(C) .                              { A = new SmartTpl::Internal::BinaryMultiplyOperator(B, C); }
 expr(A)             ::= expr(B) DIVIDE expr(C) .                                { A = new SmartTpl::Internal::BinaryDivideOperator(B, C); }
+expr(A)             ::= literal(B) .                                            { A = B; }
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::Internal::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::Internal::LiteralBoolean(false); }
 literal(A)          ::= INTEGER(B) .                                            { A = new SmartTpl::Internal::LiteralInteger(B); }

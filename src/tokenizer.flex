@@ -85,7 +85,7 @@
 "{foreachelse}"     { return TOKEN_FOREACH_ELSE; }
 "{literal}"         { BEGIN(LITERAL); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it later
 "{ "[^}]*"}"        { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
-"{"                 { BEGIN(INSIDE_CURLY_BRACES); }
+"{"                 { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_EXPRESSION; }
 "{"[a-zA-Z]*"}"     { return -1; };
 
     /**
