@@ -413,3 +413,18 @@ TEST(RunTime, OutputMath)
         EXPECT_EQ(expectedOutput, tpl.process());
     }
 }
+
+TEST(RunTime, Modulo)
+{
+    string input("1+3*10%5={1+ 3*10%5}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("1+3*10%5=1");
+    EXPECT_EQ(expectedOutput, tpl.process());
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process());
+    }
+}

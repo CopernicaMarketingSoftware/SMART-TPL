@@ -481,6 +481,22 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
 }
 
 /**
+ *  Arithmetric operation
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::modulo(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
+
+    // calculate them, and push to stack
+    _stack.push(l % r);
+}
+
+/**
  *  Comparison operator
  *  @param  left
  *  @param  right

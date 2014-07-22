@@ -188,6 +188,7 @@ private:
     virtual void minus(const Expression *left, const Expression *right) override;
     virtual void divide(const Expression *left, const Expression *right) override;
     virtual void multiply(const Expression *left, const Expression *right) override;
+    virtual void modulo(const Expression *left, const Expression *right) override;
 
     /**
      *  Comparison operators

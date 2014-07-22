@@ -125,6 +125,7 @@
 #include "operators/binaryminus.h"
 #include "operators/binarydivide.h"
 #include "operators/binarymultiply.h"
+#include "operators/binarymodulo.h"
 #include "operators/binarycompare.h"
 #include "operators/binaryequals.h"
 #include "operators/binarynotequals.h"

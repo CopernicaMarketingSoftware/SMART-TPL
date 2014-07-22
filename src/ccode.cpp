@@ -344,6 +344,7 @@ void CCode::plus(const Expression *left, const Expression *right)       { left->
 void CCode::minus(const Expression *left, const Expression *right)      { left->numeric(this); _out << "-"; right->numeric(this); }
 void CCode::divide(const Expression *left, const Expression *right)     { left->numeric(this); _out << "/"; right->numeric(this); }
 void CCode::multiply(const Expression *left, const Expression *right)   { left->numeric(this); _out << "*"; right->numeric(this); }
+void CCode::modulo(const Expression *left, const Expression *right)     { left->numeric(this); _out << "%"; right->numeric(this); }
 
 /**
  *  Comparison operators

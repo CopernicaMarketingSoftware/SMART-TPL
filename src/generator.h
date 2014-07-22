@@ -116,6 +116,7 @@ public:
     virtual void minus(const Expression *left, const Expression *right) = 0;
     virtual void divide(const Expression *left, const Expression *right) = 0;
     virtual void multiply(const Expression *left, const Expression *right) = 0;
+    virtual void modulo(const Expression *left, const Expression *right) = 0;
 
     /**
      *  Comparison operators

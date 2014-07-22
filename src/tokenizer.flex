@@ -116,6 +116,7 @@
     "-"                         { return TOKEN_MINUS; }
     "*"                         { return TOKEN_MULTIPLY; }
     "/"                         { return TOKEN_DIVIDE; }
+    "%"                         { return TOKEN_MOD; }
     "=="                        { return TOKEN_EQ; }
     "eq"                        { return TOKEN_EQ; }
     "!="                        { return TOKEN_NE; }

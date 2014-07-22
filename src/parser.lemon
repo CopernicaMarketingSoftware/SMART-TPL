@@ -107,6 +107,7 @@ expr(A)             ::= expr(B) PLUS expr(C) .                                  
 expr(A)             ::= expr(B) MINUS expr(C) .                                 { A = new SmartTpl::Internal::BinaryMinusOperator(B, C); }
 expr(A)             ::= expr(B) MULTIPLY expr(C) .                              { A = new SmartTpl::Internal::BinaryMultiplyOperator(B, C); }
 expr(A)             ::= expr(B) DIVIDE expr(C) .                                { A = new SmartTpl::Internal::BinaryDivideOperator(B, C); }
+expr(A)             ::= expr(B) MOD expr(C) .                                   { A = new SmartTpl::Internal::BinaryModuloOperator(B, C); }
 expr(A)             ::= literal(B) .                                            { A = B; }
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::Internal::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::Internal::LiteralBoolean(false); }
