@@ -168,7 +168,7 @@ Data &Data::assignManaged(const std::string &name, Value *value)
 Data &Data::callback(const std::string &name, const Callback &callback, bool cache)
 {
     // construct variable
-    Value *v = new CallbackValue(callback, cache);
+    Value *v = new Internal::CallbackValue(callback, cache);
 
     // make our Value managed
     _managed_values.emplace_back(v);
