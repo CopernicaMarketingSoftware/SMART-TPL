@@ -66,6 +66,7 @@
 #include "quotedstring.h"
 #include "generator.h"
 #include "escaper.h"
+#include "callbackvalue.h"
 #include "escapers/null.h"
 #include "escapers/html.h"
 #include "escapers/url.h"
