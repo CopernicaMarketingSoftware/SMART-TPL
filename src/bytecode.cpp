@@ -260,28 +260,47 @@ void Bytecode::write(const Expression *expression)
  */
 void Bytecode::condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements)
 {
-    // we need a label for the 'else' part that we're going to create, and for the
-    // part after the entire condition
-    jit_label elselabel = _function.new_label();
-    jit_label endlabel = _function.new_label();
+    // In case we have an else statement we generate slightly different jit code
+    if (elsestatements)
+    {
+        // we need a label for the 'else' part that we're going to create, and for the
+        // part after the entire condition
+        jit_label elselabel = _function.new_label();
+        jit_label endlabel = _function.new_label();
 
-    // branche to the label if the expression is not valid
-    _function.insn_branch_if_not(booleanExpression(expression), elselabel);
+        // branche to the label if the expression is not valid
+        _function.insn_branch_if_not(booleanExpression(expression), elselabel);
 
-    // now we should create the if statements
-    ifstatements->generate(this);
+        // now we should create the if statements
+        ifstatements->generate(this);
 
-    // branche to the end-position
-    _function.insn_branch(endlabel);
+        // branche to the end-position
+        _function.insn_branch(endlabel);
 
-    // the else label starts here
-    _function.insn_label(elselabel);
+        // the else label starts here
+        _function.insn_label(elselabel);
 
-    // generate the else instructions
-    if (elsestatements) elsestatements->generate(this);
+        // generate the else instructions
+        elsestatements->generate(this);
 
-    // the end-label starts here
-    _function.insn_label(endlabel);
+        // the end-label starts here
+        _function.insn_label(endlabel);
+    }
+    else
+    {
+        // as we don't have an else statement here we just need one label to possibly jump
+        // over the if statements if the expression is false
+        jit_label endlabel = _function.new_label();
+
+        // branche to the label if the expression is not valid
+        _function.insn_branch_if_not(booleanExpression(expression), endlabel);
+
+        // now we should create the if statements
+        ifstatements->generate(this);
+
+        // the end-label starts here
+        _function.insn_label(endlabel);
+    }
 }
 
 /**
