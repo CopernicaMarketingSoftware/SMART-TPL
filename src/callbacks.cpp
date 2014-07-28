@@ -486,7 +486,8 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
 
 /**
  *  Create a Parameters object
- *  @param  userdata     Pointer to user-supplied data
+ *  @param  userdata         Pointer to user-supplied data
+ *  @param  parameters_count The amount of parameters to reserve ahead of time
  *  @return Pointer to a new SmartTpl::Parameters object
  */
 void *smart_tpl_create_params(void *userdata, size_t parameters_count)
@@ -529,7 +530,7 @@ void smart_tpl_params_append_string(void *userdata, void *parameters, const char
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the string value
-    params->emplace_back(std::string(buf, len));
+    params->emplace_back(buf, len);
 }
 
 /**
