@@ -88,7 +88,7 @@ void smart_tpl_output(void *userdata, const void *variable, int escape)
  *  @param  userdata       pointer to user-supplied data
  *  @param  number         the number to output
  */
-void smart_tpl_output_numeric(void *userdata, int64_t number)
+void smart_tpl_output_numeric(void *userdata, numeric_t number)
 {
     // Convert the userdata to our handler object
     auto *handler = (Handler*) userdata;
@@ -131,7 +131,7 @@ const void *smart_tpl_member(void *userdata, const void *variable, const char *n
  *  @param  position        what position would we like
  *  @return                 pointer to a new variable
  */
-const void* smart_tpl_member_at(void* userdata, const void* variable, uint32_t position)
+const void* smart_tpl_member_at(void* userdata, const void* variable, size_t position)
 {
     // convert the variable to a value object
     auto *var = (const Value *)variable;
@@ -298,7 +298,7 @@ const char *smart_tpl_to_string(void *userdata, const void *variable)
  *  @param  variable        pointer to variable
  *  @return                 numeric value
  */
-int64_t smart_tpl_to_numeric(void *userdata, const void *variable)
+numeric_t smart_tpl_to_numeric(void *userdata, const void *variable)
 {
     // convert the variable to a value object
     auto *var = (const Value *)variable;
@@ -401,7 +401,7 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
  *  @param keysize         the size of key
  *  @param value           the numeric value we would like to assign
  */
-void smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, int64_t value)
+void smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, numeric_t value)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
@@ -501,7 +501,7 @@ void *smart_tpl_create_params(void *userdata)
  *  @param  parameters     Pointer to a SmartTpl::Parameters object
  *  @param  value          The numeric value to append
  */
-void smart_tpl_params_append_numeric(void *userdata, void *parameters, int64_t value)
+void smart_tpl_params_append_numeric(void *userdata, void *parameters, numeric_t value)
 {
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
