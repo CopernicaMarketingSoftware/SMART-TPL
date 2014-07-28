@@ -749,7 +749,7 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 void Bytecode::parameters(const Parameters *parameters)
 {
     // Construct the parameters through our callback
-    auto params = _callbacks.create_params(_userdata);
+    auto params = _callbacks.create_params(_userdata, _function.new_constant(parameters->size()));
 
     for (auto &param : *parameters)
     {

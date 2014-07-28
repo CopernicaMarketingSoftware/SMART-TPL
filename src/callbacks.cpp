@@ -489,10 +489,16 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
  *  @param  userdata     Pointer to user-supplied data
  *  @return Pointer to a new SmartTpl::Parameters object
  */
-void *smart_tpl_create_params(void *userdata)
+void *smart_tpl_create_params(void *userdata, size_t parameters_count)
 {
     // Important that we create the public Parameters here and not the internal one
-    return new SmartTpl::Parameters();
+    auto *params = new SmartTpl::Parameters();
+
+    // We reserve the parameters_count as this is known on compile time
+    params->reserve(parameters_count);
+
+    // Return the pointer to the parameters
+    return params;
 }
 
 /**

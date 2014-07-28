@@ -70,6 +70,11 @@ public:
     const_iterator end() const { return _parameters.end(); }
     const_reverse_iterator rbegin() const { return _parameters.rbegin(); }
     const_reverse_iterator rend() const { return _parameters.rend(); }
+
+    /**
+     *  Get the amount of parameters
+     */
+    size_t size() const { return _parameters.size(); }
 };
 
 /**

@@ -311,7 +311,7 @@ TEST(CCode, ModifierParameters)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nconst void *o = NULL;\n"
-    "{\nvoid *p = callbacks->create_params(userdata);\n"
+    "{\nvoid *p = callbacks->create_params(userdata,2);\n"
     "callbacks->params_append_numeric(userdata,p,1);\n"
     "callbacks->params_append_numeric(userdata,p,5);\n"
     "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),p);\n"

@@ -42,7 +42,7 @@ struct smart_tpl_callbacks {
     void        (*assign_string)        (void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
     void        (*assign)               (void *userdata, const char *key, size_t keysize, const void *variable);
     int         (*strcmp)               (void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
-    void       *(*create_params)        (void *userdata);
+    void       *(*create_params)        (void *userdata, size_t parameters_count);
     void        (*delete_params)        (void *userdata, void *parameters);
     void        (*params_append_numeric)(void *userdata, void *parameters, numeric_t value);
     void        (*params_append_string) (void *userdata, void *parameters, const char *buf, size_t len);

@@ -457,7 +457,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
  */
 void CCode::parameters(const Parameters *parameters)
 {
-    _out << "void *p = callbacks->create_params(userdata);" << std::endl;
+    _out << "void *p = callbacks->create_params(userdata," << parameters->size() << ");" << std::endl;
     for (auto &param : *parameters)
     {
         switch (param->type()) {
