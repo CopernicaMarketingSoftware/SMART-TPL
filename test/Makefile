@@ -1,4 +1,4 @@
-override CXXFLAGS += -Wall -g -O0 -pipe -std=c++11
+override CXXFLAGS += -Wall -g -O0 -pipe -std=c++11 -Wno-sign-compare -Wno-unused-value
 INC               += -I../ -I. -Igtest-1.7.0/include
 CXX               := c++
 
