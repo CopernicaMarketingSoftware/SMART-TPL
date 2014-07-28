@@ -20,9 +20,9 @@ class LiteralInteger : public Literal
 private:
     /**
      *  The actual value
-     *  @var    int
+     *  @var    numeric_t
      */
-    const int _value;
+    const numeric_t _value;
 
 public:
     /**
@@ -30,7 +30,7 @@ public:
      *  @param  token
      */
     LiteralInteger(Token *token)
-    : _value(std::atoi(token->c_str()))
+    : _value(std::strtoll(token->c_str(), nullptr, 10))
     {
         // we no longer need the token
         delete token;
