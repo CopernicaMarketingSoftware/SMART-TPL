@@ -40,8 +40,15 @@ public:
             size_t len = std::string::npos;
             if (params.size() >= 2) len = params[1].toNumeric();
 
-            // Execute the substr method on output and return the output of it
-            return output.substr(params[0].toNumeric(), len);
+            try
+            {
+                // Execute the substr method on output and return the output of it
+                return output.substr(params[0].toNumeric(), len);
+            }
+            catch (const std::out_of_range &error)
+            {
+                // In case this happens just fall through so we end up returning the input
+            }
         }
 
         // Return the input as we can't do substr without parameters

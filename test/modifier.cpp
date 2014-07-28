@@ -345,6 +345,24 @@ TEST(Modifier, SubStr)
     }
 }
 
+TEST(Modifier, SubStrOutOfRange)
+{
+    string input("{$var|substr:10:1}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "abcdef");
+
+    string expectedOutput("abcdef");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
 TEST(Modifier, StrStr)
 {
     string input("{$var|strstr:\"@\"}\n{$var|strstr:\"@\":true}");
