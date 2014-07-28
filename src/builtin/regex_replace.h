@@ -33,9 +33,10 @@ public:
     {
         if (params.size() >= 2)
         {
-            try {
+            try
+            {
                 // initialize our settings based on the provided parameters
-                boost::regex regex(std::string(params[0].toString()));
+                boost::regex regex(params[0].toString());
                 std::string replace_text(params[1].toString());
 
                 // initialize our input string
@@ -48,8 +49,9 @@ public:
 
                 // Turn stream into a string and return it
                 return stream.str();
-            } catch (const boost::regex_error &error) {
-                std::cerr << error.what() << std::endl;
+            }
+            catch (const boost::regex_error &error)
+            {
                 // Return the original input in case of a failure
                 return input;
             }

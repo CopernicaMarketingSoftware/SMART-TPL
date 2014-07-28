@@ -35,7 +35,7 @@ public:
         std::string output(input.toString());
 
         // convert all the characters to lowercase
-        for (auto & c : output) c = tolower(c);
+        for (auto & c : output) c = std::tolower(c);
 
         // return it wrapped into a new StringValue
         return output;

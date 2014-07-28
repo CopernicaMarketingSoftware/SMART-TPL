@@ -45,6 +45,7 @@ public:
 
         // Reserve the amount of space we'll need which is the original length * (length of seperator + 1)
         output.reserve(str.size() * (seperator.length() + 1));
+
         for (auto c : str)
         {
             output += c;

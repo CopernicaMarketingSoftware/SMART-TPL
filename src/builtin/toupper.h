@@ -34,7 +34,7 @@ public:
         std::string output(input.toString());
 
         // convert all the characters to uppercase
-        for (auto & c : output) c = toupper(c);
+        for (auto & c : output) c = std::toupper(c);
 
         // return it wrapped into a new StringValue
         return output;
