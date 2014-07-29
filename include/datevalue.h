@@ -107,7 +107,7 @@ public:
      *  Convert the variable to a string
      *  @return std::string
      */
-    virtual std::string toString() const override
+    std::string toString() const override
     {
         // Put the current date/time in our buffer
         initializeDate();
@@ -120,7 +120,7 @@ public:
      *  Returns the current unix timestamp
      *  @return numeric
      */
-    virtual numeric_t toNumeric() const override
+    numeric_t toNumeric() const override
     {
         // Get the current timestamp
         std::time_t time = _timestamp;
@@ -136,7 +136,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const override
+    bool toBoolean() const override
     {
         return false;
     }
@@ -148,7 +148,7 @@ public:
      *  @param  size        size of the name
      *  @return VariantValue
      */
-    virtual VariantValue member(const char *name, size_t size) const override
+    VariantValue member(const char *name, size_t size) const override
     {
         return nullptr;
     }
@@ -156,7 +156,7 @@ public:
     /**
      *  Get access to the amount of members this value has
      */
-    virtual size_t memberCount() const override
+    size_t memberCount() const override
     {
         return 0;
     }

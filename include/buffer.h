@@ -64,7 +64,7 @@ public:
      *
      *  @return const char*
      */
-    virtual const char *name() const override
+    const char *name() const override
     {
         // an in-memory buffer does not have a variable name, return an empty string instead
         return "";
@@ -76,10 +76,10 @@ public:
      *
      *  @return const char*
      */
-    virtual const char *data() const override
+    const char *data() const override
     {
         // stored in a member
-        return _buffer.c_str();
+        return _buffer.data();
     }
 
     /**
@@ -87,7 +87,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const override
+    size_t size() const override
     {
         // stored in a member
         return _buffer.size();

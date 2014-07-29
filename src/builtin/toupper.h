@@ -28,7 +28,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Variant
      */
-    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // copy the entire string
         std::string output(input.toString());

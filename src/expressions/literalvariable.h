@@ -41,13 +41,13 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const { return Type::Value; }
+    Type type() const { return Type::Value; }
 
     /**
      *  Generate the output that leaves a pointer to the variable
      *  @param  generator
      */
-    virtual void pointer(Generator *generator) const override
+    void pointer(Generator *generator) const override
     {
         // generate the code to get a variable pointer
         generator->varPointer(*_name);

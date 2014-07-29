@@ -48,13 +48,13 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const { return Type::Value; };
+    Type type() const { return Type::Value; };
 
     /**
      *  Generate the expression as string value
      *  @param  generator
      */
-    virtual void string(Generator *generator) const override
+    void string(Generator *generator) const override
     {
         _modifiers->generate(generator, _variable.get());
     }
@@ -80,7 +80,7 @@ public:
      *  Generate the expression to output ourself
      *  @param  generator
      */
-    virtual void output(Generator *generator) const override
+    void output(Generator *generator) const override
     {
         generator->output(this);
     }

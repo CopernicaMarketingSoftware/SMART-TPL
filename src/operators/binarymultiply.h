@@ -35,7 +35,7 @@ public:
      *  Generate the operations
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const override
+    void numeric(Generator *generator) const override
     {
         generator->multiply(_left.get(), _right.get());
     }
@@ -44,7 +44,7 @@ public:
      *  Generate the instruction
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const override
+    void boolean(Generator *generator) const override
     {
         generator->multiply(_left.get(), _right.get());
     }

@@ -63,7 +63,7 @@ public:
      *  Generate the output of this statement
      *  @param  generator
      */
-    virtual void generate(Generator *generator) const override
+    void generate(Generator *generator) const override
     {
         // generate a condition statement
         generator->condition(_expression.get(), _trueStatements.get(), _falseStatements.get());

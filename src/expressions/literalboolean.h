@@ -40,13 +40,13 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const { return Type::Boolean; }
+    Type type() const { return Type::Boolean; }
 
     /**
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    virtual void string(Generator *generator) const override
+    void string(Generator *generator) const override
     {
         // create an empty string, booleans have no output
         generator->string("");
@@ -56,7 +56,7 @@ public:
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const override
+    void boolean(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->numeric(_value ? 1 : 0);
@@ -66,7 +66,7 @@ public:
      *  Generate the code to get the integer value of the expression
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const override
+    void numeric(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->numeric(_value ? 1 : 0);

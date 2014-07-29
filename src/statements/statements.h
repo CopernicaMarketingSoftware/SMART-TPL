@@ -54,7 +54,7 @@ public:
      *  Generate source code
      *  @param  generator
      */
-    virtual void generate(Generator *generator) const override
+    void generate(Generator *generator) const override
     {
         // loop through the statements, and output each one of them
         for (auto &statement : _statements) statement->generate(generator);

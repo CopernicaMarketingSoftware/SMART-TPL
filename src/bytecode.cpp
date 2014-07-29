@@ -112,11 +112,6 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
 }
 
 /**
- *  Destructor
- */
-Bytecode::~Bytecode() {}
-
-/**
  *  Helper method to pop a value from the stack
  *  @return jit_value
  *  @throws std::runtime_error if the internal stack is empty

@@ -80,7 +80,7 @@ public:
      *  Generate the output of this statement
      *  @param  generator
      */
-    virtual void generate(Generator *generator) const override
+    void generate(Generator *generator) const override
     {
         // call the generator
         generator->foreach(_source.get(), _key ? *_key : std::string(""), *_value, _statements.get(), _else_statements.get());

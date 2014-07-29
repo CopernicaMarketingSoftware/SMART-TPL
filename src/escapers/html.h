@@ -33,7 +33,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &encode(std::string &input) const override
+    std::string &encode(std::string &input) const override
     {
         // Replace the <, >, " and & with their escaped versions
         // We do this by looping through the input and looking for the characters that need to be escaped at the same time
@@ -64,7 +64,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &decode(std::string &input) const override
+    std::string &decode(std::string &input) const override
     {
         // Replace the escaped versions of <, >, " and & with their escaped versions
         replace(input, "&lt;",   "<");

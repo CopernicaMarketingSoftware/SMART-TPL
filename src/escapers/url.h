@@ -33,7 +33,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &encode(std::string &input) const override
+    std::string &encode(std::string &input) const override
     {
         // Declare a simple hex table
         const char hex[] = "0123456789ABCDEF";
@@ -78,7 +78,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &decode(std::string &input) const override
+    std::string &decode(std::string &input) const override
     {
         std::string output;
         for (unsigned int i = 0; i < input.length(); ++i)

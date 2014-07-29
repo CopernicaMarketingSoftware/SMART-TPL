@@ -45,13 +45,13 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const { return Type::Numeric; }
+    Type type() const { return Type::Numeric; }
 
     /**
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    virtual void string(Generator *generator) const override
+    void string(Generator *generator) const override
     {
         // create string literal
         generator->string(std::to_string(_value));
@@ -61,7 +61,7 @@ public:
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const override
+    void boolean(Generator *generator) const override
     {
         // create numeric literal
         generator->numeric(_value ? 1 : 0);
@@ -71,7 +71,7 @@ public:
      *  Generate the code to get the numeric value of the expression
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const override
+    void numeric(Generator *generator) const override
     {
         // create numeric literal
         generator->numeric(_value);

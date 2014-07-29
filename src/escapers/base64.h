@@ -33,7 +33,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &encode(std::string &input) const override
+    std::string &encode(std::string &input) const override
     {
         // This is mostly using the openssl library, so it is kind of dirty code :/
         // initialize our base64 encoder
@@ -94,7 +94,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &decode(std::string &input) const override
+    std::string &decode(std::string &input) const override
     {
         // This is mostly using the openssl library, so it is kind of dirty code :/
         // initialize our base64 encoder

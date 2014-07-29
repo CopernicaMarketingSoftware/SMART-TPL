@@ -33,7 +33,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &encode(std::string &input) const override
+    std::string &encode(std::string &input) const override
     {
         return input;
     }
@@ -44,7 +44,7 @@ public:
      *  a copy and modifying that.
      *  @param input
      */
-    virtual std::string &decode(std::string &input) const override
+    std::string &decode(std::string &input) const override
     {
         return input;
     }

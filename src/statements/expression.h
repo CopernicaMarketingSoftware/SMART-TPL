@@ -40,7 +40,7 @@ public:
      *  Generate the output of this statement
      *  @param  generator
      */
-    virtual void generate(Generator *generator) const override
+    void generate(Generator *generator) const override
     {
         _expression->output(generator);
     }

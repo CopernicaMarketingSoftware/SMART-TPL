@@ -41,7 +41,7 @@ public:
      *  Generate the output of this statement
      *  @param  generator
      */
-    virtual void generate(Generator *generator) const override
+    void generate(Generator *generator) const override
     {
         // add write instruction of raw data
         generator->raw(*_data);

@@ -32,25 +32,25 @@ private:
      *  Output raw data
      *  @param  data        buffer to output
      */
-    virtual void raw(const std::string &data) override;
+    void raw(const std::string &data) override;
 
     /**
      *  Generate the code to output a variable
      *  @param  variable           The variable to output
      */
-    virtual void output(const Variable *variable) override;
+    void output(const Variable *variable) override;
 
     /**
      *  Generate the code to output the output of a filter
      *  @param  filter             The filter to eventually output
      */
-    virtual void output(const Filter *filter) override;
+    void output(const Filter *filter) override;
 
     /**
      *  Generate the code to write an expression as a string
      *  @param  expression          the expression to write as a string
      */
-    virtual void write(const Expression *expression) override;
+    void write(const Expression *expression) override;
 
     /**
      *  Generate a conditional statement
@@ -58,7 +58,7 @@ private:
      *  @param  ifstatements        the statements in the 'if' part
      *  @param  elsestatements      the statements in the 'else' part
      */
-    virtual void condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) override;
+    void condition(const Expression *expression, const Statements *ifstatements, const  Statements *elsestatements) override;
 
     /**
      *  Generate the code to get a pointer to a variable
@@ -69,70 +69,70 @@ private:
      *  @param  name                name of the variable
      *  @param  expression          Expression that evaluates to a var name
      */
-    virtual void varPointer(const Variable *parent, const std::string &name) override;
-    virtual void varPointer(const Variable *parent, const Expression *expression) override;
-    virtual void varPointer(const std::string &name) override;
+    void varPointer(const Variable *parent, const std::string &name) override;
+    void varPointer(const Variable *parent, const Expression *expression) override;
+    void varPointer(const std::string &name) override;
 
     /**
      *  Create a string or numeric literal
      *  @param  value
      */
-    virtual void string(const std::string &value) override;
-    virtual void numeric(numeric_t value) override;
+    void string(const std::string &value) override;
+    void numeric(numeric_t value) override;
 
     /**
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
-    virtual void stringVariable(const Variable *variable) override;
-    virtual void numericVariable(const Variable *variable) override;
-    virtual void booleanVariable(const Variable *variable) override;
-    virtual void variable(const Variable *variable) override;
+    void stringVariable(const Variable *variable) override;
+    void numericVariable(const Variable *variable) override;
+    void booleanVariable(const Variable *variable) override;
+    void variable(const Variable *variable) override;
 
     /**
      *  Arithmetric operations
      *  @param  left
      *  @param  right
      */
-    virtual void plus(const Expression *left, const Expression *right) override;
-    virtual void minus(const Expression *left, const Expression *right) override;
-    virtual void divide(const Expression *left, const Expression *right) override;
-    virtual void multiply(const Expression *left, const Expression *right) override;
-    virtual void modulo(const Expression *left, const Expression *right) override;
+    void plus(const Expression *left, const Expression *right) override;
+    void minus(const Expression *left, const Expression *right) override;
+    void divide(const Expression *left, const Expression *right) override;
+    void multiply(const Expression *left, const Expression *right) override;
+    void modulo(const Expression *left, const Expression *right) override;
 
     /**
      *  Comparison operators
      *  @param  left
      *  @param  right
      */
-    virtual void equals(const Expression *left, const Expression *right) override;
-    virtual void notEquals(const Expression *left, const Expression *right) override;
-    virtual void greater(const Expression *left, const Expression *right) override;
-    virtual void greaterEquals(const Expression *left, const Expression *right) override;
-    virtual void lesser(const Expression *left, const Expression *right) override;
-    virtual void lesserEquals(const Expression *left, const Expression *right) override;
+    void equals(const Expression *left, const Expression *right) override;
+    void notEquals(const Expression *left, const Expression *right) override;
+    void greater(const Expression *left, const Expression *right) override;
+    void greaterEquals(const Expression *left, const Expression *right) override;
+    void lesser(const Expression *left, const Expression *right) override;
+    void lesserEquals(const Expression *left, const Expression *right) override;
 
     /**
      *  Boolean operators
      *  @param  left
      *  @param  right
      */
-    virtual void booleanAnd(const Expression *left, const Expression *right) override;
-    virtual void booleanOr(const Expression *left, const Expression *right) override;
+    void booleanAnd(const Expression *left, const Expression *right) override;
+    void booleanOr(const Expression *left, const Expression *right) override;
 
     /**
      *  Generate the code to apply a set of modifiers on an expression
      *  @param  modifiers          The set of modifiers to apply
      *  @param  expression         The expression to apply to modifiers on
      */
-    virtual void modifiers(const Modifiers *modifiers, const Variable *variable) override;
+    void modifiers(const Modifiers *modifiers, const Variable *variable) override;
 
     /**
      *  Generate the code to construct the following parameters
      *  @param  parameters         The parameters to construct
      *  @note Construct as in, generate the code so the runtime can construct them
      */
-    virtual void parameters(const Parameters *parameters) override;
+    void parameters(const Parameters *parameters) override;
 
     /**
      *  Generate the code to do a foreach loop over variable
@@ -142,14 +142,14 @@ private:
      *  @param statements       The statements to execute on each iteration
      *  @param else_statements  The statements to execute if there was nothing to loop through
      */
-    virtual void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements) override;
+    void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements) override;
 
     /**
      *  Generate the code to assign the output of an expression to a key
      *  @param key                  The key to assign the output to
      *  @param expression           The expression to evaluate
      */
-    virtual void assign(const std::string &key, const Expression *expression) override;
+    void assign(const std::string &key, const Expression *expression) override;
 
 public:
     /**

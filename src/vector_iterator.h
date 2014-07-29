@@ -48,7 +48,7 @@ public:
      *  Check if the iterator is still valid
      *  @return bool
      */
-    virtual bool valid() const override
+    bool valid() const override
     {
         return _iter != _end;
     }
@@ -56,7 +56,7 @@ public:
     /**
      *  Move to the next position
      */
-    virtual void next() override
+    void next() override
     {
         ++_iter;
     }
@@ -65,7 +65,7 @@ public:
      *  Retrieve pointer to the current member
      *  @return Variant
      */
-    virtual VariantValue value() const override
+    VariantValue value() const override
     {
         return *_iter;
     }
@@ -74,7 +74,7 @@ public:
      *  Retrieve a pointer to the current key
      *  @return Variant
      */
-    virtual VariantValue key() const override
+    VariantValue key() const override
     {
         return nullptr;
     }
