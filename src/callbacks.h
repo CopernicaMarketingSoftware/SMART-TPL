@@ -749,14 +749,14 @@ public:
      *  @param  key_size     The length of key
      *  @see    smart_tpl_assign
      */
-    void assign(const jit_value &userdata, const jit_value &variable, const jit_value &key, const jit_value &key_size)
+    void assign(const jit_value &userdata, const jit_value &key, const jit_value &key_size, const jit_value &variable)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
-            variable.raw(),
             key.raw(),
             key_size.raw(),
+            variable.raw(),
         };
 
         // create the instruction
@@ -771,14 +771,14 @@ public:
      *  @param  key_size       The length of key
      *  @see    smart_tpl_assign_numeric
      */
-    void assign_numeric(const jit_value &userdata, const jit_value &value, const jit_value &key, const jit_value &key_size)
+    void assign_numeric(const jit_value &userdata, const jit_value &key, const jit_value &key_size, const jit_value &value)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
-            value.raw(),
             key.raw(),
             key_size.raw(),
+            value.raw(),
         };
 
         // create the instruction
@@ -793,14 +793,14 @@ public:
      *  @param  key_size      The length of key
      *  @see    smart_tpl_assign_boolean
      */
-    void assign_boolean(const jit_value &userdata, const jit_value &boolean, const jit_value &key, const jit_value &key_size)
+    void assign_boolean(const jit_value &userdata, const jit_value &key, const jit_value &key_size, const jit_value &boolean)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
-            boolean.raw(),
             key.raw(),
             key_size.raw(),
+            boolean.raw(),
         };
 
         // create the instruction
@@ -816,15 +816,15 @@ public:
      *  @param  key_size      The length of key
      *  @see    smart_tpl_assign_string
      */
-    void assign_string(const jit_value &userdata, const jit_value &str, const jit_value str_size, const jit_value &key, const jit_value &key_size)
+    void assign_string(const jit_value &userdata, const jit_value &key, const jit_value &key_size, const jit_value &str, const jit_value str_size)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
-            str.raw(),
-            str_size.raw(),
             key.raw(),
             key_size.raw(),
+            str.raw(),
+            str_size.raw(),
         };
 
         // create the instruction
