@@ -112,6 +112,7 @@ expr(A)             ::= literal(B) .                                            
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::Internal::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::Internal::LiteralBoolean(false); }
 literal(A)          ::= INTEGER(B) .                                            { A = new SmartTpl::Internal::LiteralInteger(B); }
+literal(A)          ::= DOUBLE(B) .                                             { A = new SmartTpl::Internal::LiteralDouble(B); }
 literal(A)          ::= STRING(B) .                                             { A = new SmartTpl::Internal::LiteralString(B); }
 variable(A)         ::= VARIABLE(B) .                                           { A = new SmartTpl::Internal::LiteralVariable(B); }
 variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { A = new SmartTpl::Internal::VariableArrayAccess(B,C); }

@@ -96,7 +96,7 @@ public:
      */
     virtual void string(const std::string &value) = 0;
     virtual void numeric(numeric_t value) = 0;
-    //virtual void boolean(bool value) = 0;
+    virtual void double_type(double value) = 0;
 
     /**
      *  Create a string, numeric or boolean constant for a variable
@@ -105,6 +105,7 @@ public:
     virtual void stringVariable(const Variable *variable) = 0;
     virtual void numericVariable(const Variable *variable) = 0;
     virtual void booleanVariable(const Variable *variable) = 0;
+    virtual void doubleVariable(const Variable *variable) = 0;
     virtual void variable(const Variable *variable) = 0;
 
     /**

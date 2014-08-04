@@ -133,6 +133,12 @@ public:
     }
 
     /**
+     *  Convert the variable to a floating point value
+     *  @return double
+     */
+    double toDouble() const override { return toNumeric(); };
+
+    /**
      *  Convert the variable to a boolean value
      *  @return bool
      */

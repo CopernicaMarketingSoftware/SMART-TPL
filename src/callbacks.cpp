@@ -30,6 +30,7 @@ IteratorNextCallback        Callbacks::_iterator_next;
 VariableCallback            Callbacks::_variable;
 ToStringCallback            Callbacks::_toString;
 ToNumericCallback           Callbacks::_toNumeric;
+ToDoubleCallback            Callbacks::_toDouble;
 ToBooleanCallback           Callbacks::_toBoolean;
 SizeCallback                Callbacks::_size;
 ModifierCallback            Callbacks::_modifier;
@@ -305,6 +306,21 @@ numeric_t smart_tpl_to_numeric(void *userdata, const void *variable)
 
     // convert to numeric
     return var->toNumeric();
+}
+
+/**
+ *  Retrieve the floating point representation of a variable
+ *  @param  userdata       pointer to user-supplied data
+ *  @param  variable       pointer to a variable
+ *  @return                floating point value
+ */
+double smart_tpl_to_double(void *userdata, const void *variable)
+{
+    // convert the variable to a value object
+    auto *var = (const Value *)variable;
+
+    // convert to floating point
+    return var->toDouble();
 }
 
 /**

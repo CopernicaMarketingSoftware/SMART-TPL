@@ -73,6 +73,12 @@ public:
     bool toBoolean() const override { return (bool) *_value; };
 
     /**
+     *  Convert the variable to a floating point value
+     *  @return double
+     */
+    double toDouble() const override { std::cerr << "VariantValue::toDouble(" << ((double) *_value) << ");" << std::endl;return (double) *_value; };
+
+    /**
      *  Get access to a member value
      *
      *  @param  name        name of the member

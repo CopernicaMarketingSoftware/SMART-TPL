@@ -133,6 +133,22 @@ public:
     }
 
     /**
+     *  Convert the variable to a floating point value
+     *  @return double
+     */
+    double toDouble() const override
+    {
+        // Are we cacheable? Yes return the cached version then
+        if (cache()) return _cache->toDouble();
+
+        // call the callback to find out the actual value
+        VariantValue value(_callback());
+
+        // retrieve the floating point value
+        return value.toDouble();
+    }
+
+    /**
      *  Get access to a member value
      *
      *  @param  name        name of the member

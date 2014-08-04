@@ -76,6 +76,16 @@ public:
         // create numeric literal
         generator->numeric(_value);
     }
+
+    /**
+     *  Generate the expression as a double value
+     *  @param  generator
+     */
+    void double_type(Generator *generator) const override
+    {
+        // turn out numeric value into a double
+        generator->double_type(_value);
+    }
 };
 
 /**

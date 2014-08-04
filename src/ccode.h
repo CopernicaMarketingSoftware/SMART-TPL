@@ -79,6 +79,7 @@ private:
      */
     void string(const std::string &value) override;
     void numeric(numeric_t value) override;
+    void double_type(double value) override;
 
     /**
      *  Create a string, numeric or boolean constant for a variable
@@ -87,6 +88,7 @@ private:
     void stringVariable(const Variable *variable) override;
     void numericVariable(const Variable *variable) override;
     void booleanVariable(const Variable *variable) override;
+    void doubleVariable(const Variable *variable) override;
     void variable(const Variable *variable) override;
 
     /**

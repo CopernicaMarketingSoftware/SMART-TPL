@@ -45,6 +45,16 @@ public:
     }
 
     /**
+     *  Generate the expression as a double value
+     *  @param  generator
+     */
+    virtual void double_type(Generator *generator) const override
+    {
+        // turn out numeric value into a double
+        generator->doubleVariable(this);
+    }
+
+    /**
      *  Generate a boolean code for the variable
      *  @param  generator
      */

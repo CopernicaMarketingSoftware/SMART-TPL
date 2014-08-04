@@ -31,6 +31,7 @@ void        smart_tpl_iterator_next         (void *userdata, void *iterator);
 const void *smart_tpl_variable              (void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string             (void *userdata, const void *variable);
 numeric_t   smart_tpl_to_numeric            (void *userdata, const void *variable);
+double      smart_tpl_to_double             (void *userdata, const void *variable);
 int         smart_tpl_to_boolean            (void *userdata, const void *variable);
 size_t      smart_tpl_size                  (void *userdata, const void *variable);
 void       *smart_tpl_modifier              (void *userdata, const char *name, size_t size);
@@ -141,6 +142,12 @@ private:
      *  @var    ToNumericCallback
      */
     static ToNumericCallback _toNumeric;
+
+    /**
+     *  Signature of the function to convert a variable to a floating point value
+     *  @var    ToDoubleCallback
+     */
+    static ToDoubleCallback _toDouble;
 
     /**
      *  Signature of the function to convert a variable to a boolean value
@@ -527,6 +534,25 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_to_string", (void *)smart_tpl_to_string, _toString.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the to_double function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     *  @return jit_value       Floating point representation
+     *  @see    smart_tpl_to_double
+     */
+    jit_value to_double(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_to_double", (void *)smart_tpl_to_double, _toDouble.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

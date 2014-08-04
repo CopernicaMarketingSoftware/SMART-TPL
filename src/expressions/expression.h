@@ -25,7 +25,8 @@ public:
         Numeric = 0,            // numeric type
         String = 1,             // string type
         Boolean = 2,            // boolean type
-        Value = 3               // variable that was modified by a modifier / type may be unknown
+        Double = 3,             // a double type
+        Value = 4               // variable that was modified by a modifier / type may be unknown
     };
 
 protected:
@@ -54,6 +55,12 @@ public:
      *  @param  generator
      */
     virtual void numeric(Generator *generator) const {};
+
+    /**
+     *  Generate the expression as a double value
+     *  @param  generator
+     */
+    virtual void double_type(Generator *generator) const {};
 
     /**
      *  Generate the expression as a boolean value

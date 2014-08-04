@@ -119,6 +119,13 @@ private:
     jit_value booleanExpression(const Expression *expression);
 
     /**
+     *  Retrieve the floating point representation of an expression
+     *  @param  expression
+     *  @return jit_value
+     */
+    jit_value doubleExpression(const Expression *expression);
+
+    /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */
@@ -169,6 +176,7 @@ private:
      */
     void string(const std::string &value) override;
     void numeric(numeric_t value) override;
+    void double_type(double value) override;
 
     /**
      *  Create a string or numeric constant for a variable
@@ -177,6 +185,7 @@ private:
     void stringVariable(const Variable *variable) override;
     void numericVariable(const Variable *variable) override;
     void booleanVariable(const Variable *variable) override;
+    void doubleVariable(const Variable *variable) override;
     void variable(const Variable *variable) override;
 
     /**

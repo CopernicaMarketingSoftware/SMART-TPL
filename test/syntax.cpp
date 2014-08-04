@@ -207,3 +207,10 @@ TEST(Syntax, NonExistingOperator)
     string input("{if 1 notanoperator 2}true{else}false{/if}");
     EXPECT_THROW(Template tpl((Buffer(input)));, std::runtime_error);
 }
+
+TEST(Syntax, GreaterThanDouble)
+{
+    string input("{if 13.37 gte 3.14}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}

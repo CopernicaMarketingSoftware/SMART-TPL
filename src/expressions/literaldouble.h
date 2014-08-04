@@ -1,7 +1,7 @@
 /**
- *  String.h
+ *  LiteralInteger.h
  *
- *  Implementation of a literal string value
+ *  Implementation of a literal integer value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -15,32 +15,38 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class LiteralString : public Literal
+class LiteralDouble : public Literal
 {
 private:
     /**
      *  The actual value
-     *  @var    std::string
+     *  @var    numeric_t
      */
-    std::unique_ptr<const Token> _value;
+    const double _value;
 
 public:
     /**
      *  Constructor
-     *  @param  std::string
+     *  @param  token
      */
-    LiteralString(Token *value) : _value(value) {}
+    LiteralDouble(Token *token)
+    : _value(std::strtod(token->c_str(), nullptr))
+    {
+        std::cerr << "LiteralDouble(" << _value << ");" << std::endl;
+        // we no longer need the token
+        delete token;
+    }
 
     /**
      *  Destructor
      */
-    virtual ~LiteralString() {}
+    virtual ~LiteralDouble() {}
 
     /**
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const { return Type::String; }
+    Type type() const { return Type::Double; }
 
     /**
      *  Generate the code to get the const char * to the expression
@@ -48,8 +54,8 @@ public:
      */
     void string(Generator *generator) const override
     {
-        // generate our actual value
-        generator->string(*_value);
+        // create string literal
+        generator->string(std::to_string(_value));
     }
 
     /**
@@ -58,18 +64,18 @@ public:
      */
     void boolean(Generator *generator) const override
     {
-        // just return 0
-        generator->numeric(0);
+        // create numeric literal
+        generator->numeric(_value ? 1 : 0);
     }
 
     /**
-     *  Generate the code to get the integer value of the expression
+     *  Generate the code to get the numeric value of the expression
      *  @param  generator
      */
     void numeric(Generator *generator) const override
     {
-        // just return 0
-        generator->numeric(0);
+        // create numeric literal (We actually don't really want to reach this I think)
+        generator->numeric(_value);
     }
 
     /**
@@ -78,8 +84,8 @@ public:
      */
     void double_type(Generator *generator) const override
     {
-        // just return 0
-        generator->double_type(0);
+        // create a double type
+        generator->double_type(_value);
     }
 };
 

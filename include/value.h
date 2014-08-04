@@ -54,6 +54,12 @@ public:
     virtual bool toBoolean() const = 0;
 
     /**
+     *  Convert the variable to a floating point value
+     *  @return double
+     */
+    virtual double toDouble() const = 0;
+
+    /**
      *  Get access to a member value
      *
      *  @param  name        name of the member
