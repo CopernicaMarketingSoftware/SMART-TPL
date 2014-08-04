@@ -657,11 +657,9 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
  */
 void Bytecode::greater(const Expression *left, const Expression *right)
 {
-    bool _floating = (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double);
-
     // calculate left and right values
-    jit_value l = _floating ? doubleExpression(left) : numericExpression(left);
-    jit_value r = _floating ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l > r);
@@ -675,11 +673,9 @@ void Bytecode::greater(const Expression *left, const Expression *right)
  */
 void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 {
-    bool _floating = (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double);
-
     // calculate left and right values
-    jit_value l = _floating ? doubleExpression(left) : numericExpression(left);
-    jit_value r = _floating ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l >= r);
@@ -693,11 +689,9 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
  */
 void Bytecode::lesser(const Expression *left, const Expression *right)
 {
-    bool _floating = (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double);
-
     // calculate left and right values
-    jit_value l = _floating ? doubleExpression(left) : numericExpression(left);
-    jit_value r = _floating ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l < r);
@@ -711,11 +705,9 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
  */
 void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 {
-    bool _floating = (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double);
-
     // calculate left and right values
-    jit_value l = _floating ? doubleExpression(left) : numericExpression(left);
-    jit_value r = _floating ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
     _stack.push(l <= r);

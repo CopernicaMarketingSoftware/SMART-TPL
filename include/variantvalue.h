@@ -76,7 +76,7 @@ public:
      *  Convert the variable to a floating point value
      *  @return double
      */
-    double toDouble() const override { std::cerr << "VariantValue::toDouble(" << ((double) *_value) << ");" << std::endl;return (double) *_value; };
+    double toDouble() const override { return (double) *_value; };
 
     /**
      *  Get access to a member value

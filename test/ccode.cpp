@@ -148,7 +148,7 @@ TEST(CCode, VarGreaterThen)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "if (callbacks->to_numeric(userdata,callbacks->variable(userdata,\"age\",3))>18){\n"
+    "if (callbacks->to_double(userdata,callbacks->variable(userdata,\"age\",3))>18){\n"
     "callbacks->write(userdata,\"You are over 18 years old.\",26);\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
@@ -163,7 +163,7 @@ TEST(CCode, VarGreaterThenNegativeNumber)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "if (callbacks->to_numeric(userdata,callbacks->variable(userdata,\"age\",3))>-1){\n"
+    "if (callbacks->to_double(userdata,callbacks->variable(userdata,\"age\",3))>-1){\n"
     "callbacks->write(userdata,\"You are alive..\",15);\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());

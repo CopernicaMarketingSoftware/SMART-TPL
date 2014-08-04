@@ -418,56 +418,56 @@ void CCode::notEquals(const Expression *left, const Expression *right)
 void CCode::greater(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double) left->double_type(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
     else left->numeric(this);
 
     // Print the actual operator
     _out << ">";
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double) right->double_type(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
 }
 
 void CCode::greaterEquals(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double) left->double_type(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
     else left->numeric(this);
 
     // Print the actual operator
     _out << ">=";
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double) right->double_type(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
 }
 
 void CCode::lesser(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double) left->double_type(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
     else left->numeric(this);
 
     // Print the actual operator
     _out << "<";
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double) right->double_type(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
 }
 
 void CCode::lesserEquals(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double) left->double_type(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
     else left->numeric(this);
 
     // Print the actual operator
     _out << "<=";
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double) right->double_type(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
 }
 

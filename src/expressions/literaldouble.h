@@ -32,7 +32,6 @@ public:
     LiteralDouble(Token *token)
     : _value(std::strtod(token->c_str(), nullptr))
     {
-        std::cerr << "LiteralDouble(" << _value << ");" << std::endl;
         // we no longer need the token
         delete token;
     }

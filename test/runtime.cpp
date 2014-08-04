@@ -515,3 +515,27 @@ TEST(RunTime, MathIf)
         EXPECT_EQ(expectedOutput2, tpl.process(data2));
     }
 }
+
+TEST(RunTime, DoubleVariableComparison)
+{
+    string input("{if $double > 3}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("double", 3.14);
+
+    Data data2;
+    data.assign("double", 12.3456789);
+
+    string expectedOutput("true");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+    string expectedOutput2("false");
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process(data));
+        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+    }
+}
