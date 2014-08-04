@@ -39,6 +39,7 @@ const void *smart_tpl_modify_variable       (void *userdata, const void *variabl
 void        smart_tpl_assign_numeric        (void *userdata, const char *key, size_t keysize, numeric_t value);
 void        smart_tpl_assign_boolean        (void *userdata, const char *key, size_t keysize, int boolean);
 void        smart_tpl_assign_string         (void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
+void        smart_tpl_assign_double         (void *userdata, const char *key, size_t keysize, double value);
 void        smart_tpl_assign                (void *userdata, const char *key, size_t keysize, const void *variable);
 int         smart_tpl_strcmp                (void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
 void       *smart_tpl_create_params         (void *userdata, size_t parameters_count);
@@ -226,6 +227,12 @@ private:
      *  @var AssignNumericCallback
      */
     static AssignNumericCallback _assign_numeric;
+
+    /**
+     *  Signature of the function to assign a double value to a local variable
+     *  @var AssignDoubleCallback
+     */
+    static AssignDoubleCallback _assign_double;
 
     /**
      *  Signature of the function to assign a string to a local variable
@@ -783,6 +790,28 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_assign_numeric", (void *) smart_tpl_assign_numeric, _assign_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the assign_double function
+     *  @param  userdata       Pointer to user-supplied data
+     *  @param  value          The floating point value to assign
+     *  @param  key            The key to assign value to
+     *  @param  key_size       The length of key
+     *  @see    smart_tpl_assign_numeric
+     */
+    void assign_double(const jit_value &userdata, const jit_value &value, const jit_value &key, const jit_value &key_size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw(),
+            key.raw(),
+            key_size.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_assign_double", (void *) smart_tpl_assign_double, _assign_double.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

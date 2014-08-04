@@ -539,3 +539,18 @@ TEST(RunTime, DoubleVariableComparison)
         EXPECT_EQ(expectedOutput2, tpl.process(data2));
     }
 }
+
+TEST(RunTime, AssignDouble)
+{
+    string input("{assign 15e16 to $test}{$test}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("150000000000000000.000000");
+    EXPECT_EQ(expectedOutput, tpl.process());
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, tpl.process());
+    }
+}

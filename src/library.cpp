@@ -38,6 +38,7 @@ static struct smart_tpl_callbacks callbacks = {
     .modifier              = smart_tpl_modifier,
     .modify_variable       = smart_tpl_modify_variable,
     .assign_numeric        = smart_tpl_assign_numeric,
+    .assign_double         = smart_tpl_assign_double,
     .assign_boolean        = smart_tpl_assign_boolean,
     .assign_string         = smart_tpl_assign_string,
     .assign                = smart_tpl_assign,

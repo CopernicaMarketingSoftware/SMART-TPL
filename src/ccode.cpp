@@ -715,9 +715,14 @@ void CCode::assign(const std::string &key, const Expression *expression)
             variable->pointer(this);
             break;
         }
+        throw std::runtime_error("Unsupported assign.");
     }
     case Expression::Type::Double:
-        throw std::runtime_error("Unsupported assign.");
+        // Convert to a floating point value and use the assign_double callback
+        _out << "callbacks->assign_double(userdata,";
+        string(key); _out << ",";
+        expression->double_type(this);
+        break;
     }
     // Finish this statement
     _out << ");" << std::endl;

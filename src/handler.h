@@ -218,7 +218,18 @@ public:
      *  @param key          The name of our local variable
      *  @param key_size     The size of key
      */
-    void assign(const char *key, size_t key_size, long value)
+    void assign(const char *key, size_t key_size, numeric_t value)
+    {
+        assign(key, key_size, VariantValue(value));
+    }
+
+    /**
+     *  Assign a floating point value to a local variable
+     *  @param value        The floating point value we want to assign
+     *  @param key          The name of our local variable
+     *  @param key_size     The size of key
+     */
+    void assign(const char *key, size_t key_size, double value)
     {
         assign(key, key_size, VariantValue(value));
     }

@@ -173,6 +173,7 @@
 #include "callbacks/assign_numeric.h"
 #include "callbacks/assign_boolean.h"
 #include "callbacks/assign_string.h"
+#include "callbacks/assign_double.h"
 #include "tokenprocessor.h"
 #include "parser.h"
 #include "tokenizer.h"

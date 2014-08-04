@@ -44,6 +44,7 @@ StrCmpCallback              Callbacks::_strcmp;
 AssignCallback              Callbacks::_assign;
 AssignBooleanCallback       Callbacks::_assign_boolean;
 AssignNumericCallback       Callbacks::_assign_numeric;
+AssignDoubleCallback        Callbacks::_assign_double;
 AssignStringCallback        Callbacks::_assign_string;
 
 /**
@@ -418,6 +419,22 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
  *  @param value           the numeric value we would like to assign
  */
 void smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, numeric_t value)
+{
+    // Convert userdata to our Handler
+    auto handler = (Handler *) userdata;
+
+    // Assign numeric value to key
+    handler->assign(key, keysize, value);
+}
+
+/**
+ *  Assign a floating point value to a local variable
+ *  @param userdata        pointer to user-supplied data
+ *  @param key             the key we would like to assign it to
+ *  @param keysize         the size of key
+ *  @param value           the floating point value we would like to assign
+ */
+void smart_tpl_assign_double(void *userdata, const char *key, size_t keysize, double value)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;

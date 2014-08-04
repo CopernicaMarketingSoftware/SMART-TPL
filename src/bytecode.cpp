@@ -967,9 +967,14 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
             _callbacks.assign(_userdata, key_str, key_size, var);
             break;
         }
+        throw std::runtime_error("Unsupported assign.");
     }
     case Expression::Type::Double:
-        throw std::runtime_error("Unsupported assign.");
+        // Convert to a floating point and use the assign_double callback
+        expression->double_type(this);
+        auto _double = pop();
+        _callbacks.assign_double(_userdata, key_str, key_size, _double);
+        break;
     }
 }
 
