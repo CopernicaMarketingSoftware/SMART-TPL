@@ -823,7 +823,7 @@ void Bytecode::parameters(const Parameters *parameters)
         }
         case Expression::Type::Double:
             // Convert the expression to a floating point value and append it using params_append_numeric
-            _callbacks.params_append_numeric(_userdata, params, doubleExpression(param.get()));
+            _callbacks.params_append_double(_userdata, params, doubleExpression(param.get()));
             break;
         default:
             throw std::runtime_error("Unsupported operation for now");

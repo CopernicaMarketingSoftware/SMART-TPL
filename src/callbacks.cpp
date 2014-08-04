@@ -37,6 +37,7 @@ ModifierCallback            Callbacks::_modifier;
 ModifyVariableCallback      Callbacks::_modify_variable;
 CreateParamsCallback        Callbacks::_create_params;
 ParamsAppendNumericCallback Callbacks::_params_append_numeric;
+ParamsAppendDoubleCallback  Callbacks::_params_append_double;
 ParamsAppendStringCallback  Callbacks::_params_append_string;
 ParamsAppendBooleanCallback Callbacks::_params_append_boolean;
 DeleteParamsCallback        Callbacks::_delete_params;
