@@ -34,6 +34,7 @@ public:
         NumericMode,
         StringMode,
         BooleanMode,
+        DoubleMode,
     };
     TestModifier(Mode mode) : Modifier(), _mode(mode) {};
     virtual ~TestModifier() {};
@@ -58,6 +59,9 @@ public:
                 EXPECT_TRUE(params[0].toBoolean());
                 EXPECT_FALSE(params[1].toBoolean());
                 EXPECT_TRUE(params[2].toBoolean());
+                break;
+            case DoubleMode:
+                EXPECT_EQ(1, params.size());
                 break;
         };
         return input;
@@ -133,6 +137,22 @@ TEST(Modifiers, ParametersBoolean)
     Template tpl((Buffer(input)));
 
     TestModifier test(TestModifier::BooleanMode);
+    Data data;
+    data.modifier("test", &test)
+        .assign("var", "Test");
+
+    string expectedOutput("Test");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    compile(tpl);
+}
+
+TEST(Modifiers, ParametersDouble)
+{
+    string input("{$var|test:0.0}");
+    Template tpl((Buffer(input)));
+
+    TestModifier test(TestModifier::DoubleMode);
     Data data;
     data.modifier("test", &test)
         .assign("var", "Test");

@@ -612,6 +612,12 @@ void CCode::parameters(const Parameters *parameters)
             param->string(this);
             _out << ");";
             break;
+        case Expression::Type::Double:
+            // This expression in the parameters is a floating point value, so we use params_append_double
+            _out << "callbacks->params_append_double(userdata,p,";
+            param->double_type(this);
+            _out << ");";
+            break;
         default:
             throw std::runtime_error("Unsupported operation for now");
         }

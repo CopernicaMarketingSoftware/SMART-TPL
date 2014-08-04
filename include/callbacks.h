@@ -47,6 +47,7 @@ struct smart_tpl_callbacks {
     void       *(*create_params)        (void *userdata, size_t parameters_count);
     void        (*delete_params)        (void *userdata, void *parameters);
     void        (*params_append_numeric)(void *userdata, void *parameters, numeric_t value);
+    void        (*params_append_double) (void *userdata, void *parameters, double value);
     void        (*params_append_string) (void *userdata, void *parameters, const char *buf, size_t len);
     void        (*params_append_boolean)(void *userdata, void *parameters, int boolean);
 };

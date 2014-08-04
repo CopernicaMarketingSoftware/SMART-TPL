@@ -166,6 +166,7 @@
 #include "callbacks/params_append_numeric.h"
 #include "callbacks/params_append_boolean.h"
 #include "callbacks/params_append_string.h"
+#include "callbacks/params_append_double.h"
 #include "callbacks/delete_params.h"
 #include "callbacks/size.h"
 #include "callbacks/strcmp.h"

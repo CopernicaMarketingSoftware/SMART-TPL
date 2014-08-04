@@ -551,6 +551,21 @@ void smart_tpl_params_append_numeric(void *userdata, void *parameters, numeric_t
 }
 
 /**
+ *  Append a floating point value to the parameters
+ *  @param  userdata        Pointer to user-supplied data
+ *  @param  parameters      Pointer to a SmartTpl::Parameters object
+ *  @param  value           The floating point value to append
+ */
+void smart_tpl_params_append_double(void *userdata, void *parameters, double value)
+{
+    // Convert to a Parameters object
+    auto *params = (SmartTpl::Parameters *) parameters;
+
+    // Add the numeric value
+    params->emplace_back(value);
+}
+
+/**
  *  Append a string value to the parameters
  *  @param  userdata      Pointer to user-supplied data
  *  @param  parameters    Pointer to a SmartTpl::Parameters object
