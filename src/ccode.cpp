@@ -367,11 +367,62 @@ void CCode::variable(const Variable* variable)
  *  @param  left
  *  @param  right
  */
-void CCode::plus(const Expression *left, const Expression *right)       { left->numeric(this); _out << "+"; right->numeric(this); }
-void CCode::minus(const Expression *left, const Expression *right)      { left->numeric(this); _out << "-"; right->numeric(this); }
-void CCode::divide(const Expression *left, const Expression *right)     { left->numeric(this); _out << "/"; right->numeric(this); }
-void CCode::multiply(const Expression *left, const Expression *right)   { left->numeric(this); _out << "*"; right->numeric(this); }
-void CCode::modulo(const Expression *left, const Expression *right)     { left->numeric(this); _out << "%"; right->numeric(this); }
+void CCode::plus(const Expression *left, const Expression *right)
+{
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
+    else left->numeric(this);
+
+    // print the operator
+    _out << "+";
+
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
+    else right->numeric(this);
+}
+void CCode::minus(const Expression *left, const Expression *right)
+{
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
+    else left->numeric(this);
+
+    // print the operator
+    _out << "-";
+
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
+    else right->numeric(this);
+}
+
+void CCode::divide(const Expression *left, const Expression *right)
+{
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
+    else left->numeric(this);
+
+    // print the operator
+    _out << "/";
+
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
+    else right->numeric(this);
+}
+
+void CCode::multiply(const Expression *left, const Expression *right)
+{
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
+    else left->numeric(this);
+
+    // print the operator
+    _out << "*";
+
+    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
+    else right->numeric(this);
+}
+
+void CCode::modulo(const Expression *left, const Expression *right) { left->numeric(this); _out << "%"; right->numeric(this); }
 
 /**
  *  Comparison operators
