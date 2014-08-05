@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     ToBooleanCallback()
-    : VariableBaseCallback(jit_type_int)
+    : VariableBaseCallback(jit_type_sys_bool)
     {
     }
 

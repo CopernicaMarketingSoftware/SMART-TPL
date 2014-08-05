@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     ParamsAppendBooleanCallback()
-    : ParameterAppendBaseCallback(jit_type_int)
+    : ParameterAppendBaseCallback(jit_type_sys_bool)
     {
     }
 
