@@ -63,189 +63,158 @@ private:
 
     /**
      *  Signature of the write callback
-     *  @var    WriteCallback
      */
-    static WriteCallback _write;
+    static SignatureCallback _write;
 
     /**
      *  Signature of the output callback
-     *  @var    OutputCallback
      */
-    static OutputCallback _output;
+    static SignatureCallback _output;
 
     /**
      *  Signature fo the output numeric callback
-     *  @var    OutputNumericCallback
      */
-    static OutputNumericCallback _output_numeric;
+    static SignatureCallback _output_numeric;
 
     /**
      *  Signature of the member callback
-     *  @var    MemberCallback
      */
-    static MemberCallback _member;
+    static SignatureCallback _member;
 
     /**
      *  Signature of the member_at callback
-     *  @var    MemberAtCallback
      */
-    static MemberAtCallback _member_at;
+    static SignatureCallback _member_at;
 
     /**
      *  Signature of the create-iterator callback
-     *  @var CreateItereratorCallback
      */
-    static CreateIteratorCallback _create_iterator;
+    static SignatureCallback _create_iterator;
 
     /**
      *  Signature of the delete-iterator callback
-     *  @var DeleteItereratorCallback
      */
-    static DeleteIteratorCallback _delete_iterator;
+    static SignatureCallback _delete_iterator;
 
     /**
      *  Signature of the valid-iterator callback
-     *  @var ValidItereratorCallback
      */
-    static ValidIteratorCallback _valid_iterator;
+    static SignatureCallback _valid_iterator;
 
     /**
      *  Signature of the iterator-key callback
-     *  @var ItereratorKeyCallback
      */
-    static IteratorKeyCallback _iterator_key;
+    static SignatureCallback _iterator_key;
 
     /**
      *  Signature of the iterator-value callback
-     *  @var ItereratorValueCallback
      */
-    static IteratorValueCallback _iterator_value;
+    static SignatureCallback _iterator_value;
 
     /**
      *  Signature of the iterator-next callback
-     *  @var IteratorNextCallback
      */
-    static IteratorNextCallback _iterator_next;
+    static SignatureCallback _iterator_next;
 
     /**
      *  Signature of the variable callback
-     *  @var    MemberCallback
      */
-    static VariableCallback _variable;
+    static SignatureCallback _variable;
 
     /**
      *  Signature of the function to convert a variable to a string
-     *  @var    ToStringCallback
      */
-    static ToStringCallback _toString;
+    static SignatureCallback _toString;
 
     /**
      *  Signature of the function to convert a variable to a numeric value
-     *  @var    ToNumericCallback
      */
-    static ToNumericCallback _toNumeric;
+    static SignatureCallback _toNumeric;
 
     /**
      *  Signature of the function to convert a variable to a floating point value
-     *  @var    ToDoubleCallback
      */
-    static ToDoubleCallback _toDouble;
+    static SignatureCallback _toDouble;
 
     /**
      *  Signature of the function to convert a variable to a boolean value
-     *  @var    ToBooleanCallback
      */
-    static ToBooleanCallback _toBoolean;
+    static SignatureCallback _toBoolean;
 
     /**
      *  Signature of the function to retrieve the size/strlen of a variable
-     *  @var    SizeCallback
      */
-    static SizeCallback _size;
+    static SignatureCallback _size;
 
     /**
      *  Signature of the function to retrieve the modifier
-     *  @var    ModifierCallback
      */
-    static ModifierCallback _modifier;
+    static SignatureCallback _modifier;
 
     /**
      *  Signature of the function to modify a variable
-     *  @var    ModifyVariableCallback
      */
-    static ModifyVariableCallback _modify_variable;
+    static SignatureCallback _modify_variable;
 
     /**
      *  Signature of the function to create a new parameters object
-     *  @var CreateParamsCallback
      */
-    static CreateParamsCallback _create_params;
+    static SignatureCallback _create_params;
 
     /**
      *  Signature of the function to append a numeric value to parameters
-     *  @var ParamsAppendNumericCallback
      */
-    static ParamsAppendNumericCallback _params_append_numeric;
+    static SignatureCallback _params_append_numeric;
 
     /**
      *  Signature of the function to append a floating point value to parameters
-     *  @var ParamsAppendDoubleCallback
      */
-    static ParamsAppendDoubleCallback _params_append_double;
+    static SignatureCallback _params_append_double;
 
     /**
      *  Signature of the function to append a string value to parameters
-     *  @var ParamsAppendStringCallback
      */
-    static ParamsAppendStringCallback _params_append_string;
+    static SignatureCallback _params_append_string;
 
     /**
      *  Signature of the function to append a boolean value to parameters
-     *  @var ParamsAppendBooleanCallback
      */
-    static ParamsAppendBooleanCallback _params_append_boolean;
+    static SignatureCallback _params_append_boolean;
 
     /**
      *  Signature of the function to delete the parameters
-     *  @var DeleteParamsCallback
      */
-    static DeleteParamsCallback _delete_params;
+    static SignatureCallback _delete_params;
 
     /**
      *  Signature of the function to compare 2 strings
-     *  @var StrCmpCallback
      */
-    static StrCmpCallback _strcmp;
+    static SignatureCallback _strcmp;
 
     /**
      *  Signature of the function to assign a variable to a local variable
-     *  @var AssignCallback
      */
-    static AssignCallback _assign;
+    static SignatureCallback _assign;
 
     /**
      *  Signature of the function to assign a boolean to a local variable
-     *  @var AssignBooleanCallback
      */
-    static AssignBooleanCallback _assign_boolean;
+    static SignatureCallback _assign_boolean;
 
     /**
      *  Signature of the function to assign a numeric value to a local variable
-     *  @var AssignNumericCallback
      */
-    static AssignNumericCallback _assign_numeric;
+    static SignatureCallback _assign_numeric;
 
     /**
      *  Signature of the function to assign a double value to a local variable
-     *  @var AssignDoubleCallback
      */
-    static AssignDoubleCallback _assign_double;
+    static SignatureCallback _assign_double;
 
     /**
      *  Signature of the function to assign a string to a local variable
-     *  @var AssignStringCallback
      */
-    static AssignStringCallback _assign_string;
+    static SignatureCallback _assign_string;
 
 public:
     /**

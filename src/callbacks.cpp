@@ -16,37 +16,37 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Create all static variables
  */
-WriteCallback               Callbacks::_write;
-OutputCallback              Callbacks::_output;
-OutputNumericCallback       Callbacks::_output_numeric;
-MemberCallback              Callbacks::_member;
-MemberAtCallback            Callbacks::_member_at;
-CreateIteratorCallback      Callbacks::_create_iterator;
-DeleteIteratorCallback      Callbacks::_delete_iterator;
-ValidIteratorCallback       Callbacks::_valid_iterator;
-IteratorKeyCallback         Callbacks::_iterator_key;
-IteratorValueCallback       Callbacks::_iterator_value;
-IteratorNextCallback        Callbacks::_iterator_next;
-VariableCallback            Callbacks::_variable;
-ToStringCallback            Callbacks::_toString;
-ToNumericCallback           Callbacks::_toNumeric;
-ToDoubleCallback            Callbacks::_toDouble;
-ToBooleanCallback           Callbacks::_toBoolean;
-SizeCallback                Callbacks::_size;
-ModifierCallback            Callbacks::_modifier;
-ModifyVariableCallback      Callbacks::_modify_variable;
-CreateParamsCallback        Callbacks::_create_params;
-ParamsAppendNumericCallback Callbacks::_params_append_numeric;
-ParamsAppendDoubleCallback  Callbacks::_params_append_double;
-ParamsAppendStringCallback  Callbacks::_params_append_string;
-ParamsAppendBooleanCallback Callbacks::_params_append_boolean;
-DeleteParamsCallback        Callbacks::_delete_params;
-StrCmpCallback              Callbacks::_strcmp;
-AssignCallback              Callbacks::_assign;
-AssignBooleanCallback       Callbacks::_assign_boolean;
-AssignNumericCallback       Callbacks::_assign_numeric;
-AssignDoubleCallback        Callbacks::_assign_double;
-AssignStringCallback        Callbacks::_assign_string;
+SignatureCallback Callbacks::_write({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
+SignatureCallback Callbacks::_output({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
+SignatureCallback Callbacks::_output_numeric({ jit_type_void_ptr, jit_type_sys_longlong });
+SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_delete_iterator({ jit_type_void_ptr, jit_type_void_ptr });
+SignatureCallback Callbacks::_valid_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
+SignatureCallback Callbacks::_iterator_key({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_iterator_value({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_iterator_next({ jit_type_void_ptr, jit_type_void_ptr });
+SignatureCallback Callbacks::_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_toString({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_toNumeric({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_longlong);
+SignatureCallback Callbacks::_toDouble({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_float64);
+SignatureCallback Callbacks::_toBoolean({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
+SignatureCallback Callbacks::_size({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_ulonglong);
+SignatureCallback Callbacks::_modifier({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_modify_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_create_params({ jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_params_append_numeric({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong });
+SignatureCallback Callbacks::_params_append_double({ jit_type_void_ptr, jit_type_void_ptr, jit_type_float64 });
+SignatureCallback Callbacks::_params_append_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
+SignatureCallback Callbacks::_params_append_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_bool });
+SignatureCallback Callbacks::_delete_params({ jit_type_void_ptr, jit_type_void_ptr });
+SignatureCallback Callbacks::_strcmp({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_sys_bool);
+SignatureCallback Callbacks::_assign({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr });
+SignatureCallback Callbacks::_assign_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_bool });
+SignatureCallback Callbacks::_assign_numeric({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_longlong });
+SignatureCallback Callbacks::_assign_double({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_float64 });
+SignatureCallback Callbacks::_assign_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr, jit_type_sys_ulonglong });
 
 /**
  *  A static empty value
