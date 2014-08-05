@@ -542,7 +542,7 @@ TEST(RunTime, DoubleVariableComparison)
 
 TEST(RunTime, AssignDouble)
 {
-    string input("{assign 15e16 to $test}{$test}");
+    string input("{assign 1.5e17 to $test}{$test}");
     Template tpl((Buffer(input)));
 
     string expectedOutput("150000000000000000.000000");
