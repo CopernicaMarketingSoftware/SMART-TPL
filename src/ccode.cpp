@@ -171,8 +171,12 @@ void CCode::condition(const Expression *expression, const Statements *ifstatemen
  */
 void CCode::varPointer(const std::string &name)
 {
+    // quote newlines, null characters, etc in the string so that it can
+    // be picked up by the compiler
+    QuotedString quoted(name);
+
     // call the callback to get the variable
-    _out << "callbacks->variable(userdata,\"" << name << "\"," << name.size() << ")";
+    _out << "callbacks->variable(userdata,\"" << quoted << "\"," << name.size() << ")";
 }
 
 /**
@@ -188,8 +192,12 @@ void CCode::varPointer(const Variable *parent, const std::string &name)
     // generate a var pointer for the variable
     parent->pointer(this);
 
+    // quote newlines, null characters, etc in the string so that it can
+    // be picked up by the compiler
+    QuotedString quoted(name);
+
     // and append a call to retrieve the member
-    _out << ",\"" << name << "\"," << name.size() << ")";
+    _out << ",\"" << quoted << "\"," << name.size() << ")";
 }
 
 /**
