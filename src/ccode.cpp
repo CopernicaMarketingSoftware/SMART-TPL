@@ -453,7 +453,11 @@ void CCode::equals(const Expression *left, const Expression *right)
 
 void CCode::notEquals(const Expression *left, const Expression *right)
 {
-    if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    if (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double)
+    {
+        left->double_type(this); _out << "!="; right->double_type(this);
+    }
+    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
         left->numeric(this); _out << "!="; right->numeric(this);
     }
