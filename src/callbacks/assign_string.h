@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     AssignStringCallback()
-    : AssignBaseCallback(jit_type_void_ptr, jit_type_ulong)
+    : AssignBaseCallback(jit_type_void_ptr, jit_type_sys_ulonglong)
     {
     }
 

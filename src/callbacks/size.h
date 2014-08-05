@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     SizeCallback()
-    : VariableBaseCallback(jit_type_ulong)
+    : VariableBaseCallback(jit_type_sys_ulonglong)
     {
     }
 

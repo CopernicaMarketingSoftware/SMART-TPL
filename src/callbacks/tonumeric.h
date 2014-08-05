@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     ToNumericCallback()
-    : VariableBaseCallback(jit_type_long)
+    : VariableBaseCallback(jit_type_sys_longlong)
     {
     }
 

@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     CreateParamsCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_ulong }, jit_type_void_ptr)
+    : BaseCallback({ jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr)
     {
     }
 

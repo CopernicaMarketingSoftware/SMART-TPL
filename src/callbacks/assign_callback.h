@@ -23,11 +23,11 @@ public:
      *  Constructor
      */
     AssignBaseCallback(jit_type_t assign_type)
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong, assign_type }, jit_type_void) {}
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, assign_type }, jit_type_void) {}
 
     // This one is only required because strings require 2 parameters..
     AssignBaseCallback(jit_type_t assign_type, jit_type_t assign_type1)
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong, assign_type, assign_type1 }, jit_type_void) {}
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, assign_type, assign_type1 }, jit_type_void) {}
 
     /**
      *  Destructor

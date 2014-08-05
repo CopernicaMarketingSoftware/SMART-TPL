@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     ParamsAppendNumericCallback()
-    : ParameterAppendBaseCallback(jit_type_long)
+    : ParameterAppendBaseCallback(jit_type_sys_longlong)
     {
     }
 

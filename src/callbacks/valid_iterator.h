@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     ValidIteratorCallback()
-    : IteratorBaseCallback(jit_type_sys_int)
+    : IteratorBaseCallback(jit_type_int)
     {
     }
 
