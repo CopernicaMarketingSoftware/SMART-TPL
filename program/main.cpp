@@ -29,11 +29,8 @@
 
 static const struct option opts[] = {
     { "help",              no_argument, 0, 'h' },
-    { "keep-file",         no_argument, 0, 'k' },
     { 0, 0, 0, 0 }
 };
-
-bool keepfile = false;
 
 /**
  *  Helper function to compile a template
@@ -44,63 +41,39 @@ static bool compile(const std::string &base)
 {
     // create the input and output files
     std::string input = base + ".tpl";
-    std::string c_output = base + ".c";
     std::string so_output = base + ".so";
 
-    // store that in the C file
-    std::ofstream cstream(c_output);
-
-    // must be open
-    if (!cstream.is_open())
-    {
-        // report error
-        std::cerr << "Failure: " << input << " (" << c_output << " " << strerror(errno) << ")" << std::endl;
-
-        // report error
-        return false;
-    }
-
-    // when the template object is created, exceptions may pop-up describing
-    // syntax error or other problems
+    // We directly use the internal classes here to skip the byte compile part
     try
     {
         SmartTpl::File file(input);
         // create template
         SmartTpl::Internal::CCode code(file);
 
-        // convert into C code
-        cstream << code;
+        // the command to compile the C file into a *.so file
+        // important to note here is the - on the end, which really just says that
+        // we will give the compiler input on stdin instead of through a file
+        std::ostringstream command;
+        const char* compiler = getenv("CC");
+        const char* cflags = getenv("CFLAGS");
+        command << (compiler ? compiler : "gcc") << " -x c -fPIC -shared "
+                << (cflags ? cflags : "-O3") << " -o " << so_output << " -";
 
-        // close the c-stream
-        cstream.close();
+        // start the actual command and start writing into it if we started it correctly
+        FILE *shell = popen(command.str().c_str(), "w");
+        if (shell == nullptr) throw std::runtime_error("There was some error while executing popen() " + std::string(strerror(errno)));
+        fprintf(shell, "%s", code.asString().c_str());
+        int status = pclose(shell);
+        if (WEXITSTATUS(status) != 0) throw std::runtime_error("Failed to compile");
     }
     catch (const std::runtime_error &error)
     {
         // report error
         std::cerr << "Failure: " << input << " (" << error.what() << ")" << std::endl;
 
-        // unlink our failed C file
-        if (!keepfile) unlink(c_output.c_str());
-
         // report error
         return false;
     }
-
-    // the command to compile the C file into a *.so file
-    std::ostringstream command;
-    const char* compiler = getenv("CC");
-    const char* cflags = getenv("CFLAGS");
-    command << (compiler ? compiler : "gcc") << " " << c_output << " -fPIC -shared "
-            << (cflags ? cflags : "-O3") << " -o " << so_output;
-
-    // run the command
-    int status = system(command.str().c_str());
-
-    // if we ran into an error, we keep the C source file intact
-    if (WEXITSTATUS(status) != 0) return false;
-
-    // unlink intermediate C file
-    if (!keepfile) unlink(c_output.c_str());
 
     // done
     return true;
@@ -114,8 +87,7 @@ static bool compile(const std::string &base)
 void print_help(const char *program, int exit_code)
 {
     std::cerr << "Usage: " << program << " [options] <yourtemplate.tpl>..." << std::endl
-              << "--help, -h      This help information." << std::endl
-              << "--keep-file, -k Keep the generated C file." << std::endl;
+              << "--help, -h      This help information." << std::endl;
     exit(exit_code);
 }
 
@@ -134,11 +106,8 @@ int main(int argc, char *argv[])
     }
 
     int arg;
-    while ((arg = getopt_long(argc, argv, "kh", opts, &argc)) != -1) {
+    while ((arg = getopt_long(argc, argv, "h", opts, &argc)) != -1) {
         switch (arg) {
-        case 'k':
-            keepfile = true;
-            break;
         case 'h':
             print_help(argv[0], EXIT_SUCCESS);
             return EXIT_SUCCESS;
