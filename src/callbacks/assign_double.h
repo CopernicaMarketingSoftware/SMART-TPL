@@ -1,8 +1,8 @@
 /**
- *  AssignNumeric.h
+ *  AssignDouble.h
  *
- *  Signature of the assign_numeric callback. This is a callback that will call back
- *  to the native function smart_tpl_assign_numeric(void *, const char *data, size_t size, long);
+ *  Signature of the assign_double callback. This is a callback that will call back
+ *  to the native function smart_tpl_assign_double(void *, const char *data, size_t size, double);
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV

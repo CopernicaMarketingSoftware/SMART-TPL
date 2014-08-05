@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     MemberCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_int }, jit_type_void_ptr)
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_long }, jit_type_void_ptr)
     {
     }
 

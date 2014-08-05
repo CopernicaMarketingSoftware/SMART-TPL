@@ -825,7 +825,7 @@ public:
      *  @param  value          The floating point value to assign
      *  @param  key            The key to assign value to
      *  @param  key_size       The length of key
-     *  @see    smart_tpl_assign_numeric
+     *  @see    smart_tpl_assign_double
      */
     void assign_double(const jit_value &userdata, const jit_value &value, const jit_value &key, const jit_value &key_size)
     {

@@ -1,8 +1,8 @@
 /**
- *  ToNumeric.h
+ *  ToDouble.h
  *
- *  Signature of the to_numeric callback. This is a callback that will call back
- *  to the native function smart_tpl_to_numeric(void *, void *);
+ *  Signature of the to_double callback. This is a callback that will call back
+ *  to the native function smart_tpl_to_double(void *, void *);
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV

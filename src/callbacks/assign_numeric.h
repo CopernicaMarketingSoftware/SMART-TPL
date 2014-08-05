@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     AssignNumericCallback()
-    : AssignBaseCallback(jit_type_sys_int)
+    : AssignBaseCallback(jit_type_long)
     {
     }
 

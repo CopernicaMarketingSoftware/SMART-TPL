@@ -1,8 +1,8 @@
 /**
- *  Params_append_numeric.h
+ *  Params_append_double.h
  *
- *  Signature of the params_append_numeric callback. This is a callback that will call back
- *  to the native function smart_tpl_params_append_numeric(void *, void *, long);
+ *  Signature of the params_append_double callback. This is a callback that will call back
+ *  to the native function smart_tpl_params_append_double(void *, void *, double);
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV

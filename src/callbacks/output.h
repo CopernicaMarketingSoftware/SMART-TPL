@@ -23,7 +23,7 @@ public:
      *  Constructor
      */
     OutputCallback()
-    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_int })
+    : BaseCallback({ jit_type_void_ptr, jit_type_void_ptr, jit_type_ulong })
     {
     }
 

@@ -14,24 +14,9 @@
 namespace SmartTpl { namespace Internal {
 
 /**
- *  Class definition
+ *  Our signature matches with the IteratorBaseCallback, so we're just a typedef
  */
-class DeleteIteratorCallback : public IteratorBaseCallback
-{
-public:
-    /**
-     *  Constructor
-     */
-    DeleteIteratorCallback()
-    : IteratorBaseCallback()
-    {
-    }
-
-    /**
-     *  Destructor
-     */
-    virtual ~DeleteIteratorCallback() {}
-};
+using DeleteIteratorCallback = IteratorBaseCallback;
 
 /**
  *  End namespace
