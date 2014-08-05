@@ -326,7 +326,7 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
 
     // call the native function to retrieve the member of a variable, and store the pointer
     // to the variable on the stack
-    _stack.push(_callbacks.member(_userdata, pointer(parent), namevalue, namesize));
+    _stack.push(std::move(_callbacks.member(_userdata, pointer(parent), namevalue, namesize)));
 }
 
 /**
@@ -347,7 +347,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
-        _stack.push(_callbacks.member_at(_userdata, pointer(parent), position));
+        _stack.push(std::move(_callbacks.member_at(_userdata, pointer(parent), position)));
     }
     else
     {
@@ -360,7 +360,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 
         // call the native function to retrieve the member of a variable, and store the pointer
         // to the variable on the stack
-        _stack.push(_callbacks.member(_userdata, pointer(parent), buffer, size));
+        _stack.push(std::move(_callbacks.member(_userdata, pointer(parent), buffer, size)));
     }
 }
 
@@ -376,7 +376,7 @@ void Bytecode::varPointer(const std::string &name)
     jit_value namesize = _function.new_constant(name.size(), jit_type_sys_ulonglong);
 
     // push the variable on the stack
-    _stack.push(_callbacks.variable(_userdata, namevalue, namesize));
+    _stack.push(std::move(_callbacks.variable(_userdata, namevalue, namesize)));
 }
 
 /**
@@ -387,8 +387,8 @@ void Bytecode::varPointer(const std::string &name)
 void Bytecode::string(const std::string &value)
 {
     // push buffer and size
-    _stack.push(_function.new_constant((void *)value.data(), jit_type_void_ptr));
-    _stack.push(_function.new_constant(value.size(), jit_type_sys_ulonglong));
+    _stack.push(std::move(_function.new_constant((void *)value.data(), jit_type_void_ptr)));
+    _stack.push(std::move(_function.new_constant(value.size(), jit_type_sys_ulonglong)));
 }
 
 /**
@@ -399,7 +399,7 @@ void Bytecode::string(const std::string &value)
 void Bytecode::numeric(numeric_t value)
 {
     // push value
-    _stack.push(_function.new_constant(value, jit_type_sys_longlong));
+    _stack.push(std::move(_function.new_constant(value, jit_type_sys_longlong)));
 }
 
 /**
@@ -410,7 +410,7 @@ void Bytecode::numeric(numeric_t value)
 void Bytecode::double_type(double value)
 {
     // push value
-    _stack.push(_function.new_constant(value, jit_type_float64));
+    _stack.push(std::move(_function.new_constant(value, jit_type_float64)));
 }
 
 /**
@@ -424,8 +424,8 @@ void Bytecode::stringVariable(const Variable *variable)
     jit_value var = pointer(variable);
 
     // call the functions to retrieve the string value
-    _stack.push(_callbacks.to_string(_userdata, var));
-    _stack.push(_callbacks.size(_userdata, var));
+    _stack.push(std::move(_callbacks.to_string(_userdata, var)));
+    _stack.push(std::move(_callbacks.size(_userdata, var)));
 }
 
 /**
@@ -436,7 +436,7 @@ void Bytecode::stringVariable(const Variable *variable)
 void Bytecode::numericVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
-    _stack.push(_callbacks.to_numeric(_userdata, pointer(variable)));
+    _stack.push(std::move(_callbacks.to_numeric(_userdata, pointer(variable))));
 }
 
 /**
@@ -447,7 +447,7 @@ void Bytecode::numericVariable(const Variable *variable)
 void Bytecode::booleanVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
-    _stack.push(_callbacks.to_boolean(_userdata, pointer(variable)));
+    _stack.push(std::move(_callbacks.to_boolean(_userdata, pointer(variable))));
 }
 
 /**
@@ -457,7 +457,7 @@ void Bytecode::booleanVariable(const Variable *variable)
 void Bytecode::doubleVariable(const Variable *variable)
 {
     // call the function to convert a variable to a floating point value
-    _stack.push(_callbacks.to_double(_userdata, pointer(variable)));
+    _stack.push(std::move(_callbacks.to_double(_userdata, pointer(variable))));
 }
 
 void Bytecode::variable(const Variable* variable)
@@ -478,7 +478,7 @@ void Bytecode::plus(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l + r);
+    _stack.emplace(l + r);
 }
 
 /**
@@ -494,7 +494,7 @@ void Bytecode::minus(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l - r);
+    _stack.emplace(l - r);
 }
 
 /**
@@ -510,7 +510,7 @@ void Bytecode::divide(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l / r);
+    _stack.emplace(l / r);
 }
 
 /**
@@ -526,7 +526,7 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l * r);
+    _stack.emplace(l * r);
 }
 
 /**
@@ -542,7 +542,7 @@ void Bytecode::modulo(const Expression *left, const Expression *right)
     jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l % r);
+    _stack.emplace(l % r);
 }
 
 /**
@@ -560,7 +560,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         jit_value r = doubleExpression(right);
 
         // Compare them and push it to the stack
-        _stack.push(l == r);
+        _stack.emplace(l == r);
     }
     else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
@@ -569,7 +569,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         jit_value r = numericExpression(right);
 
         // Compare them and push it to the stack
-        _stack.push(l == r);
+        _stack.emplace(l == r);
     }
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
@@ -578,7 +578,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         jit_value r = booleanExpression(right);
 
         // Compare them and push it to the stack
-        _stack.push(l == r);
+        _stack.emplace(l == r);
     }
     else
     {
@@ -594,7 +594,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
 
         // Compare against the constant _false which is just a 0
-        _stack.push(cmp == _false);
+        _stack.emplace(cmp == _false);
     }
 }
 
@@ -613,7 +613,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         jit_value r = doubleExpression(right);
 
         // Compare them and push it to the stack
-        _stack.push(l != r);
+        _stack.emplace(l != r);
     }
     else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
     {
@@ -622,7 +622,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         jit_value r = numericExpression(right);
 
         // Compare them and push it to the stack
-        _stack.push(l != r);
+        _stack.emplace(l != r);
     }
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
@@ -631,7 +631,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         jit_value r = booleanExpression(right);
 
         // Compare them and push it to the stack
-        _stack.push(l != r);
+        _stack.emplace(l != r);
     }
     else
     {
@@ -645,7 +645,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
 
         // Call the strcmp callback and push the result to the stack
         jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
-        _stack.push(cmp != _false);
+        _stack.emplace(cmp != _false);
     }
 }
 
@@ -662,7 +662,7 @@ void Bytecode::greater(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l > r);
+    _stack.emplace(l > r);
 }
 
 /**
@@ -678,7 +678,7 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l >= r);
+    _stack.emplace(l >= r);
 }
 
 /**
@@ -694,7 +694,7 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l < r);
+    _stack.emplace(l < r);
 }
 
 /**
@@ -710,7 +710,7 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
-    _stack.push(l <= r);
+    _stack.emplace(l <= r);
 }
 
 /**
@@ -726,7 +726,7 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
     jit_value r = booleanExpression(right);
 
     // insert a boolean and on the left and right expression
-    _stack.push(_function.insn_and(l, r));
+    _stack.push(std::move(_function.insn_and(l, r)));
 }
 
 /**
@@ -742,7 +742,7 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
     jit_value r = booleanExpression(right);
 
     // insert a boolean or on the left and right expression
-    _stack.push(_function.insn_or(l, r));
+    _stack.push(std::move(_function.insn_or(l, r)));
 }
 
 /**
@@ -765,7 +765,7 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         auto buffer = pop();
 
         // call the native function to save the modifier to the variable on the stack
-        _stack.push(_callbacks.modifier(_userdata, buffer, size));
+        _stack.push(std::move(_callbacks.modifier(_userdata, buffer, size)));
 
         // pop the modifier
         auto mod = pop();
@@ -781,7 +781,7 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         jit_value jitparams = (params) ? pop() : _false;
 
         // let's apply the modifier and push the new result of it to the stack
-        _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
+        _stack.push(std::move(_callbacks.modify_variable(_userdata, var, mod, jitparams)));
 
         // If we actually constructed parameters let's deconstruct them again
         if (params) _callbacks.delete_params(_userdata, jitparams);
@@ -831,7 +831,7 @@ void Bytecode::parameters(const Parameters *parameters)
     }
 
     // Push the parameters to the stack
-    _stack.push(params);
+    _stack.push(std::move(params));
 }
 
 /**
