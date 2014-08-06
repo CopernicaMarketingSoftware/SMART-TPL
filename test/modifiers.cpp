@@ -39,7 +39,7 @@ public:
     TestModifier(Mode mode) : Modifier(), _mode(mode) {};
     virtual ~TestModifier() {};
 
-    virtual VariantValue modify(const VariantValue &input, const Parameters &params) override
+    VariantValue modify(const VariantValue &input, const Parameters &params) override
     {
         switch (_mode) {
             case NumericMode:

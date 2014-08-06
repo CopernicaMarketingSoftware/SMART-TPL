@@ -82,13 +82,13 @@ public:
      *  Execute the template given a certain data source
      *  @param  data
      */
-    virtual void process(Handler &handler) override;
+    void process(Handler &handler) override;
 
     /**
      *  Compile the template into C code
      *  @return std::string
      */
-    virtual std::string compile() override
+    std::string compile() override
     {
         // a shared library can not be turned into C code, because it
         // already has been compiled to native code
@@ -99,7 +99,7 @@ public:
      *  Retrieve what encoding the 'template' has natively
      *  @return std::string
      */
-    virtual std::string encoding() override
+    std::string encoding() override
     {
         return _mode;
     }

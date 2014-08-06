@@ -172,7 +172,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return VariantValue
      */
-    virtual VariantValue member(size_t position) const override
+    VariantValue member(size_t position) const override
     {
         return nullptr;
     }
@@ -182,7 +182,7 @@ public:
      *  @param  position     Position of the key we want to retrieve
      *  @return VariantValue VariantValue object, probably a string
      */
-    virtual VariantValue key(size_t position) const override
+    VariantValue key(size_t position) const override
     {
         return nullptr;
     }
@@ -192,7 +192,7 @@ public:
      *
      *  @return int
      */
-    virtual size_t size() const override
+    size_t size() const override
     {
         // Put the current date/time in the buffer
         initializeDate();
@@ -208,7 +208,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const override
+    Iterator *iterator() const override
     {
         return nullptr;
     }

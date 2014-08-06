@@ -104,7 +104,7 @@ public:
      *
      *  @return const char*
      */
-    virtual const char *name() const override
+    const char *name() const override
     {
         // return the filename
         return _name.c_str();
@@ -119,7 +119,7 @@ public:
      *
      *  @return bool
      */
-    virtual bool library() const override
+    bool library() const override
     {
         // this is stored in a member variable
         return _library;
@@ -131,7 +131,7 @@ public:
      *
      *  @return const char*
      */
-    virtual const char *data() const override
+    const char *data() const override
     {
         // already stored in a member
         return _source.c_str();
@@ -142,7 +142,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const override
+    size_t size() const override
     {
         // check the source object
         return _source.size();
