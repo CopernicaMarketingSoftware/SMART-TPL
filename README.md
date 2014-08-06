@@ -184,7 +184,7 @@ void example()
     SmartTpl::Data data;
 
     // assign data
-    data.callback("name", []() -> const char * {
+    data.callback("name", []() -> std::string {
 
         // @todo find out the value of the name, for example by starting
         //       a database query
@@ -222,9 +222,9 @@ public:
      *  string. This is for example called when a {$variable} is used in
      *  a template.
      *
-     *  @return const char *
+     *  @return std::string
      */
-    virtual std::string toString() const override
+    std::string toString() const override
     {
         return "abcd";
     }
@@ -235,7 +235,7 @@ public:
      *
      *  @return size_t
      */
-    virtual size_t size() const override
+    size_t size() const override
     {
         return 4;
     }
@@ -246,7 +246,7 @@ public:
      *
      *  @return numeric_t
      */
-    virtual numeric_t toNumeric() const override
+    numeric_t toNumeric() const override
     {
         return 0;
     }
@@ -255,22 +255,31 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const override
+    bool toBoolean() const override
     {
         return false;
+    }
+
+    /**
+     *  Convert the variable to a floating point value
+     *  @return double
+     */
+    double toDouble() const override
+    {
+        return 0.0;
     }
 
     /**
      *  Method that gets called when a member is accessed. This is called
      *  when the variable is accessed in the template as {$var.x} or {$var[$x]}
      *
-     *  This method should return a SmartTpl::Value object.
+     *  This method should return a SmartTpl::VariantValue object.
      *
      *  @param  name        name of the member
      *  @param  size        size of name
-     *  @return Value       Pointer to a new value
+     *  @return VariantValue
      */
-    virtual VariantValue member(const char *name, size_t size) const override
+    VariantValue member(const char *name, size_t size) const override
     {
         // check the name
         if (strcmp(name, "x") == 0) return SomeOtherValue();
@@ -284,7 +293,7 @@ public:
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    virtual size_t memberCount() const override
+    size_t memberCount() const override
     {
         return 1;
     }
@@ -292,9 +301,9 @@ public:
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
-     *  @return Variant
+     *  @return VariantValue
      */
-    virtual VariantValue member(size_t position) const override
+    VariantValue member(size_t position) const override
     {
         // Not implemented, always return empty values
         return nullptr;
@@ -303,9 +312,9 @@ public:
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
-     *  @return Variant      Variant object, probably a string
+     *  @return VariantValue
      */
-    virtual VariantValue key(size_t position) const override
+    VariantValue key(size_t position) const override
     {
         // Not implemented, always return empty values
         return nullptr;
@@ -318,7 +327,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const override
+    Iterator *iterator() const override
     {
         // Return a custom implementation of Iterator
         return new CustomIterator(this);
@@ -345,7 +354,4 @@ void example()
 
 By overriding from SmartTpl::Value, you can create all sorts of variables
 that behave like arrays or objects. The SmartTpl library already has built-in
-types for a number of types, like SmartTpl::NumericValue and SmartTpl::StringValue
-and SmartTpl::EmptyValue.
-
-
+types for a number of types, through the [VARIANT-CPP](https://github.com/CopernicaMarketingSoftware/VARIANT-CPP) library.

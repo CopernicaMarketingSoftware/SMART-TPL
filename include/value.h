@@ -64,7 +64,7 @@ public:
      *
      *  @param  name        name of the member
      *  @param  size        size of the name
-     *  @return Variant
+     *  @return VariantValue
      *
      */
     virtual VariantValue member(const char *name, size_t size) const = 0;
@@ -78,14 +78,14 @@ public:
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
-     *  @return Variant
+     *  @return VariantValue
      */
     virtual VariantValue member(size_t position) const = 0;
 
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
-     *  @return Variant      Variant object, probably a string
+     *  @return VariantValue
      */
     virtual VariantValue key(size_t position) const = 0;
 
