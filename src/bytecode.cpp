@@ -122,7 +122,7 @@ jit_value Bytecode::pop()
     if (_stack.empty()) throw std::runtime_error("_stack is empty");
 
     // get the value from the stack
-    jit_value value = _stack.top();
+    jit_value& value = _stack.top();
 
     // remove the value from the stack
     _stack.pop();
