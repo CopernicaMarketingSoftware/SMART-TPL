@@ -1002,11 +1002,8 @@ void Bytecode::process(Handler &handler)
         // arguments should be passed as pointers
         void *args[1] = { &arg };
 
-        // result variable (not used)
-        int result;
-
         // call the function
-        _function.apply(args, &result);
+        _function.apply(args, nullptr);
     }
 }
 
