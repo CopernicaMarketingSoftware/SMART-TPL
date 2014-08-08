@@ -72,7 +72,7 @@ private:
     /**
      *  Are we supposed to throw because of a runtime failure or not?
      */
-    bool _exception = false;
+    bool _failed = false;
 
 public:
     /**
@@ -276,11 +276,10 @@ public:
     const Escaper *escaper() const { return _encoder; }
 
     /**
-     *  Exception related methods, throwException() will set the Handler in exception
-     *  mode and exception() will return if we are in exception mode or not
+     *  Error related methods that allow us to mark our handler as failed
      */
-    void throwException() { _exception = true; };
-    bool exception() const { return _exception; };
+    void markFailed() { _failed = true; };
+    bool failed() const { return _failed; };
 };
 
 /**

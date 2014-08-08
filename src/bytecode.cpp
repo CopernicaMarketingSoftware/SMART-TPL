@@ -94,7 +94,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
         _function.insn_label(_error);
 
         // and from our error label we set ourself to exception mode
-        _callbacks.throw_exception(_userdata);
+        _callbacks.mark_failed(_userdata);
 
         // This will basically result in the following psuedo code
         //
