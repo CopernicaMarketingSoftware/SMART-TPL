@@ -70,6 +70,16 @@ private:
     std::list<std::unique_ptr<const Value>> _managed_local_values;
 
     /**
+     *  List of iterators that we are managing
+     */
+    std::list<std::unique_ptr<Iterator>> _managed_iterators;
+
+    /**
+     *  List of parameters that we are managing
+     */
+    std::list<std::unique_ptr<SmartTpl::Parameters>> _managed_parameters;
+
+    /**
      *  Are we supposed to throw because of a runtime failure or not?
      */
     bool _failed = false;
@@ -268,6 +278,22 @@ public:
 
         // Return true to indicate that we are now managing value
         return true;
+    }
+
+    /**
+     *  Make the following iterator managed
+     */
+    void manageIterator(Iterator *iter)
+    {
+        _managed_iterators.emplace_back(iter);
+    }
+
+    /**
+     *  Make the following set of parameters managed
+     */
+    void manageParameters(SmartTpl::Parameters *params)
+    {
+        _managed_parameters.emplace_back(params);
     }
 
     /**

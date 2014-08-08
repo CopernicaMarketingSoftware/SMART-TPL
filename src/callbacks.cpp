@@ -165,13 +165,16 @@ void *smart_tpl_create_iterator(void *userdata, const void *variable)
     auto *var = (const Value *)variable;
 
     // construct a new iterator
-    //  @todo can we allocate this on the heap instead of allocating with new?
-    //        for example by using an already-allocated stack of iterator objects inside the handler object?
-    //
-    //  @todo because the iterators are not pushed to a stack, we will have a memory
-    //        leak if the statements inside the loop crash, and the delete_itertor
-    //        callback does not get called. Is this a serious possibility?
-    return new Iterator(var);
+    auto *iter = new Iterator(var);
+
+    // cast userdata to our handler
+    auto *handler = (Handler *)userdata;
+
+    // make our newly allocated iterator managed
+    handler->manageIterator(iter);
+
+    // return our iterator
+    return iter;
 }
 
 /**
@@ -185,7 +188,7 @@ void smart_tpl_delete_iterator(void *userdata, void *iterator)
     auto *iter = (Iterator *)iterator;
 
     // destruct it
-    delete iter;
+    //delete iter; // @todo as we're making these things managed now using std::unique_ptrs we should just get rid of these callbacks
 }
 
 /**
@@ -533,6 +536,12 @@ void *smart_tpl_create_params(void *userdata, size_t parameters_count)
     // We reserve the parameters_count as this is known on compile time
     params->reserve(parameters_count);
 
+    // cast userdata to our handler
+    auto *handler = (Handler *)userdata;
+
+    // make our newly allocated iterator managed
+    handler->manageParameters(params);
+
     // Return the pointer to the parameters
     return params;
 }
@@ -609,7 +618,7 @@ void smart_tpl_delete_params(void *userdata, void *parameters)
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Deconstruct the Parameters
-    delete params;
+    //delete params;
 }
 
 /**

@@ -567,3 +567,25 @@ TEST(RunTime, ZeroDivision)
         EXPECT_THROW(tpl.process(), std::runtime_error);
     }
 }
+
+/**
+ *  The idea here is that we do a zero division inside a foreach loop to stop execution
+ *  while an iterator was created on the heap. As these were unmanaged this would in
+ *  fact leak as it would never call the delete_iterator() method.
+ */
+TEST(RunTime, ZeroDivisionLeaky)
+{
+    string input("{foreach $key in $list}{1/0}{/foreach}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("list", Variant::Value({0,1,2,3,4}));
+
+    EXPECT_THROW(tpl.process(data), std::runtime_error);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_THROW(tpl.process(data), std::runtime_error);
+    }
+}
