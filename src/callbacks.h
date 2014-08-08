@@ -49,6 +49,7 @@ void        smart_tpl_params_append_double  (void *userdata, void *parameters, d
 void        smart_tpl_params_append_string  (void *userdata, void *parameters, const char *buf, size_t len);
 void        smart_tpl_params_append_boolean (void *userdata, void *parameters, int boolean);
 void        smart_tpl_mark_failed           (void *userdata);
+int         smart_tpl_throw_exception       (void *userdata);
 
 /**
  *  Class definition

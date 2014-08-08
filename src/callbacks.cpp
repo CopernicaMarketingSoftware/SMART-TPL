@@ -626,6 +626,17 @@ void smart_tpl_mark_failed(void *userdata)
 }
 
 /**
+ *  Used to throw an actual C++ exception from the runtime, don't do this from the jitted code
+ *  as you won't be able to actually catch it from there. This only has the return type int so
+ *  we can include it inside if statements etc
+ *  @param  userdata        Pointer to user-supplied data
+ */
+int smart_tpl_throw_exception(void* userdata)
+{
+    throw std::runtime_error("A runtime error occured :(");
+}
+
+/**
  *  End namespace
  */
 }}

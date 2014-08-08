@@ -408,12 +408,24 @@ void CCode::divide(const Expression *left, const Expression *right)
     if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
     else left->numeric(this);
 
-    // print the operator
-    _out << "/";
+    // print the operator and start a new block for our zero division check
+    _out << "/((";
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
     if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
+
+    // compare it to 0 using an inline if statement. If this is true we will call throw_exception
+    // which will throw a C++ exception out of everything
+    _out << ") == 0 ? callbacks->throw_exception(userdata) : (";
+
+    // but if we are false we'll need the original value of course, so we print that expression yet again
+    // this seems inefficient, although it probably doesn't mattter as C compiler are 'smart' ;)
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
+    else right->numeric(this);
+
+    // And end the actual block for the inline if statement
+    _out << "))";
 }
 
 void CCode::multiply(const Expression *left, const Expression *right)

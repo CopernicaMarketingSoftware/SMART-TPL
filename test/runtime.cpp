@@ -560,4 +560,10 @@ TEST(RunTime, ZeroDivision)
     string input("{1/0}");
     Template tpl((Buffer(input)));
     EXPECT_THROW(tpl.process(), std::runtime_error);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_THROW(tpl.process(), std::runtime_error);
+    }
 }
