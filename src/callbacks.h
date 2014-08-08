@@ -23,7 +23,6 @@ void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);
-void        smart_tpl_delete_iterator       (void *userdata, void *iterator);
 int         smart_tpl_valid_iterator        (void *userdata, void *iterator);
 const void *smart_tpl_iterator_key          (void *userdata, void *iterator);
 const void *smart_tpl_iterator_value        (void *userdata, void *iterator);
@@ -43,7 +42,6 @@ void        smart_tpl_assign_double         (void *userdata, const char *key, si
 void        smart_tpl_assign                (void *userdata, const char *key, size_t keysize, const void *variable);
 int         smart_tpl_strcmp                (void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
 void       *smart_tpl_create_params         (void *userdata, size_t parameters_count);
-void        smart_tpl_delete_params         (void *userdata, void *parameters);
 void        smart_tpl_params_append_numeric (void *userdata, void *parameters, numeric_t value);
 void        smart_tpl_params_append_double  (void *userdata, void *parameters, double value);
 void        smart_tpl_params_append_string  (void *userdata, void *parameters, const char *buf, size_t len);
@@ -92,11 +90,6 @@ private:
      *  Signature of the create-iterator callback
      */
     static SignatureCallback _create_iterator;
-
-    /**
-     *  Signature of the delete-iterator callback
-     */
-    static SignatureCallback _delete_iterator;
 
     /**
      *  Signature of the valid-iterator callback
@@ -182,11 +175,6 @@ private:
      *  Signature of the function to append a boolean value to parameters
      */
     static SignatureCallback _params_append_boolean;
-
-    /**
-     *  Signature of the function to delete the parameters
-     */
-    static SignatureCallback _delete_params;
 
     /**
      *  Signature of the function to compare 2 strings
@@ -431,24 +419,6 @@ public:
     }
 
     /**
-     *  Call the delete_iterator callback
-     *  @param  userdata         Pointer to user-supplied data
-     *  @param  iterator         Iterator to delete
-     *  @see    smart_tpl_delete_iterator
-     */
-    void delete_iterator(const jit_value &userdata, const jit_value &iterator)
-    {
-        // construct the arguments
-        jit_value_t args[] = {
-            userdata.raw(),
-            iterator.raw(),
-        };
-
-        // create the instruction
-        _function->insn_call_native("smart_tpl_delete_iterator", (void *) smart_tpl_delete_iterator, _delete_iterator.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
-    }
-
-    /**
      *  Call the variable function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  name            Name of the variable
@@ -662,24 +632,6 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_params_append_string", (void *) smart_tpl_params_append_string, _params_append_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
-    }
-
-    /**
-     *  Call the delete_params function
-     *  @param  userdata       Pointer to user-supplied data
-     *  @param  parameters     Pointer to the parameters we would like to delete
-     *  @see    smart_tpl_delete_params
-     */
-    void delete_params(const jit_value &userdata, const jit_value &parameters)
-    {
-        // construct the arguments
-        jit_value_t args[] = {
-            userdata.raw(),
-            parameters.raw(),
-        };
-
-        // create the instruction
-        _function->insn_call_native("smart_tpl_delete_params", (void *) smart_tpl_delete_params, _delete_params.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

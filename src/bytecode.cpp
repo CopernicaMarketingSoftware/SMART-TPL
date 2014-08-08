@@ -807,9 +807,6 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 
         // let's apply the modifier and push the new result of it to the stack
         _stack.push(std::move(_callbacks.modify_variable(_userdata, var, mod, jitparams)));
-
-        // If we actually constructed parameters let's deconstruct them again
-        if (params) _callbacks.delete_params(_userdata, jitparams);
     }
 }
 
@@ -946,9 +943,6 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
 
     // insert our label_after_while at the end
     _function.insn_label(label_after_while);
-
-    // Call the delete_iterator callback
-    _callbacks.delete_iterator(_userdata, iterator);
 }
 
 /**

@@ -25,7 +25,6 @@ struct smart_tpl_callbacks {
     const void *(*member)               (void *userdata, const void *variable, const char *name, size_t size);
     const void *(*member_at)            (void *userdata, const void *variable, size_t position);
     void       *(*create_iterator)      (void *userdata, const void *variable);
-    void        (*delete_iterator)      (void *userdata, void *iterator);
     int         (*valid_iterator)       (void *userdata, void *iterator);
     const void *(*iterator_key)         (void *userdata, void *iterator);
     const void *(*iterator_value)       (void *userdata, void *iterator);
@@ -45,7 +44,6 @@ struct smart_tpl_callbacks {
     void        (*assign)               (void *userdata, const char *key, size_t keysize, const void *variable);
     int         (*strcmp)               (void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
     void       *(*create_params)        (void *userdata, size_t parameters_count);
-    void        (*delete_params)        (void *userdata, void *parameters);
     void        (*params_append_numeric)(void *userdata, void *parameters, numeric_t value);
     void        (*params_append_double) (void *userdata, void *parameters, double value);
     void        (*params_append_string) (void *userdata, void *parameters, const char *buf, size_t len);

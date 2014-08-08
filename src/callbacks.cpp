@@ -22,7 +22,6 @@ SignatureCallback Callbacks::_output_numeric({ jit_type_void_ptr, jit_type_sys_l
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
-SignatureCallback Callbacks::_delete_iterator({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_valid_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
 SignatureCallback Callbacks::_iterator_key({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_iterator_value({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -40,7 +39,6 @@ SignatureCallback Callbacks::_params_append_numeric({ jit_type_void_ptr, jit_typ
 SignatureCallback Callbacks::_params_append_double({ jit_type_void_ptr, jit_type_void_ptr, jit_type_float64 });
 SignatureCallback Callbacks::_params_append_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_params_append_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_bool });
-SignatureCallback Callbacks::_delete_params({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_strcmp({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_sys_bool);
 SignatureCallback Callbacks::_assign({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr });
 SignatureCallback Callbacks::_assign_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_bool });
@@ -175,20 +173,6 @@ void *smart_tpl_create_iterator(void *userdata, const void *variable)
 
     // return our iterator
     return iter;
-}
-
-/**
- *  Tell the handler that a loop is completed
- *  @param  userdata        pointer to user-supplied data
- *  @param  iterator        pointer to the iterator created with smart_tpl_delete_iterator
- */
-void smart_tpl_delete_iterator(void *userdata, void *iterator)
-{
-    // cast to iterator
-    auto *iter = (Iterator *)iterator;
-
-    // destruct it
-    //delete iter; // @todo as we're making these things managed now using std::unique_ptrs we should just get rid of these callbacks
 }
 
 /**
@@ -605,20 +589,6 @@ void smart_tpl_params_append_boolean(void *userdata, void *parameters, int boole
 
     // Add the boolean value to the parameters
     params->emplace_back(boolean != 0);
-}
-
-/**
- *  Used to deconstruct the Parameters object
- *  @param  userdata        Pointer to user-supplied data
- *  @param  parameters      Pointer to a SmartTpl::Parameters object
- */
-void smart_tpl_delete_params(void *userdata, void *parameters)
-{
-    // Convert to a Parameters object
-    auto *params = (SmartTpl::Parameters *) parameters;
-
-    // Deconstruct the Parameters
-    //delete params;
 }
 
 /**

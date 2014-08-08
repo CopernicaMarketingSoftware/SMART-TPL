@@ -598,9 +598,6 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 
         if (params)
         {
-            // Deconstruct our parameters
-            _out << "callbacks->delete_params(userdata,p);" << std::endl;
-
             // End our private block
             _out << "}" << std::endl;
         }
@@ -700,9 +697,6 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
 
     // End our else block if we have an else block that is
     if (else_statements) _out << "}" << std::endl;
-
-    // clean up the iterator
-    _out << "callbacks->delete_iterator(userdata,iterator);" << std::endl;
 
     // end of the block
     _out << "}" << std::endl;

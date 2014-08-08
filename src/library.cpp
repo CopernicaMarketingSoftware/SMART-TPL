@@ -24,7 +24,6 @@ static struct smart_tpl_callbacks callbacks = {
     .member                = smart_tpl_member,
     .member_at             = smart_tpl_member_at,
     .create_iterator       = smart_tpl_create_iterator,
-    .delete_iterator       = smart_tpl_delete_iterator,
     .valid_iterator        = smart_tpl_valid_iterator,
     .iterator_key          = smart_tpl_iterator_key,
     .iterator_value        = smart_tpl_iterator_value,
@@ -44,11 +43,12 @@ static struct smart_tpl_callbacks callbacks = {
     .assign                = smart_tpl_assign,
     .strcmp                = smart_tpl_strcmp,
     .create_params         = smart_tpl_create_params,
-    .delete_params         = smart_tpl_delete_params,
     .params_append_numeric = smart_tpl_params_append_numeric,
     .params_append_double  = smart_tpl_params_append_double,
     .params_append_string  = smart_tpl_params_append_string,
     .params_append_boolean = smart_tpl_params_append_boolean,
+    .mark_failed           = smart_tpl_mark_failed,
+    .throw_exception       = smart_tpl_throw_exception,
 };
 
 /**

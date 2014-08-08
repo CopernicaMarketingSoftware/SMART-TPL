@@ -26,8 +26,7 @@ TEST(CCode, ForEach)
     "while (callbacks->valid_iterator(userdata,iterator)) {\n"
     "callbacks->assign(userdata,\"key\",3,callbacks->iterator_value(userdata,iterator));\n"
     "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3),1);\n"
-    "callbacks->write(userdata,\"\\n\",1);\ncallbacks->iterator_next(userdata,iterator);\n}\n"
-    "callbacks->delete_iterator(userdata,iterator);\n}\n}\n"
+    "callbacks->write(userdata,\"\\n\",1);\ncallbacks->iterator_next(userdata,iterator);\n}\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
@@ -48,7 +47,7 @@ TEST(CCode, ForEachWithKeys)
     "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3),1);\n"
     "callbacks->write(userdata,\"\\n\",1);\ncallbacks->write(userdata,\"value: \",7);\n"
     "callbacks->output(userdata,callbacks->variable(userdata,\"value\",5),1);\n"
-    "callbacks->iterator_next(userdata,iterator);\n}\ncallbacks->delete_iterator(userdata,iterator);\n}\n}\n"
+    "callbacks->iterator_next(userdata,iterator);\n}\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
@@ -67,8 +66,7 @@ TEST(CCode, ForEachElse)
     "while (callbacks->valid_iterator(userdata,iterator)) {\n"
     "callbacks->assign(userdata,\"key\",3,callbacks->iterator_value(userdata,iterator));\n"
     "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3),1);\n"
-    "callbacks->write(userdata,\"\\n\",1);\ncallbacks->iterator_next(userdata,iterator);\n}\n}\n"
-    "callbacks->delete_iterator(userdata,iterator);\n}\n}\n"
+    "callbacks->write(userdata,\"\\n\",1);\ncallbacks->iterator_next(userdata,iterator);\n}\n}\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
@@ -314,8 +312,7 @@ TEST(CCode, ModifierParameters)
     "{\nvoid *p = callbacks->create_params(userdata,2);\n"
     "callbacks->params_append_numeric(userdata,p,1);\n"
     "callbacks->params_append_numeric(userdata,p,5);\n"
-    "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),p);\n"
-    "callbacks->delete_params(userdata,p);\n}\n"
+    "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),p);\n}\n"
     "callbacks->output(userdata,o,1);\n}\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
