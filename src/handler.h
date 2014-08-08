@@ -69,6 +69,10 @@ private:
      */
     std::list<std::unique_ptr<const Value>> _managed_local_values;
 
+    /**
+     *  Are we supposed to throw because of a runtime failure or not?
+     */
+    bool _exception = false;
 
 public:
     /**
@@ -270,6 +274,13 @@ public:
      *  @return The escaper to use to print the variables
      */
     const Escaper *escaper() const { return _encoder; }
+
+    /**
+     *  Exception related methods, throwException() will set the Handler in exception
+     *  mode and exception() will return if we are in exception mode or not
+     */
+    void throwException() { _exception = true; };
+    bool exception() const { return _exception; };
 };
 
 /**

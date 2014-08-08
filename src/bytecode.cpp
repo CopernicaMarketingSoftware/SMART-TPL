@@ -73,7 +73,8 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _callbacks(&_function),
     _userdata(_function.get_param(0)),
     _true(_function.new_constant(1)),
-    _false(_function.new_constant(0))
+    _false(_function.new_constant(0)),
+    _error(_function.new_label())
 {
     // set our jit_exception_handler as the exception handler for jit
     auto original_handler = jit_exception_set_handler(Bytecode::jit_exception_handler);
@@ -85,6 +86,24 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     {
         // generate the libjit code
         _tree.generate(this);
+
+        // in case we reach this point correctly just return from our function cleanly
+        _function.insn_return();
+
+        // start our error label
+        _function.insn_label(_error);
+
+        // and from our error label we set ourself to exception mode
+        _callbacks.throw_exception(_userdata);
+
+        // This will basically result in the following psuedo code
+        //
+        // return;
+        // error:
+        //   exception;
+        //
+        // Resulting in you just being able to jump to error from anywhere else
+        // in the code to exit out early
 
         // compile the function
         _function.compile();
@@ -505,11 +524,17 @@ void Bytecode::minus(const Expression *left, const Expression *right)
  */
 void Bytecode::divide(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    // First calculate the right value
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
+    // if it is 0 we branch off to our early exit label
+    _function.insn_branch_if(r == _false, _error);
+
+    // calculate the left one
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+
     // calculate them, and push to stack
+    // in the case we branch off to _error this will never actually happen
     _stack.emplace(l / r);
 }
 

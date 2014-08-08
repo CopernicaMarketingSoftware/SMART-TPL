@@ -81,6 +81,11 @@ private:
     jit_value _false;
 
     /**
+     *  A jit label that we can jump to to exit out earlier
+     */
+    jit_label _error;
+
+    /**
      *  Stack with temporary values
      *  @var    std::stack
      */

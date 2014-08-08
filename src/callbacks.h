@@ -48,6 +48,7 @@ void        smart_tpl_params_append_numeric (void *userdata, void *parameters, n
 void        smart_tpl_params_append_double  (void *userdata, void *parameters, double value);
 void        smart_tpl_params_append_string  (void *userdata, void *parameters, const char *buf, size_t len);
 void        smart_tpl_params_append_boolean (void *userdata, void *parameters, int boolean);
+void        smart_tpl_throw_exception       (void *userdata);
 
 /**
  *  Class definition
@@ -215,6 +216,11 @@ private:
      *  Signature of the function to assign a string to a local variable
      */
     static SignatureCallback _assign_string;
+
+    /**
+     *  Signature of the function to set an exception message that should be thrown eventually
+     */
+    static SignatureCallback _throw_exception;
 
 public:
     /**
@@ -854,6 +860,22 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_assign_string", (void *) smart_tpl_assign_string, _assign_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the throw_exception function
+     *  @param   userdata        Pointer to user-supplied data
+     *  @see     smart_tpl_throw_exception
+     */
+    void throw_exception(const jit_value &userdata)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_throw_exception", (void *) smart_tpl_throw_exception, _throw_exception.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 };
 

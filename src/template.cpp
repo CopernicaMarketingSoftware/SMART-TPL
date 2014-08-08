@@ -75,6 +75,9 @@ std::string Template::process(const Data &data, const std::string &outencoding) 
     // ask the executor to display the template
     _executor->process(handler);
 
+    // In case our handler is set in exception mode we have to throw a runtime error
+    if (handler.exception()) throw std::runtime_error("A runtime error occured :(");
+
     // return the generated output string
     return handler.output();
 }

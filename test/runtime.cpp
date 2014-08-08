@@ -554,3 +554,10 @@ TEST(RunTime, AssignDouble)
         EXPECT_EQ(expectedOutput, tpl.process());
     }
 }
+
+TEST(RunTime, ZeroDivision)
+{
+    string input("{1/0}");
+    Template tpl((Buffer(input)));
+    EXPECT_THROW(tpl.process(), std::runtime_error);
+}
