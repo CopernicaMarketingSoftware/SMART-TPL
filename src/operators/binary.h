@@ -50,7 +50,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const { return Type::Boolean; }
+    virtual Type type() const override { return Type::Boolean; }
 };
 
 /**

@@ -40,7 +40,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const { return Type::String; }
+    Type type() const override { return Type::String; }
 
     /**
      *  Generate the code to get the const char * to the expression

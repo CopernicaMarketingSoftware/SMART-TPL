@@ -41,7 +41,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const { return Type::Value; }
+    Type type() const override { return Type::Value; }
 
     /**
      *  Generate the output that leaves a pointer to the variable

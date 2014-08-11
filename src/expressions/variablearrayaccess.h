@@ -33,7 +33,7 @@ public:
      */
     VariableArrayAccess(Variable *variable, Expression *key) :
         ArrayAccess(variable),
-        _key(std::unique_ptr<Expression>(key)) {}
+        _key(key) {}
 
     /**
      *  Destructor
@@ -44,7 +44,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const { return Type::Value; }
+    Type type() const override { return Type::Value; }
 
     /**
      *  Generate a call that creates a pointer to a variable

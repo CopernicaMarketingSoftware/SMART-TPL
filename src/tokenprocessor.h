@@ -77,7 +77,7 @@ public:
     void add(Statements *statements)
     {
         // store in unique ptr
-        _statements = std::unique_ptr<Statements>(statements);
+        _statements.reset(statements);
     }
 
     /**
@@ -133,7 +133,7 @@ public:
      */
     void mode(Token *token)
     {
-        _encoding = std::unique_ptr<Token>(token);
+        _encoding.reset(token);
     }
 
     /**

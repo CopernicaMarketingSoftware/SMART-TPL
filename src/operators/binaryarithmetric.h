@@ -34,7 +34,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const { return Type::Numeric; }
+    virtual Type type() const override { return Type::Numeric; }
 };
 
 /**
