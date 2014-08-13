@@ -1,7 +1,7 @@
 /**
- *  LiteralInteger.h
+ *  LiteralNumeric.h
  *
- *  Implementation of a literal integer value
+ *  Implementation of a literal numeric value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -15,7 +15,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class LiteralInteger : public Literal
+class LiteralNumeric : public Literal
 {
 private:
     /**
@@ -29,7 +29,7 @@ public:
      *  Constructor
      *  @param  token
      */
-    LiteralInteger(Token *token)
+    LiteralNumeric(Token *token)
     : _value(std::strtoll(token->c_str(), nullptr, 10))
     {
         // we no longer need the token
@@ -39,7 +39,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~LiteralInteger() {}
+    virtual ~LiteralNumeric() {}
 
     /**
      *  The return type of the expression

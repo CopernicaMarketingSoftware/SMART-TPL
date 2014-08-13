@@ -1,5 +1,5 @@
 /**
- *  LiteralInteger.h
+ *  LiteralDouble.h
  *
  *  Implementation of a literal integer value
  *

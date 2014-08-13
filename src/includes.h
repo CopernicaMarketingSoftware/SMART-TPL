@@ -109,7 +109,7 @@
 #include "expressions/variablearrayaccess.h"
 #include "expressions/literal.h"
 #include "expressions/literalboolean.h"
-#include "expressions/literalinteger.h"
+#include "expressions/literalnumeric.h"
 #include "expressions/literaldouble.h"
 #include "expressions/literalstring.h"
 #include "expressions/filter.h"
