@@ -1,3 +1,12 @@
+/**
+ *  Invalid_Syntax.cpp
+ *
+ *  Unit tests that tests if certain syntax which should be invalid is in fact invalid
+ *
+ *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
+ *  @copyright 2014 Copernica BV
+ */
+
 #include <gtest/gtest.h>
 #include <../smarttpl.h>
 
