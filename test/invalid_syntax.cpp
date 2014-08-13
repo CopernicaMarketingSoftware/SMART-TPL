@@ -6,12 +6,6 @@
 using namespace SmartTpl;
 using namespace std;
 
-TEST(InvalidSyntax, Empty)
-{
-    string input;
-    EXPECT_THROW(Template((Buffer(input))), std::runtime_error);
-}
-
 TEST(InvalidSyntax, Mode)
 {
     string input("{mode=html}");

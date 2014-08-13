@@ -193,6 +193,10 @@ Tokenizer::~Tokenizer()
  */
 bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 {
+    // in case the size is 0 we'll just accept it, running it through the actual parser
+    // and all wastes time and won't even accept it!
+    if (size == 0) return true;
+
     // read our data into a buffer that flex wants
     auto *state = yy_scan_bytes(buffer, size, _scanner);
 

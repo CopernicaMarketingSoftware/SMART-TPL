@@ -6,6 +6,21 @@
 using namespace SmartTpl;
 using namespace std;
 
+TEST(Syntax, Empty)
+{
+    string input;
+    Template tpl((Buffer(input)));
+
+    string expectedOutput;
+    EXPECT_EQ(expectedOutput, tpl.process());
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process());
+    }
+}
+
 TEST(Syntax, Mode)
 {
     string input("{mode=html}echo"); // echo is purely there as we do at least need 1 statement
