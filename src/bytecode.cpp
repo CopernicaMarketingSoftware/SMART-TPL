@@ -226,14 +226,8 @@ jit_value Bytecode::doubleExpression(const Expression *expression)
  */
 void Bytecode::output(const Variable *variable)
 {
-    // get a pointer to the variable
-    variable->pointer(this);
-
-    // pop the value variable->pointer(this); pushed to the stack from the stack
-    auto var = pop();
-
-    // output the variable using the output callback
-    _callbacks.output(_userdata, var, _true);
+    // output the variable using the output callback, we of course use pointer(Variable*) here
+    _callbacks.output(_userdata, pointer(variable), _true);
 }
 
 /**
@@ -258,14 +252,7 @@ void Bytecode::output(const Filter *filter)
  */
 void Bytecode::write(const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric)
-    {
-        expression->numeric(this);
-
-        auto number = pop();
-
-        _callbacks.output_numeric(_userdata, number);
-    }
+    if (expression->type() == Expression::Type::Numeric) _callbacks.output_numeric(_userdata, numericExpression(expression));
     else
     {
         // convert the expression to a string (this pushes two values on the stack
@@ -358,15 +345,9 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 {
     if (expression->type() == Expression::Type::Numeric)
     {
-        // convert the expression to a numeric value
-        expression->numeric(this);
-
-        // pop the output of expression->numeric(this) from the stack
-        auto position = pop();
-
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
-        _stack.push(std::move(_callbacks.member_at(_userdata, pointer(parent), position)));
+        _stack.push(std::move(_callbacks.member_at(_userdata, pointer(parent), numericExpression(expression))));
     }
     else
     {
@@ -611,6 +592,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         left->string(this);
         jit_value l_size = pop();
         jit_value l = pop();
+
         right->string(this);
         jit_value r_size = pop();
         jit_value r = pop();
@@ -664,6 +646,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         left->string(this);
         jit_value l_size = pop();
         jit_value l = pop();
+
         right->string(this);
         jit_value r_size = pop();
         jit_value r = pop();
@@ -866,12 +849,8 @@ void Bytecode::parameters(const Parameters *parameters)
  */
 void Bytecode::foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements)
 {
-    // convert our variable to a jit_value
-    variable->pointer(this);
-    auto var = pop();
-
     // tell the callbacks that we're creating an iterator
-    auto iterator = _callbacks.create_iterator(_userdata, var);
+    auto iterator = _callbacks.create_iterator(_userdata, pointer(variable));
 
     // we create a label just before our loop so we can actually loop
     // and we create a label just outside of it, so we can jump out of it
@@ -960,9 +939,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
     switch (expression->type()) {
     case Expression::Type::Numeric: {
         // Convert to a numeric type and use the assign_numeric callback
-        expression->numeric(this);
-        auto numeric = pop();
-        _callbacks.assign_numeric(_userdata, key_str, key_size, numeric);
+        _callbacks.assign_numeric(_userdata, key_str, key_size, numericExpression(expression));
         break;
     }
     case Expression::Type::String: {
@@ -975,9 +952,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
     }
     case Expression::Type::Boolean: {
         // Convert to a boolean and use the assign_boolean callback
-        expression->boolean(this);
-        auto boolean = pop();
-        _callbacks.assign_boolean(_userdata, key_str, key_size, boolean);
+        _callbacks.assign_boolean(_userdata, key_str, key_size, booleanExpression(expression));
         break;
     }
     case Expression::Type::Value: {
@@ -985,18 +960,14 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         if (variable)
         {
             // If we are a variable just convert it to a pointer and pass that to the assign callback
-            variable->pointer(this);
-            auto var = pop();
-            _callbacks.assign(_userdata, key_str, key_size, var);
+            _callbacks.assign(_userdata, key_str, key_size, pointer(variable));
             break;
         }
         throw std::runtime_error("Unsupported assign.");
     }
     case Expression::Type::Double:
         // Convert to a floating point and use the assign_double callback
-        expression->double_type(this);
-        auto _double = pop();
-        _callbacks.assign_double(_userdata, key_str, key_size, _double);
+        _callbacks.assign_double(_userdata, key_str, key_size, doubleExpression(expression));
         break;
     }
 }
