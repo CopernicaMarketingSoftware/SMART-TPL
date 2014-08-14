@@ -561,10 +561,10 @@ void CCode::booleanOr(const Expression *left, const Expression *right)  { left->
  */
 void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
-    for (auto iter = modifiers->begin(); iter != modifiers->end(); ++iter)
+    for (const auto &modifier : *modifiers)
     {
         // Retrieve the parameters
-        const Parameters *params = (*iter)->parameters();
+        const Parameters *params = modifier->parameters();
         // Start our own private block if we have parameters
         if (params)
         {
@@ -576,7 +576,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 
         // Call the modify_variable callback
         _out << "o = callbacks->modify_variable(userdata,";
-        if (iter == modifiers->begin())
+        if (modifier == *modifiers->begin())
         {
             variable->pointer(this);
             _out << ",";
@@ -588,7 +588,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 
         // Write the get modifier callback
         _out << "callbacks->modifier(userdata,";
-        string((*iter)->token());
+        string(modifier->token());
         _out << "),";
 
         // If there are parameters write our local variable here, NULL otherwise

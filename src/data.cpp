@@ -88,17 +88,7 @@ Data::Data(const Variant::Value &value)
     std::map<std::string, Variant::Value> map = value;
 
     // Loop through the map and assign all the elements
-    for (auto iter = map.begin(); iter != map.end(); ++iter) assign(iter->first, iter->second);
-}
-
-Data::Data(Variant::Value &&value)
-: Data() // Call the default Contructor so all the modifiers are still registered
-{
-    // Turn our Variant::Value into a map
-    std::map<std::string, Variant::Value> map = value;
-
-    // Loop through the map and assign all the elements
-    for (auto iter = map.begin(); iter != map.end(); ++iter) assign(iter->first, std::move(iter->second));
+    for (auto &iter : map) assign(iter.first, iter.second);
 }
 
 /**

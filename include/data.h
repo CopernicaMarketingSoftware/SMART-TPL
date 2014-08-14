@@ -50,7 +50,6 @@ public:
      *  @param  value    Use this Variant::Value (map assumed) to initialize your Data object
      */
     Data(const Variant::Value &value);
-    Data(Variant::Value &&value);
 
     /**
      *  Deleted copy and move constructor
