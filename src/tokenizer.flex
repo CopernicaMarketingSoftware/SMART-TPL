@@ -145,15 +145,15 @@
 
 <STRING>{
     [^\\\"]                     { yyextra->token()->append(yytext, yyleng); }
-    "\\\""                      { yyextra->token()->append("\"", 1); }
-    "\\"                        { yyextra->token()->append("\\", 1); }
+    "\\\""                      { yyextra->token()->push_back('\"'); }
+    "\\"                        { yyextra->token()->push_back('\\'); }
     "\""                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
 }
 
 <LITERAL>{
     "\n"                        { yyextra->increaseLine(); yyextra->token()->push_back('\n'); }
     [^{\n]+                     { yyextra->token()->append(yytext, yyleng); }
-    "{"                         { yyextra->token()->append("{"); }
+    "{"                         { yyextra->token()->push_back('{'); }
     "{/literal}"                { BEGIN(INITIAL); return TOKEN_RAW; }
 }
 

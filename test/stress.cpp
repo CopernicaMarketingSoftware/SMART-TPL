@@ -24,7 +24,7 @@ TEST(Stress, ChainedModifiers)
 {
     string input("{$var");
     for (int i = 0; i < 500; ++i) input.append("|upper|lower");
-    input.append("}");
+    input.push_back('}');
     Template tpl((Buffer(input)));
 
     Data data;
