@@ -57,7 +57,7 @@ static bool compile(const std::string &base)
         const char* compiler = getenv("CC");
         const char* cflags = getenv("CFLAGS");
         command << (compiler ? compiler : "gcc") << " -x c -fPIC -shared "
-                << (cflags ? cflags : "-O3") << " -o " << so_output << " -";
+                << (cflags ? cflags : "-O3 -nostdlib") << " -o " << so_output << " -";
 
         // start the actual command and start writing into it if we started it correctly
         FILE *shell = popen(command.str().c_str(), "w");
