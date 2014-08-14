@@ -67,7 +67,7 @@
      *  The rules that are active when the parser is in 'template' mode, and just
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
-[\n]                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token("\n", 1)); return TOKEN_RAW; }
+"\n"                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token("\n", 1)); return TOKEN_RAW; }
 [^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("{", 1)); return TOKEN_RAW; }
 "{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("}", 1)); return TOKEN_RAW; }
