@@ -25,11 +25,6 @@
 %option noyywrap
 
 /**
- *  We are no using the method this creates, only causes a unused function warning
- */
-%option nounput
-
-/**
  *  We are not a big fan of global variable, hence we turn this into a reentrant
  *  tokenizer
  */
@@ -50,6 +45,7 @@
  *  Exclusive parser mode "INSIDE_CURLY_BRACES" and "IDENTIFIER" and "STRING". This is exclusive,
  *  because other tokens are disabled when in one of these modes
  */
+%x RAW
 %x INSIDE_CURLY_BRACES
 %x IDENTIFIER
 %x STRING
@@ -67,10 +63,11 @@
      *  The rules that are active when the parser is in 'template' mode, and just
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
-"\n"                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token("\n", 1)); return TOKEN_RAW; }
-[^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
-"{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("{", 1)); return TOKEN_RAW; }
-"{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("}", 1)); return TOKEN_RAW; }
+
+"\n"                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token("\n", 1)); BEGIN(RAW); }
+[^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); BEGIN(RAW); }
+"{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("{", 1)); BEGIN(RAW); }
+"{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("}", 1)); BEGIN(RAW); }
 "{if"[ \t]+         { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
@@ -87,6 +84,21 @@
 "{ "[^}]*"}"        { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{"                 { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_EXPRESSION; }
 "{"[a-z]*"}"        { return -1; };
+
+    /**
+     *  These rules are just to build up raw strings as one big string instead of a bunch of
+     *  smaller strings. The EOF rule here is just so we can actually properly end with raw
+     *  strings as well, which is rather common.
+     */
+
+<RAW>{
+    "\n"                        { yyextra->increaseLine(); yyextra->token()->push_back('\n'); }
+    [^{\n]+                     { yyextra->token()->append(yytext, yyleng); }
+    "{ldelim}"                  { yyextra->token()->push_back('{'); }
+    "{rdelim}"                  { yyextra->token()->push_back('}'); }
+    "{"                         { BEGIN(INITIAL); unput('{'); return TOKEN_RAW; }
+    <<EOF>>                     { BEGIN(INITIAL); return TOKEN_RAW; }
+}
 
     /**
      *  When in expression mode, we are tokenizing an expression inside an {if}

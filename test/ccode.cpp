@@ -45,7 +45,7 @@ TEST(CCode, ForEachWithKeys)
     "callbacks->assign(userdata,\"key\",3,callbacks->iterator_key(userdata,iterator));\n"
     "callbacks->assign(userdata,\"value\",5,callbacks->iterator_value(userdata,iterator));\n"
     "callbacks->write(userdata,\"key: \",5);\ncallbacks->output(userdata,callbacks->variable(userdata,\"key\",3),1);\n"
-    "callbacks->write(userdata,\"\\n\",1);\ncallbacks->write(userdata,\"value: \",7);\n"
+    "callbacks->write(userdata,\"\\nvalue: \",8);\n"
     "callbacks->output(userdata,callbacks->variable(userdata,\"value\",5),1);\n"
     "callbacks->iterator_next(userdata,iterator);\n}\n}\n}\n"
     "const char *mode = \"raw\";\n");
