@@ -86,7 +86,7 @@
 "{literal}"         { BEGIN(LITERAL); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it later
 "{ "[^}]*"}"        { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{"                 { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_EXPRESSION; }
-"{"[a-zA-Z]*"}"     { return -1; };
+"{"[a-z]*"}"        { return -1; };
 
     /**
      *  When in expression mode, we are tokenizing an expression inside an {if}
@@ -95,7 +95,7 @@
 
 <INSIDE_CURLY_BRACES>{
     [ \t]
-    "$"[a-zA-Z][a-z0-9_-]*      { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
+    "$"[a-z][a-z0-9_-]*         { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext+1, yyleng-1)); return TOKEN_VARIABLE; }
     "true"                      { return TOKEN_TRUE; }
     "false"                     { return TOKEN_FALSE; }
     "and"                       { return TOKEN_AND; }
@@ -140,7 +140,7 @@
 }
 
 <IDENTIFIER>{
-    [a-zA-Z][a-zA-Z0-9_]*       { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
+    [a-z][a-z0-9_]*             { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
 }
 
 <STRING>{
