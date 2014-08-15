@@ -31,6 +31,16 @@
 %option reentrant
 
 /**
+ *  Use the SmartTpl prefix to avoid colission with other flex generated parsers
+ */
+%option prefix="SmartTpl"
+
+/**
+ *  Make this scanner case insensitive
+ */
+%option case-insensitive
+
+/**
  *  The user-supplied extra data that we store in the scanner object, is info
  *  about the current token that is being processed.
  */
