@@ -62,6 +62,15 @@ public:
     Template(const Template &that) = delete;
 
     /**
+     *  Move constructor
+     */
+    Template(Template &&that)
+    : _executor(that._executor),
+      _encoding(std::move(that._encoding)) {
+      that._executor = nullptr;
+    }
+
+    /**
      *  Destructor
      */
     virtual ~Template();
