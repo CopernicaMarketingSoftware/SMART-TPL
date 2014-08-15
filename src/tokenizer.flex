@@ -144,7 +144,7 @@
 }
 
 <STRING>{
-    [^\\\"]                     { yyextra->token()->append(yytext, yyleng); }
+    [^\\\"]+                    { yyextra->token()->append(yytext, yyleng); }
     "\\\""                      { yyextra->token()->push_back('\"'); }
     "\\"                        { yyextra->token()->push_back('\\'); }
     "\""                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
