@@ -31,7 +31,7 @@ public:
     VariantValue(std::nullptr_t value) : _value(new Variant::Value(nullptr)) {}
     VariantValue(bool value) : _value(new Variant::Value(value)) {}
     VariantValue(int value) : _value(new Variant::Value(value)) {}
-    VariantValue(long value) : _value(new Variant::Value(value)) {}
+    VariantValue(int64_t value) : _value(new Variant::Value(value)) {}
     VariantValue(double value) : _value(new Variant::Value(value)) {}
     VariantValue(const char* value) : _value(new Variant::Value(value)) {}
     VariantValue(const char* value, size_t len) : _value(new Variant::Value(value, len)) {}

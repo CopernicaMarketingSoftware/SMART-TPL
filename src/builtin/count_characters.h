@@ -38,7 +38,7 @@ public:
         if (params.size() >= 1) include_whitespaces = params[0].toBoolean();
 
         // If we include whitespaces we might as well just return the size
-        if (include_whitespaces) return (long) input.size();
+        if (include_whitespaces) return (int64_t) input.size();
 
         // Let's just convert our input to a C string
         std::string str = input.toString();
