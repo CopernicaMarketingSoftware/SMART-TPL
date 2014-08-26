@@ -22,7 +22,6 @@ INSTALL_HEADERS =   ${INSTALL_PREFIX}/include
 INSTALL_LIB     =   ${INSTALL_PREFIX}/lib
 INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 
-
 #
 #   Name of the target library and target program
 #
@@ -34,7 +33,6 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 
 LIBRARY         =   libsmarttpl.so
 PROGRAM         =   smarttpl
-
 
 #
 #   Compiler and other programs
@@ -66,16 +64,12 @@ LEMON           =   lemon
 #   final libsmarttpl.so file much bigger, so you want to leave that flag out on
 #   production servers).
 #
-#   Are you compiling on OSX? You may have to append the option 
-#   "-undefined dynamic_lookup" to the linker flags
-#
 
 COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -pipe -std=c++11 -Wno-sign-compare -Wno-unused-value -Wno-psabi
 LINKER_FLAGS    =   -L.
 DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex -lvariant -ljson-c
 FLEX_FLAGS      =
 LEMON_FLAGS     =
-
 
 #
 #   Command to remove files, copy files and create directories.
@@ -89,7 +83,6 @@ CP              =   cp -f
 MKDIR           =   mkdir -p
 MV              =   mv -f
 
-
 #
 #   The tokenizer input file
 #
@@ -98,7 +91,6 @@ MV              =   mv -f
 
 TOKENIZER       =    src/tokenizer.cpp
 
-
 #
 #    The lemon input file
 
@@ -106,7 +98,6 @@ TOKENIZER       =    src/tokenizer.cpp
 #
 
 PARSER          =    src/parser.cpp
-
 
 #
 #   The source files
@@ -139,7 +130,6 @@ PROGRAM_OBJECTS =   $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
 
 GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.out}
 
-
 #
 #   End of the variables section. Here starts the list of instructions and
 #   dependencies that are used by the compiler.
@@ -150,7 +140,7 @@ all: ${LIBRARY} ${PROGRAM}
 ${LIBRARY}: ${PARSER} ${TOKENIZER} ${LIBRARY_OBJECTS}
 	${LINKER} ${LINKER_FLAGS} -shared -o $@ ${LIBRARY_OBJECTS} ${DEPENDENCIES}
 
-${PROGRAM}: ${PROGRAM_OBJECTS}
+${PROGRAM}: ${PROGRAM_OBJECTS} ${LIBRARY}
 	${LINKER} ${LINKER_FLAGS} -o $@ ${PROGRAM_OBJECTS} -lsmarttpl
 
 clean:
