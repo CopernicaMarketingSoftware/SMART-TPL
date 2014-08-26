@@ -170,7 +170,7 @@ TEST(RunTime, StringComparisonEquals)
 
 TEST(RunTime, StringComparisonNotEquals)
 {
-    string input("{if \"string1\" != \"string2\"}true{else}false{/if}");
+    string input("{if \"str\'ing1\" != \'stri\"ng2\'}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
     string expectedOutput("true");

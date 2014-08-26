@@ -58,7 +58,8 @@
 %x RAW
 %x INSIDE_CURLY_BRACES
 %x IDENTIFIER
-%x STRING
+%x STRING_DOUBLE_QUOTES
+%x STRING_SINGLE_QUOTES
 %x LITERAL
 
 /**
@@ -129,7 +130,8 @@
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
     [+-]?[0-9]+"."[0-9]+("e"[-+]?[0-9]+)? { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_DOUBLE; }
-    "\""                        { BEGIN(STRING); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
+    "\""                        { BEGIN(STRING_DOUBLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
+    "\'"                        { BEGIN(STRING_SINGLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
@@ -165,11 +167,26 @@
     [a-z][a-z0-9_]*             { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
 }
 
-<STRING>{
+    /**
+     *  This set of rules is for matching literal strings that are between double quotes
+     */
+
+<STRING_DOUBLE_QUOTES>{
     [^\\\"]+                    { yyextra->token()->append(yytext, yyleng); }
     "\\\""                      { yyextra->token()->push_back('\"'); }
     "\\"                        { yyextra->token()->push_back('\\'); }
     "\""                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
+}
+
+    /**
+     *  This set of rules is for matching literal strings that are between single quotes
+     */
+
+<STRING_SINGLE_QUOTES>{
+    [^\\\']+                    { yyextra->token()->append(yytext, yyleng); }
+    "\\\'"                      { yyextra->token()->push_back('\''); }
+    "\\"                        { yyextra->token()->push_back('\\'); }
+    "\'"                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
 }
 
 <LITERAL>{
