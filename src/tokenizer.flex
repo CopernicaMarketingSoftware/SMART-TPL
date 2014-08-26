@@ -163,6 +163,10 @@
     .                           { return -1; }
 }
 
+    /**
+     *  This set of rules is for matching identifiers like modifiers
+     */
+
 <IDENTIFIER>{
     [a-z][a-z0-9_]*             { BEGIN(INSIDE_CURLY_BRACES); yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_IDENTIFIER; }
 }
@@ -188,6 +192,10 @@
     "\\"                        { yyextra->token()->push_back('\\'); }
     "\'"                        { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_STRING; }
 }
+
+    /**
+     *  This set of rules is to make the {literal} block work correctly
+     */
 
 <LITERAL>{
     "\n"                        { yyextra->increaseLine(); yyextra->token()->push_back('\n'); }
