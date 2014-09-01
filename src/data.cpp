@@ -92,6 +92,16 @@ Data::Data(const Variant::Value &value)
 }
 
 /**
+ *  Move constructor
+ */
+Data::Data(Data&& that)
+: _variables(std::move(that._variables)),
+  _managed_values(std::move(that._managed_values)),
+  _modifiers(std::move(that._modifiers))
+{
+}
+
+/**
  * Assign data
  * @param  name         Name of the variable
  * @param  value        Value of the variable

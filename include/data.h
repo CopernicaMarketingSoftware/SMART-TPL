@@ -52,10 +52,14 @@ public:
     Data(const Variant::Value &value);
 
     /**
-     *  Deleted copy and move constructor
+     *  Deleted copy constructor
      */
     Data(const Data &that) = delete;
-    Data(Data&& that) = delete;
+
+    /**
+     *  Move constructor
+     */
+    Data(Data&& that);
 
     /**
      *  Destructor
