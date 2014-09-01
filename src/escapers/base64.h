@@ -72,7 +72,8 @@ public:
         }
 
         // Flush the base64 BIO to make sure everything is written
-        BIO_flush(base64);
+        // We're casting the output to void here so the compiler will shut up about it
+        (void) BIO_flush(base64);
 
         // Get the char pointer and length of the mem BIO
         char *output;

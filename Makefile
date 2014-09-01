@@ -61,7 +61,7 @@ LEMON           =   lemon
 #   production servers).
 #
 
-COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -pipe -std=c++11 -Wno-sign-compare -Wno-unused-value -Wno-psabi
+COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -pipe -std=c++11 -Wno-sign-compare -Wno-psabi
 LINKER_FLAGS    =   -L.
 DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex -lvariant -ljson-c
 FLEX_FLAGS      =
@@ -109,8 +109,8 @@ PROGRAM_SOURCES =   $(wildcard program/*.cpp)
 #   We also use a Makefile function here that takes all source files.
 #
 
-LIBRARY_OBJECTS =   $(LIBRARY_SOURCES:%.cpp=%.o)
-PROGRAM_OBJECTS =   $(PROGRAM_SOURCES:%.cpp=%.o)
+LIBRARY_OBJECTS =   $(sort $(LIBRARY_SOURCES:%.cpp=%.o))
+PROGRAM_OBJECTS =   $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
 
 #
 #   Auto-generated files
