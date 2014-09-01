@@ -37,11 +37,7 @@ PROGRAM         =   smarttpl
 #
 #   Compiler and other programs
 #
-#   By default, clang is used. If you want to use a different
-#   compiler, you can change that here. You can change this for both the
-#   compiler (the program that turns the c++ files into object files) and for
-#   the linker (the program that links all object files into a single .so
-#   library file. By default, clang++ is used for both.
+#   By default, c++ is used. Meaning your default C++ compiler is used.
 #
 #   For generating the tokenizer and the parser, the external programs "flex"
 #   and "lemon" are being used. You may override them here
@@ -84,17 +80,13 @@ MKDIR           =   mkdir -p
 MV              =   mv -f
 
 #
-#   The tokenizer input file
-#
-#   The Tokenizer.flex file should be fed to the "flex" program
+#   The tokenizer output file
 #
 
 TOKENIZER       =    src/tokenizer.cpp
 
 #
-#    The lemon input file
-
-#    The Parser.lemon file is processed by the "lemon" program
+#    The lemon output file
 #
 
 PARSER          =    src/parser.cpp
@@ -117,8 +109,8 @@ PROGRAM_SOURCES =   $(wildcard program/*.cpp)
 #   We also use a Makefile function here that takes all source files.
 #
 
-LIBRARY_OBJECTS =   $(sort $(LIBRARY_SOURCES:%.cpp=%.o))
-PROGRAM_OBJECTS =   $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
+LIBRARY_OBJECTS =   $(LIBRARY_SOURCES:%.cpp=%.o)
+PROGRAM_OBJECTS =   $(PROGRAM_SOURCES:%.cpp=%.o)
 
 #
 #   Auto-generated files
