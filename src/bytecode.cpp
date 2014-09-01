@@ -123,8 +123,9 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     // done building
     _context.build_end();
 
-    // get the closure
-    _closure = (ShowTemplate *)_function.closure();
+    // get the closure, but only if libjit supports closures and it isn't in interpreter mode
+    // in interpreter mode closures tend to just segfault while running
+    if (jit_supports_closures() && !jit_uses_interpreter()) _closure = (ShowTemplate *)_function.closure();
 
     // Set the jit_exception_handler back to the original handler
     jit_exception_set_handler(original_handler);
