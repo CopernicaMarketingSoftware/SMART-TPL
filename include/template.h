@@ -76,6 +76,12 @@ public:
     virtual ~Template();
 
     /**
+     *  Deleted assign operator
+     *  @param  that
+     */
+    Template& operator=(const Template &that) = delete;
+
+    /**
      *  Get the template representation in C that can be compiled into a shared
      *  object. This method only works for templates that were not already a
      *  shared library.
