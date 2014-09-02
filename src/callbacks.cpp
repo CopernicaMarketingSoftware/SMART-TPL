@@ -50,7 +50,7 @@ SignatureCallback Callbacks::_mark_failed({ jit_type_void_ptr });
 /**
  *  A static empty value
  */
-VariantValue                _empty;
+static VariantValue _empty;
 
 /**
  *  Function to write raw data
