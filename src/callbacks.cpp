@@ -276,11 +276,14 @@ const char *smart_tpl_to_string(void *userdata, const void *variable)
     // convert the variable to a value object
     auto *var = (const Value *) variable;
 
+    // convert the userdata to a handler object
+    auto *handler = (Handler *)userdata;
+
     // convert to string
     auto result = var->toString();
 
-    // return the string
-    return result.c_str();
+    // Make it managed and return the const char* from our handler
+    return handler->manageString(std::move(result));
 }
 
 /**

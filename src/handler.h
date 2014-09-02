@@ -66,18 +66,27 @@ private:
      *  because of that be deleted
      *
      *  Can also contain externally created Values that were made managed using manageValue(Value*)
+     *  @see manageValue
      */
     std::list<std::unique_ptr<const Value>> _managed_local_values;
 
     /**
      *  List of iterators that we are managing
+     *  @see manageIterator
      */
     std::list<std::unique_ptr<Iterator>> _managed_iterators;
 
     /**
      *  List of parameters that we are managing
+     *  @see manageParameters
      */
     std::list<std::unique_ptr<SmartTpl::Parameters>> _managed_parameters;
+
+    /**
+     *  A list of strings that are meant to kept in scope so their buffers remain valid
+     *  @see manageString
+     */
+    std::list<std::string> _managed_strings;
 
     /**
      *  Are we supposed to throw because of a runtime failure or not?
@@ -294,6 +303,15 @@ public:
     void manageParameters(SmartTpl::Parameters *params)
     {
         _managed_parameters.emplace_back(params);
+    }
+
+    /**
+     *  Make a string managed and return the const char* pointer which will remain in scope
+     */
+    const char* manageString(std::string &&str)
+    {
+        // insert it in our managed strings list and return it
+        return _managed_strings.insert(_managed_strings.end(), std::move(str))->c_str();
     }
 
     /**
