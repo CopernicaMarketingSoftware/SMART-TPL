@@ -48,5 +48,13 @@ int main(int argc, char** argv) {
                 return EXIT_FAILURE;
         }
     }
+    if (no_gcc == false) {
+        int gcc = system("gcc --version");
+        no_gcc = (!WEXITSTATUS(gcc) == 0);
+    }
+    if (no_clang == false) {
+        int clang = system("clang --version");
+        no_clang = (!WEXITSTATUS(clang) == 0);
+    }
     return RUN_ALL_TESTS();
 };
