@@ -31,14 +31,8 @@ public:
      */
     VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
-        // By default we don't include whitespaces
-        bool include_whitespaces = false;
-
-        // If we have parameters we have at least one, this being the toggle for whitespaces/no whitespaces
-        if (params.size() >= 1) include_whitespaces = params[0].toBoolean();
-
         // If we include whitespaces we might as well just return the size
-        if (include_whitespaces) return (int64_t) input.size();
+        if (params.size() >= 1 && params[0].toBoolean()) return (int64_t) input.size();
 
         // Let's just convert our input to a C string
         std::string str = input.toString();

@@ -44,7 +44,7 @@ public:
      */
     ModifierExpression(const Token *name, const Parameters *parameters) : _name(name), _parameters(parameters) {}
 
-    /** 
+    /**
      *  Destructor
      */
     virtual ~ModifierExpression() {}

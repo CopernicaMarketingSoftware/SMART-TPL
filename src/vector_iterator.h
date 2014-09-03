@@ -18,7 +18,11 @@ namespace SmartTpl { namespace Internal {
 class VectorIterator : public SmartTpl::Iterator
 {
 private:
+    /**
+     *  The vector we're iterating over
+     */
     const std::vector<Variant::Value> _vector;
+
     /**
      *  Iterator to the current position in our vector
      */

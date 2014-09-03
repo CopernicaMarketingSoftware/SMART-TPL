@@ -383,7 +383,7 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
     // convert to Parameters object
     auto *params_ptr = (SmartTpl::Parameters *) parameters;
 
-    // If params_ptr is valid use that one, create an empty one of the stack otherwise
+    // If params_ptr is valid use that one, create an empty one on the stack otherwise
     SmartTpl::Parameters params = (params_ptr) ? *params_ptr : SmartTpl::Parameters();
 
     // Actually modify the value
@@ -502,7 +502,7 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
     // If we aren't the same size to begin with we might as well just error out already
     if (a_len != b_len) return -1;
 
-    // If we didn't return yet we are both the same length, if we're both 0 we're equal!
+    // If we didn't return yet that means we are both the same length, if we're both 0 we're equal!
     else if (a_len == 0) return 0;
 
     // Pfft, we still don't know if we're equal, let's just ask strncmp() then

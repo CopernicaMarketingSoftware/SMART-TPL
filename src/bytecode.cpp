@@ -866,7 +866,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
         // Jump to the start of the actual while loop if we are valid
         _function.insn_branch_if(valid, label_while);
 
-        // Otherwise just fall through and cal the else_statements
+        // Otherwise just fall through and call the else_statements
         else_statements->generate(this);
 
         // Then just jump over the while loop entirely

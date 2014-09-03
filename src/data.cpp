@@ -172,6 +172,7 @@ Data &Data::callback(const std::string &name, const Callback &callback, bool cac
 
     // make our Value managed
     _managed_values.emplace_back(v);
+
     // and store in the list of variables
     _variables[name] = v;
 

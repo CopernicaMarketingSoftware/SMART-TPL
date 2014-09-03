@@ -18,7 +18,11 @@ namespace SmartTpl { namespace Internal {
 class MapIterator : public SmartTpl::Iterator
 {
 private:
+    /**
+     *  The map we're iterating over
+     */
     const std::map<std::string, Variant::Value> _map;
+
     /**
      *  Iterator to the current position in our vector
      */

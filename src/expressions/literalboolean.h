@@ -71,6 +71,16 @@ public:
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->numeric(_value ? 1 : 0);
     }
+
+    /**
+     *  Generate the expression as a double value
+     *  @param  generator
+     */
+    void double_type(Generator *generator) const override
+    {
+        // turn the value into 1 or 0 (in C there are no booleans)
+        generator->double_type(_value ? 1 : 0);
+    }
 };
 
 /**

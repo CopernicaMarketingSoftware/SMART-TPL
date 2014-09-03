@@ -388,6 +388,7 @@ void CCode::plus(const Expression *left, const Expression *right)
     if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
 }
+
 void CCode::minus(const Expression *left, const Expression *right)
 {
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
@@ -448,8 +449,11 @@ void CCode::modulo(const Expression *left, const Expression *right) { left->nume
  *  Comparison operators
  *  @param  left
  *  @param  right
- *  @todo Maybe don't actually compile in the comparison if it's a comparison between literals
- *        it seems kind of pointless to evaluate something like (true == true) everytime.
+ *  @note   Literal comparisons are possible with this, although that shouldn't matter.
+ *          We're assuming gcc as the compiler for this after all, which will optimize it out
+ *          anyway, even if you compile it with -O0 (aka don't optimize). Only thing it probably
+ *          can't optimize away are our strcmp calls, but that's mostly because we have our own
+ *          function for that.
  */
 void CCode::equals(const Expression *left, const Expression *right)
 {
@@ -490,6 +494,7 @@ void CCode::notEquals(const Expression *left, const Expression *right)
         _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ","; right->string(this); _out << ") != 0";
     }
 }
+
 void CCode::greater(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
@@ -565,6 +570,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
     {
         // Retrieve the parameters
         const Parameters *params = modifier->parameters();
+
         // Start our own private block if we have parameters
         if (params)
         {
@@ -581,10 +587,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
             variable->pointer(this);
             _out << ",";
         }
-        else
-        {
-            _out << "o,";
-        }
+        else _out << "o,";
 
         // Write the get modifier callback
         _out << "callbacks->modifier(userdata,";
@@ -596,11 +599,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
         else _out << "NULL";
         _out << ");" << std::endl;
 
-        if (params)
-        {
-            // End our private block
-            _out << "}" << std::endl;
-        }
+        if (params) _out << "}" << std::endl; // End our private block
     }
 }
 
