@@ -92,11 +92,6 @@ private:
     std::stack<jit_value> _stack;
 
     /**
-     *  The exception handler for libjit
-     */
-    static void *jit_exception_handler(int exception_type);
-
-    /**
      *  Helper method to pop a value from the stack
      *  @return jit_value
      */

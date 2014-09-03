@@ -20,50 +20,6 @@ namespace SmartTpl { namespace Internal {
 jit_type_t Bytecode::_function_signature = jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params);
 
 /**
- *  Custom exception handler for libjit
- *  We purely need this as the default exception handler of libjit will call
- *  exit(1); Which we obviously don't want. The only way around this is to
- *  register our own exception handler and throw a C++ exception from there
- *  so it'll jump over parts of the default libjit exception handler.
- */
-void* Bytecode::jit_exception_handler(int exception_type)
-{
-    std::stringstream error;
-
-    // convert the exception type to a human readable string
-    // source: https://github.com/agalakhov/libjit/blob/master/jit/jit-except.c#L213
-    switch (exception_type) {
-    case JIT_RESULT_OVERFLOW:
-        error << "Overflow during checked arithmetic operation"; break;
-    case JIT_RESULT_ARITHMETIC:
-        error << "Arithmetic exception (dividing the minimum integer by -1)"; break;
-    case JIT_RESULT_DIVISION_BY_ZERO:
-        error << "Division by zero"; break;
-    case JIT_RESULT_COMPILE_ERROR:
-        error << "Error during function compilation"; break;
-    case JIT_RESULT_OUT_OF_MEMORY:
-        error << "Out of memory"; break;
-    case JIT_RESULT_NULL_REFERENCE:
-        error << "Null pointer dereferenced"; break;
-    case JIT_RESULT_NULL_FUNCTION:
-        error << "Null function pointer called"; break;
-    case JIT_RESULT_CALLED_NESTED:
-        error << "Nested function called from non-nested context"; break;
-    case JIT_RESULT_OUT_OF_BOUNDS:
-        error << "Array index out of bounds"; break;
-    case JIT_RESULT_UNDEFINED_LABEL:
-        error << "Undefined label"; break;
-    case JIT_RESULT_OK: // I'm assuming this will never actually happen..
-        error << "Uhm, success?"; break;
-    default:
-        error << "Unknown exception " << exception_type; break;
-    };
-
-    // throw our error string as a runtime error
-    throw std::runtime_error(error.str());
-}
-
-/**
  *  Constructor
  *  @param  source The source that holds the template
  *  @throws std::runtime_error If something went wrong while compiling the jit code
@@ -77,7 +33,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _error(_function.new_label())
 {
     // set our jit_exception_handler as the exception handler for jit
-    auto original_handler = jit_exception_set_handler(Bytecode::jit_exception_handler);
+    auto original_handler = jit_exception_set_handler(JitException::handler);
 
     // start building the function
     _context.build_start();

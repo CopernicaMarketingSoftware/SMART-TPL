@@ -148,6 +148,7 @@
 #include "iterator.h"
 #include "handler.h"
 #include "executor.h"
+#include "jit_exception.h"
 #include "bytecode.h"
 #include "library.h"
 #include "vector_iterator.h"
