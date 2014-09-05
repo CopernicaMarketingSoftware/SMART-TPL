@@ -46,6 +46,11 @@ private:
      */
     std::string _encoding = "raw";
 
+    /**
+     *  Contains the source of the template
+     */
+    std::string _source;
+
 public:
     /**
      *  Constructor
@@ -139,6 +144,11 @@ public:
      *  Used to retrieve what encoding this template is in, natively
      */
     const std::string encoding() const { return _encoding; };
+
+    /**
+     *  Retrieve the original source of this template
+     */
+    const std::string source() const { return _source; };
 };
 
 /**
