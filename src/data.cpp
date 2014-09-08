@@ -148,8 +148,32 @@ Data &Data::assignValue(const std::string &name, Value *value)
  */
 Data &Data::assignManaged(const std::string &name, Value *value)
 {
+    // assigning nullptr's doesn't make sense..
+    if (!value) return *this;
+
     // append variable
     _variables[name] = value;
+
+    // make it managed
+    _managed_values.emplace_back(value);
+
+    // allow chaining
+    return *this;
+}
+
+/**
+ *  Assign data that is managed by a unique pointer and keep managing it
+ *  @param  name        Name of the variable
+ *  @param  value       A unique pointer to a VariantValue
+ *  @return Data        Same object for chaining
+ */
+Data &Data::assignManaged(const std::string &name, std::shared_ptr<Value> &value)
+{
+    // assigning empty shared pointer doesn't make sense
+    if (!value) return *this;
+
+    // append variable
+    _variables[name] = value.get();
 
     // make it managed
     _managed_values.emplace_back(value);

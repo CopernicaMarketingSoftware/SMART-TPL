@@ -31,7 +31,7 @@ private:
     /**
      *  All managed values that should be cleaned up upon destruction
      */
-    std::list<std::unique_ptr<Value>> _managed_values;
+    std::list<std::shared_ptr<Value>> _managed_values;
 
     /**
      *  All modifiers
@@ -52,9 +52,14 @@ public:
     Data(const Variant::Value &value);
 
     /**
-     *  Deleted copy constructor
+     *  Copy constructor
      */
-    Data(const Data &that) = delete;
+    Data(const Data &that)
+    : _variables(that._variables),
+      _managed_values(that._managed_values),
+      _modifiers(that._modifiers)
+    {
+    }
 
     /**
      *  Move constructor
@@ -90,6 +95,7 @@ public:
      *  @return Data        Same object for chaining
      */
     Data &assignManaged(const std::string &name, Value *value);
+    Data &assignManaged(const std::string &name, std::shared_ptr<Value> &value);
 
     /**
      *  Assign a callback
