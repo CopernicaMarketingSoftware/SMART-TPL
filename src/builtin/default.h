@@ -31,13 +31,16 @@ public:
      */
     VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
-        // If the string size of our input is 0 that means that we are empty
-        if (input.size() == 0)
-        {
-            if (params.size() >= 1) return params[0].toString();
-        }
-
-        // Return the output
+		// convert input to a string
+		auto value = input.toString();
+		
+		// leap out on non-empty strings
+		if (!value.empty()) return input;
+		
+        // input was empty, return the default that was passed as parameter
+		if (params.size() >= 1) return params[0].toString();
+		
+        // no parameter was given, strange
         return input;
     }
 };

@@ -81,20 +81,6 @@ public:
     virtual VariantValue member(size_t position) const = 0;
 
     /**
-     *  Get access to the key at a certain position
-     *  @param  position     Position of the key we want to retrieve
-     *  @return VariantValue
-     */
-    virtual VariantValue key(size_t position) const = 0;
-
-    /**
-     *  String length of the variable
-     *
-     *  @return size_t
-     */
-    virtual size_t size() const = 0;
-
-    /**
      *  Create a new iterator that allows you to iterate over the subvalues
      *  feel free to return nullptr from here in case memberCount returns 0
      *  as this method won't ever get called in that case anyway.

@@ -32,7 +32,7 @@ public:
     VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
     {
         // If we include whitespaces we might as well just return the size
-        if (params.size() >= 1 && params[0].toBoolean()) return (int64_t) input.size();
+        if (params.size() >= 1 && params[0].toBoolean()) return (int64_t) input.toString().size();
 
         // Let's just convert our input to a C string
         std::string str = input.toString();

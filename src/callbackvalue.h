@@ -45,16 +45,6 @@ private:
     mutable std::unique_ptr<VariantValue> _cache;
 
     /**
-     *  This variable will be used to temporarily cache the size value so we
-     *  won't have to execute the callback twice in the case of string values.
-     *  This does however assume that size() will always be called after toString()
-     *  codewise this is true, but the compiler is allowed to change this order in
-     *  some cases!
-     *  @var      size_t
-     */
-    mutable size_t _size_cache;
-
-    /**
      *  Check if we should cache and if we should if we are already cached
      *  and if we aren't cached we'll cache
      *  @return bool
@@ -92,9 +82,6 @@ public:
 
         // call the callback to find out the actual value
         VariantValue value(_callback());
-
-        // Set the size cache
-        _size_cache = value.size();
 
         // retrieve the string value
         return value.toString();
@@ -180,32 +167,6 @@ public:
         // callbacks can only return scalar values, members will never
         // be retrieved
         return nullptr;
-    }
-
-    /**
-     *  Get access to the key at a certain position
-     *  @param  position     Position of the key we want to retrieve
-     *  @return VariantValue      VariantValue object, probably a string
-     */
-    VariantValue key(size_t position) const override
-    {
-        // callbacks can only return simple scalar values, so retrieving
-        // a key never happens
-        return nullptr;
-    }
-
-    /**
-     *  String length of the variable
-     *
-     *  @return size_t
-     */
-    size_t size() const override
-    {
-        // Are we cacheable? Yes return the cached version then
-        if (cache()) return _cache->size();
-
-        // Return the cached size
-        return _size_cache;
     }
 
     /**

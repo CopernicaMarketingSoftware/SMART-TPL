@@ -122,36 +122,6 @@ public:
     }
 
     /**
-     *  Get access to the key at a certain position
-     *  @param  position     Position of the key we want to retrieve
-     *  @return Variant      Variant object, probably a string
-     */
-    VariantValue key(size_t position) const override
-    {
-        // if position is higher than the amount of items in the map we just return nullptr
-        if (position >= memberCount()) return nullptr;
-
-        // get an iterator to the begin of the map
-        auto iter = _value.begin();
-
-        // advance it by position
-        std::advance(iter, position);
-
-        // return the value
-        return iter->second;
-    }
-
-    /**
-     *  String length of the variable
-     *
-     *  @return size_t
-     */
-    size_t size() const override
-    {
-        return 0;
-    }
-
-    /**
      *  Create a new iterator that allows you to iterate over the subvalues
      *  feel free to return nullptr from here in case memberCount returns 0
      *  as this method won't ever get called in that case anyway.

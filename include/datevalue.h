@@ -178,30 +178,6 @@ public:
     }
 
     /**
-     *  Get access to the key at a certain position
-     *  @param  position     Position of the key we want to retrieve
-     *  @return VariantValue VariantValue object, probably a string
-     */
-    VariantValue key(size_t position) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  String length of the variable
-     *
-     *  @return int
-     */
-    size_t size() const override
-    {
-        // Put the current date/time in the buffer
-        initializeDate();
-
-        // Returns the size of the buffer
-        return _buffer.size();
-    }
-
-    /**
      *  Create a new iterator that allows you to iterate over the subvalues
      *  feel free to return nullptr from here in case memberCount returns 0
      *  as this method won't ever get called in that case anyway.

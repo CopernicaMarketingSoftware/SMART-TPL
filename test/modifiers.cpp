@@ -52,7 +52,6 @@ public:
             case StringMode:
                 EXPECT_EQ(1, params.size());
                 EXPECT_EQ("test", params[0].toString());
-                EXPECT_EQ(4, params[0].size());
                 break;
             case BooleanMode:
                 EXPECT_EQ(3, params.size());

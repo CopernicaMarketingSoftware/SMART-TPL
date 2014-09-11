@@ -342,8 +342,8 @@ size_t smart_tpl_size(void *userdata, const void *variable)
     // convert the variable to a value object
     auto *var = (const Value *)variable;
 
-    // return the size
-    return var->size();
+    // @todo will be adjusted
+    return var->toString().size();
 }
 
 /**
