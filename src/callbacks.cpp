@@ -279,11 +279,8 @@ const char *smart_tpl_to_string(void *userdata, const void *variable)
     // convert the userdata to a handler object
     auto *handler = (Handler *)userdata;
 
-    // convert to string
-    auto result = var->toString();
-
-    // Make it managed and return the const char* from our handler
-    return handler->manageString(std::move(result));
+    // Pull the var through the manageString method and return the c_str() of the return value
+    return handler->manageString(var)->c_str();
 }
 
 /**
@@ -342,8 +339,11 @@ size_t smart_tpl_size(void *userdata, const void *variable)
     // convert the variable to a value object
     auto *var = (const Value *)variable;
 
-    // @todo will be adjusted
-    return var->toString().size();
+    // convert the userdata to a handler object
+    auto *handler = (Handler *)userdata;
+
+    // pull the var through the manageString method and return the size of the return value
+    return handler->manageString(var)->size();
 }
 
 /**

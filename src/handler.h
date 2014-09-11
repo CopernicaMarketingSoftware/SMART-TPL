@@ -86,7 +86,7 @@ private:
      *  A list of strings that are meant to kept in scope so their buffers remain valid
      *  @see manageString
      */
-    std::list<std::string> _managed_strings;
+    std::map<const Value*, std::string> _managed_strings;
 
     /**
      *  Are we supposed to throw because of a runtime failure or not?
@@ -306,12 +306,35 @@ public:
     }
 
     /**
-     *  Make a string managed and return the const char* pointer which will remain in scope
+     *  Ask our string cache for the string associated with value
+     *  @param value
      */
-    const char* manageString(std::string &&str)
+    std::string* managedString(const Value* value)
     {
-        // insert it in our managed strings list and return it
-        return _managed_strings.insert(_managed_strings.end(), std::move(str))->c_str();
+        return nullptr;
+    }
+
+    /**
+     *  Return either a cached string associated with value or cache it right here right now
+     */
+    std::string* manageString(const Value* value)
+    {
+        // look for the string under the key value
+        auto iter = _managed_strings.find(value);
+
+        // if we're not cached we're gonna cache it
+        if (iter == _managed_strings.end())
+        {
+            // turn value into a string using toString and insert it into our map
+            auto inserted = _managed_strings.emplace(value, value->toString());
+
+            // set our iterator to the first element of the return value of inserted
+            // which is the iterator of the new element
+            iter = inserted.first;
+        }
+
+        // return a pointer to the value of our iterator
+        return &iter->second;
     }
 
     /**
