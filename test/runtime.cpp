@@ -21,7 +21,7 @@ TEST(RunTime, ForEach)
     string input("{foreach $item in $list}item: {$item}\n{/foreach}");
     Template tpl((Buffer(input)));
 
-    std::vector<Variant::Value> list;
+    std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
@@ -42,12 +42,7 @@ TEST(RunTime, ForEachWithKeys)
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
     Template tpl((Buffer(input)));
 
-    std::map<std::string, Variant::Value> map;
-    map["1"] = 1;
-    map["2"] = 2;
-    map["3"] = 3;
-    map["4"] = 4;
-    map["5"] = 5;
+    std::map<std::string, VariantValue> map({{"1", 1},{"2", 2},{"3", 3}, {"4", 4}, {"5", 5}});
     Data data;
     data.assign("map", map);
 
@@ -66,7 +61,7 @@ TEST(RunTime, ForEachElse)
     string input("{foreach $item in $list}item: {$item}\n{foreachelse}else{/foreach}");
     Template tpl((Buffer(input)));
 
-    std::vector<Variant::Value> list;
+    std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
@@ -92,12 +87,7 @@ TEST(RunTime, ForEachWithKeysElse)
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{foreachelse}else{/foreach}");
     Template tpl((Buffer(input)));
 
-    std::map<std::string, Variant::Value> map;
-    map["1"] = 1;
-    map["2"] = 2;
-    map["3"] = 3;
-    map["4"] = 4;
-    map["5"] = 5;
+    std::map<std::string, VariantValue> map({{"1", 1},{"2", 2},{"3", 3}, {"4", 4}, {"5", 5}});
     Data data;
     data.assign("map", map);
 
@@ -233,7 +223,7 @@ TEST(RunTime, AssigningInForEach)
     string input("{foreach $item in $list}{$output=$item}{/foreach}{$output}");
     Template tpl((Buffer(input)));
 
-    std::vector<Variant::Value> list;
+    std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
@@ -254,7 +244,7 @@ TEST(RunTime, ArrayAccess)
     string input("{$list[3]}");
     Template tpl((Buffer(input)));
 
-    std::vector<Variant::Value> list;
+    std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
 
     Data data;
@@ -275,8 +265,7 @@ TEST(RunTime, KeyArrayAccess)
     string input("{$map[\"key\"]}");
     Template tpl((Buffer(input)));
 
-    std::map<std::string, Variant::Value> map;
-    map["key"] = "test";
+    std::map<std::string, VariantValue> map({{"key", "test"}});
     Data data;
     data.assign("map", map);
 
@@ -579,7 +568,7 @@ TEST(RunTime, ZeroDivisionLeaky)
     Template tpl((Buffer(input)));
 
     Data data;
-    data.assign("list", Variant::Value({0,1,2,3,4}));
+    data.assign("list", VariantValue({0,1,2,3,4}));
 
     EXPECT_THROW(tpl.process(data), std::runtime_error);
 

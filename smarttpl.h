@@ -34,7 +34,6 @@
 #include <algorithm>
 #include <set>
 #include <ctime>
-#include <variant.h>
 
 #include "smarttpl/source.h"
 #include "smarttpl/file.h"
@@ -44,6 +43,13 @@
 
 #include "smarttpl/value.h"
 #include "smarttpl/variantvalue.h"
+#include "smarttpl/nullvalue.h"
+#include "smarttpl/boolvalue.h"
+#include "smarttpl/numericvalue.h"
+#include "smarttpl/doublevalue.h"
+#include "smarttpl/stringvalue.h"
+#include "smarttpl/vectorvalue.h"
+#include "smarttpl/mapvalue.h"
 #include "smarttpl/datevalue.h"
 
 #include "smarttpl/callbacks.h"

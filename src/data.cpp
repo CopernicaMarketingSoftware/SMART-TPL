@@ -78,20 +78,6 @@ Data::Data()
 }
 
 /**
- *  Contructor
- *  @param  value    Use this Variant::Value (map assumed) to initialize your Data object
- */
-Data::Data(const Variant::Value &value)
-: Data() // Call the default constructor so all the modifiers are still registered
-{
-    // Turn our Variant::Value into a map
-    std::map<std::string, Variant::Value> map = value;
-
-    // Loop through the map and assign all the elements
-    for (auto &iter : map) assign(iter.first, iter.second);
-}
-
-/**
  *  Move constructor
  */
 Data::Data(Data&& that)

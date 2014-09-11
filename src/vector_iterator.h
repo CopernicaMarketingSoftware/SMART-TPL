@@ -1,7 +1,7 @@
 /**
  *  Vector_Iterator.h
  *
- *  Iterator for Vectors
+ *  Iterator for VectorValues
  *
  *  @author Toon Schoenmakers <toon.schonemakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -21,23 +21,23 @@ private:
     /**
      *  The vector we're iterating over
      */
-    const std::vector<Variant::Value> _vector;
+    const std::vector<VariantValue> _vector;
 
     /**
      *  Iterator to the current position in our vector
      */
-    std::vector<Variant::Value>::const_iterator _iter;
+    std::vector<VariantValue>::const_iterator _iter;
 
     /**
      *  End iterator which indicates where we should stop
      */
-    const std::vector<Variant::Value>::const_iterator _end;
+    const std::vector<VariantValue>::const_iterator _end;
 
 public:
     /**
      *  Constructor
      */
-    VectorIterator(const std::vector<Variant::Value> &value)
+    VectorIterator(const std::vector<VariantValue> &value)
     : _vector(value),
       _iter(_vector.begin()),
       _end(_vector.end())

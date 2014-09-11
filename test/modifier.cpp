@@ -239,7 +239,7 @@ TEST(Modifier, Count)
     string input("{$var|count}");
     Template tpl((Buffer(input)));
 
-    std::vector<Variant::Value> list;
+    std::vector<VariantValue> list;
     for (int i = 0; i < 10; ++i) list.push_back(i);
 
     Data data;

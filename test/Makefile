@@ -16,7 +16,7 @@ all: ${BINARY}
 	${COMPILER} ${COMPILER_FLAGS} ${INC} -c $< -o $@
 
 ${BINARY}: ${DEPS} main.cpp
-	${LINKER} ${LINKER_FLAGS} ${INC} -o ${BINARY} ${DEPS} libgtest.a -pthread ../libsmarttpl.so -lvariant
+	${LINKER} ${LINKER_FLAGS} ${INC} -o ${BINARY} ${DEPS} libgtest.a -pthread ../libsmarttpl.so
 
 libgtest.a:
 	wget -q https://googletest.googlecode.com/files/gtest-1.7.0.zip

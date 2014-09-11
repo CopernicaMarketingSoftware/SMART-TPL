@@ -46,12 +46,6 @@ public:
     Data();
 
     /**
-     *  Contructor
-     *  @param  value    Use this Variant::Value (map assumed) to initialize your Data object
-     */
-    Data(const Variant::Value &value);
-
-    /**
      *  Copy constructor
      */
     Data(const Data &that)

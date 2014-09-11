@@ -1,7 +1,7 @@
 /**
  *  Map_Iterator.h
  *
- *  Iterator for Maps
+ *  Iterator for MapValues
  *
  *  @author Toon Schoenmakers <toon.schonemakers@copernica.com>
  *  @copyright 2014 Copernica BV
@@ -21,23 +21,23 @@ private:
     /**
      *  The map we're iterating over
      */
-    const std::map<std::string, Variant::Value> _map;
+    const std::map<std::string, VariantValue> _map;
 
     /**
-     *  Iterator to the current position in our vector
+     *  Iterator to the current position in our map
      */
-    std::map<std::string, Variant::Value>::const_iterator _iter;
+    std::map<std::string, VariantValue>::const_iterator _iter;
 
     /**
      *  End iterator which indicates where we should stop
      */
-    const std::map<std::string, Variant::Value>::const_iterator _end;
+    const std::map<std::string, VariantValue>::const_iterator _end;
 
 public:
     /**
      *  Constructor
      */
-    MapIterator(const std::map<std::string, Variant::Value> &value)
+    MapIterator(const std::map<std::string, VariantValue> &value)
     : _map(value),
       _iter(_map.begin()),
       _end(_map.end())

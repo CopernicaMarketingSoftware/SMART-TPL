@@ -32,7 +32,6 @@
 #include <openssl/sha.h>
 #include <openssl/bio.h>
 #include <openssl/evp.h>
-#include <variant.h>
 
 /**
  *  Public includes
@@ -43,8 +42,16 @@
 #include "include/buffer.h"
 
 #include "include/iterator.h"
+
 #include "include/value.h"
 #include "include/variantvalue.h"
+#include "include/nullvalue.h"
+#include "include/boolvalue.h"
+#include "include/numericvalue.h"
+#include "include/doublevalue.h"
+#include "include/stringvalue.h"
+#include "include/vectorvalue.h"
+#include "include/mapvalue.h"
 #include "include/callback.h"
 #include "include/datevalue.h"
 

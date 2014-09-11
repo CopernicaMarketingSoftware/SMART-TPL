@@ -14,23 +14,24 @@
 namespace SmartTpl {
 
 /**
- *  Create a new iterator that allows you to iterate over the subvalues
- *  feel free to return nullptr from here in case memberCount returns 0
- *  as this method won't ever get called in that case anyway.
- *
- *  @return Newly allocated Iterator
+ *  Constructors, one for most scalar types
  */
-Iterator *VariantValue::iterator() const
-{
-    // In case we're a vector we'll return a vector iterator
-    if (_value->type() == Variant::ValueType::ValueVectorType) return new Internal::VectorIterator(*_value);
-
-    // In case we're a map we'll return a map iterator
-    if (_value->type() == Variant::ValueType::ValueMapType) return new Internal::MapIterator(*_value);
-
-    // In case we're neither a map or a vector we'll just not return a iterator..
-    return nullptr;
-}
+VariantValue::VariantValue() : _value(new NullValue()) {}
+VariantValue::VariantValue(std::nullptr_t value) : _value(new NullValue()) {}
+VariantValue::VariantValue(bool value) : _value(new BoolValue(value)) {}
+VariantValue::VariantValue(int32_t value) : _value(new NumericValue(value)) {}
+VariantValue::VariantValue(int64_t value) : _value(new NumericValue(value)) {}
+VariantValue::VariantValue(double value) : _value(new DoubleValue(value)) {}
+VariantValue::VariantValue(const char* value) : _value(new StringValue(value)) {}
+VariantValue::VariantValue(const char* value, size_t len) : _value(new StringValue(value, len)) {}
+VariantValue::VariantValue(const std::string& value) : _value(new StringValue(value)) {}
+VariantValue::VariantValue(std::string&& value) : _value(new StringValue(std::move(value))) {}
+VariantValue::VariantValue(const std::vector<VariantValue>& value) : _value(new VectorValue(value)) {};
+VariantValue::VariantValue(std::vector<VariantValue>&& value) : _value(new VectorValue(std::move(value))) {};
+VariantValue::VariantValue(const std::initializer_list<VariantValue>& value) : _value(new VectorValue(value)) {};
+VariantValue::VariantValue(const std::map<std::string, VariantValue>& value) : _value(new MapValue(value)) {};
+VariantValue::VariantValue(std::map<std::string, VariantValue>&& value) : _value(new MapValue(std::move(value))) {};
+VariantValue::VariantValue(const std::initializer_list<std::map<std::string, VariantValue>::value_type>& value) : _value(new MapValue(value)) {};
 
 /**
  *  End namespace

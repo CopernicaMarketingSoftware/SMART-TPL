@@ -1,10 +1,9 @@
 /**
- *  Value.h
+ *  NullValue.h
  *
- *  Interface that describes a value. This class can be extended to create
- *  your own custom template variables.
+ *  A SmartTpl::Value which represents a nullptr
  *
- *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
+ *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
  *  @copyright 2014 Copernica BV
  */
 
@@ -14,85 +13,108 @@
 namespace SmartTpl {
 
 /**
- *  Typedef for a general numeric type, if we ever decide to change it we'll just
- *  have to modify this.
- */
-using numeric_t = int64_t;
-
-/**
- *  Forward declaration of VariantValue so we can return VariantValue
- */
-class VariantValue;
-
-/**
  *  Class definition
  */
-class Value
+class NullValue : public Value
 {
 public:
     /**
+     *  Constructors
+     */
+    NullValue() {}
+
+    /**
      *  Destructor
      */
-    virtual ~Value() {};
+    virtual ~NullValue() {};
 
     /**
      *  Convert the value to a string
      *  @return std::string
      */
-    virtual std::string toString() const = 0;
+    std::string toString() const override
+    {
+        return "";
+    };
 
     /**
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() const = 0;
+    numeric_t toNumeric() const override
+    {
+        return 0;
+    };
 
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const = 0;
+    bool toBoolean() const override
+    {
+        return false;
+    };
 
     /**
      *  Convert the variable to a floating point value
      *  @return double
      */
-    virtual double toDouble() const = 0;
+    double toDouble() const override
+    {
+        return 0.0;
+    };
 
     /**
      *  Get access to a member value
+     *
      *  @param  name        name of the member
      *  @param  size        size of the name
-     *  @return VariantValue
+     *  @return Variant
+     *
      */
-    virtual VariantValue member(const char *name, size_t size) const = 0;
+    VariantValue member(const char *name, size_t size) const override
+    {
+        return nullptr;
+    }
 
     /**
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    virtual size_t memberCount() const = 0;
+    size_t memberCount() const override
+    {
+        return 0;
+    }
 
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
-     *  @return VariantValue
+     *  @return Variant
      */
-    virtual VariantValue member(size_t position) const = 0;
+    VariantValue member(size_t position) const override
+    {
+        return nullptr;
+    }
 
     /**
      *  Get access to the key at a certain position
      *  @param  position     Position of the key we want to retrieve
-     *  @return VariantValue
+     *  @return Variant      Variant object, probably a string
      */
-    virtual VariantValue key(size_t position) const = 0;
+    VariantValue key(size_t position) const override
+    {
+        return nullptr;
+    }
 
     /**
      *  String length of the variable
      *
      *  @return size_t
      */
-    virtual size_t size() const = 0;
+    size_t size() const override
+    {
+        return 0;
+    }
 
     /**
      *  Create a new iterator that allows you to iterate over the subvalues
@@ -101,7 +123,10 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const = 0;
+    Iterator *iterator() const override
+    {
+        return nullptr;
+    }
 };
 
 /**
