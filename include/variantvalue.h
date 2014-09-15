@@ -61,6 +61,25 @@ public:
     virtual ~VariantValue() {};
 
     /**
+     *  Assignment operators
+     */
+    VariantValue& operator=(std::nullptr_t value);
+    VariantValue& operator=(bool value);
+    VariantValue& operator=(int32_t value);
+    VariantValue& operator=(int64_t value);
+    VariantValue& operator=(double value);
+    VariantValue& operator=(const char* value);
+    VariantValue& operator=(const std::string& value);
+    VariantValue& operator=(std::string&& value);
+    VariantValue& operator=(const std::vector<VariantValue>& value);
+    VariantValue& operator=(std::vector<VariantValue>&& value);
+    VariantValue& operator=(const std::initializer_list<VariantValue>& value);
+    VariantValue& operator=(const std::map<std::string, VariantValue>& value);
+    VariantValue& operator=(std::map<std::string, VariantValue>&& value);
+    VariantValue& operator=(const std::initializer_list<std::map<std::string, VariantValue>::value_type>& value);
+    VariantValue& operator=(const std::shared_ptr<Value> &value) { _value = value; return *this; }
+
+    /**
      *  Convert the value to a string
      *  @return std::string
      */

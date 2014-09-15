@@ -42,7 +42,12 @@ TEST(RunTime, ForEachWithKeys)
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
     Template tpl((Buffer(input)));
 
-    std::map<std::string, VariantValue> map({{"1", 1},{"2", 2},{"3", 3}, {"4", 4}, {"5", 5}});
+    std::map<std::string, VariantValue> map;
+    map["1"] = 1;
+    map["2"] = 2;
+    map["3"] = 3;
+    map["4"] = 4;
+    map["5"] = 5;
     Data data;
     data.assign("map", map);
 
