@@ -291,6 +291,7 @@ public:
 
     /**
      *  Make the following iterator managed
+     *  @param iter The iterator to make managed
      */
     void manageIterator(Iterator *iter)
     {
@@ -299,23 +300,23 @@ public:
 
     /**
      *  Make the following set of parameters managed
+     *  @param parameters_count The amount of parameters that will be placed into it
      */
-    void manageParameters(SmartTpl::Parameters *params)
+    SmartTpl::Parameters* newParameters(size_t parameters_count)
     {
-        _managed_parameters.emplace_back(params);
-    }
+        // use emplace to place our new parameters object directly in place
+        auto iter = _managed_parameters.emplace(_managed_parameters.begin(), new SmartTpl::Parameters());
 
-    /**
-     *  Ask our string cache for the string associated with value
-     *  @param value
-     */
-    std::string* managedString(const Value* value)
-    {
-        return nullptr;
+        // reserve the parameters_count
+        (*iter)->reserve(parameters_count);
+
+        // return the raw pointer to our parameters
+        return iter->get();
     }
 
     /**
      *  Return either a cached string associated with value or cache it right here right now
+     *  @param value The Value to take the string of and make it managed
      */
     std::string* manageString(const Value* value)
     {

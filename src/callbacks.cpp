@@ -517,17 +517,11 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
  */
 void *smart_tpl_create_params(void *userdata, size_t parameters_count)
 {
-    // Important that we create the public Parameters here and not the internal one
-    auto *params = new SmartTpl::Parameters();
-
-    // We reserve the parameters_count as this is known on compile time
-    params->reserve(parameters_count);
-
     // cast userdata to our handler
     auto *handler = (Handler *)userdata;
 
-    // make our newly allocated iterator managed
-    handler->manageParameters(params);
+    // use newParameters to create a new parameters object
+    auto params = handler->newParameters(parameters_count);
 
     // Return the pointer to the parameters
     return params;
