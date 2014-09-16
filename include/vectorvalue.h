@@ -113,8 +113,8 @@ public:
 
     /**
      *  Create a new iterator that allows you to iterate over the subvalues
-     *  feel free to return nullptr from here in case memberCount returns 0
-     *  as this method won't ever get called in that case anyway.
+     *  feel free to return nullptr if you don't want to be able to iterate
+     *  over your type
      *
      *  @return Newly allocated Iterator
      */

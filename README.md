@@ -230,17 +230,6 @@ public:
     }
 
     /**
-     *  Method that returns the size of the variable (which is the length of
-     *  the string).
-     *
-     *  @return size_t
-     */
-    size_t size() const override
-    {
-        return 4;
-    }
-
-    /**
      *  Method that gets called when the variable is used in a numeric 
      *  context, to turn the variable into an integer
      *
@@ -310,20 +299,9 @@ public:
     }
 
     /**
-     *  Get access to the key at a certain position
-     *  @param  position     Position of the key we want to retrieve
-     *  @return VariantValue
-     */
-    VariantValue key(size_t position) const override
-    {
-        // Not implemented, always return empty values
-        return nullptr;
-    }
-
-    /**
      *  Create a new iterator that allows you to iterate over the subvalues
-     *  feel free to return nullptr from here in case memberCount returns 0
-     *  as this method won't ever get called in that case anyway.
+     *  feel free to return nullptr if you don't want to be able to iterate
+     *  over your type
      *
      *  @return Newly allocated Iterator
      */

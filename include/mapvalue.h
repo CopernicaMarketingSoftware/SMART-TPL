@@ -123,12 +123,20 @@ public:
 
     /**
      *  Create a new iterator that allows you to iterate over the subvalues
-     *  feel free to return nullptr from here in case memberCount returns 0
-     *  as this method won't ever get called in that case anyway.
+     *  feel free to return nullptr if you don't want to be able to iterate
+     *  over your type
      *
      *  @return Newly allocated Iterator
      */
     Iterator *iterator() const override;
+
+    /**
+     *  A few rather basic inserters to expand your map later on
+     */
+    template<typename ...Args>
+    void insert(const std::string &key, Args&&... args) { _value.insert(std::make_pair(key, args...)); };
+    template<typename ...Args>
+    void insert(std::string &&key, Args&&... args) { _value.insert(std::make_pair(std::move(key), args...)); };
 };
 
 /**
