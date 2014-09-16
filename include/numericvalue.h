@@ -29,6 +29,7 @@ public:
      */
     NumericValue(int64_t value) : _value(value) {}
     NumericValue(int32_t value) : _value(value) {};
+    NumericValue(int16_t value) : _value(value) {};
 
     /**
      *  Destructor

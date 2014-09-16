@@ -30,6 +30,7 @@ public:
     VariantValue();
     VariantValue(std::nullptr_t value);
     VariantValue(bool value);
+    VariantValue(int16_t value);
     VariantValue(int32_t value);
     VariantValue(int64_t value);
     VariantValue(double value);
@@ -65,6 +66,7 @@ public:
      */
     VariantValue& operator=(std::nullptr_t value);
     VariantValue& operator=(bool value);
+    VariantValue& operator=(int16_t value);
     VariantValue& operator=(int32_t value);
     VariantValue& operator=(int64_t value);
     VariantValue& operator=(double value);
