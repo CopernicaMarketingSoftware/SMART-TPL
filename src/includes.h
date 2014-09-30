@@ -81,6 +81,7 @@
 #include "builtin/tolower.h"
 #include "builtin/toupper.h"
 #include "builtin/cat.h"
+#include "builtin/strlen.h"
 #include "builtin/count.h"
 #include "builtin/count_words.h"
 #include "builtin/count_characters.h"
