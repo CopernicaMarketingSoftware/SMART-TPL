@@ -27,6 +27,7 @@ static Internal::Nl2brModifier           nl2br;
 static Internal::SpacifyModifier         spacify;
 static Internal::TruncateModifier        truncate;
 static Internal::CountModifier           count;
+static Internal::EmptyModifier           empty;
 static Internal::StrlenModifier          strlen;
 static Internal::UcFirstModifier         ucfirst;
 static Internal::TrimModifier            trim;
@@ -63,6 +64,7 @@ Data::Data()
               {"truncate",         &truncate},
               {"count",            &count},
               {"strlen",           &strlen},
+              {"empty",            &empty},
               {"ucfirst",          &ucfirst},
               {"trim",             &trim},
               {"regex_replace",    &regex_replace},
