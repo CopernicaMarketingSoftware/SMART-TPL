@@ -54,25 +54,37 @@ public:
      *  Generate the expression as a numeric value
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const {};
+    virtual void numeric(Generator *generator) const
+    {
+        throw std::runtime_error("Default numeric implementation called");
+    };
 
     /**
      *  Generate the expression as a double value
      *  @param  generator
      */
-    virtual void double_type(Generator *generator) const {};
+    virtual void double_type(Generator *generator) const
+    {
+        throw std::runtime_error("Default double_type implementation called");
+    };
 
     /**
      *  Generate the expression as a boolean value
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const {};
+    virtual void boolean(Generator *generator) const
+    {
+        throw std::runtime_error("Default boolean implementation called");
+    };
 
     /**
      *  Generate the expression as string value
      *  @param  generator
      */
-    virtual void string(Generator *generator) const {};
+    virtual void string(Generator *generator) const
+    {
+        throw std::runtime_error("Default string implementation called");
+    };
 
     /**
      *  Generate the expression to output ourself
