@@ -128,8 +128,8 @@
     "to"                        { return TOKEN_TO; }
     "="                         { return TOKEN_IS; }
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
-    [+-]?[0-9]+                 { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
-    [+-]?[0-9]+"."[0-9]+("e"[-+]?[0-9]+)? { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_DOUBLE; }
+    [0-9]+                      { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
+    [0-9]+"."[0-9]+("e"[-+]?[0-9]+)? { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_DOUBLE; }
     "\""                        { BEGIN(STRING_DOUBLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
     "\'"                        { BEGIN(STRING_SINGLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
     "("                         { return TOKEN_LPAREN; }

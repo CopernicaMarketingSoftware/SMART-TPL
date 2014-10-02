@@ -26,6 +26,7 @@
 %left AND.
 %left EQ NE.
 %left LT LE GT GE.
+%left INTEGER DOUBLE.
 %left PLUS MINUS.
 %left MULTIPLY DIVIDE MOD.
 %right EXP NOT.
@@ -102,7 +103,6 @@ outexpr(A)          ::= expr(B) .                                               
 outexpr(A)          ::= variable(B) PIPE modifiers(C) .                         { A = new SmartTpl::Internal::Filter(B, C); }
 expr(A)             ::= variable(B) .                                           { A = B; }
 expr(A)             ::= LPAREN expr(B) RPAREN .                                 { A = B; }
-expr(A)             ::= .                                                       { A = nullptr; }
 expr(A)             ::= expr(B) PLUS expr(C) .                                  { A = new SmartTpl::Internal::BinaryPlusOperator(B, C); }
 expr(A)             ::= expr(B) MINUS expr(C) .                                 { A = new SmartTpl::Internal::BinaryMinusOperator(B, C); }
 expr(A)             ::= expr(B) MULTIPLY expr(C) .                              { A = new SmartTpl::Internal::BinaryMultiplyOperator(B, C); }
@@ -112,7 +112,9 @@ expr(A)             ::= literal(B) .                                            
 literal(A)          ::= TRUE .                                                  { A = new SmartTpl::Internal::LiteralBoolean(true); }
 literal(A)          ::= FALSE .                                                 { A = new SmartTpl::Internal::LiteralBoolean(false); }
 literal(A)          ::= INTEGER(B) .                                            { A = new SmartTpl::Internal::LiteralNumeric(B); }
+literal(A)          ::= MINUS INTEGER(B) .                                      { B->insert(0, 1, '-'); A = new SmartTpl::Internal::LiteralNumeric(B); }
 literal(A)          ::= DOUBLE(B) .                                             { A = new SmartTpl::Internal::LiteralDouble(B); }
+literal(A)          ::= MINUS DOUBLE(B) .                                       { B->insert(0, 1, '-'); A = new SmartTpl::Internal::LiteralDouble(B); }
 literal(A)          ::= STRING(B) .                                             { A = new SmartTpl::Internal::LiteralString(B); }
 variable(A)         ::= VARIABLE(B) .                                           { A = new SmartTpl::Internal::LiteralVariable(B); }
 variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { A = new SmartTpl::Internal::VariableArrayAccess(B,C); }

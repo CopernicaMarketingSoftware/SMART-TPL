@@ -447,12 +447,13 @@ TEST(CCode, LiteralBlock)
 
 TEST(CCode, OutputMath)
 {
-    string input("1+3-2*10={1+ 3- 2*10}");
+    string input("1+3-2*10={1+3-2*10}\n(1+3-2)*10={(1+3-2)*10}");
     Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "callbacks->write(userdata,\"1+3-2*10=\",9);\ncallbacks->output_numeric(userdata,1+3-2*10);\n}\n"
+    "callbacks->write(userdata,\"1+3-2*10=\",9);\ncallbacks->output_numeric(userdata,((1+3)-(2*10)));\n"
+    "callbacks->write(userdata,\"\\n(1+3-2)*10=\",12);\ncallbacks->output_numeric(userdata,(((1+3)-2)*10));\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 

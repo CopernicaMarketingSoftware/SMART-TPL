@@ -387,24 +387,22 @@ TEST(RunTime, Int64)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ("true", tpl.process(data));
+        EXPECT_EQ("true", library.process(data));
     }
 }
 
 TEST(RunTime, OutputMath)
 {
-    // Spaces here after the + and the - are purely required so that the parser
-    // actually knows what is a part of the number and what isn't
-    string input("1+3-2*10={1+ 3- 2*10}\n(1+3-2)*10={(1+ 3- 2)*10}");
+    string input("-1+3-2*10={-1+3-2*10}\n(1+3-2)*10={(1+3-2)*10}");
     Template tpl((Buffer(input)));
 
-    string expectedOutput("1+3-2*10=-16\n(1+3-2)*10=20");
+    string expectedOutput("-1+3-2*10=-18\n(1+3-2)*10=20");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process());
+        EXPECT_EQ(expectedOutput, library.process());
     }
 }
 
@@ -426,8 +424,8 @@ TEST(RunTime, OutputMathVariables)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process(data));
-        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+        EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
 
@@ -449,14 +447,14 @@ TEST(RunTime, OutputMathOnlyVariables)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process(data));
-        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+        EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
 
 TEST(RunTime, Modulo)
 {
-    string input("1+3*10%5={1+ 3*10%5}");
+    string input("1+3*10%5={1+3*10%5}");
     Template tpl((Buffer(input)));
 
     string expectedOutput("1+3*10%5=1");
@@ -465,7 +463,7 @@ TEST(RunTime, Modulo)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process());
+        EXPECT_EQ(expectedOutput, library.process());
     }
 }
 
@@ -483,7 +481,7 @@ TEST(RunTime, AssignMath)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process(data));
+        EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
 
@@ -505,8 +503,8 @@ TEST(RunTime, MathIf)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process(data));
-        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+        EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
 
@@ -529,8 +527,8 @@ TEST(RunTime, DoubleVariableComparison)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process(data));
-        EXPECT_EQ(expectedOutput2, tpl.process(data2));
+        EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
 
@@ -545,7 +543,7 @@ TEST(RunTime, AssignDouble)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_EQ(expectedOutput, tpl.process());
+        EXPECT_EQ(expectedOutput, library.process());
     }
 }
 
@@ -558,7 +556,7 @@ TEST(RunTime, ZeroDivision)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_THROW(tpl.process(), std::runtime_error);
+        EXPECT_THROW(library.process(), std::runtime_error);
     }
 }
 
@@ -566,6 +564,9 @@ TEST(RunTime, ZeroDivision)
  *  The idea here is that we do a zero division inside a foreach loop to stop execution
  *  while an iterator was created on the heap. As these were unmanaged this would in
  *  fact leak as it would never call the delete_iterator() method.
+ *
+ *  As the delete_iterator() method no longer exists this test is no longer really
+ *  needed. But hey the more tests the better.
  */
 TEST(RunTime, ZeroDivisionLeaky)
 {
@@ -580,6 +581,6 @@ TEST(RunTime, ZeroDivisionLeaky)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_THROW(tpl.process(data), std::runtime_error);
+        EXPECT_THROW(library.process(data), std::runtime_error);
     }
 }
