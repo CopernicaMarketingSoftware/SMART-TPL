@@ -406,6 +406,21 @@ TEST(RunTime, OutputMath)
     }
 }
 
+TEST(RunTime, MathTextPlusText)
+{
+    string input("{\"10\" + \"text\"}");
+    Template tpl((Buffer(input)));
+
+    string expectedOutput("10");
+    EXPECT_EQ(expectedOutput, tpl.process());
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process());
+    }
+}
+
 TEST(RunTime, OutputMathVariables)
 {
     string input("10*var={10*$var}");

@@ -58,8 +58,8 @@ public:
      */
     void boolean(Generator *generator) const override
     {
-        // just return 0
-        generator->numeric(0);
+        // just redirect it to numeric(Generator*)
+        numeric(generator);
     }
 
     /**
@@ -68,8 +68,16 @@ public:
      */
     void numeric(Generator *generator) const override
     {
-        // just return 0
-        generator->numeric(0);
+        try
+        {
+            // try to parse the string
+            generator->numeric(std::strtoll(_value->c_str(), nullptr, 10));
+        }
+        catch (...)
+        {
+            // if that doesn't work just return 0
+            generator->numeric(0);
+        }
     }
 
     /**
@@ -78,8 +86,16 @@ public:
      */
     void double_type(Generator *generator) const override
     {
-        // just return 0
-        generator->double_type(0);
+        try
+        {
+            // try to parse the string
+            generator->double_type(std::strtod(_value->c_str(), nullptr));
+        }
+        catch (...)
+        {
+            // if that doesn't work just return 0
+            generator->double_type(0);
+        }
     }
 };
 
