@@ -80,6 +80,8 @@ public:
     VariantValue& operator=(std::map<std::string, VariantValue>&& value);
     VariantValue& operator=(const std::initializer_list<std::map<std::string, VariantValue>::value_type>& value);
     VariantValue& operator=(const std::shared_ptr<Value> &value) { _value = value; return *this; }
+    VariantValue& operator=(const VariantValue &value) { _value = value._value; return *this; }
+    VariantValue& operator=(VariantValue &&value) { _value = std::move(value._value); value._value = nullptr; return *this; }
 
     /**
      *  Convert the value to a string
