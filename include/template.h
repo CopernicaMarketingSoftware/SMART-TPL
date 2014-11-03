@@ -68,10 +68,12 @@ public:
 
     /**
      *  Move constructor
+     *  @param  that
      */
     Template(Template &&that)
     : _executor(that._executor),
-      _encoding(std::move(that._encoding)) {
+      _encoding(std::move(that._encoding)),
+      _source(std::move(that._source)) {
       that._executor = nullptr;
     }
 
@@ -143,12 +145,12 @@ public:
     /**
      *  Used to retrieve what encoding this template is in, natively
      */
-    const std::string encoding() const { return _encoding; };
+    const std::string &encoding() const { return _encoding; };
 
     /**
      *  Retrieve the original source of this template
      */
-    const std::string source() const { return _source; };
+    const std::string &source() const { return _source; };
 };
 
 /**
