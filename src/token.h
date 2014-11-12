@@ -26,6 +26,8 @@ public:
      */
     Token(const char *buffer, size_t size) : std::string(buffer, size) {};
     Token(const std::string &str) : std::string(str) {};
+    Token(std::string &&str) : std::string(std::move(str)) {};
+    Token(const char c) : std::string(1, c) {};
     Token() : std::string() {};
 
     /**

@@ -75,10 +75,10 @@
      *  processes all input until it recognizes something like {if}, {$var} or {foreach}
      */
 
-"\n"                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token("\n", 1)); BEGIN(RAW); }
+"\n"                { yyextra->increaseLine(); yyextra->setCurrentToken(new SmartTpl::Internal::Token('\n')); BEGIN(RAW); }
 [^{\n]+             { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); BEGIN(RAW); }
-"{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("{", 1)); BEGIN(RAW); }
-"{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token("}", 1)); BEGIN(RAW); }
+"{ldelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token('{')); BEGIN(RAW); }
+"{rdelim}"          { yyextra->setCurrentToken(new SmartTpl::Internal::Token('}')); BEGIN(RAW); }
 "{if"[ \t]+         { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_IF; }
 "{elseif"[ \t]+     { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_ELSEIF; }
 "{else}"            { return TOKEN_ELSE; }
