@@ -41,7 +41,7 @@ protected:
         while ((pos = input.find(oldStr, pos)) != std::string::npos)
         {
             // Replace that what we were looking for with newStr
-            input.replace(pos, oldStrLen, newStr);
+            input.replace(pos, oldStrLen, newStr, newStrLen);
             pos += newStrLen;
         }
         return input;

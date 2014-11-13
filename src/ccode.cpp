@@ -736,7 +736,6 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
 
     // end of the block
     _out << '}' << std::endl;
-
 }
 
 /**
