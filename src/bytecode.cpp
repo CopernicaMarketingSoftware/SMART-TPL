@@ -718,12 +718,16 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  */
 void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
+    // we will need a pointer to the variable on the stack that we can pop off later on to modify it
     variable->pointer(this);
 
+    // loop through all the modifiers
     for (const auto &modifier : *modifiers)
     {
         // Push the token of the modifier (so the name of it) to the stack
         string(modifier.get()->token());
+
+        // the stack currently contains { size, buffer, variable }
 
         // pop the buffer and size from the stack (in reverse order) to get the modifier name
         auto size = pop();
@@ -732,9 +736,12 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         // call the native function to save the modifier to the variable on the stack
         _stack.push(std::move(_callbacks.modifier(_userdata, buffer, size)));
 
+        // the stack currently contains { modifier, variable }
+
         // pop the modifier
         auto mod = pop();
-        // pop the latest value from the stack
+
+        // pop the variable from the stack
         auto var = pop();
 
         // Let's retrieve our parameters and if we have them generate them
@@ -761,6 +768,7 @@ void Bytecode::parameters(const Parameters *parameters)
     // Construct the parameters through our callback
     auto params = _callbacks.create_params(_userdata, _function.new_constant(parameters->size()));
 
+    // loop through all the parameters and add them to our params object one by one
     for (auto &param : *parameters)
     {
         switch (param->type()) {
@@ -780,6 +788,7 @@ void Bytecode::parameters(const Parameters *parameters)
             auto size = pop();
             auto buffer = pop();
 
+            // actually append the string
             _callbacks.params_append_string(_userdata, params, buffer, size);
             break;
         }
