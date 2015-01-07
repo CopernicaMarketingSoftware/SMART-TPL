@@ -52,7 +52,7 @@ inline bool compile(const Template &tpl)
 
     if (no_clang == false)
     {
-        FILE *clangshell = popen("clang -x c -pipe -Wall -Werror -fPIC -shared -nostdlib -O3 -o " SHARED_LIBRARY " -", "w");
+        FILE *clangshell = popen("clang -x c -pipe -Wall -Werror -fbracket-depth=1024 -fPIC -shared -nostdlib -O3 -o " SHARED_LIBRARY " -", "w");
         EXPECT_TRUE(clangshell != NULL) << strerror(errno);
         if (clangshell)
         {

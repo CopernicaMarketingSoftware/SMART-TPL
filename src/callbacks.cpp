@@ -369,7 +369,7 @@ void* smart_tpl_modifier(void *userdata, const char *name, size_t size)
  *  @param modifier_ptr   pointer to the modifier that should be applied
  *  @param parameters     pointer to a Parameters object
  */
-const void* smart_tpl_modify_variable(void *userdata, const void *variable, void *modifier_ptr, void *parameters)
+const void* smart_tpl_modify_variable(void *userdata, const void *variable, void *modifier_ptr, const void *parameters)
 {
     // In case the modifier or the input is a nullptr just return the original value
     if (modifier_ptr == nullptr || variable == nullptr) return variable;
@@ -515,7 +515,7 @@ int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b,
  *  @param  parameters_count The amount of parameters to reserve ahead of time
  *  @return Pointer to a new SmartTpl::Parameters object
  */
-void *smart_tpl_create_params(void *userdata, size_t parameters_count)
+const void *smart_tpl_create_params(void *userdata, size_t parameters_count)
 {
     // cast userdata to our handler
     auto *handler = (Handler *)userdata;
@@ -533,13 +533,16 @@ void *smart_tpl_create_params(void *userdata, size_t parameters_count)
  *  @param  parameters     Pointer to a SmartTpl::Parameters object
  *  @param  value          The numeric value to append
  */
-void smart_tpl_params_append_numeric(void *userdata, void *parameters, numeric_t value)
+const void *smart_tpl_params_append_numeric(void *userdata, const void *parameters, numeric_t value)
 {
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the numeric value
     params->emplace_back(value);
+
+    // allow chaining
+    return parameters;
 }
 
 /**
@@ -548,13 +551,16 @@ void smart_tpl_params_append_numeric(void *userdata, void *parameters, numeric_t
  *  @param  parameters      Pointer to a SmartTpl::Parameters object
  *  @param  value           The floating point value to append
  */
-void smart_tpl_params_append_double(void *userdata, void *parameters, double value)
+const void *smart_tpl_params_append_double(void *userdata, const void *parameters, double value)
 {
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the numeric value
     params->emplace_back(value);
+
+    // allow chaining
+    return parameters;
 }
 
 /**
@@ -564,13 +570,16 @@ void smart_tpl_params_append_double(void *userdata, void *parameters, double val
  *  @param  buf           String we would like to append
  *  @param  len           Size of buf
  */
-void smart_tpl_params_append_string(void *userdata, void *parameters, const char *buf, size_t len)
+const void *smart_tpl_params_append_string(void *userdata, const void *parameters, const char *buf, size_t len)
 {
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the string value
     params->emplace_back(buf, len);
+
+    // allow chaining
+    return parameters;
 }
 
 /**
@@ -579,13 +588,16 @@ void smart_tpl_params_append_string(void *userdata, void *parameters, const char
  *  @param  parameters     Pointer to a SmartTpl::Parameters object
  *  @param  boolean        A 'boolean' value, 0 is false, everything else is true (C-style)
  */
-void smart_tpl_params_append_boolean(void *userdata, void *parameters, int boolean)
+const void *smart_tpl_params_append_boolean(void *userdata, const void *parameters, int boolean)
 {
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
 
     // Add the boolean value to the parameters
     params->emplace_back(boolean != 0);
+
+    // allow chaining
+    return parameters;
 }
 
 /**

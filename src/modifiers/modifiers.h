@@ -70,6 +70,11 @@ public:
     const_iterator end() const { return _modifiers.end(); }
     const_reverse_iterator rbegin() const { return _modifiers.rbegin(); }
     const_reverse_iterator rend() const { return _modifiers.rend(); }
+
+    /**
+     *  A simple size() method
+     */
+    std::size_t size() const { return _modifiers.size(); }
 };
 
 /**

@@ -82,26 +82,17 @@ void CCode::output(const Variable* variable)
  */
 void CCode::output(const Filter *filter)
 {
-    // Start a new block
-    _out << '{' << std::endl;
-
-    // Let's first of all declare our output variable
-    _out << "const void *o = NULL;" << std::endl;
+    // Now let's actually call the output callback
+    _out << "callbacks->output(userdata,";
 
     // call the string method on our filter, which writes all the filtering code for us
     filter->string(this);
 
-    // Now let's actually call the output callback
-    _out << "callbacks->output(userdata,o,";
-
     // Let's write the escape flag
-    _out << (filter->escape() ? 1 : 0);
+    _out << ',' << (filter->escape() ? 1 : 0);
 
     // And end the output statement
     _out << ");" << std::endl;
-
-    // End our block
-    _out << '}' << std::endl;
 }
 
 /**
@@ -603,40 +594,37 @@ void CCode::booleanOr(const Expression *left, const Expression *right)  { left->
  */
 void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
-    for (const auto &modifier : *modifiers)
+    // get some iterators
+    const auto begin = modifiers->begin();
+    const auto end = modifiers->end();
+    const auto last = --(modifiers->end());
+
+    // write out all the modify_variable calls first
+    for (std::size_t i = 0; i < modifiers->size(); ++i) _out << "callbacks->modify_variable(userdata,";
+
+    // then write the pointer to the variable
+    variable->pointer(this);
+    _out << ',';
+
+    // finish writing the actual statements by retrieving all the actual modifiers
+    for (auto iter = begin; iter != end; ++iter)
     {
-        // Retrieve the parameters
-        const Parameters *params = modifier->parameters();
-
-        // Start our own private block if we have parameters
-        if (params)
-        {
-            _out << '{' << std::endl;
-
-            // Generate the parameters
-            params->generate(this);
-        }
-
-        // Call the modify_variable callback
-        _out << "o = callbacks->modify_variable(userdata,";
-        if (modifier == *modifiers->begin())
-        {
-            variable->pointer(this);
-            _out << ',';
-        }
-        else _out << "o,";
-
-        // Write the get modifier callback
+        const auto &modifier = *iter;
         _out << "callbacks->modifier(userdata,";
         string(modifier->token());
         _out << "),";
 
-        // If there are parameters write our local variable here, NULL otherwise
-        if (params) _out << 'p';
-        else _out << "NULL";
-        _out << ");" << std::endl;
+        const Parameters *params = modifier->parameters();
 
-        if (params) _out << '}' << std::endl; // End our private block
+        // in case we have no parameters we can simply write NULL here
+        if (!params) _out << "NULL";
+        // otherwise we generate the parameters inline
+        else params->generate(this);
+
+        _out << ')';
+
+        // all of them need this comma, except for the last one
+        if (iter != last) _out << ',';
     }
 }
 
@@ -647,38 +635,58 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
  */
 void CCode::parameters(const Parameters *parameters)
 {
-    _out << "void *p = callbacks->create_params(userdata," << parameters->size() << ");" << std::endl;
-    for (auto &param : *parameters)
+    // write out all the param_append function names at least, as you can see
+    // we are doing this is reverse order. This is simply done so at runtime the
+    // push_back methods are actually called in the correct order
+    for (auto iter = parameters->rbegin(); iter != parameters->rend(); ++iter)
     {
+        const auto &param = *iter;
+
         switch (param->type()) {
         case Expression::Type::Boolean:
-            // This expression in the parameters is a boolean value, so we use params_append_boolean
-            _out << "callbacks->params_append_boolean(userdata,p,";
-            param->boolean(this);
-            _out << ");";
+            _out << "callbacks->params_append_boolean(userdata,";
             break;
         case Expression::Type::Numeric:
-            // This expression in the parameters is a numeric value, so we use params_append_numeric
-            _out << "callbacks->params_append_numeric(userdata,p,";
-            param->numeric(this);
-            _out << ");";
+            _out << "callbacks->params_append_numeric(userdata,";
             break;
         case Expression::Type::String:
-            // This expression in the parameters is a string value, so we use params_append_string
-            _out << "callbacks->params_append_string(userdata,p,";
-            param->string(this);
-            _out << ");";
+            _out << "callbacks->params_append_string(userdata,";
             break;
         case Expression::Type::Double:
-            // This expression in the parameters is a floating point value, so we use params_append_double
-            _out << "callbacks->params_append_double(userdata,p,";
-            param->double_type(this);
-            _out << ");";
+            _out << "callbacks->params_append_double(userdata,";
             break;
         default:
             throw std::runtime_error("Unsupported operation for now");
         }
-        _out << std::endl;
+    }
+
+    // in the middle we create the parameters object
+    _out << "callbacks->create_params(userdata," << parameters->size() << ")";
+
+    // and add the actual parameters, as you can see here we are not going in
+    // reverse order, we are simply executing from the inside to the outside and all
+    for (auto iter = parameters->begin(); iter != parameters->end(); ++iter)
+    {
+        const auto &param = *iter;
+
+        _out << ',';
+        switch (param->type()) {
+        case Expression::Type::Boolean:
+            param->boolean(this);
+            break;
+        case Expression::Type::Numeric:
+            param->numeric(this);
+            break;
+        case Expression::Type::String:
+            param->string(this);
+            break;
+        case Expression::Type::Double:
+            param->double_type(this);
+            break;
+        default:
+            throw std::runtime_error("Nice one if you actually reach this");
+        }
+        _out << ')';
     }
 }
 

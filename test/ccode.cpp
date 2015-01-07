@@ -85,9 +85,10 @@ TEST(CCode, SingleModifier)
     Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
-    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nconst void *o = NULL;\n"
-    "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"toupper\",7),NULL);\n"
-    "callbacks->output(userdata,o,1);\n}\n}\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->output(userdata,callbacks->modify_variable(userdata,"
+    "callbacks->variable(userdata,\"var\",3),"
+    "callbacks->modifier(userdata,\"toupper\",7),NULL),1);\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
@@ -102,13 +103,13 @@ TEST(CCode, ChainedModifiers)
     Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
-    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nconst void *o = NULL;\n"
-    "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"toupper\",7),NULL);\n"
-    "o = callbacks->modify_variable(userdata,o,callbacks->modifier(userdata,\"tolower\",7),NULL);\n"
-    "o = callbacks->modify_variable(userdata,o,callbacks->modifier(userdata,\"toupper\",7),NULL);\n"
-    "o = callbacks->modify_variable(userdata,o,callbacks->modifier(userdata,\"tolower\",7),NULL);\n"
-    "callbacks->output(userdata,o,1);\n}\n}\n"
-    "const char *mode = \"raw\";\n");
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->output(userdata,callbacks->modify_variable(userdata,"
+    "callbacks->modify_variable(userdata,callbacks->modify_variable(userdata,"
+    "callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),"
+    "callbacks->modifier(userdata,\"toupper\",7),NULL),callbacks->modifier(userdata,"
+    "\"tolower\",7),NULL),callbacks->modifier(userdata,\"toupper\",7),NULL),"
+    "callbacks->modifier(userdata,\"tolower\",7),NULL),1);\n}\nconst char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
@@ -344,12 +345,12 @@ TEST(CCode, ModifierParameters)
     Template tpl((Buffer(input)));
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
-    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n{\nconst void *o = NULL;\n"
-    "{\nvoid *p = callbacks->create_params(userdata,2);\n"
-    "callbacks->params_append_numeric(userdata,p,1);\n"
-    "callbacks->params_append_numeric(userdata,p,5);\n"
-    "o = callbacks->modify_variable(userdata,callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),p);\n}\n"
-    "callbacks->output(userdata,o,1);\n}\n}\n"
+    "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
+    "callbacks->output(userdata,callbacks->modify_variable(userdata,"
+    "callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),"
+    "callbacks->params_append_numeric(userdata,"
+    "callbacks->params_append_numeric(userdata,"
+    "callbacks->create_params(userdata,2),1),5)),1);\n}\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 

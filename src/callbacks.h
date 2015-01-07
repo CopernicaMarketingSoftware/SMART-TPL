@@ -34,18 +34,18 @@ double      smart_tpl_to_double             (void *userdata, const void *variabl
 int         smart_tpl_to_boolean            (void *userdata, const void *variable);
 size_t      smart_tpl_size                  (void *userdata, const void *variable);
 void       *smart_tpl_modifier              (void *userdata, const char *name, size_t size);
-const void *smart_tpl_modify_variable       (void *userdata, const void *variable, void *modifier, void *parameters);
+const void *smart_tpl_modify_variable       (void *userdata, const void *variable, void *modifier, const void *parameters);
 void        smart_tpl_assign_numeric        (void *userdata, const char *key, size_t keysize, numeric_t value);
 void        smart_tpl_assign_boolean        (void *userdata, const char *key, size_t keysize, int boolean);
 void        smart_tpl_assign_string         (void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
 void        smart_tpl_assign_double         (void *userdata, const char *key, size_t keysize, double value);
 void        smart_tpl_assign                (void *userdata, const char *key, size_t keysize, const void *variable);
 int         smart_tpl_strcmp                (void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
-void       *smart_tpl_create_params         (void *userdata, size_t parameters_count);
-void        smart_tpl_params_append_numeric (void *userdata, void *parameters, numeric_t value);
-void        smart_tpl_params_append_double  (void *userdata, void *parameters, double value);
-void        smart_tpl_params_append_string  (void *userdata, void *parameters, const char *buf, size_t len);
-void        smart_tpl_params_append_boolean (void *userdata, void *parameters, int boolean);
+const void *smart_tpl_create_params         (void *userdata, size_t parameters_count);
+const void *smart_tpl_params_append_numeric (void *userdata, const void *parameters, numeric_t value);
+const void *smart_tpl_params_append_double  (void *userdata, const void *parameters, double value);
+const void *smart_tpl_params_append_string  (void *userdata, const void *parameters, const char *buf, size_t len);
+const void *smart_tpl_params_append_boolean (void *userdata, const void *parameters, int boolean);
 void        smart_tpl_mark_failed           (void *userdata);
 int         smart_tpl_throw_exception       (void *userdata);
 
