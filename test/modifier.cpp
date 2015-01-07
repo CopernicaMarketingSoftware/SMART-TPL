@@ -316,14 +316,19 @@ TEST(Modifier, UcFirst)
 
     Data data;
     data.assign("var", "sir");
+    Data data2;
+    data2.assign("var", "");
 
     string expectedOutput("Sir.");
+    string expectedOutput2(".");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
         EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
 

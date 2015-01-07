@@ -34,6 +34,11 @@ public:
         // initialize our output
         std::string output(input.toString());
 
+        // in case our input is empty we are just returning our input because that
+        // is more efficient than returning this new string. Besides in case of an
+        // empty string calling [0] is undefined behavior..
+        if (output.empty()) return input;
+
         // Turn the first character into the uppercase form
         output[0] = std::toupper(output[0]);
 
