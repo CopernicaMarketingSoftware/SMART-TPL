@@ -148,9 +148,15 @@ public:
     /**
      *  Generate the code to apply a set of modifiers on an expression and turn it into a boolean
      *  @param  modifiers          The set of modifiers to apply
-     *  @param  variable           The variable to apply to modifers to
+     *  @param  variable           The variable to apply the modifers to
      */
     virtual void modifiersBoolean(const Modifiers *modifers, const Variable *variable) = 0;
+    /**
+     *  Generate the code to apply a set of modifiers on an expression and turn it into a double
+     *  @param  modifiers          The set of modifiers to apply
+     *  @param  variable           The variable to apply the modifiers to
+     */
+    virtual void modifiersDouble(const Modifiers *modifiers, const Variable *variable) = 0;
 
     /**
      *  Generate the code to construct the following parameters

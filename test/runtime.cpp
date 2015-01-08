@@ -628,3 +628,27 @@ TEST(RunTime, IfWithModifierToBoolean)
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
+
+TEST(RunTime, IfWithModifierNumberComparison)
+{
+    string input("{if $key|count > 5}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("key", VariantValue({1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
+    Data data2;
+    data2.assign("key", VariantValue({1, 2, 3}));
+
+    string expectedOutput("true");
+    string expectedOutput2("false");
+
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
+    }
+}

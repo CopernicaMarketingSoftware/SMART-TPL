@@ -764,9 +764,25 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
  */
 void Bytecode::modifiersBoolean(const Modifiers *modifiers, const Variable *variable)
 {
+    // first generate the modifiers and all, which adds the output to the stack
     this->modifiers(modifiers, variable);
 
+    // push the result that is on the stack through to_boolean
     _stack.push(std::move(_callbacks.to_boolean(_userdata, pop())));
+}
+
+/**
+ *  Generate the code to apply a set of modifiers on an expression and turn it into a double
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  variable           The variable to apply the modifiers to
+ */
+void Bytecode::modifiersDouble(const Modifiers *modifiers, const Variable *variable)
+{
+    // first generate the modifiers and all, which adds the output to the stack
+    this->modifiers(modifiers, variable);
+
+    // push the result that is on the stack through to_double
+    _stack.push(std::move(_callbacks.to_double(_userdata, pop())));
 }
 
 /**

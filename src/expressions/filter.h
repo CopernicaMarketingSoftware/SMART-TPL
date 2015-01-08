@@ -83,7 +83,7 @@ public:
      */
     void double_type(Generator *generator) const override
     {
-        throw std::runtime_error("Non-default double_type implementation called");
+        _modifiers->generateDouble(generator, _variable.get());
     };
 
     /**

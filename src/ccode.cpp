@@ -635,8 +635,30 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
  */
 void CCode::modifiersBoolean(const Modifiers *modifiers, const Variable *variable)
 {
+    // write out the to_boolean function
     _out << "callbacks->to_boolean(userdata,";
+
+    // write the modifiers, which return a variable pointer
     this->modifiers(modifiers, variable);
+
+    // close the function
+    _out << ')';
+}
+
+/**
+ *  Generate the code to apply a set of modifiers on an expression and turn it into a double
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  variable           The variable to apply the modifiers to
+ */
+void CCode::modifiersDouble(const Modifiers *modifiers, const Variable *variable)
+{
+    // write the to_double function
+    _out << "callbacks->to_double(userdata,";
+
+    // write out the modifiers as the variable pointer
+    this->modifiers(modifiers, variable);
+
+    // close the function
     _out << ')';
 }
 

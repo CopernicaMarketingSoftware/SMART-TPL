@@ -73,6 +73,15 @@ public:
     }
 
     /**
+     *  Generate the code for modifiers but turning it into a double, this is mostly
+     *  used for if statements
+     */
+    void generateDouble(Generator *generator, const Variable *variable) const
+    {
+        generator->modifiersDouble(this, variable);
+    }
+
+    /**
      *  Get the begin and end iterator
      */
     const_iterator begin() const { return _modifiers.begin(); }
