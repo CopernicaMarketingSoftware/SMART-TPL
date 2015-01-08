@@ -64,6 +64,15 @@ public:
     }
 
     /**
+     *  Generate the code for modifiers but turning it into a boolean, this
+     *  is mostly used for if statements
+     */
+    void generateBoolean(Generator *generator, const Variable *variable) const
+    {
+        generator->modifiersBoolean(this, variable);
+    }
+
+    /**
      *  Get the begin and end iterator
      */
     const_iterator begin() const { return _modifiers.begin(); }

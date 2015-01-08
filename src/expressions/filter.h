@@ -15,7 +15,7 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class Filter : public Expression
+class Filter : public Variable
 {
 private:
     /**
@@ -51,6 +51,15 @@ public:
     Type type() const { return Type::Value; };
 
     /**
+     *  Generate the output that leaves a pointer to the variable
+     *  @param  generator
+     */
+    void pointer(Generator *generator) const override
+    {
+        _modifiers->generate(generator, _variable.get());
+    }
+
+    /**
      *  Generate the expression as string value
      *  @param  generator
      */
@@ -58,6 +67,33 @@ public:
     {
         _modifiers->generate(generator, _variable.get());
     }
+
+    /**
+     *  Generate the expression as a numeric value
+     *  @param  generator
+     */
+    void numeric(Generator *generator) const override
+    {
+        throw std::runtime_error("Non-default numeric implementation called");
+    };
+
+    /**
+     *  Generate the expression as a double value
+     *  @param  generator
+     */
+    void double_type(Generator *generator) const override
+    {
+        throw std::runtime_error("Non-default double_type implementation called");
+    };
+
+    /**
+     *  Generate the expression as a boolean value
+     *  @param  generator
+     */
+    void boolean(Generator *generator) const override
+    {
+        _modifiers->generateBoolean(generator, _variable.get());
+    };
 
     /**
      *  Retrieve whether we should escape or not, this method will simply check

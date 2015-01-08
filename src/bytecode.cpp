@@ -758,6 +758,18 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 }
 
 /**
+ *  Generate the code to apply a set of modifiers on an expression and turn it into a boolean
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  variable           The variable to apply to modifers to
+ */
+void Bytecode::modifiersBoolean(const Modifiers *modifiers, const Variable *variable)
+{
+    this->modifiers(modifiers, variable);
+
+    _stack.push(std::move(_callbacks.to_boolean(_userdata, pop())));
+}
+
+/**
  *  Generate the code to construct the following parameters
  *  @param  parameters         The parameters to construct
  *  @note   Construct as in, generate the code so the runtime can construct them

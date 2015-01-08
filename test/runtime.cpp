@@ -599,3 +599,32 @@ TEST(RunTime, ZeroDivisionLeaky)
         EXPECT_THROW(library.process(data), std::runtime_error);
     }
 }
+
+/*
+ *  Before using modifiers in if statements just woudn't work at all, this tests
+ *  if turning the output from a modifiers directly into a boolean for an if
+ *  statement works.
+ */
+TEST(RunTime, IfWithModifierToBoolean)
+{
+    string input("{if $key|empty}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("key", "Not empty");
+    Data data2;
+    data2.assign("key", "");
+
+    string expectedOutput("false");
+    string expectedOutput2("true");
+
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+    EXPECT_EQ(expectedOutput2, tpl.process(data2));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+        EXPECT_EQ(expectedOutput2, library.process(data2));
+    }
+}
