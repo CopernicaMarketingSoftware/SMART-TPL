@@ -31,7 +31,8 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 #   named 'smarttpl'
 #
 
-LIBRARY         =   libsmarttpl.so
+SHARED_LIBRARY  =   libsmarttpl.so
+STATIC_LIBRARY  =   libsmarttpl.a
 PROGRAM         =   smarttpl
 
 #
@@ -47,6 +48,7 @@ COMPILER        =   c++
 LINKER          =   c++
 FLEX            =   flex
 LEMON           =   lemon
+ARCHIVER        =   ar rcs
 
 #
 #   Additions flags
@@ -61,11 +63,13 @@ LEMON           =   lemon
 #   production servers).
 #
 
-COMPILER_FLAGS  =   -Wall -c -I. -O2 -fpic -pipe -std=c++11 -Wno-sign-compare -Wno-psabi
-LINKER_FLAGS    =   -L.
-DEPENDENCIES    =   -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex
-FLEX_FLAGS      =
-LEMON_FLAGS     =
+COMPILER_FLAGS        = -Wall -c -I. -O2 -pipe -std=c++11 -Wno-sign-compare -Wno-psabi
+SHARED_COMPILER_FLAGS = -fPIC
+STATIC_COMPILER_FLAGS =
+LINKER_FLAGS          = -L.
+DEPENDENCIES          = -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex
+FLEX_FLAGS            =
+LEMON_FLAGS           =
 
 #
 #   Command to remove files, copy files and create directories.
@@ -109,8 +113,9 @@ PROGRAM_SOURCES =   $(wildcard program/*.cpp)
 #   We also use a Makefile function here that takes all source files.
 #
 
-LIBRARY_OBJECTS =   $(sort $(LIBRARY_SOURCES:%.cpp=%.o))
-PROGRAM_OBJECTS =   $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
+SHARED_LIBRARY_OBJECTS = $(sort $(LIBRARY_SOURCES:%.cpp=%.o))
+STATIC_LIBRARY_OBJECTS = $(sort $(LIBRARY_SOURCES:%.cpp=%.s.o))
+PROGRAM_OBJECTS        = $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
 
 #
 #   Auto-generated files
@@ -127,16 +132,19 @@ GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.
 #   dependencies that are used by the compiler.
 #
 
-all: ${LIBRARY} ${PROGRAM}
+all: ${SHARED_LIBRARY} ${STATIC_LIBRARY} ${PROGRAM}
 
-${LIBRARY}: ${PARSER} ${TOKENIZER} ${LIBRARY_OBJECTS}
-	${LINKER} ${LINKER_FLAGS} -shared -o $@ ${LIBRARY_OBJECTS} ${DEPENDENCIES}
+${SHARED_LIBRARY}: ${PARSER} ${TOKENIZER} ${SHARED_LIBRARY_OBJECTS}
+	${LINKER} ${LINKER_FLAGS} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${DEPENDENCIES}
 
-${PROGRAM}: ${PROGRAM_OBJECTS} ${LIBRARY}
+${STATIC_LIBRARY}: ${PARSER} ${TOKENIZER} ${STATIC_LIBRARY_OBJECTS}
+	${ARCHIVER} ${STATIC_LIBRARY} ${STATIC_LIBRARY_OBJECTS}
+
+${PROGRAM}: ${PROGRAM_OBJECTS} ${SHARED_LIBRARY}
 	${LINKER} ${LINKER_FLAGS} -o $@ ${PROGRAM_OBJECTS} -lsmarttpl
 
 clean:
-	${RM} ${GENERATED} ${LIBRARY_OBJECTS} ${PROGRAM_OBJECTS} ${LIBRARY} ${PROGRAM}
+	${RM} ${GENERATED} ${SHARED_LIBRARY_OBJECTS} ${STATIC_LIBRARY_OBJECTS} ${PROGRAM_OBJECTS} ${LIBRARY} ${PROGRAM}
 
 ${TOKENIZER}: ${TOKENIZER:%.cpp=%.flex}
 	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
@@ -145,8 +153,14 @@ ${PARSER}: ${PARSER:%.cpp=%.lemon}
 	${LEMON} ${LEMON_FLAGS} ${@:%.cpp=%.lemon}
 	${MV} ${PARSER:%.cpp=%.c} $@
 
-.cpp.o: ${@:%.o=%.cpp}
+${SHARED_LIBRARY_OBJECTS}: ${@:%.o=%.cpp}
+	${COMPILER} ${COMPILER_FLAGS} ${SHARED_COMPILER_FLAGS} -o $@ ${@:%.o=%.cpp}
+
+${PROGRAM_OBJECTS}: ${@:%.o=%.cpp}
 	${COMPILER} ${COMPILER_FLAGS} -o $@ ${@:%.o=%.cpp}
+
+${STATIC_LIBRARY_OBJECTS}: ${@:%.s.o=%.cpp}
+	${COMPILER} ${COMPILER_FLAGS} ${STATIC_COMPILER_FLAGS} -o $@ ${@:%.s.o=%.cpp}
 
 install:
 	${MKDIR} ${INSTALL_HEADERS}/smarttpl
