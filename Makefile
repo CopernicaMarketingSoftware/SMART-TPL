@@ -166,5 +166,6 @@ install:
 	${MKDIR} ${INSTALL_HEADERS}/smarttpl
 	${CP} smarttpl.h ${INSTALL_HEADERS}
 	${CP} include/*.h ${INSTALL_HEADERS}/smarttpl
-	${CP} ${LIBRARY} ${INSTALL_LIB}
+	${CP} ${SHARED_LIBRARY} ${INSTALL_LIB}
+	${CP} ${STATIC_LIBRARY} ${INSTALL_LIB}
 	${CP} ${PROGRAM} ${INSTALL_BIN}
