@@ -46,10 +46,6 @@ private:
      */
     std::string _encoding = "raw";
 
-    /**
-     *  Contains the source of the template
-     */
-    std::string _source;
 
 public:
     /**
@@ -70,11 +66,12 @@ public:
      *  Move constructor
      *  @param  that
      */
-    Template(Template &&that)
-    : _executor(that._executor),
-      _encoding(std::move(that._encoding)),
-      _source(std::move(that._source)) {
-      that._executor = nullptr;
+    Template(Template &&that) : 
+        _executor(that._executor),
+        _encoding(std::move(that._encoding))
+    {
+        // reset other object
+        that._executor = nullptr;
     }
 
     /**
@@ -144,13 +141,10 @@ public:
 
     /**
      *  Used to retrieve what encoding this template is in, natively
+     *  @return std::string
      */
     const std::string &encoding() const { return _encoding; };
 
-    /**
-     *  Retrieve the original source of this template
-     */
-    const std::string &source() const { return _source; };
 };
 
 /**

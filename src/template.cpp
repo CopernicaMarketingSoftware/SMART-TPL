@@ -18,7 +18,6 @@ namespace SmartTpl {
  *  @param  source        Source of the template to load
  */
 Template::Template(const Source& source)
-: _source(source.data(), source.size())
 {
     // is the source a shared library?
     if (source.library())
