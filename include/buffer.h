@@ -92,6 +92,15 @@ public:
         // stored in a member
         return _buffer.size();
     }
+    
+    /**
+     *  Cast the buffer to a string
+     *  @return std::string
+     */
+    operator const std::string () const
+    {
+        return _buffer;
+    }
 };
 
 /**
