@@ -31,8 +31,6 @@ TEST(CCode, ForEach)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, ForEachWithKeys)
@@ -54,8 +52,6 @@ TEST(CCode, ForEachWithKeys)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, ForEachElse)
@@ -75,8 +71,6 @@ TEST(CCode, ForEachElse)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, SingleModifier)
@@ -93,8 +87,6 @@ TEST(CCode, SingleModifier)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, ChainedModifiers)
@@ -113,8 +105,6 @@ TEST(CCode, ChainedModifiers)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, IfElse)
@@ -130,8 +120,6 @@ TEST(CCode, IfElse)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, ElseIf)
@@ -150,8 +138,6 @@ TEST(CCode, ElseIf)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, VarGreaterThen)
@@ -167,8 +153,6 @@ TEST(CCode, VarGreaterThen)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, VarGreaterThenNegativeNumber)
@@ -184,8 +168,6 @@ TEST(CCode, VarGreaterThenNegativeNumber)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, LiteralArrayAccess)
@@ -202,8 +184,6 @@ TEST(CCode, LiteralArrayAccess)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, NumericComparison)
@@ -219,8 +199,6 @@ TEST(CCode, NumericComparison)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, BoolComparison)
@@ -235,8 +213,6 @@ TEST(CCode, BoolComparison)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, StringComparison)
@@ -252,8 +228,6 @@ TEST(CCode, StringComparison)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, StringComparisonNotEquals)
@@ -269,8 +243,6 @@ TEST(CCode, StringComparisonNotEquals)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, AssignValue)
@@ -285,8 +257,6 @@ TEST(CCode, AssignValue)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, AssignValueIs)
@@ -301,8 +271,6 @@ TEST(CCode, AssignValueIs)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, LiteralStringsWeirdCharacters)
@@ -318,8 +286,6 @@ TEST(CCode, LiteralStringsWeirdCharacters)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, LiteralEmptyString)
@@ -335,8 +301,6 @@ TEST(CCode, LiteralEmptyString)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, ModifierParameters)
@@ -355,8 +319,6 @@ TEST(CCode, ModifierParameters)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, Unicode)
@@ -373,8 +335,6 @@ TEST(CCode, Unicode)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, LiteralStringUnicode)
@@ -392,8 +352,6 @@ TEST(CCode, LiteralStringUnicode)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, TemplateMode)
@@ -409,8 +367,6 @@ TEST(CCode, TemplateMode)
     EXPECT_EQ("test", tpl.encoding());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, Encoded)
@@ -426,8 +382,6 @@ TEST(CCode, Encoded)
     EXPECT_EQ("html", tpl.encoding());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, LiteralBlock)
@@ -442,8 +396,6 @@ TEST(CCode, LiteralBlock)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
 
 TEST(CCode, OutputMath)
@@ -459,6 +411,4 @@ TEST(CCode, OutputMath)
     EXPECT_EQ(expectedOutput, tpl.compile());
 
     compile(tpl);
-
-    EXPECT_EQ(input, tpl.source());
 }
