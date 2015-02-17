@@ -31,7 +31,7 @@ private:
      *  The internal buffer
      *  @var std::string
      */
-    const std::string _buffer;
+    std::string _buffer;
 
 public:
     /**
