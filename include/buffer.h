@@ -94,6 +94,17 @@ public:
     }
     
     /**
+     *  Is the buffer empty
+     * 
+     *  @return bool
+     */
+    bool empty() const
+    {
+        // pass on to buffer
+        return _buffer.empty();
+    }
+    
+    /**
      *  Cast the buffer to a string
      *  @return std::string
      */
