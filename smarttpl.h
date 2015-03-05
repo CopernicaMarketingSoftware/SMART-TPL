@@ -59,6 +59,7 @@
 #include "smarttpl/data.h"
 #include "smarttpl/template.h"
 #include "smarttpl/compileerror.h"
+#include "smarttpl/runtimeerror.h"
 
 /**
  *  End of the include guard

@@ -1,18 +1,9 @@
 /**
- *  Buffer.h
+ *  CompileError.h
  *
- *  Template source that can be used for templates that are fetched from
- *  memory.
+ *  An exception class about compile errors within templates, these will include
+ *  a line number which you can retrieve using the line() method.
  *
- *  Explanation: when you instantiate a Template object, you need to pass
- *  a Source object to it to tell the Template object where it can be found.
- *  This Buffer class is one of the available Source objects that can be used
- *  for templates that are already in memory.
- *
- *  Important: the buffer that is passed to the constructor should be valid
- *  for as long as the Memory object exists!
- *
- *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
 

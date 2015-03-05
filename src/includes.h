@@ -61,6 +61,7 @@
 #include "include/data.h"
 #include "include/template.h"
 #include "include/compileerror.h"
+#include "include/runtimeerror.h"
 
 /**
  *  Library only dependencies

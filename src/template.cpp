@@ -76,7 +76,7 @@ std::string Template::process(const Data &data, const std::string &outencoding) 
     _executor->process(handler);
 
     // In case our handler is set in failed mode we have to throw a runtime error
-    if (handler.failed()) throw std::runtime_error("A runtime error occured :(");
+    if (handler.failed()) throw RunTimeError();
 
     // return the generated output string
     return handler.output();
