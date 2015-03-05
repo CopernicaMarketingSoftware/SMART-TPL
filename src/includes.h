@@ -60,6 +60,7 @@
 #include "include/modifier.h"
 #include "include/data.h"
 #include "include/template.h"
+#include "include/compileerror.h"
 
 /**
  *  Library only dependencies

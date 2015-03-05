@@ -58,6 +58,7 @@
 #include "smarttpl/callback.h"
 #include "smarttpl/data.h"
 #include "smarttpl/template.h"
+#include "smarttpl/compileerror.h"
 
 /**
  *  End of the include guard

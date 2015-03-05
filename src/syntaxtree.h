@@ -36,9 +36,8 @@ public:
         Tokenizer tokenizer;
         if (tokenizer.process(this, buffer, size) == false)
         {
-            // append the line to our error and throw it
-            _error.append(" at line ").append(std::to_string(tokenizer.getCurrentLine()));
-            throw std::runtime_error(_error);
+            // throw a CompileError
+            throw CompileError(_error, tokenizer.getCurrentLine());
         }
     }
 
