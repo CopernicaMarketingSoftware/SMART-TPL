@@ -30,7 +30,8 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _userdata(_function.get_param(0)),
     _true(_function.new_constant(1)),
     _false(_function.new_constant(0)),
-    _error(_function.new_label())
+    _error(_function.new_label()),
+    _error_msg(_false)
 {
     // set our jit_exception_handler as the exception handler for jit
     auto original_handler = jit_exception_set_handler(JitException::handler);
@@ -50,7 +51,7 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
         _function.insn_label(_error);
 
         // and from our error label we set ourself to exception mode
-        _callbacks.mark_failed(_userdata);
+        _callbacks.mark_failed(_userdata, _error_msg);
 
         // This will basically result in the following psuedo code
         //
@@ -464,6 +465,13 @@ void Bytecode::divide(const Expression *left, const Expression *right)
 {
     // First calculate the right value
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+
+    // we set our error message to the zero division error, because if we jump
+    // to the mark_failed point from here it is due to a zero division, this
+    // is probably not the best solution to set this as it will be set in case
+    // everything goes well as well.
+    // @todo look for a better solution for this
+    _error_msg = _function.new_constant((void*) "Zero division error");
 
     // if it is 0 we branch off to our early exit label
     _function.insn_branch_if(r == _false, _error);

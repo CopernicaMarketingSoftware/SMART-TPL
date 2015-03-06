@@ -46,7 +46,7 @@ const void *smart_tpl_params_append_numeric (void *userdata, const void *paramet
 const void *smart_tpl_params_append_double  (void *userdata, const void *parameters, double value);
 const void *smart_tpl_params_append_string  (void *userdata, const void *parameters, const char *buf, size_t len);
 const void *smart_tpl_params_append_boolean (void *userdata, const void *parameters, int boolean);
-void        smart_tpl_mark_failed           (void *userdata);
+void        smart_tpl_mark_failed           (void *userdata, const char *error);
 int         smart_tpl_throw_exception       (void *userdata, const char *error);
 
 /**
@@ -818,13 +818,15 @@ public:
     /**
      *  Call the mark_failed function
      *  @param   userdata        Pointer to user-supplied data
+     *  @param   error           Error message
      *  @see     smart_tpl_mark_failed
      */
-    void mark_failed(const jit_value &userdata)
+    void mark_failed(const jit_value &userdata, const jit_value &error)
     {
         // construct the arguments
         jit_value_t args[] = {
             userdata.raw(),
+            error.raw()
         };
 
         // create the instruction

@@ -45,7 +45,7 @@ SignatureCallback Callbacks::_assign_boolean({ jit_type_void_ptr, jit_type_void_
 SignatureCallback Callbacks::_assign_numeric({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_longlong });
 SignatureCallback Callbacks::_assign_double({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_float64 });
 SignatureCallback Callbacks::_assign_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr, jit_type_sys_ulonglong });
-SignatureCallback Callbacks::_mark_failed({ jit_type_void_ptr });
+SignatureCallback Callbacks::_mark_failed({ jit_type_void_ptr, jit_type_void_ptr });
 
 /**
  *  A static empty value
@@ -604,13 +604,13 @@ const void *smart_tpl_params_append_boolean(void *userdata, const void *paramete
  *  Used to set the handler into failed mode so we know we have to throw a runtime error
  *  @param  userdata        Pointer to user-supplied data
  */
-void smart_tpl_mark_failed(void *userdata)
+void smart_tpl_mark_failed(void *userdata, const char *error)
 {
     // Convert userdata to our Handler
     auto *handler = (Handler *) userdata;
 
     // Set the handler into failed mode
-    handler->markFailed();
+    handler->markFailed(error);
 }
 
 /**

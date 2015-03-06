@@ -89,9 +89,11 @@ private:
     std::map<const Value*, std::string> _managed_strings;
 
     /**
-     *  Are we supposed to throw because of a runtime failure or not?
+     *  An error message possibly set by markFailed, if this is empty
+     *  there were simply no errors.
+     *  @var std::string
      */
-    bool _failed = false;
+    std::string _error;
 
 public:
     /**
@@ -346,8 +348,9 @@ public:
     /**
      *  Error related methods that allow us to mark our handler as failed
      */
-    void markFailed() { _failed = true; };
-    bool failed() const { return _failed; };
+    void markFailed(const char *error) { _error = error; };
+    bool failed() const { return !_error.empty(); };
+    const std::string &error() const { return _error; };
 };
 
 /**

@@ -86,6 +86,14 @@ private:
     jit_label _error;
 
     /**
+     *  A value containing a possible error message. This has to be a 'global' variable
+     *  due to the way exceptions work inside our jit code. As we can't throw a C++ error
+     *  through it we use a bunch of gotos essentially. And we obviously can't pass variables
+     *  along with gotos.
+     */
+    jit_value _error_msg;
+
+    /**
      *  Stack with temporary values
      *  @var    std::stack
      */
