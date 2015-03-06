@@ -91,12 +91,13 @@ Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
 /**
  *  Helper method to pop a value from the stack
  *  @return jit_value
- *  @throws std::runtime_error if the internal stack is empty
+ *  @throws RunTimeError if the internal stack is empty
  */
 jit_value Bytecode::pop()
 {
     // let's check if the stack is empty and throw an error if it is instead of crashing
-    if (_stack.empty()) throw std::runtime_error("_stack is empty");
+    // this should never ever happen, unless working on the library itself.
+    if (_stack.empty()) throw RunTimeError("Internal stack is empty");
 
     // get the value from the stack
     jit_value& value = _stack.top();
@@ -833,7 +834,7 @@ void Bytecode::parameters(const Parameters *parameters)
             _callbacks.params_append_double(_userdata, params, doubleExpression(param.get()));
             break;
         default:
-            throw std::runtime_error("Unsupported operation for now");
+            throw RunTimeError("Unknown typed values are currently unsupported");
         }
     }
 
@@ -965,7 +966,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
             _callbacks.assign(_userdata, key_str, key_size, pointer(variable));
             break;
         }
-        throw std::runtime_error("Unsupported assign.");
+        throw RunTimeError("Unsupported assign");
     }
     case Expression::Type::Double:
         // Convert to a floating point and use the assign_double callback

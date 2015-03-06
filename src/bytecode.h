@@ -275,7 +275,7 @@ public:
     /**
      *  Constructor
      *  @param  source The source that holds the template
-     *  @throws std::runtime_error If something went wrong while compiling the jit code
+     *  @throws CompileError If something went wrong while compiling the jit code
      */
     Bytecode(const Source& source);
 

@@ -24,10 +24,10 @@ class CompileError : public std::runtime_error
 {
 private:
     /**
-     *  The line at which the error occured
-     *  @var std::size_t
+     *  The line at which the error occured, no line known means this is set to -1
+     *  @var int
      */
-    std::size_t _line;
+    int _line = -1;
 
 public:
     /**
@@ -36,8 +36,10 @@ public:
      *  @param  error        The error message
      *  @param  line         The line at which the error occured
      */
-    CompileError(const std::string &error, std::size_t line)
+    CompileError(const std::string &error, int line)
         : std::runtime_error("Compile error at line " + std::to_string(line) + ": " + error), _line(line) {};
+    CompileError(const std::string &error)
+        : std::runtime_error("Compile error: " + error) {};
 
     /**
      *  Destructor
@@ -47,9 +49,9 @@ public:
     /**
      *  The line at which the error occured
      *
-     *  @return std::size_t
+     *  @return int
      */
-    std::size_t line() const { return _line; };
+    int line() const { return _line; };
 };
 
 /**

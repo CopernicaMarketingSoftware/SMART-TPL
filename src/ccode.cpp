@@ -690,7 +690,7 @@ void CCode::parameters(const Parameters *parameters)
             _out << "callbacks->params_append_double(userdata,";
             break;
         default:
-            throw std::runtime_error("Unsupported operation for now");
+            throw RunTimeError("Unknown typed values are currently unsupported");
         }
     }
 
@@ -718,7 +718,8 @@ void CCode::parameters(const Parameters *parameters)
             param->double_type(this);
             break;
         default:
-            throw std::runtime_error("Nice one if you actually reach this");
+            // should not be reachable as we probably already threw at this point
+            throw RunTimeError("Unknown typed values are currently unsupported");
         }
         _out << ')';
     }
@@ -816,7 +817,7 @@ void CCode::assign(const std::string &key, const Expression *expression)
             variable->pointer(this);
             break;
         }
-        throw std::runtime_error("Unsupported assign.");
+        throw RunTimeError("Unsupported assign");
     }
     case Expression::Type::Double:
         // Convert to a floating point value and use the assign_double callback
