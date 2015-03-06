@@ -566,12 +566,12 @@ TEST(RunTime, ZeroDivision)
 {
     string input("{1/0}");
     Template tpl((Buffer(input)));
-    EXPECT_THROW(tpl.process(), std::runtime_error);
+    EXPECT_THROW(tpl.process(), RunTimeError);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_THROW(library.process(), std::runtime_error);
+        EXPECT_THROW(library.process(), RunTimeError);
     }
 }
 
@@ -591,12 +591,12 @@ TEST(RunTime, ZeroDivisionLeaky)
     Data data;
     data.assign("list", VariantValue({0,1,2,3,4}));
 
-    EXPECT_THROW(tpl.process(data), std::runtime_error);
+    EXPECT_THROW(tpl.process(data), RunTimeError);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
-        EXPECT_THROW(library.process(data), std::runtime_error);
+        EXPECT_THROW(library.process(data), RunTimeError);
     }
 }
 

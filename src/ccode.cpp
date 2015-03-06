@@ -424,7 +424,7 @@ void CCode::divide(const Expression *left, const Expression *right)
 
     // compare it to 0 using an inline if statement. If this is true we will call throw_exception
     // which will throw a C++ exception out of everything
-    _out << ") == 0 ? callbacks->throw_exception(userdata) : (";
+    _out << ") == 0 ? callbacks->throw_exception(userdata, \"Zero division error\") : (";
 
     // but if we are false we'll need the original value of course, so we print that expression yet again
     // this seems inefficient, although it probably doesn't mattter as C compiler are 'smart' ;)

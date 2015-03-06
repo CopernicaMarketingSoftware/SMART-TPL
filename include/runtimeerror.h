@@ -27,8 +27,9 @@ public:
      *
      *  @param  error        The error message
      */
-    RunTimeError(const std::string &error = "Runtime error")
-        : std::runtime_error(error) {};
+    RunTimeError(const std::string &error)
+        : std::runtime_error("RunTimeError: " + error) {};
+    RunTimeError() : std::runtime_error("RunTimeError") {};
 
     /**
      *  Destructor

@@ -49,5 +49,5 @@ struct smart_tpl_callbacks {
     const void *(*params_append_string) (void *userdata, const void *parameters, const char *buf, size_t len);
     const void *(*params_append_boolean)(void *userdata, const void *parameters, int boolean);
     void        (*mark_failed)          (void *userdata);
-    int         (*throw_exception)      (void *userdata);
+    int         (*throw_exception)      (void *userdata, const char *message);
 };

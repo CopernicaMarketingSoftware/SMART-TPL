@@ -619,9 +619,9 @@ void smart_tpl_mark_failed(void *userdata)
  *  we can include it inside if statements etc
  *  @param  userdata        Pointer to user-supplied data
  */
-int smart_tpl_throw_exception(void* userdata)
+int smart_tpl_throw_exception(void* userdata, const char *error)
 {
-    throw std::runtime_error("A runtime error occured :(");
+    throw RunTimeError(error);
 }
 
 /**
