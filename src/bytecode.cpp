@@ -21,8 +21,8 @@ jit_type_t Bytecode::_function_signature = jit_function::signature_helper(jit_ty
 
 /**
  *  Constructor
- *  @param  source The source that holds the template
- *  @throws std::runtime_error If something went wrong while compiling the jit code
+ *  @param  source       The source that holds the template
+ *  @throws CompileError If something went wrong while compiling the jit code
  */
 Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
     _function(_context, _function_signature),
@@ -834,7 +834,7 @@ void Bytecode::parameters(const Parameters *parameters)
             _callbacks.params_append_double(_userdata, params, doubleExpression(param.get()));
             break;
         default:
-            throw RunTimeError("Unknown typed values are currently unsupported");
+            throw CompileError("Unknown typed values are currently unsupported");
         }
     }
 
@@ -966,7 +966,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
             _callbacks.assign(_userdata, key_str, key_size, pointer(variable));
             break;
         }
-        throw RunTimeError("Unsupported assign");
+        throw CompileError("Unsupported assign");
     }
     case Expression::Type::Double:
         // Convert to a floating point and use the assign_double callback

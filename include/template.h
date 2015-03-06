@@ -52,7 +52,7 @@ public:
      *  Constructor
      *  @param  source             Source of your template
      *
-     *  @throws std::runtime_error In case JIT compilation failed, the what() will describe what and where it went wrong
+     *  @throws CompileError       In case JIT compilation failed, the what() will describe what and where it went wrong
      */
     Template(const Source &source);
 
