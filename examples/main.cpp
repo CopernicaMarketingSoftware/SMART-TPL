@@ -26,11 +26,13 @@ int main(int argc, const char *argv[])
         SmartTpl::Data data;
 
         // assign variables
-        Variant::Value map;
+        std::map<std::string, SmartTpl::VariantValue> map;
         map["member"] = "Test";
         map["anothermember"] = "Testing 1 2 3..";
+        SmartTpl::MapValue mapValue(map);
+
         SmartTpl::DateValue date("%A %d %B %Y %T");
-        data.assign("variable", map)
+        data.assignValue("variable", &mapValue)
             .callback("name", []() { return "naam"; })
             .assignValue("date", &date)
             .assign("x", "Mr. x");
