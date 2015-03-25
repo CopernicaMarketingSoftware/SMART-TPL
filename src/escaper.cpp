@@ -23,9 +23,10 @@ static std::map<std::string, Escaper*> _escapers;
  *  Constructor, the escaper will automatically register itself in _escapers
  *  @param  name     The human readable name it should use to register itself
  */
-Escaper::Escaper(const std::string &name)
+Escaper::Escaper(const char *name)
 {
-    _escapers[name] = this;
+    // only register if we have a valid name, this way escapers can prevent to be registered
+    if (name) _escapers[name] = this;
 }
 
 /**

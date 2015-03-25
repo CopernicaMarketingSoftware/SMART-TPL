@@ -6,6 +6,10 @@
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 Copernica BV
  */
+
+/**
+ *  Dependencies
+ */
 #include "includes.h"
 
 /**
@@ -71,14 +75,18 @@ Data::Data()
               {"substr",           &substr},
               {"strstr",           &strstr},
               {"urlencode",        &urlencode},
-              {"urldecode",        &urldecode},
-              {"md5",              &md5},
-              {"sha1",             &sha1},
-              {"sha256",           &sha256},
-              {"sha512",           &sha512},
-              {"base64_encode",    &base64_encode},
-              {"base64_decode",    &base64_decode}}) // register built-in modifiers
+              {"urldecode",        &urldecode}}) // register built-in modifiers
 {
+    // in case the openssl library is valid we are loading all the modifiers that use it
+    if (Internal::OpenSSL::instance())
+    {
+        _modifiers.insert({{"md5",              &md5},
+                           {"sha1",             &sha1},
+                           {"sha256",           &sha256},
+                           {"sha512",           &sha512},
+                           {"base64_encode",    &base64_encode},
+                           {"base64_decode",    &base64_decode}});
+    }
 }
 
 /**

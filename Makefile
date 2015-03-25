@@ -67,7 +67,7 @@ COMPILER_FLAGS        = -Wall -c -I. -O2 -pipe -std=c++11 -Wno-sign-compare -Wno
 SHARED_COMPILER_FLAGS = -fPIC
 STATIC_COMPILER_FLAGS =
 LINKER_FLAGS          = -L.
-DEPENDENCIES          = -ljitplus -ljit -ldl -lssl -lcrypto -lboost_regex
+DEPENDENCIES          = -ljitplus -ljit -ldl -lboost_regex
 FLEX_FLAGS            =
 LEMON_FLAGS           =
 
