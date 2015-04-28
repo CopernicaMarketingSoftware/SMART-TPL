@@ -6,6 +6,20 @@ into native code.  Although Smarty is a PHP library, the SmartTpl project is _no
 limited to PHP. SmartTpl is a pure C++ library to work with templates.
 For help with install SMART-TPL please head over to [INSTALL.md](https://github.com/CopernicaMarketingSoftware/SMART-TPL/blob/master/INSTALL.md)
 
+ABOUT
+=====
+
+SMART-TPL library is created and maintained by Copernica (www.copernica.com). 
+Do you appreciate our work and are you looking for other high quality solutions? 
+
+Then check out our other solutions:
+
+* PHP-CPP (www.php-cpp.com)
+* PHP-JS (www.php-js.com)
+* Copernica Marketing Suite (www.copernica.com)
+* MailerQ MTA (www.mailerq.com)
+* Responsive Email web service (www.responsiveemail.com)
+
 What does it do?
 ----------------
 
