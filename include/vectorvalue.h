@@ -131,8 +131,6 @@ public:
      *  Regular emplace and emplace_back methods to later on expand your vector
      */
     template<typename ...Args>
-    void emplace(Args&&... args) { _value.emplace(std::forward<Args>(args)...); }
-    template<typename ...Args>
     void emplace_back(Args&&... args) { _value.emplace_back(std::forward<Args>(args)...); }
 };
 
