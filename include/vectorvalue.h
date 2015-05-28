@@ -27,6 +27,7 @@ public:
     /**
      *  Constructors
      */
+    VectorValue() : _value() {};
     VectorValue(const std::vector<VariantValue>& value) : _value(value) {};
     VectorValue(std::vector<VariantValue>&& value) : _value(std::move(value)) {};
     VectorValue(const std::initializer_list<VariantValue>& value) : _value(value) {};

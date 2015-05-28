@@ -27,6 +27,7 @@ public:
     /**
      *  Constructors
      */
+    MapValue() : _value() {};
     MapValue(const std::map<std::string, VariantValue>& value) : _value(value) {};
     MapValue(std::map<std::string, VariantValue>&& value) : _value(std::move(value)) {};
     MapValue(const std::initializer_list<std::map<std::string, VariantValue>::value_type>& value) : _value(value) {};
