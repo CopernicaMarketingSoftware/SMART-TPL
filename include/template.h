@@ -86,6 +86,13 @@ public:
     Template& operator=(const Template &that) = delete;
 
     /**
+     *  Is this template dependent on data to be personalised?
+     *
+     *  @return Whether the template uses personalisationd ata
+     */
+    bool personalized() const;
+
+    /**
      *  Get the template representation in C that can be compiled into a shared
      *  object. This method only works for templates that were not already a
      *  shared library.

@@ -36,6 +36,12 @@ private:
     ShowTemplate *_function;
 
     /**
+     *  Do we depend on personalization data?
+     *  @var    bool
+     */
+    bool _personalized;
+
+    /**
      *  The 'mode' function
      */
     const char *_mode;
@@ -58,6 +64,14 @@ public:
 
         // function should exist
         if (!_function) throw std::runtime_error(dlerror());
+
+        // find the personalized symbol
+        int *personalized = static_cast<int*>(dlsym(_handle, "personalized"));
+
+        // it could not exist (when opening older templates), in which
+        // case we assume it to be dependent on personalization data
+        if (!personalized) _personalized = true;
+        else _personalized = *personalized;
 
         // find the mode symbol
         const char **mode_ptr = (const char **) dlsym(_handle, "mode");
@@ -83,6 +97,16 @@ public:
      *  @param  data
      */
     void process(Handler &handler) override;
+
+    /**
+     *  Does the template use personalisation data?
+     *
+     *  @return Whether the template uses any personalisation data
+     */
+    bool personalized() const override
+    {
+        return _personalized;
+    }
 
     /**
      *  Compile the template into C code

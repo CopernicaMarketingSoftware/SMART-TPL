@@ -124,7 +124,7 @@ void Bytecode::raw(const std::string &data)
 }
 
 /**
- *  Construct a poiner to a variable
+ *  Construct a pointer to a variable
  *  @param  variable
  *  @return jit_value
  */

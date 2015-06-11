@@ -291,6 +291,17 @@ public:
     void process(Handler &handler) override;
 
     /**
+     *  Does the template use personalisation data?
+     *
+     *  @return Whether the template uses any personalisation data
+     */
+    bool personalized() const override
+    {
+        // ask the tree whether it is personalized
+        return _tree.personalized();
+    }
+
+    /**
      *  Compile the template into C code
      *  @return std::string
      */

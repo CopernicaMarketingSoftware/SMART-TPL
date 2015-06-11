@@ -33,6 +33,12 @@ private:
      */
     void *_resource;
 
+    /**
+     *  Is the template we are parsing in any way personalized?
+     *  @var    bool
+     */
+    bool _personalized = false;
+
 protected:
     /**
      *  A set of statements that make up the template
@@ -102,6 +108,24 @@ public:
 
             _error.push_back(']');
         }
+    }
+
+    /**
+     *  This template uses personalisation data
+     */
+    void setPersonalized()
+    {
+        _personalized = true;
+    }
+
+    /**
+     *  Get whether we're personalized
+     *
+     *  @return boolean
+     */
+    bool personalized() const
+    {
+        return _personalized;
     }
 
     /**

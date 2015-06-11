@@ -49,6 +49,17 @@ public:
      */
     virtual std::string encoding() = 0;
 
+    /**
+     *  Does the template use personalisation data?
+     *
+     *  @return Whether the template uses any personalisation data
+     */
+    virtual bool personalized() const
+    {
+        // we assume it does
+        return true;
+    }
+
 };
 
 /**

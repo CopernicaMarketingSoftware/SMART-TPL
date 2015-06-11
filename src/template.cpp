@@ -41,7 +41,17 @@ Template::Template(const Source& source)
 Template::~Template()
 {
     // we no longer need the executor
-    if (_executor) delete _executor;
+    delete _executor;
+}
+
+/**
+ *  Is this template dependent on data to be personalised?
+ *
+ *  @return Whether the template uses personalisationd ata
+ */
+bool Template::personalized() const
+{
+    return _executor->personalized();
 }
 
 /**

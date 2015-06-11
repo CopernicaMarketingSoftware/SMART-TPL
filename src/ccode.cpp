@@ -31,6 +31,9 @@ CCode::CCode(const SyntaxTree &tree)
     // end of the function
     _out << '}' << std::endl;
 
+    // the function to check whether a template uses personalization data
+    _out << "int personalized = " << (tree.personalized() ? "1" : "0") << ";" << std::endl;
+
     // Write a second function that returns what mode we are in
     _out << "const char *mode = ";
 
