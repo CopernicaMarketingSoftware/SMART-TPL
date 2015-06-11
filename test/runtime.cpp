@@ -21,6 +21,8 @@ TEST(RunTime, ForEach)
     string input("{foreach $item in $list}item: {$item}\n{/foreach}");
     Template tpl((Buffer(input)));
 
+    EXPECT_TRUE(tpl.personalized());
+
     std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
 
@@ -33,6 +35,7 @@ TEST(RunTime, ForEach)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
@@ -41,6 +44,8 @@ TEST(RunTime, ForEachWithKeys)
 {
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{/foreach}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     std::map<std::string, VariantValue> map;
     map["1"] = 1;
@@ -57,6 +62,7 @@ TEST(RunTime, ForEachWithKeys)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
@@ -65,6 +71,8 @@ TEST(RunTime, ForEachElse)
 {
     string input("{foreach $item in $list}item: {$item}\n{foreachelse}else{/foreach}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
@@ -82,6 +90,7 @@ TEST(RunTime, ForEachElse)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ("else", library.process(data1));
     }
@@ -91,6 +100,8 @@ TEST(RunTime, ForEachWithKeysElse)
 {
     string input("{foreach $map as $key => $value}key: {$key}\nvalue: {$value}{foreachelse}else{/foreach}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     std::map<std::string, VariantValue> map({{"1", 1},{"2", 2},{"3", 3}, {"4", 4}, {"5", 5}});
     Data data;
@@ -106,6 +117,7 @@ TEST(RunTime, ForEachWithKeysElse)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ("else", library.process(data1));
     }
@@ -116,12 +128,15 @@ TEST(RunTime, If)
     string input("{if true}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("true");
     EXPECT_EQ(tpl.process(), expectedOutput);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
@@ -130,6 +145,8 @@ TEST(RunTime, IfElse)
 {
     string input("{if $var}true{elseif $var1}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data1;
     data1.assign("var", true);
@@ -142,6 +159,7 @@ TEST(RunTime, IfElse)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ("", library.process());
         EXPECT_EQ("true", library.process(data1));
         EXPECT_EQ("false", library.process(data2));
@@ -153,12 +171,15 @@ TEST(RunTime, StringComparisonEquals)
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("false");
     EXPECT_EQ(tpl.process(), expectedOutput);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
@@ -168,12 +189,15 @@ TEST(RunTime, StringComparisonNotEquals)
     string input("{if \"str\'ing1\" != \'stri\"ng2\'}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("true");
     EXPECT_EQ(tpl.process(), expectedOutput);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
@@ -183,12 +207,15 @@ TEST(RunTime, NumericComparison)
     string input("{if 1 == 1}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("true");
     EXPECT_EQ(tpl.process(), expectedOutput);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
@@ -198,12 +225,15 @@ TEST(RunTime, BooleanComparison)
     string input("{if true == true}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("true");
     EXPECT_EQ(tpl.process(), expectedOutput);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
@@ -213,12 +243,15 @@ TEST(RunTime, Assigning)
     string input("{$var}-{$var=1}-{$var}");
     Template tpl((Buffer(input)));
 
+    EXPECT_TRUE(tpl.personalized());
+
     string expectedOutput("--1");
     EXPECT_EQ(tpl.process(), expectedOutput);
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(library.process(), expectedOutput);
     }
 }
@@ -227,6 +260,8 @@ TEST(RunTime, AssigningInForEach)
 {
     string input("{foreach $item in $list}{$output=$item}{/foreach}{$output}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
@@ -240,6 +275,7 @@ TEST(RunTime, AssigningInForEach)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(library.process(data), expectedOutput);
     }
 }
@@ -248,6 +284,8 @@ TEST(RunTime, ArrayAccess)
 {
     string input("{$list[3]}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     std::vector<VariantValue> list;
     for (int i = 0; i < 5; ++i) list.push_back(i);
@@ -261,6 +299,7 @@ TEST(RunTime, ArrayAccess)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(library.process(data), expectedOutput);
     }
 }
@@ -269,6 +308,8 @@ TEST(RunTime, KeyArrayAccess)
 {
     string input("{$map[\"key\"]}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     std::map<std::string, VariantValue> map({{"key", "test"}});
     Data data;
@@ -280,6 +321,7 @@ TEST(RunTime, KeyArrayAccess)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(library.process(data), expectedOutput);
     }
 }
@@ -288,6 +330,8 @@ TEST(RunTime, CompareVarConstantNumeric)
 {
     string input("{if $var == 1}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data1;
     data1.assign("var", 1);
@@ -301,6 +345,7 @@ TEST(RunTime, CompareVarConstantNumeric)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ("true", library.process(data1));
         EXPECT_EQ("false", library.process(data2));
     }
@@ -310,6 +355,8 @@ TEST(RunTime, CompareVarConstantBoolean)
 {
     string input("{if $var == true}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data1;
     data1.assign("var", true);
@@ -323,6 +370,7 @@ TEST(RunTime, CompareVarConstantBoolean)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ("true", library.process(data1));
         EXPECT_EQ("false", library.process(data2));
     }
@@ -332,6 +380,8 @@ TEST(RunTime, CompareVarConstantString)
 {
     string input("{if $var == \"string\"}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data1;
     data1.assign("var", "string");
@@ -345,6 +395,7 @@ TEST(RunTime, CompareVarConstantString)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ("true", library.process(data1));
         EXPECT_EQ("false", library.process(data2));
     }
@@ -354,6 +405,8 @@ TEST(RunTime, CompareVarVar)
 {
     string input("{if $var1 == $var2}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data1;
     data1.assign("var1", "string")
@@ -369,6 +422,7 @@ TEST(RunTime, CompareVarVar)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ("true", library.process(data1));
         EXPECT_EQ("false", library.process(data2));
     }
@@ -379,6 +433,8 @@ TEST(RunTime, Int64)
     string input("{if $int64 > 2147483647}true{else}false{/if}");
     Template tpl((Buffer(input)));
 
+    EXPECT_TRUE(tpl.personalized());
+
     Data data;
     data.assign("int64", 922337203685477580);
 
@@ -387,6 +443,7 @@ TEST(RunTime, Int64)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ("true", library.process(data));
     }
 }
@@ -396,12 +453,15 @@ TEST(RunTime, OutputMath)
     string input("-1+3-2*10={-1+3-2*10}\n(1+3-2)*10={(1+3-2)*10}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("-1+3-2*10=-18\n(1+3-2)*10=20");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process());
     }
 }
@@ -411,12 +471,15 @@ TEST(RunTime, MathTextPlusText)
     string input("{\"10\" + \"text\"}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("10");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process());
     }
 }
@@ -425,6 +488,8 @@ TEST(RunTime, OutputMathVariables)
 {
     string input("10*var={10*$var}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("var", 200);
@@ -439,6 +504,7 @@ TEST(RunTime, OutputMathVariables)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
@@ -448,6 +514,8 @@ TEST(RunTime, OutputMathOnlyVariables)
 {
     string input("var*var={$var*$var}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("var", 200);
@@ -462,6 +530,7 @@ TEST(RunTime, OutputMathOnlyVariables)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
@@ -472,12 +541,15 @@ TEST(RunTime, Modulo)
     string input("1+3*10%5={1+3*10%5}");
     Template tpl((Buffer(input)));
 
+    EXPECT_FALSE(tpl.personalized());
+
     string expectedOutput("1+3*10%5=1");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_FALSE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process());
     }
 }
@@ -486,6 +558,8 @@ TEST(RunTime, AssignMath)
 {
     string input("{assign $var*11 to $test}{$test}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("var", 456);
@@ -496,6 +570,7 @@ TEST(RunTime, AssignMath)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
@@ -504,6 +579,8 @@ TEST(RunTime, MathIf)
 {
     string input("{if $var%3 == 1}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("var", 10);
@@ -518,6 +595,7 @@ TEST(RunTime, MathIf)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
@@ -527,6 +605,8 @@ TEST(RunTime, DoubleVariableComparison)
 {
     string input("{if $double > 3}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("double", 3.14);
@@ -542,6 +622,7 @@ TEST(RunTime, DoubleVariableComparison)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
@@ -552,12 +633,15 @@ TEST(RunTime, AssignDouble)
     string input("{assign 1.5e17 to $test}{$test}");
     Template tpl((Buffer(input)));
 
+    EXPECT_TRUE(tpl.personalized());
+
     string expectedOutput("150000000000000000.000000");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process());
     }
 }
@@ -588,6 +672,8 @@ TEST(RunTime, ZeroDivisionLeaky)
     string input("{foreach $key in $list}{1/0}{/foreach}");
     Template tpl((Buffer(input)));
 
+    EXPECT_TRUE(tpl.personalized());
+
     Data data;
     data.assign("list", VariantValue({0,1,2,3,4}));
 
@@ -596,6 +682,7 @@ TEST(RunTime, ZeroDivisionLeaky)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_THROW(library.process(data), RunTimeError);
     }
 }
@@ -609,6 +696,8 @@ TEST(RunTime, IfWithModifierToBoolean)
 {
     string input("{if $key|empty}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("key", "Not empty");
@@ -624,6 +713,7 @@ TEST(RunTime, IfWithModifierToBoolean)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
@@ -633,6 +723,8 @@ TEST(RunTime, IfWithModifierNumberComparison)
 {
     string input("{if $key|count > 5}true{else}false{/if}");
     Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
 
     Data data;
     data.assign("key", VariantValue({1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
@@ -648,6 +740,7 @@ TEST(RunTime, IfWithModifierNumberComparison)
     if (compile(tpl)) // This will compile the Template into a shared library
     {
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
         EXPECT_EQ(expectedOutput, library.process(data));
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
