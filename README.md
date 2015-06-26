@@ -4,7 +4,7 @@ SMART-TPL
 Experimental library to see if it is somehow possible to compile Smarty templates 
 into native code.  Although Smarty is a PHP library, the SmartTpl project is _not_ 
 limited to PHP. SmartTpl is a pure C++ library to work with templates.
-For help with install SMART-TPL please head over to [INSTALL.md](https://github.com/CopernicaMarketingSoftware/SMART-TPL/blob/master/INSTALL.md)
+For help installing SMART-TPL please head over to [INSTALL.md](https://github.com/CopernicaMarketingSoftware/SMART-TPL/blob/master/INSTALL.md)
 
 ABOUT
 =====
