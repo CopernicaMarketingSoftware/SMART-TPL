@@ -33,6 +33,11 @@ private:
      */
     const std::vector<VariantValue>::const_iterator _end;
 
+    /**
+     *  A simple counter so we can at least return some kind of key
+     */
+    numeric_t _count;
+
 public:
     /**
      *  Constructor
@@ -40,7 +45,8 @@ public:
     VectorIterator(const std::vector<VariantValue> &value)
     : _vector(value),
       _iter(_vector.begin()),
-      _end(_vector.end())
+      _end(_vector.end()),
+      _count(0)
     {}
 
     /**
@@ -63,6 +69,7 @@ public:
     void next() override
     {
         ++_iter;
+        ++_count;
     }
 
     /**
@@ -80,7 +87,7 @@ public:
      */
     VariantValue key() const override
     {
-        return nullptr;
+        return _count;
     }
 };
 
