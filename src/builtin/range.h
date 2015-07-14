@@ -34,6 +34,12 @@ public:
         // if there are no parameters we're not touching the input
         if (params.size() == 0) return input;
 
+        // try to retrieve the raw iterator
+        auto rawIter = input.iterator();
+
+        // if there's no raw iterator we just return the original input
+        if (!rawIter) return input;
+
         // get our limits
         numeric_t begin = 0;
         numeric_t end = 0;
@@ -54,7 +60,7 @@ public:
         numeric_t current = 1;
 
         // loop over all our values
-        for (std::unique_ptr<Iterator> iter(input.iterator()); iter->valid(); iter->next(), ++current)
+        for (std::unique_ptr<Iterator> iter(rawIter); iter->valid(); iter->next(), ++current)
         {
             // if we're before our start we just continue
             if (begin > current) continue;
