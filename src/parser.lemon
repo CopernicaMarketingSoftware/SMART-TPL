@@ -100,7 +100,6 @@ boolexpr(A)         ::= outexpr(B) LE outexpr(C) .                              
 boolexpr(A)         ::= boolexpr(B) AND boolexpr(C) .                           { A = new SmartTpl::Internal::BinaryAndOperator(B, C); }
 boolexpr(A)         ::= boolexpr(B) OR boolexpr(C) .                            { A = new SmartTpl::Internal::BinaryOrOperator(B, C); }
 outexpr(A)          ::= expr(B) .                                               { A = B; }
-outexpr(A)          ::= variable(B) PIPE modifiers(C) .                         { A = new SmartTpl::Internal::Filter(B, C); }
 expr(A)             ::= variable(B) .                                           { A = B; }
 expr(A)             ::= LPAREN expr(B) RPAREN .                                 { A = B; }
 expr(A)             ::= expr(B) PLUS expr(C) .                                  { A = new SmartTpl::Internal::BinaryPlusOperator(B, C); }
@@ -119,9 +118,10 @@ literal(A)          ::= STRING(B) .                                             
 variable(A)         ::= VARIABLE(B) .                                           { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralVariable(B); }
 variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { parent->setPersonalized(); A = new SmartTpl::Internal::VariableArrayAccess(B,C); }
 variable(A)         ::= variable(B) DOT IDENTIFIER(C) .                         { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralArrayAccess(B,C); }
+variable(A)         ::= variable(B) PIPE modifiers(C) .                         { A = new SmartTpl::Internal::Filter(B, C); }
 modifiers(A)        ::= modifiers(B) PIPE modifier(C) .                         { A = B; A->add(C); }
 modifiers(A)        ::= modifier(B) .                                           { A = new SmartTpl::Internal::Modifiers(B); }
 modifier(A)         ::= IDENTIFIER(B) COLON parameters(C) .                     { A = new SmartTpl::Internal::ModifierExpression(B, C); }
 modifier(A)         ::= IDENTIFIER(B) .                                         { A = new SmartTpl::Internal::ModifierExpression(B); }
-parameters(A)       ::= parameters(B) COLON expr(C) .                           { A = B; A->add(C); }
-parameters(A)       ::= expr(B) .                                               { A = new SmartTpl::Internal::Parameters(B); }
+parameters(A)       ::= parameters(B) COLON literal(C) .                           { A = B; A->add(C); }
+parameters(A)       ::= literal(B) .                                               { A = new SmartTpl::Internal::Parameters(B); }

@@ -583,3 +583,27 @@ TEST(Modifier, Base64Decoding)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, HeadList)
+{
+    string input("{foreach $key in $var|range:5}{$key},{/foreach}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+
+    string expectedOutput("1,2,3,4,5,");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}
+
+TEST(Modifier, TailList)
+{
+    string input("{foreach $key in $var|range:6:5}{$key},{/foreach}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+
+    string expectedOutput("6,7,8,9,10,");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+}

@@ -46,6 +46,7 @@ static Internal::Sha256Modifier          sha256;
 static Internal::Sha512Modifier          sha512;
 static Internal::Base64EncodeModifier    base64_encode;
 static Internal::Base64DecodeModifier    base64_decode;
+static Internal::RangeModifier           range_modifier;
 
 /**
  *  Constructor
@@ -75,7 +76,8 @@ Data::Data()
               {"substr",           &substr},
               {"strstr",           &strstr},
               {"urlencode",        &urlencode},
-              {"urldecode",        &urldecode}}) // register built-in modifiers
+              {"urldecode",        &urldecode},
+              {"range",            &range_modifier}}) // register built-in modifiers
 {
     // in case the openssl library is valid we are loading all the modifiers that use it
     if (Internal::OpenSSL::instance())
