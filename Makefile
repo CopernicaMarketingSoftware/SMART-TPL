@@ -30,7 +30,7 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 #
 
 SONAME					=	0.10
-VERSION					=	0.10
+VERSION					=	0.10.0
 
 #
 #   Name of the target library and target program
@@ -41,8 +41,8 @@ VERSION					=	0.10
 #   named 'smarttpl'
 #
 
-SHARED_LIBRARY  =   libsmarttpl.so.${VERSION}
-STATIC_LIBRARY  =   libsmarttpl.a.${VERSION}
+SHARED_LIBRARY  =   libsmarttpl.so
+STATIC_LIBRARY  =   libsmarttpl.a
 PROGRAM         =   smarttpl
 
 #
@@ -177,10 +177,12 @@ install:
 	${MKDIR} ${INSTALL_HEADERS}/smarttpl
 	${CP} smarttpl.h ${INSTALL_HEADERS}
 	${CP} include/*.h ${INSTALL_HEADERS}/smarttpl
-	${CP} ${SHARED_LIBRARY} ${INSTALL_LIB}
-	${LN} ${INSTALL_LIB}/${SHARED_LIBRARY} ${INSTALL_LIB}/libsmarttpl.so
-	${CP} ${STATIC_LIBRARY} ${INSTALL_LIB}
-	${LN} ${INSTALL_LIB}/${STATIC_LIBRARY} ${INSTALL_LIB}/libsmarttpl.sa
+	${CP} ${SHARED_LIBRARY} ${INSTALL_LIB}/${SHARED_LIBRARY}.${VERSION}
+	${LN} ${INSTALL_LIB}/${SHARED_LIBRARY}.${VERSION} ${INSTALL_LIB}/${SHARED_LIBRARY}.${SONAME}
+	${LN} ${INSTALL_LIB}/${SHARED_LIBRARY}.${VERSION} ${INSTALL_LIB}/${SHARED_LIBRARY}
+	${CP} ${STATIC_LIBRARY} ${INSTALL_LIB}/${STATIC_LIBRARY}.${VERSION}
+	${LN} ${INSTALL_LIB}/${STATIC_LIBRARY}.${VERSION} ${INSTALL_LIB}/${STATIC_LIBRARY}.${SONAME}
+	${LN} ${INSTALL_LIB}/${STATIC_LIBRARY}.${VERSION} ${INSTALL_LIB}/${STATIC_LIBRARY}
 	${CP} ${PROGRAM} ${INSTALL_BIN}
 	if `which ldconfig`; then \
 		ldconfig; \
