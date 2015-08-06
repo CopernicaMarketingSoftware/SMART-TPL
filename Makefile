@@ -23,6 +23,16 @@ INSTALL_LIB     =   ${INSTALL_PREFIX}/lib
 INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 
 #
+#   SONAME and version
+#
+#   When ABI changes, soname and minor version of the library should be raised.
+#   Otherwise only release verions changes. (version is MAJOR.MINOR.RELEASE)
+#
+
+SONAME					=	0.10
+VERSION					=	0.10
+
+#
 #   Name of the target library and target program
 #
 #   The SMART-TPL library will be installed on your system as libsmarttpl.so.
@@ -31,8 +41,8 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 #   named 'smarttpl'
 #
 
-SHARED_LIBRARY  =   libsmarttpl.so
-STATIC_LIBRARY  =   libsmarttpl.a
+SHARED_LIBRARY  =   libsmarttpl.so.${VERSION}
+STATIC_LIBRARY  =   libsmarttpl.a.${VERSION}
 PROGRAM         =   smarttpl
 
 #
@@ -82,6 +92,7 @@ RM              =   rm -f
 CP              =   cp -f
 MKDIR           =   mkdir -p
 MV              =   mv -f
+LN              =   ln -fs
 
 #
 #   The tokenizer output file
@@ -135,7 +146,7 @@ GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.
 all: ${SHARED_LIBRARY} ${STATIC_LIBRARY} ${PROGRAM}
 
 ${SHARED_LIBRARY}: ${PARSER} ${TOKENIZER} ${SHARED_LIBRARY_OBJECTS}
-	${LINKER} ${LINKER_FLAGS} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${DEPENDENCIES}
+	${LINKER} ${LINKER_FLAGS} -Wl,-soname,libsmarttpl.so.${SONAME} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${DEPENDENCIES}
 
 ${STATIC_LIBRARY}: ${PARSER} ${TOKENIZER} ${STATIC_LIBRARY_OBJECTS}
 	${ARCHIVER} ${STATIC_LIBRARY} ${STATIC_LIBRARY_OBJECTS}
@@ -167,5 +178,10 @@ install:
 	${CP} smarttpl.h ${INSTALL_HEADERS}
 	${CP} include/*.h ${INSTALL_HEADERS}/smarttpl
 	${CP} ${SHARED_LIBRARY} ${INSTALL_LIB}
+	${LN} ${INSTALL_LIB}/${SHARED_LIBRARY} ${INSTALL_LIB}/libsmarttpl.so
 	${CP} ${STATIC_LIBRARY} ${INSTALL_LIB}
+	${LN} ${INSTALL_LIB}/${STATIC_LIBRARY} ${INSTALL_LIB}/libsmarttpl.sa
 	${CP} ${PROGRAM} ${INSTALL_BIN}
+	if `which ldconfig`; then \
+		ldconfig; \
+	fi
