@@ -166,6 +166,32 @@ TEST(RunTime, IfElse)
     }
 }
 
+TEST(RunTime, IfNot)
+{
+    string input("{if not $var}not true{else}not false{/if}");
+    Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
+
+    Data data1;
+    data1.assign("var", true);
+    Data data2;
+    data2.assign("var", false);
+    EXPECT_EQ("not true", tpl.process());
+    EXPECT_EQ("not false", tpl.process(data1));
+    EXPECT_EQ("not true", tpl.process(data2));
+}
+
+TEST(RunTime, IfNotTrue)
+{
+    string input("{if not true}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    EXPECT_FALSE(tpl.personalized());
+
+    EXPECT_EQ("false", tpl.process());
+}
+
 TEST(RunTime, StringComparisonEquals)
 {
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");

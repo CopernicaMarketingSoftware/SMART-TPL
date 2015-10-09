@@ -97,6 +97,7 @@ boolexpr(A)         ::= outexpr(B) GT outexpr(C) .                              
 boolexpr(A)         ::= outexpr(B) GE outexpr(C) .                              { A = new SmartTpl::Internal::BinaryGreaterEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) LT outexpr(C) .                              { A = new SmartTpl::Internal::BinaryLesserOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) LE outexpr(C) .                              { A = new SmartTpl::Internal::BinaryLesserEqualsOperator(B, C); }
+boolexpr(A)         ::= NOT expr(B) .                                           { A = new SmartTpl::Internal::BooleanInverter(B); }
 boolexpr(A)         ::= boolexpr(B) AND boolexpr(C) .                           { A = new SmartTpl::Internal::BinaryAndOperator(B, C); }
 boolexpr(A)         ::= boolexpr(B) OR boolexpr(C) .                            { A = new SmartTpl::Internal::BinaryOrOperator(B, C); }
 outexpr(A)          ::= expr(B) .                                               { A = B; }

@@ -87,6 +87,13 @@ TEST(Syntax, WithoutElse)
     compile(tpl);
 }
 
+TEST(Syntax, IfNotTrue)
+{
+    string input("{if not true}false{else}true{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
 TEST(Syntax, ForEach)
 {
     string input("{foreach $var in $map}loop{/foreach}");

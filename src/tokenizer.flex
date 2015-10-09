@@ -155,6 +155,8 @@
     "ge"                        { return TOKEN_GE; }
     "<="                        { return TOKEN_LE; }
     "le"                        { return TOKEN_LE; }
+    "not"                       { return TOKEN_NOT; }
+    "!"                         { return TOKEN_NOT; }
     "&&"                        { return TOKEN_AND; }
     "||"                        { return TOKEN_OR; }
     "|"                         { BEGIN(IDENTIFIER); return TOKEN_PIPE; }
