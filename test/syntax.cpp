@@ -94,6 +94,13 @@ TEST(Syntax, IfNotTrue)
     compile(tpl);
 }
 
+TEST(Syntax, IfNotVar)
+{
+    string input("{if !$var}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+    compile(tpl);
+}
+
 TEST(Syntax, ForEach)
 {
     string input("{foreach $var in $map}loop{/foreach}");
