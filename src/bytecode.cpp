@@ -425,6 +425,19 @@ void Bytecode::variable(const Variable* variable)
 }
 
 /**
+ *  Negate the boolean expression
+ *  @param  expression
+ */
+void Bytecode::negateBoolean(const Expression *expression)
+{
+    // turn the expression into a boolean
+    expression->boolean(this);
+
+    // pop the result, negate it and push it back to the stack
+    _stack.push(std::move(_function.insn_to_not_bool(pop())));
+}
+
+/**
  *  Arithmetric operation
  *  @param  left
  *  @param  right

@@ -192,6 +192,22 @@ TEST(RunTime, IfNotTrue)
     EXPECT_EQ("false", tpl.process());
 }
 
+TEST(RunTime, IfNotModifier)
+{
+    string input("{if not $var|empty}true{else}false{/if}");
+    Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
+
+    Data data1;
+    data1.assign("var", "");
+    Data data2;
+    data2.assign("var", "not-empty");
+
+    EXPECT_EQ("false", tpl.process(data1));
+    EXPECT_EQ("true", tpl.process(data2));
+}
+
 TEST(RunTime, StringComparisonEquals)
 {
     string input("{if \"string1\" == \"string2\"}true{else}false{/if}");

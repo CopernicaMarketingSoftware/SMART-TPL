@@ -153,7 +153,7 @@ TEST(CCode, IfNotTrue)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "if (0){\ncallbacks->write(userdata,\"false\",5);\n}else{\ncallbacks->write(userdata,\"true\",4);\n}\n}\n"
+    "if (!1){\ncallbacks->write(userdata,\"false\",5);\n}else{\ncallbacks->write(userdata,\"true\",4);\n}\n}\n"
     "int personalized = 0;\nconst char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());
 
@@ -167,7 +167,7 @@ TEST(CCode, IfNotVar)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "if (callbacks->to_boolean(userdata,callbacks->variable(userdata,\"var\",3))!=1){\n"
+    "if (!callbacks->to_boolean(userdata,callbacks->variable(userdata,\"var\",3))){\n"
     "callbacks->write(userdata,\"true\",4);\n}else{\ncallbacks->write(userdata,\"false\",5);\n}\n}\n"
     "int personalized = 1;\nconst char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());

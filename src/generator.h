@@ -109,6 +109,12 @@ public:
     virtual void variable(const Variable *variable) = 0;
 
     /**
+     *  Negate the boolean expression
+     *  @param  expression
+     */
+    virtual void negateBoolean(const Expression *expression) = 0;
+
+    /**
      *  Arithmetric operations
      *  @param  left
      *  @param  right

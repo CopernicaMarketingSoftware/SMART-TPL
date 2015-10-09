@@ -92,6 +92,12 @@ private:
     void variable(const Variable *variable) override;
 
     /**
+     *  Negate the boolean expression
+     *  @param  expression
+     */
+    virtual void negateBoolean(const Expression *expression) override;
+
+    /**
      *  Arithmetric operations
      *  @param  left
      *  @param  right

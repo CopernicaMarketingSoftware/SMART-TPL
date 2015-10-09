@@ -365,6 +365,19 @@ void CCode::variable(const Variable* variable)
 }
 
 /**
+ *  Negate the boolean expression
+ *  @param  expression
+ */
+void CCode::negateBoolean(const Expression *expression)
+{
+    // output a ! to negate the boolean
+    _out << "!";
+
+    // then actually start printing the boolean expression
+    expression->boolean(this);
+}
+
+/**
  *  Arithmetric operations
  *  @param  left
  *  @param  right
