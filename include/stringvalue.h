@@ -29,8 +29,7 @@ public:
      */
     StringValue(const char* value) : _value(value) {}
     StringValue(const char* value, size_t len) : _value(value, len) {};
-    StringValue(const std::string& value) : _value(value) {};
-    StringValue(std::string&& value) : _value(std::move(value)) {};
+    StringValue(std::string value) : _value(std::move(value)) {};
 
     /**
      *  Destructor
@@ -68,7 +67,10 @@ public:
      */
     bool toBoolean() const override
     {
-        return toNumeric();
+        // just like in php an empty string and a string containing "0" are false
+        if (_value.empty()) return false;
+        else if (_value == "0") return false;
+        else return true;
     };
 
     /**

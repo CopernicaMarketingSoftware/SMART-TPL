@@ -58,8 +58,8 @@ public:
      */
     void boolean(Generator *generator) const override
     {
-        // just redirect it to numeric(Generator*)
-        numeric(generator);
+        // call the numeric generator with wether we're empty or not
+        generator->numeric(!_value->empty());
     }
 
     /**

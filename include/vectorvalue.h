@@ -61,7 +61,7 @@ public:
      */
     bool toBoolean() const override
     {
-        return false;
+        return !_value.empty();
     };
 
     /**

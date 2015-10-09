@@ -36,8 +36,7 @@ public:
     VariantValue(double value);
     VariantValue(const char* value);
     VariantValue(const char* value, size_t len);
-    VariantValue(const std::string& value);
-    VariantValue(std::string&& value);
+    VariantValue(std::string value);
     VariantValue(const std::vector<VariantValue>& value);
     VariantValue(std::vector<VariantValue>&& value);
     VariantValue(const std::initializer_list<VariantValue>& value);
@@ -71,8 +70,7 @@ public:
     VariantValue& operator=(int64_t value);
     VariantValue& operator=(double value);
     VariantValue& operator=(const char* value);
-    VariantValue& operator=(const std::string& value);
-    VariantValue& operator=(std::string&& value);
+    VariantValue& operator=(std::string value);
     VariantValue& operator=(const std::vector<VariantValue>& value);
     VariantValue& operator=(std::vector<VariantValue>&& value);
     VariantValue& operator=(const std::initializer_list<VariantValue>& value);
