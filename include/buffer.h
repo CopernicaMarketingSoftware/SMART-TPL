@@ -45,6 +45,13 @@ public:
     /**
      *  Constructor
      *
+     *  @param  buffer      Pointer to the buffer
+     */
+    Buffer(const char *buffer) : _buffer(buffer) {}
+
+    /**
+     *  Constructor
+     *
      *  @param  buffer      Create buffer from a std::string
      */
     Buffer(const std::string &buffer) : _buffer(buffer) {}
