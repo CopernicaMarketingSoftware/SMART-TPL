@@ -27,7 +27,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Variable() {}
+    virtual ~Variable() = default;
 
     /**
      *  Generate the output that leaves a pointer to the variable

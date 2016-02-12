@@ -42,7 +42,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Expression() {}
+    virtual ~Expression() = default;
 
     /**
      *  The return type of the expression
