@@ -47,11 +47,23 @@ private:
             "libssl.so.1.0",
 
             // no symlink versions found, go look for a 1.0.2 version
+            "libssl.so.1.0.2h",
+            "libssl.so.1.0.2g",
+            "libssl.so.1.0.2f",
+            "libssl.so.1.0.2e",
+            "libssl.so.1.0.2d",
+            "libssl.so.1.0.2c",
             "libssl.so.1.0.2b",
             "libssl.so.1.0.2a",
             "libssl.so.1.0.2",
 
             // go look for a 1.0.1 version
+            "libssl.so.1.0.1t",
+            "libssl.so.1.0.1s",
+            "libssl.so.1.0.1r",
+            "libssl.so.1.0.1q",
+            "libssl.so.1.0.1p",
+            "libssl.so.1.0.1o",
             "libssl.so.1.0.1n",
             "libssl.so.1.0.1m",
             "libssl.so.1.0.1l",
@@ -64,33 +76,9 @@ private:
             "libssl.so.1.0.1e",
             "libssl.so.1.0.1",
 
-            // go look for a 1.0.0 version
-            "libssl.so.1.0.0s",
-            "libssl.so.1.0.0r",
-            "libssl.so.1.0.0q",
-            "libssl.so.1.0.0p",
-            "libssl.so.1.0.0o",
-            "libssl.so.1.0.0n",
-            "libssl.so.1.0.0m",
-            "libssl.so.1.0.0l",
-            "libssl.so.1.0.0",
+            // no working version found
+            nullptr
 
-            // try 0.9.8
-            "libssl.so.9.9.8zg",
-            "libssl.so.9.9.8zf",
-            "libssl.so.0.9.8ze",
-            "libssl.so.0.9.8zd",
-            "libssl.so.0.9.8zc",
-            "libssl.so.0.9.8zb",
-            "libssl.so.0.9.8",
-
-            // try 0.9.7 (this is really old stuff)
-            "libssl.so.0.9.7m",
-            "libssl.so.0.9.7l",
-            "libssl.so.0.9.7k",
-            "libssl.so.0.9.7j",
-            "libssl.so.0.9.7i",
-            "libssl.so.0.9.7"
         }),
         MD5(_lib, "MD5"),
         SHA1(_lib, "SHA1"),
