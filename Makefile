@@ -73,11 +73,11 @@ ARCHIVER        =   ar rcs
 #   production servers).
 #
 
-COMPILER_FLAGS        = -Wall -c -I. -O2 -pipe -std=c++11 -Wno-sign-compare -Wno-psabi
+COMPILER_FLAGS        = -Wall -c -I. -O2 -MD -pipe -std=c++11 -Wno-sign-compare -Wno-psabi
 SHARED_COMPILER_FLAGS = -fPIC
 STATIC_COMPILER_FLAGS =
 LINKER_FLAGS          = -L.
-DEPENDENCIES          = -ljitplus -ljit -ldl -lboost_regex
+LIBRARIES             = -ljitplus -ljit -ldl -lboost_regex
 FLEX_FLAGS            =
 LEMON_FLAGS           =
 
@@ -129,6 +129,12 @@ STATIC_LIBRARY_OBJECTS = $(sort $(LIBRARY_SOURCES:%.cpp=%.s.o))
 PROGRAM_OBJECTS        = $(sort $(PROGRAM_SOURCES:%.cpp=%.o))
 
 #
+#	Dependency (*.d) files
+#
+
+DEPENDENCIES = $(LIBRARY_SOURCES:%.cpp=%.d) $(PROGRAM_SOURCES:%.cpp=%.d)
+
+#
 #   Auto-generated files
 #
 #   Some of the source files are not part of the project, but are generated
@@ -145,8 +151,10 @@ GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.
 
 all: ${SHARED_LIBRARY} ${STATIC_LIBRARY} ${PROGRAM}
 
+-include ${DEPENDENCIES}
+
 ${SHARED_LIBRARY}: ${PARSER} ${TOKENIZER} ${SHARED_LIBRARY_OBJECTS}
-	${LINKER} ${LINKER_FLAGS} -Wl,-soname,libsmarttpl.so.${SONAME} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${DEPENDENCIES}
+	${LINKER} ${LINKER_FLAGS} -Wl,-soname,libsmarttpl.so.${SONAME} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${LIBRARIES}
 
 ${STATIC_LIBRARY}: ${PARSER} ${TOKENIZER} ${STATIC_LIBRARY_OBJECTS}
 	${ARCHIVER} ${STATIC_LIBRARY} ${STATIC_LIBRARY_OBJECTS}
