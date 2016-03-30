@@ -23,8 +23,8 @@ VariantValue::VariantValue(int16_t value) : _value(new NumericValue(value)) {}
 VariantValue::VariantValue(int32_t value) : _value(new NumericValue(value)) {}
 VariantValue::VariantValue(int64_t value) : _value(new NumericValue(value)) {}
 VariantValue::VariantValue(double value) : _value(new DoubleValue(value)) {}
-VariantValue::VariantValue(const char* value) : _value(new StringValue(value)) {}
-VariantValue::VariantValue(const char* value, size_t len) : _value(new StringValue(value, len)) {}
+VariantValue::VariantValue(const char* value) : _value(value ? (Value *)new StringValue(value) : (Value *)new NullValue()) {}
+VariantValue::VariantValue(const char* value, size_t len) : _value(value ? (Value *)new StringValue(value, len) : (Value *)new NullValue()) {}
 VariantValue::VariantValue(std::string value) : _value(new StringValue(std::move(value))) {}
 VariantValue::VariantValue(const std::vector<VariantValue>& value) : _value(new VectorValue(value)) {};
 VariantValue::VariantValue(std::vector<VariantValue>&& value) : _value(new VectorValue(std::move(value))) {};
@@ -42,7 +42,7 @@ VariantValue& VariantValue::operator=(int16_t value) { _value.reset(new NumericV
 VariantValue& VariantValue::operator=(int32_t value) { _value.reset(new NumericValue(value)); return *this; }
 VariantValue& VariantValue::operator=(int64_t value) { _value.reset(new NumericValue(value)); return *this; }
 VariantValue& VariantValue::operator=(double value) { _value.reset(new DoubleValue(value)); return *this; }
-VariantValue& VariantValue::operator=(const char* value) { _value.reset(new StringValue(value)); return *this; }
+VariantValue& VariantValue::operator=(const char* value) { _value.reset(value ? (Value *)new StringValue(value) : (Value *)new NullValue()); return *this; }
 VariantValue& VariantValue::operator=(std::string value) { _value.reset(new StringValue(std::move(value))); return *this; }
 VariantValue& VariantValue::operator=(const std::vector<VariantValue>& value) { _value.reset(new VectorValue(value)); return *this; }
 VariantValue& VariantValue::operator=(std::vector<VariantValue>&& value) { _value.reset(new VectorValue(std::move(value))); return *this; }
