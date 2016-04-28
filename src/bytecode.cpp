@@ -291,7 +291,7 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
 
     // call the native function to retrieve the member of a variable, and store the pointer
     // to the variable on the stack
-    _stack.push(std::move(_callbacks.member(_userdata, pointer(parent), namevalue, namesize)));
+    _stack.push(_callbacks.member(_userdata, pointer(parent), namevalue, namesize));
 }
 
 /**
@@ -306,7 +306,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
     {
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
-        _stack.push(std::move(_callbacks.member_at(_userdata, pointer(parent), numericExpression(expression))));
+        _stack.push(_callbacks.member_at(_userdata, pointer(parent), numericExpression(expression)));
     }
     else
     {
@@ -319,7 +319,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 
         // call the native function to retrieve the member of a variable, and store the pointer
         // to the variable on the stack
-        _stack.push(std::move(_callbacks.member(_userdata, pointer(parent), buffer, size)));
+        _stack.push(_callbacks.member(_userdata, pointer(parent), buffer, size));
     }
 }
 
@@ -335,7 +335,7 @@ void Bytecode::varPointer(const std::string &name)
     jit_value namesize = _function.new_constant(name.size(), jit_type_sys_ulonglong);
 
     // push the variable on the stack
-    _stack.push(std::move(_callbacks.variable(_userdata, namevalue, namesize)));
+    _stack.push(_callbacks.variable(_userdata, namevalue, namesize));
 }
 
 /**
@@ -346,8 +346,8 @@ void Bytecode::varPointer(const std::string &name)
 void Bytecode::string(const std::string &value)
 {
     // push buffer and size
-    _stack.push(std::move(_function.new_constant((void *)value.data(), jit_type_void_ptr)));
-    _stack.push(std::move(_function.new_constant(value.size(), jit_type_sys_ulonglong)));
+    _stack.push(_function.new_constant((void *)value.data(), jit_type_void_ptr));
+    _stack.push(_function.new_constant(value.size(), jit_type_sys_ulonglong));
 }
 
 /**
@@ -358,7 +358,7 @@ void Bytecode::string(const std::string &value)
 void Bytecode::numeric(numeric_t value)
 {
     // push value
-    _stack.push(std::move(_function.new_constant(value, jit_type_sys_longlong)));
+    _stack.push(_function.new_constant(value, jit_type_sys_longlong));
 }
 
 /**
@@ -369,7 +369,7 @@ void Bytecode::numeric(numeric_t value)
 void Bytecode::double_type(double value)
 {
     // push value
-    _stack.push(std::move(_function.new_constant(value, jit_type_float64)));
+    _stack.push(_function.new_constant(value, jit_type_float64));
 }
 
 /**
@@ -383,8 +383,8 @@ void Bytecode::stringVariable(const Variable *variable)
     jit_value var = pointer(variable);
 
     // call the functions to retrieve the string value
-    _stack.push(std::move(_callbacks.to_string(_userdata, var)));
-    _stack.push(std::move(_callbacks.size(_userdata, var)));
+    _stack.push(_callbacks.to_string(_userdata, var));
+    _stack.push(_callbacks.size(_userdata, var));
 }
 
 /**
@@ -395,7 +395,7 @@ void Bytecode::stringVariable(const Variable *variable)
 void Bytecode::numericVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
-    _stack.push(std::move(_callbacks.to_numeric(_userdata, pointer(variable))));
+    _stack.push(_callbacks.to_numeric(_userdata, pointer(variable)));
 }
 
 /**
@@ -406,7 +406,7 @@ void Bytecode::numericVariable(const Variable *variable)
 void Bytecode::booleanVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
-    _stack.push(std::move(_callbacks.to_boolean(_userdata, pointer(variable))));
+    _stack.push(_callbacks.to_boolean(_userdata, pointer(variable)));
 }
 
 /**
@@ -416,7 +416,7 @@ void Bytecode::booleanVariable(const Variable *variable)
 void Bytecode::doubleVariable(const Variable *variable)
 {
     // call the function to convert a variable to a floating point value
-    _stack.push(std::move(_callbacks.to_double(_userdata, pointer(variable))));
+    _stack.push(_callbacks.to_double(_userdata, pointer(variable)));
 }
 
 void Bytecode::variable(const Variable* variable)
@@ -434,7 +434,7 @@ void Bytecode::negateBoolean(const Expression *expression)
     expression->boolean(this);
 
     // pop the result, negate it and push it back to the stack
-    _stack.push(std::move(_function.insn_to_not_bool(pop())));
+    _stack.push(_function.insn_to_not_bool(pop()));
 }
 
 /**
@@ -713,7 +713,7 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
     jit_value r = booleanExpression(right);
 
     // insert a boolean and on the left and right expression
-    _stack.push(std::move(_function.insn_and(l, r)));
+    _stack.push(_function.insn_and(l, r));
 }
 
 /**
@@ -729,7 +729,7 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
     jit_value r = booleanExpression(right);
 
     // insert a boolean or on the left and right expression
-    _stack.push(std::move(_function.insn_or(l, r)));
+    _stack.push(_function.insn_or(l, r));
 }
 
 /**
@@ -756,7 +756,7 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         auto buffer = pop();
 
         // call the native function to save the modifier to the variable on the stack
-        _stack.push(std::move(_callbacks.modifier(_userdata, buffer, size)));
+        _stack.push(_callbacks.modifier(_userdata, buffer, size));
 
         // the stack currently contains { modifier, variable }
 
@@ -775,7 +775,7 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         jit_value jitparams = (params) ? pop() : _false;
 
         // let's apply the modifier and push the new result of it to the stack
-        _stack.push(std::move(_callbacks.modify_variable(_userdata, var, mod, jitparams)));
+        _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
     }
 }
 
@@ -790,7 +790,7 @@ void Bytecode::modifiersBoolean(const Modifiers *modifiers, const Variable *vari
     this->modifiers(modifiers, variable);
 
     // push the result that is on the stack through to_boolean
-    _stack.push(std::move(_callbacks.to_boolean(_userdata, pop())));
+    _stack.push(_callbacks.to_boolean(_userdata, pop()));
 }
 
 /**
@@ -804,7 +804,7 @@ void Bytecode::modifiersDouble(const Modifiers *modifiers, const Variable *varia
     this->modifiers(modifiers, variable);
 
     // push the result that is on the stack through to_double
-    _stack.push(std::move(_callbacks.to_double(_userdata, pop())));
+    _stack.push(_callbacks.to_double(_userdata, pop()));
 }
 
 /**
