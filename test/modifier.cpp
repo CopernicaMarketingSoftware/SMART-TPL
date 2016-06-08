@@ -214,6 +214,12 @@ TEST(Modifier, Spacify)
         Template library(File(SHARED_LIBRARY)); // Here we load that shared library
         EXPECT_EQ(expectedOutput, library.process(data));
     }
+
+    Data data1;
+    data1.assign("var", { 1, 2, 3, 4, 5 });
+
+    string expectedOutput1("\n");
+    EXPECT_EQ(expectedOutput1, tpl.process(data1));
 }
 
 TEST(Modifier, Truncate)
@@ -594,6 +600,12 @@ TEST(Modifier, HeadList)
 
     string expectedOutput("1,2,3,4,5,");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }
 
 TEST(Modifier, TailList)
@@ -606,4 +618,28 @@ TEST(Modifier, TailList)
 
     string expectedOutput("6,7,8,9,10,");
     EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
+TEST(Modifer, RangeNoArray)
+{
+    string input("{$var|range:0:1}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", 1);
+
+    string expectedOutput("1");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
 }

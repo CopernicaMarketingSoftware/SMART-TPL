@@ -412,6 +412,7 @@ void Bytecode::booleanVariable(const Variable *variable)
 /**
  *  Create a floating point constant for a variable
  *  @param  variable
+ *  @note   +1 on the stack
  */
 void Bytecode::doubleVariable(const Variable *variable)
 {
@@ -427,6 +428,7 @@ void Bytecode::variable(const Variable* variable)
 /**
  *  Negate the boolean expression
  *  @param  expression
+ *  @note   +1 on the stack
  */
 void Bytecode::negateBoolean(const Expression *expression)
 {

@@ -37,28 +37,37 @@ public:
         // If we have parameters we have at least one, then this is our custom seperator
         if (params.size() >= 1) seperator = params[0].toString();
 
-        // Let's just convert our input to a C string
-        std::string str(input.toString());
-
-        // Init our output value
-        std::string output;
-
-        // Reserve the amount of space we'll need which is the original length * (length of seperator + 1)
-        output.reserve(str.size() * (seperator.length() + 1));
-
-        for (auto c : str)
+        // some of these methods can throw quite hard, which very likely just means there's something wrong with the input
+        try
         {
-            output += c;
+            // Let's just convert our input to a C string
+            std::string str(input.toString());
 
-            // append the seperator
-            output.append(seperator);
+            // Init our output value
+            std::string output;
+
+            // Reserve the amount of space we'll need which is the original length * (length of seperator + 1)
+            output.reserve(str.size() * (seperator.length() + 1));
+
+            for (auto c : str)
+            {
+                output += c;
+
+                // append the seperator
+                output.append(seperator);
+            }
+
+            // Simply erase the last seperator
+            output.erase(output.size() - seperator.size());
+
+            // Return the output
+            return output;
         }
-
-        // Simply erase the last seperator
-        output.erase(output.size() - seperator.size());
-
-        // Return the output
-        return output;
+        catch (...)
+        {
+            // if we failed we simply return the original input
+            return input;
+        }
     }
 };
 
