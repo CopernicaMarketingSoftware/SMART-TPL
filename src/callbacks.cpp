@@ -377,16 +377,8 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
     // convert to the Modifier
     auto *modifier = (Modifier *) modifier_ptr;
 
-    // cast to a plain old Value object
-    auto *value = (const Value*) variable;
-
-    // wrap it inside a VariantValue as we'll need it as a VariantValue
-    // @todo  We could also just change the modifer api to accept a plain old value instead?
-    auto *variantvalue = new VariantValue(value);
-
-    // cast the handler and manage this variantvalue
-    auto *handler = (Handler *) userdata;
-    handler->manageValue(variantvalue);
+    // convert to the Variant object
+    auto *value = (const VariantValue *) variable;
 
     // convert to Parameters object
     auto *params_ptr = (SmartTpl::Parameters *) parameters;
@@ -395,16 +387,17 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
     SmartTpl::Parameters params = (params_ptr) ? *params_ptr : SmartTpl::Parameters();
 
     // Actually modify the value
-    auto variant = modifier->modify(*variantvalue, params);
+    auto variant = modifier->modify(*value, params);
 
     // If we both have the same shared pointer to modifier probably just returned the input
     // Returning the input value is faster and safer from this point on
-    if (variant == *variantvalue) return variantvalue;
+    if (variant == *value) return value;
 
     // Convert the variant to a pointer so we can actually return it from C
     auto *output = new VariantValue(variant);
 
     // Give it to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
     handler->manageValue(output);
 
     return output;
