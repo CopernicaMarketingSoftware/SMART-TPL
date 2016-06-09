@@ -29,16 +29,16 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // if there are no parameters we're not touching the input
-        if (params.size() == 0) return input;
+        if (params.size() == 0) throw NoModification();
 
         // try to retrieve the raw iterator
         auto rawIter = input.iterator();
 
         // if there's no raw iterator we just return the original input
-        if (!rawIter) return input;
+        if (!rawIter) throw NoModification();
 
         // get our limits
         numeric_t begin = 0;

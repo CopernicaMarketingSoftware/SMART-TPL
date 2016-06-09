@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // Let's just convert our input to a C string
         std::string str(input.toString());

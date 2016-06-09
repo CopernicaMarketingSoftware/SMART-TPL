@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         if (params.size() >= 1)
         {
@@ -52,7 +52,7 @@ public:
         }
 
         // Return the input as we can't do substr without parameters
-        return input;
+        throw NoModification();
     }
 };
 

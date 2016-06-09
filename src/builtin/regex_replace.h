@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         if (params.size() >= 2)
         {
@@ -53,12 +53,12 @@ public:
             catch (const boost::regex_error &error)
             {
                 // Return the original input in case of a failure
-                return input;
+                throw NoModification();
             }
         }
 
         // Return the original input in case of not enough parameters
-        return input;
+        throw NoModification();
     }
 };
 

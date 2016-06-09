@@ -377,8 +377,8 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
     // convert to the Modifier
     auto *modifier = (Modifier *) modifier_ptr;
 
-    // convert to the Variant object
-    auto *value = (const VariantValue *) variable;
+    // convert to a plain old Value*
+    auto *value = (const Value *) variable;
 
     // convert to Parameters object
     auto *params_ptr = (SmartTpl::Parameters *) parameters;
@@ -386,21 +386,28 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
     // If params_ptr is valid use that one, create an empty one on the stack otherwise
     SmartTpl::Parameters params = (params_ptr) ? *params_ptr : SmartTpl::Parameters();
 
-    // Actually modify the value
-    auto variant = modifier->modify(*value, params);
+    // the modify method of the modifier could throw a NoModification exception
+    try
+    {
+        // Actually modify the value
+        auto variant = modifier->modify(*value, params);
 
-    // If we both have the same shared pointer to modifier probably just returned the input
-    // Returning the input value is faster and safer from this point on
-    if (variant == *value) return value;
+        // Convert the variant to a pointer so we can actually return it from C
+        auto *output = new VariantValue(variant);
 
-    // Convert the variant to a pointer so we can actually return it from C
-    auto *output = new VariantValue(variant);
+        // Give it to our handler so he can manage the Variant pointer
+        auto *handler = (Handler *) userdata;
+        handler->manageValue(output);
 
-    // Give it to our handler so he can manage the Variant pointer
-    auto *handler = (Handler *) userdata;
-    handler->manageValue(output);
-
-    return output;
+        // and return the output
+        return output;
+    }
+    catch (const Modifier::NoModification &nomod)
+    {
+        // in case we caught a NoModification exception we know that the intend
+        // was not to modify the input, in which case we just return the input again
+        return value;
+    }
 }
 
 /**

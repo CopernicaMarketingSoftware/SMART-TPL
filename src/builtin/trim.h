@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // initialize our characters to trim
         std::string to_trim(" \t\n\r\0\x0B");

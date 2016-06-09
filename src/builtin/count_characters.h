@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // If we include whitespaces we might as well just return the size
         if (params.size() >= 1 && params[0].toBoolean()) return (int64_t) input.toString().size();

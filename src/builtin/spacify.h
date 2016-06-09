@@ -29,7 +29,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // By default we use one space as a seperator
         std::string seperator(" ");
@@ -66,7 +66,7 @@ public:
         catch (...)
         {
             // if we failed we simply return the original input
-            return input;
+            throw NoModification();
         }
     }
 };

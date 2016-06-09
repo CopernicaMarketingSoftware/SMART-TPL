@@ -39,7 +39,7 @@ public:
     TestModifier(Mode mode) : Modifier(), _mode(mode) {};
     virtual ~TestModifier() {};
 
-    VariantValue modify(const VariantValue &input, const Parameters &params) override
+    VariantValue modify(const Value &input, const Parameters &params) override
     {
         switch (_mode) {
             case NumericMode:
@@ -63,7 +63,7 @@ public:
                 EXPECT_EQ(1, params.size());
                 break;
         };
-        return input;
+        throw NoModification();
     }
 private:
     const Mode _mode;

@@ -34,10 +34,10 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // in case we don't have a valid openssl library we are simply returning the original input
-        if (!OpenSSL::instance()) return input;
+        if (!OpenSSL::instance()) throw NoModification();
 
         // initialize our output
         unsigned char digest[SHA_DIGEST_LENGTH];

@@ -29,19 +29,19 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
 		// convert input to a string
 		auto value = input.toString();
 		
 		// leap out on non-empty strings
-		if (!value.empty()) return input;
+		if (!value.empty()) throw NoModification();
 		
         // input was empty, return the default that was passed as parameter
 		if (params.size() >= 1) return params[0].toString();
 		
         // no parameter was given, strange
-        return input;
+        throw NoModification();
     }
 };
 

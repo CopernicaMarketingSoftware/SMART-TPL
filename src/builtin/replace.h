@@ -50,7 +50,7 @@ public:
      *  @param  params      Parameters used for this modification
      *  @return Value
      */
-    virtual VariantValue modify(const VariantValue &input, const SmartTpl::Parameters &params) override
+    virtual VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
         // initialize our output
         std::string output(input.toString());
@@ -66,7 +66,7 @@ public:
         }
 
         // Simply return the input
-        return input;
+        throw NoModification();
     }
 };
 
