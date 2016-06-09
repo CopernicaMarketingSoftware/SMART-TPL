@@ -50,6 +50,12 @@ public:
     VariantValue(const std::shared_ptr<Value> &value) : _value(value) {};
 
     /**
+     *  Do not allow us to create this directly from a Value*!
+     */
+    VariantValue(const Value *value) = delete;
+    VariantValue(Value *value) = delete;
+
+    /**
      *  Copy and move constructors
      */
     VariantValue(const VariantValue &that) : _value(that._value) {}
