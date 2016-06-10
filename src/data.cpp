@@ -252,6 +252,25 @@ Modifier *Data::modifier(const char* name, size_t size) const
 }
 
 /**
+ *  contains a specific value
+ *  @param const Value*     a pointer to the value
+ *  @return boolean
+ */
+bool Data::contains(const Value *value) const
+{
+    // iterate over all values
+    for (const auto &variable :_variables)
+    {
+        // if pointers are identical it is in the data object
+        if (variable.second == value) return true;
+    }
+    
+    // the value was not found
+    return false;
+}
+
+
+/**
  *  End namespace
  */
 }

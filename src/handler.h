@@ -270,6 +270,9 @@ public:
             if (v.get() == value) return false;
         }
 
+        // if it is already hold by the data object we also do not have to manage it
+        if (_data->contains(value)) return false;
+
         // If they are not we start managing it
         _managed_local_values.emplace_back(value);
 

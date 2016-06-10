@@ -125,6 +125,13 @@ public:
      *  @return Modifier*   nullptr in case it isn't found
      */
     Modifier *modifier(const char *name, size_t size) const;
+    
+    /**
+     *  contains a specific value
+     *  @param const Value*     a pointer to the value
+     *  @return boolean
+     */
+    bool contains(const Value *value) const;
 };
 
 /**
