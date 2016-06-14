@@ -29,8 +29,8 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 #   Otherwise only release verions changes. (version is MAJOR.MINOR.RELEASE)
 #
 
-SONAME					=	0.10
-VERSION					=	0.10.2
+SONAME					=	1.0
+VERSION					=	1.0.0
 
 #
 #   Name of the target library and target program
