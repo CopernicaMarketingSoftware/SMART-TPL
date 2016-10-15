@@ -14,7 +14,7 @@
  *  loops that iterate over variables.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2016 Copernica BV
  */
 #ifndef __SMART_TPL_H__
 #define __SMART_TPL_H__
@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <set>
 #include <ctime>
+#include <vector>
 
 #include "smarttpl/source.h"
 #include "smarttpl/file.h"
