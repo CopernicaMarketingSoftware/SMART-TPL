@@ -4,7 +4,7 @@
  *  Simple helper class to dynamically load the openssl library.
  *
  *  @author Toon Schoenmakers<toon.schoenmakers@copernica.com>
- *  @copyright 2015 Copernica BV
+ *  @copyright 2015 - 2017 Copernica BV
  */
 
 /**
@@ -44,10 +44,16 @@ private:
             // version, and that we try to use first
             "libssl.so",
             "libssl.so.1",
+            "libssl.so.1.1",
+            "libssl.so.1.1.0e",
+            "libssl.so.1.1.0d",
+            "libssl.so.1.1.0c",
+            "libssl.so.1.1.0b",
+            "libssl.so.1.1.0a",
+            "libssl.so.1.1.0",
+
+            // symlinked versions?
             "libssl.so.1.0",
-            "libssl.so.1.0.0b",
-            "libssl.so.1.0.0a",
-            "libssl.so.1.0.0",
 
             // no symlink versions found, go look for a 1.0.2 version
             "libssl.so.1.0.2j",
