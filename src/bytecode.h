@@ -28,6 +28,12 @@ private:
     SyntaxTree _tree;
 
     /**
+     *  The signature for _function
+     *  @var    jit_type_t
+     */
+    jit_type_t _function_signature;
+
+    /**
      *  The jit context
      *  @var    jit_context
      */

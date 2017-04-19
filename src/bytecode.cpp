@@ -14,17 +14,12 @@
 namespace SmartTpl { namespace Internal {
 
 /**
- *  The signature for _function
- *  @var    jit_type_t
- */
-jit_type_t Bytecode::_function_signature = jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params);
-
-/**
  *  Constructor
  *  @param  source       The source that holds the template
  *  @throws CompileError If something went wrong while compiling the jit code
  */
 Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
+    _function_signature(jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params)),
     _function(_context, _function_signature),
     _callbacks(&_function),
     _userdata(_function.get_param(0)),
