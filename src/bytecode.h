@@ -46,12 +46,6 @@ private:
     jit_function _function;
 
     /**
-     *  The signature for _function
-     *  @var    jit_type_t
-     */
-    static jit_type_t _function_signature;
-
-    /**
      *  Signature of the ShowTemplate function
      */
     using ShowTemplate = void(const void *userdata);
