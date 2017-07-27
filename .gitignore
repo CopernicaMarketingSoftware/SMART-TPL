@@ -6,7 +6,7 @@
 parser.cpp
 parser.h
 parser.out
-tokenizer.cpp
+tokenizer_v?.cpp
 a.out
 smarttpl
 

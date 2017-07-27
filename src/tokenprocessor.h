@@ -17,7 +17,6 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Forward declarations
  */
-class Tokenizer;
 class Token;
 class Statements;
 

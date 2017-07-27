@@ -98,7 +98,7 @@ LN              =   ln -fs
 #   The tokenizer output file
 #
 
-TOKENIZER       =    src/tokenizer.cpp
+TOKENIZER       =    src/tokenizer_v1.cpp
 
 #
 #    The lemon output file

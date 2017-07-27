@@ -1,17 +1,17 @@
 /**
- *  Tokenizer.h
+ *  Tokenizer_v1.h
  *
  *  C++ class that tokenizes an input string, and that feeds the tokens to
  *  the parser object
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**
  *  Set up namespace
  */
-namespace SmartTpl { namespace Internal {
+namespace SmartTpl { namespace Internal { namespace v1 {
 
 /**
  *  Forward declarations
@@ -85,4 +85,4 @@ public:
 /**
  *  End of namespace
  */
-}}
+}}}

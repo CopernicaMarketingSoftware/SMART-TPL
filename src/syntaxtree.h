@@ -33,7 +33,7 @@ public:
     {
         // ask the tokenizer to process the buffer, and tell that this object
         // is the parser that can be fed with the tokens found in the buffer
-        Tokenizer tokenizer;
+        v1::Tokenizer tokenizer;
         if (tokenizer.process(this, buffer, size) == false)
         {
             // throw a CompileError
