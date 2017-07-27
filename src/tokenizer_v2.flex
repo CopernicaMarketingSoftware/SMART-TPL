@@ -1,12 +1,12 @@
 %{
 /**
- *  Tokenizer.yy
+ *  Tokenizer_v2.yy
  *
  *  This file contains all the rules for splitting up a *.tpl template into
  *  tokens. This file can be compiled into a *.c file with the 'flex' command.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 #include "includes.h"
 
@@ -33,7 +33,7 @@
 /**
  *  Use the SmartTpl prefix to avoid colission with other flex generated parsers
  */
-%option prefix="SmartTpl"
+%option prefix="SmartTplv2"
 
 /**
  *  Make this scanner case insensitive
@@ -44,12 +44,12 @@
  *  The user-supplied extra data that we store in the scanner object, is info
  *  about the current token that is being processed.
  */
-%option extra-type="SmartTpl::Internal::Tokenizer *"
+%option extra-type="SmartTpl::Internal::v2::Tokenizer *"
 
 /**
  *  Output to tokenizer.cpp please
  */
-%option outfile="src/tokenizer.cpp"
+%option outfile="src/tokenizer_v2.cpp"
 
 /**
  *  Exclusive parser mode "INSIDE_CURLY_BRACES" and "IDENTIFIER" and "STRING". This is exclusive,
@@ -211,7 +211,7 @@
 /**
  *  Set up namespace
  */
-namespace SmartTpl { namespace Internal {
+namespace SmartTpl { namespace Internal { namespace v2 {
 
 /**
  *  Constructor
@@ -294,4 +294,4 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 /**
  *  End namespace
  */
-}}
+}}}

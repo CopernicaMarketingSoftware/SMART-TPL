@@ -156,6 +156,7 @@
 #include "tokenprocessor.h"
 #include "parser.h"
 #include "tokenizer_v1.h"
+#include "tokenizer_v2.h"
 #include "syntaxtree.h"
 #include "ccode.h"
 #include "callbacks.h"

@@ -98,7 +98,7 @@ LN              =   ln -fs
 #   The tokenizer output file
 #
 
-TOKENIZER       =    src/tokenizer_v1.cpp
+TOKENIZERS      =    src/tokenizer_v1.cpp src/tokenizer_v2.cpp
 
 #
 #    The lemon output file
@@ -113,7 +113,7 @@ PARSER          =    src/parser.cpp
 #   src/ directory for all *.cpp files. No changes are probably necessary here
 #
 
-LIBRARY_SOURCES =   $(wildcard src/*.cpp) ${TOKENIZER} ${PARSER}
+LIBRARY_SOURCES =   $(wildcard src/*.cpp) ${TOKENIZERS} ${PARSER}
 PROGRAM_SOURCES =   $(wildcard program/*.cpp)
 
 #
@@ -142,7 +142,7 @@ DEPENDENCIES = $(LIBRARY_SOURCES:%.cpp=%.d) $(PROGRAM_SOURCES:%.cpp=%.d)
 #   explicit list of the generated files.
 #
 
-GENERATED       =   ${TOKENIZER} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.out}
+GENERATED       =   ${TOKENIZERS} ${PARSER} ${PARSER:%.cpp=%.h} ${PARSER:%.cpp=%.out}
 
 #
 #   End of the variables section. Here starts the list of instructions and
@@ -153,10 +153,10 @@ all: ${SHARED_LIBRARY} ${STATIC_LIBRARY} ${PROGRAM}
 
 -include ${DEPENDENCIES}
 
-${SHARED_LIBRARY}: ${PARSER} ${TOKENIZER} ${SHARED_LIBRARY_OBJECTS}
+${SHARED_LIBRARY}: ${PARSER} ${TOKENIZERS} ${SHARED_LIBRARY_OBJECTS}
 	${LINKER} ${LINKER_FLAGS} -Wl,-soname,libsmarttpl.so.${SONAME} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${LIBRARIES}
 
-${STATIC_LIBRARY}: ${PARSER} ${TOKENIZER} ${STATIC_LIBRARY_OBJECTS}
+${STATIC_LIBRARY}: ${PARSER} ${TOKENIZERS} ${STATIC_LIBRARY_OBJECTS}
 	${ARCHIVER} ${STATIC_LIBRARY} ${STATIC_LIBRARY_OBJECTS}
 
 ${PROGRAM}: ${PROGRAM_OBJECTS} ${SHARED_LIBRARY}
@@ -165,7 +165,7 @@ ${PROGRAM}: ${PROGRAM_OBJECTS} ${SHARED_LIBRARY}
 clean:
 	${RM} ${GENERATED} ${SHARED_LIBRARY_OBJECTS} ${STATIC_LIBRARY_OBJECTS} ${PROGRAM_OBJECTS} ${LIBRARY} ${PROGRAM}
 
-${TOKENIZER}: ${TOKENIZER:%.cpp=%.flex}
+${TOKENIZERS}: ${TOKENIZERS:%.cpp=%.flex}
 	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
 
 ${PARSER}: ${PARSER:%.cpp=%.lemon}
