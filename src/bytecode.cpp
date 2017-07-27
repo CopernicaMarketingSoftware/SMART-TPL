@@ -4,7 +4,7 @@
  *  Implementation file of the LLVM code generator.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 #include "includes.h"
 
@@ -18,7 +18,8 @@ namespace SmartTpl { namespace Internal {
  *  @param  source       The source that holds the template
  *  @throws CompileError If something went wrong while compiling the jit code
  */
-Bytecode::Bytecode(const Source& source) : _tree(source.data(), source.size()),
+Bytecode::Bytecode(const Source& source) : 
+    _tree(source.version(), source.data(), source.size()),
     _function_signature(jit_function::signature_helper(jit_type_void, jit_type_void_ptr, jit_function::end_params)),
     _function(_context, _function_signature),
     _callbacks(&_function),

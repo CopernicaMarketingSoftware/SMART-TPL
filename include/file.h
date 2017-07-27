@@ -10,7 +10,7 @@
  *  for templates that are stored on the local filesystem.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**
@@ -70,10 +70,11 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  name               Name of the file
+     *  @param  name        Name of the file
+     *  @param  version     Source version (1 for backward compatibility, 2 for more tolerant parsing)   
      *  @throws std::runtime_error If the file doesn't seem to exist or some other IO operation failed
      */
-    File(const char *name) : _name(name)
+    File(const char *name, size_t version = 1) : Source(version), _name(name)
     {
         // initialize the object
         initialize();
@@ -81,10 +82,11 @@ public:
 
     /**
      *  Constructor
-     *  @param  name               Name of the file
+     *  @param  name        Name of the file
+     *  @param  version     Source version (1 for backward compatibility, 2 for more tolerant parsing)   
      *  @throws std::runtime_error If the file doesn't seem to exist or some other IO operation failed
      */
-    File(const std::string &name) : _name(name)
+    File(const std::string &name, size_t version = 1) : Source(version), _name(name)
     {
         // initialize the object
         initialize();

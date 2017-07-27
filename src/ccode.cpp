@@ -4,7 +4,7 @@
  *  Implementation file for the Ccode class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 #include "includes.h"
 
@@ -44,8 +44,8 @@ CCode::CCode(const SyntaxTree &tree)
     _out << '\"' << quoted << "\";" << std::endl;
 }
 
-CCode::CCode(const Source& source)
-: CCode(SyntaxTree(source.data(), source.size()))
+CCode::CCode(const Source &source) : 
+    CCode(SyntaxTree(source.version(), source.data(), source.size()))
 {
 }
 

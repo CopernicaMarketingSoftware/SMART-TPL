@@ -13,7 +13,7 @@
  *  for as long as the Memory object exists!
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**
@@ -39,23 +39,25 @@ public:
      *
      *  @param  buffer      Pointer to the buffer
      *  @param  size        Size of the buffer
+     *  @param  version     Source code version (2 is more forgiving)
      */
-    Buffer(const char *buffer, size_t size) : _buffer(buffer, size) {}
+    Buffer(const char *buffer, size_t size, size_t version = 1) : Source(version), _buffer(buffer, size) {}
 
     /**
      *  Constructor
      *
      *  @param  buffer      Pointer to the buffer
      */
-    Buffer(const char *buffer) : _buffer(buffer) {}
+    Buffer(const char *buffer) : Source(1), _buffer(buffer) {}
 
     /**
      *  Constructor
      *
      *  @param  buffer      Create buffer from a std::string
+     *  @param  version     Source code version (2 is more forgiving)
      */
-    Buffer(const std::string &buffer) : _buffer(buffer) {}
-    Buffer(std::string &&buffer) : _buffer(std::move(buffer)) {}
+    Buffer(const std::string &buffer, size_t version = 1) : Source(version), _buffer(buffer) {}
+    Buffer(std::string &&buffer, size_t version = 1) : Source(version), _buffer(std::move(buffer)) {}
 
     /**
      *  Destructor

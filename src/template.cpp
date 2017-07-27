@@ -4,7 +4,7 @@
  *  Implementation of the Template class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 #include "includes.h"
 
@@ -17,7 +17,7 @@ namespace SmartTpl {
  *  Constructor
  *  @param  source        Source of the template to load
  */
-Template::Template(const Source& source)
+Template::Template(const Source &source)
 {
     // is the source a shared library?
     if (source.library())

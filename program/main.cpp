@@ -5,7 +5,7 @@
  *  shared library.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**
@@ -46,7 +46,9 @@ static bool compile(const std::string &base)
     // We directly use the internal classes here to skip the byte compile part
     try
     {
+        // construct the file
         SmartTpl::File file(input);
+        
         // create template
         SmartTpl::Internal::CCode code(file);
 

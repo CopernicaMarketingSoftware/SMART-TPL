@@ -8,7 +8,7 @@
  *  of the generators of the SmartTpl library (the template-to-c-code generator)
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**

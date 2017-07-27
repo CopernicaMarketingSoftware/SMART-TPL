@@ -9,7 +9,7 @@
  *  tokenizer.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**
@@ -25,18 +25,34 @@ class SyntaxTree : public TokenProcessor
 public:
     /**
      *  Constructor
+     *  @param  version         Tokenizer version (1 for old and 2 for new)
      *  @param  buffer          The buffer to parse
      *  @param  size            Size of the buffer
      *  @throws std::runtime_error in the case of an error
      */
-    SyntaxTree(const char *buffer, size_t size) : TokenProcessor()
+    SyntaxTree(size_t version, const char *buffer, size_t size) : TokenProcessor()
     {
-        // ask the tokenizer to process the buffer, and tell that this object
-        // is the parser that can be fed with the tokens found in the buffer
-        v1::Tokenizer tokenizer;
-        if (tokenizer.process(this, buffer, size) == false)
+        // check version number
+        if (version == 1)
         {
-            // throw a CompileError
+            // use the old tokenizer
+            v1::Tokenizer tokenizer;
+            
+            // pass the buffer to the tokenizer, it will pass all tokens to this syntaxtree object
+            if (tokenizer.process(this, buffer, size)) return;
+            
+            // report the error
+            throw CompileError(_error, tokenizer.getCurrentLine());
+        }
+        else
+        {
+            // use the new tokenizer
+            v2::Tokenizer tokenizer;
+            
+            // pass the buffer to the tokenizer, it will pass all tokens to this syntaxtree object
+            if (tokenizer.process(this, buffer, size)) return;
+
+            // report the error
             throw CompileError(_error, tokenizer.getCurrentLine());
         }
     }

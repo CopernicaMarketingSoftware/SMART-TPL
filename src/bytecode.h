@@ -7,7 +7,7 @@
  *  can be passed to a LLVM machine.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2017 Copernica BV
  */
 
 /**
@@ -280,10 +280,9 @@ private:
 public:
     /**
      *  Constructor
-     *  @param  source The source that holds the template
      *  @throws CompileError If something went wrong while compiling the jit code
      */
-    Bytecode(const Source& source);
+    Bytecode(const Source &source);
 
     /**
      *  Destructor

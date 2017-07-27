@@ -11,7 +11,7 @@
  *  template that are fetched from a database or from any other source.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica Marketing Software
+ *  @copyright 2014 - 2017 Copernica Marketing Software
  */
 
 /**
@@ -24,20 +24,38 @@ namespace SmartTpl {
  */
 class Source
 {
+private:
+    /**
+     *  The source version number
+     *  @var size_t
+     */
+    size_t _version;
+
 protected:
     /**
      *  Constructor
      *
      *  The constructor is protected, you should create an instance of File,
      *  Buffer or an implementation of the Source class that you create yourself.
+     * 
+     *  Currently, we support two source versions: 1 and 2. Version 2 is
+     *  more forgiving in parsing standalone curly braces
+     * 
+     *  @param  version     version number of the source code
      */
-    Source() {}
+    Source(size_t version) : _version(version) {}
 
 public:
     /**
      *  Destructor
      */
     virtual ~Source() {}
+
+    /**
+     *  Expose the version number
+     *  @return size_t
+     */
+    size_t version() const { return _version; }
 
     /**
      *  Name of the source
