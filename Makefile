@@ -54,8 +54,8 @@ PROGRAM         =   smarttpl
 #   and "lemon" are being used. You may override them here
 #
 
-COMPILER        =   c++
-LINKER          =   c++
+COMPILER        =   g++
+LINKER          =   g++
 FLEX            =   flex
 LEMON           =   lemon
 ARCHIVER        =   ar rcs
