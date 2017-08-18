@@ -29,8 +29,8 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 #   Otherwise only release verions changes. (version is MAJOR.MINOR.RELEASE)
 #
 
-SONAME					=	1.0
-VERSION					=	1.0.2
+SONAME					=	1.1
+VERSION					=	1.1.0
 
 #
 #   Name of the target library and target program
@@ -54,8 +54,8 @@ PROGRAM         =   smarttpl
 #   and "lemon" are being used. You may override them here
 #
 
-COMPILER        =   c++
-LINKER          =   c++
+COMPILER        =   g++
+LINKER          =   g++
 FLEX            =   flex
 LEMON           =   lemon
 ARCHIVER        =   ar rcs
