@@ -14,6 +14,11 @@
 #pragma once
 
 /**
+ *  Dependencies
+ */
+#include <functional>
+
+/**
  *  Set up namespace
  */
 namespace SmartTpl {
