@@ -82,8 +82,11 @@ public:
      */
     void generate(Generator *generator) const override
     {
-        // call the generator
-        generator->foreach(_source.get(), _key ? *_key : std::string(""), *_value, _statements.get(), _else_statements.get());
+        // if there is no key, we pass an empty string
+        if (_key == nullptr) generator->foreach(_source.get(), std::string(""), *_value, _statements.get(), _else_statements.get());
+    
+        // otherwise we call the generator with a reference to the key
+        else generator->foreach(_source.get(), *_key, *_value, _statements.get(), _else_statements.get());
     }
 };
 
