@@ -1,8 +1,8 @@
 COMPILER_FLAGS    = -Wall -g -O0 -pipe -std=c++11 -Wno-sign-compare
 LINKER_FLAGS      =
 INC               = -I../ -I. -Igoogletest-release-1.8.0/googletest/include
-COMPILER          = c++
-LINKER            = c++
+COMPILER          = g++
+LINKER            = g++
 
 VALGRIND          = valgrind
 VALGRIND_OPTS     =

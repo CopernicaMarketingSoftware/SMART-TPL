@@ -45,6 +45,8 @@ private:
             "libssl.so",
             "libssl.so.1",
             "libssl.so.1.1",
+            "libssl.so.1.1.0g",
+            "libssl.so.1.1.0f",
             "libssl.so.1.1.0e",
             "libssl.so.1.1.0d",
             "libssl.so.1.1.0c",
@@ -52,10 +54,10 @@ private:
             "libssl.so.1.1.0a",
             "libssl.so.1.1.0",
 
-            // symlinked versions?
-            "libssl.so.1.0",
-
             // no symlink versions found, go look for a 1.0.2 version
+            "libssl.so.1.0.2m",
+            "libssl.so.1.0.2l",
+            "libssl.so.1.0.2k",
             "libssl.so.1.0.2j",
             "libssl.so.1.0.2i",
             "libssl.so.1.0.2h",
@@ -88,6 +90,9 @@ private:
             "libssl.so.1.0.1f",
             "libssl.so.1.0.1e",
             "libssl.so.1.0.1",
+
+            // libssl package uses a wrong soname in libssl package...
+            "libssl.so.1.0.0",
 
             // no working version found
             nullptr
