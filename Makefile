@@ -30,7 +30,7 @@ INSTALL_BIN     =   ${INSTALL_PREFIX}/bin
 #
 
 SONAME					=	1.1
-VERSION					=	1.1.0
+VERSION					=	1.1.1
 
 #
 #   Name of the target library and target program
