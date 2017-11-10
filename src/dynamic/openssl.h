@@ -45,6 +45,7 @@ private:
             "libssl.so",
             "libssl.so.1",
             "libssl.so.1.1",
+            "libssl.so.1.1.0h",
             "libssl.so.1.1.0g",
             "libssl.so.1.1.0f",
             "libssl.so.1.1.0e",
@@ -55,6 +56,7 @@ private:
             "libssl.so.1.1.0",
 
             // no symlink versions found, go look for a 1.0.2 version
+            "libssl.so.1.1.0n",
             "libssl.so.1.0.2m",
             "libssl.so.1.0.2l",
             "libssl.so.1.0.2k",
