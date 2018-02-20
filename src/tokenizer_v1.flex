@@ -91,7 +91,7 @@
 "{/if}"             { return TOKEN_ENDIF; }
 "{endif}"           { return TOKEN_ENDIF; }
 "{foreachelse}"     { return TOKEN_FOREACH_ELSE; }
-"{literal}"         { BEGIN(LITERAL); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it later
+"{literal}"         { BEGIN(LITERAL); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we will just append to it later
 "{ "[^}]*"}"        { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_RAW; }
 "{"                 { BEGIN(INSIDE_CURLY_BRACES); return TOKEN_EXPRESSION; }
 "{"[a-z]*"}"        { return -1; };
@@ -130,8 +130,8 @@
     "=>"                        { return TOKEN_ASSIGN_FOREACH; }
     [0-9]+                      { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_INTEGER; }
     [0-9]+"."[0-9]+("e"[-+]?[0-9]+)? { yyextra->setCurrentToken(new SmartTpl::Internal::Token(yytext, yyleng)); return TOKEN_DOUBLE; }
-    "\""                        { BEGIN(STRING_DOUBLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
-    "\'"                        { BEGIN(STRING_SINGLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we'll just append to it from STRING
+    "\""                        { BEGIN(STRING_DOUBLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we will just append to it from STRING
+    "\'"                        { BEGIN(STRING_SINGLE_QUOTES); yyextra->setCurrentToken(new SmartTpl::Internal::Token()); } // We create an empty token here, we will just append to it from STRING
     "("                         { return TOKEN_LPAREN; }
     ")"                         { return TOKEN_RPAREN; }
     "."                         { BEGIN(IDENTIFIER); return TOKEN_DOT; }
@@ -242,8 +242,8 @@ Tokenizer::~Tokenizer()
  */
 bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
 {
-    // in case the size is 0 we'll just accept it, running it through the actual parser
-    // and all wastes time and won't even accept it!
+    // in case the size is 0 we will just accept it, running it through the actual parser
+    // and all wastes time and will not even accept it!
     if (size == 0) return true;
 
     // read our data into a buffer that flex wants
