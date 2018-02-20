@@ -1,10 +1,10 @@
 /**
- *  Strstr.h
+ *  Strpos.h
  *
- *  Built-in "|strstr:\"needle\":true" modifier
+ *  Built-in "|strpos:\"needle"" modifier
  *
- *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @author Tamas Elekes <tamas.elekes@copernica.com>
+ *  @copyright 2018 Copernica BV
  */
 
 /**
@@ -15,13 +15,13 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class StrStrModifier : public Modifier
+class StrPosModifier : public Modifier
 {
 public:
     /**
      *  Destructor
      */
-    virtual ~StrStrModifier() {};
+    virtual ~StrPosModifier() {};
 
     /**
      *  Modify a value object
@@ -30,28 +30,25 @@ public:
      *  @return Value
      */
     VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
-    {
+    {        
         if (params.size() >= 1)
         {
-            // initialize the needle and the before_needle flag
+            // initialize the needle 
             std::string needle(params[0].toString());
-            bool before_needle = false;
-            if (params.size() >= 2) before_needle = params[1].toBoolean();
 
             // initialize our haystack
             std::string haystack(input.toString());
-
+            
             // Look for the needle in our haystack
             size_t pos = haystack.find(needle);
 			
-            // Return nothing (empty value) if we were unable to find the needle
-            if (pos == std::string::npos) return nullptr;
+            // Return -1 if unable to find the needle
+            if (pos == std::string::npos) return -1;
 
-            if (before_needle) return haystack.substr(0, pos);
-            else return haystack.substr(pos);
+			return (int64_t) pos;
         }
 
-        // Return the input as we can't do strstr without at least a needle
+        // Return the input as we can't do strpos without at least a needle
         throw NoModification();
     }
 };

@@ -37,6 +37,7 @@ static Internal::UcFirstModifier         ucfirst;
 static Internal::TrimModifier            trim;
 static Internal::RegexReplaceModifier    regex_replace;
 static Internal::SubStrModifier          substr;
+static Internal::StrPosModifier          strpos;
 static Internal::StrStrModifier          strstr;
 static Internal::UrlencodeModifier       urlencode;
 static Internal::UrldecodeModifier       urldecode;
@@ -75,6 +76,7 @@ Data::Data()
               {"regex_replace",    &regex_replace},
               {"substr",           &substr},
               {"strstr",           &strstr},
+              {"strpos",           &strpos},
               {"urlencode",        &urlencode},
               {"urldecode",        &urldecode},
               {"range",            &range_modifier}}) // register built-in modifiers

@@ -9,7 +9,7 @@
 COMPILER = clang++
 LINKER = g++
 COMPILER_FLAGS = -Wall -c -O0 -g -std=c++11 -fpic -o
-LINKER_DEPENDENCIES = -lsmarttpl -lvariant
+LINKER_DEPENDENCIES = -lsmarttpl
 LINKER_FLAGS = 
 
 #
