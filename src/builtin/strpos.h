@@ -8,6 +8,11 @@
  */
 
 /**
+ *  Dependencies
+ */
+#include <limits>
+
+/**
  *  Namespace
  */
 namespace SmartTpl { namespace Internal {
@@ -45,7 +50,11 @@ public:
             // Return -1 if unable to find the needle
             if (pos == std::string::npos) return -1;
 
-			return (int64_t) pos;
+			// also return -1 if it is outside our indexable range
+			if (pos > static_cast<size_t>(std::numeric_limits<int64_t>::max())) return -1;
+			
+			// return the position
+			return static_cast<int64_t>(pos);
         }
 
         // Return the input as we can't do strpos without at least a needle
