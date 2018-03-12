@@ -11,3 +11,8 @@ a.out
 smarttpl
 
 examples/*.c
+
+.idea/
+cmake-build-debug/
+
+
