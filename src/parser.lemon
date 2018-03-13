@@ -24,7 +24,7 @@
 
 %left OR.
 %left AND.
-%left EQ NE.
+%left EQ NE REGEX.
 %left LT LE GT GE.
 %left INTEGER DOUBLE.
 %left PLUS MINUS.
@@ -91,6 +91,7 @@ statement(A)        ::= assignStatement(B) .                                    
 assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) END_BRACES .              { A = new SmartTpl::Internal::AssignStatement(B, C); }
 assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) END_BRACES .          { A = new SmartTpl::Internal::AssignStatement(C, B); }
 boolexpr(A)         ::= outexpr(B) .                                            { A = B; }
+boolexpr(A)         ::= outexpr(B) REGEX outexpr(C) .                           { A = new SmartTpl::Internal::BinaryRegexOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) EQ outexpr(C) .                              { A = new SmartTpl::Internal::BinaryEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) NE outexpr(C) .                              { A = new SmartTpl::Internal::BinaryNotEqualsOperator(B, C); }
 boolexpr(A)         ::= outexpr(B) GT outexpr(C) .                              { A = new SmartTpl::Internal::BinaryGreaterOperator(B, C); }

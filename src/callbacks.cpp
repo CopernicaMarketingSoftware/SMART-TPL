@@ -4,7 +4,7 @@
  *  Implementation of the callbacks
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 #include "includes.h"
 
@@ -40,6 +40,9 @@ SignatureCallback Callbacks::_params_append_double({ jit_type_void_ptr, jit_type
 SignatureCallback Callbacks::_params_append_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_params_append_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_bool });
 SignatureCallback Callbacks::_strcmp({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_sys_bool);
+SignatureCallback Callbacks::_regex_compile({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_regex_match({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_sys_bool);
+SignatureCallback Callbacks::_regex_release({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_assign({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr });
 SignatureCallback Callbacks::_assign_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_bool });
 SignatureCallback Callbacks::_assign_numeric({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_longlong });
@@ -506,14 +509,79 @@ void smart_tpl_assign(void *userdata, const char *key, size_t keysize, const voi
  */
 int smart_tpl_strcmp(void *userdata, const char *a, size_t a_len, const char *b, size_t b_len)
 {
-    // If we aren't the same size to begin with we might as well just error out already
-    if (a_len != b_len) return -1;
+    // simple if strings have the same size
+    if (a_len == b_len) return strncmp(a, b, a_len);
+    
+    // caculate difference for the overlapping start of both strings
+    int result = strncmp(a, b, std::min(a_len, b_len));
+    
+    // ready if there is indeed a difference
+    if (result != 0) return result;
+    
+    // the prefixes are the same, the shortest one comes earlier
+    return a_len - b_len;
+}
 
-    // If we didn't return yet that means we are both the same length, if we're both 0 we're equal!
-    else if (a_len == 0) return 0;
+/**
+ *  Compile a regex comparison
+ *  @param  userdata        Pointer to user-supplied data
+ *  @param  regex           Regular expression
+ *  @param  size            Size of the regular expression
+ *  @return Pointer         Handle to a regular expression
+ */
+void *smart_tpl_regex_compile(void *userdata, const char *regex, size_t size)
+{
+    // prevent exceptions
+    try
+    {
+        // initialize our settings based on the provided parameters
+        return new boost::regex(regex, regex + size);
+    }
+    catch (const std::runtime_error &error)
+    {
+        // return nullptr to indicate error
+        return nullptr;
+    }
+}
 
-    // Pfft, we still don't know if we're equal, let's just ask strncmp() then
-    return strncmp(a, b, a_len);
+/**
+ *  Execute a regex match
+ *  @param  userdata        Pointer to user-supplied data
+ *  @param  regex           Regular expression handle
+ *  @param  message         The message to search for
+ *  @param  size            Size of the message
+ *  @return int             Return value
+ */
+int smart_tpl_regex_match(void *userdata, void *handle, const char *message, size_t size)
+{
+    // prevent exceptions
+    try
+    {
+        // convert the pointer back into a regex
+        auto *regex = (boost::regex *)handle;
+        
+        // make the call
+        return boost::regex_search(message, message + size, *regex);
+    }
+    catch (const std::runtime_error &error)
+    {
+        // we treat this as a non-match
+        return 0;
+    }
+}
+
+/**
+ *  Free up resources used by a regex
+ *  @param  userdata        Pointer to user-supplied data
+ *  @param  regex           Regular expression handle
+ */
+void smart_tpl_regex_release(void *userdata, void *handle)
+{
+    // convert the pointer back into a regex
+    auto *regex = (boost::regex *)handle;
+    
+    // release resources
+    delete regex;
 }
 
 /**

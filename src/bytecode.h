@@ -7,7 +7,7 @@
  *  can be passed to a LLVM machine.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2017 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -81,23 +81,23 @@ private:
     jit_value _false;
 
     /**
-     *  A jit label that we can jump to to exit out earlier
+     *  Runtime error handlers to which the code jumps in case of an error
+     *  @var    ErrorLabel
      */
-    jit_label _error;
-
-    /**
-     *  A value containing a possible error message. This has to be a 'global' variable
-     *  due to the way exceptions work inside our jit code. As we can't throw a C++ error
-     *  through it we use a bunch of gotos essentially. And we obviously can't pass variables
-     *  along with gotos.
-     */
-    jit_value _error_msg;
+    ErrorLabel _division_by_zero;
+    ErrorLabel _invalid_regex;
 
     /**
      *  Stack with temporary values
      *  @var    std::stack
      */
     std::stack<jit_value> _stack;
+    
+    /**
+     *  Internal method to generate the code for an error-label
+     *  @param  label
+     */
+    void add(ErrorLabel &label);
 
     /**
      *  Helper method to pop a value from the stack
@@ -224,6 +224,7 @@ private:
     void greaterEquals(const Expression *left, const Expression *right) override;
     void lesser(const Expression *left, const Expression *right) override;
     void lesserEquals(const Expression *left, const Expression *right) override;
+    void regex(const Expression *left, const Expression *right) override;
 
     /**
      *  Boolean operators

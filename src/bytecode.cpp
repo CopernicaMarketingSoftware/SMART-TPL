@@ -4,7 +4,7 @@
  *  Implementation file of the LLVM code generator.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2017 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 #include "includes.h"
 
@@ -26,8 +26,8 @@ Bytecode::Bytecode(const Source& source) :
     _userdata(_function.get_param(0)),
     _true(_function.new_constant(1)),
     _false(_function.new_constant(0)),
-    _error(_function.new_label()),
-    _error_msg(_false)
+    _division_by_zero(_function, "Division by zero"),
+    _invalid_regex(_function, "Invalid regular expression")
 {
     // set our jit_exception_handler as the exception handler for jit
     auto original_handler = jit_exception_set_handler(JitException::handler);
@@ -43,20 +43,24 @@ Bytecode::Bytecode(const Source& source) :
         // in case we reach this point correctly just return from our function cleanly
         _function.insn_return();
 
-        // start our error label
-        _function.insn_label(_error);
-
-        // and from our error label we set ourself to exception mode
-        _callbacks.mark_failed(_userdata, _error_msg);
-
-        // This will basically result in the following psuedo code
+        // generate the error labels, by adding the error handlers we create 
+        // the following code inside the function:
         //
-        // return;
-        // error:
-        //   exception;
+        //  instruction;
+        //  instruction;
+        //  return;
+        //  division_by_zero:
+        //  instruction;
+        //  return;
+        //  invalid_regex:
+        //  instruction;
+        //  return;
         //
-        // Resulting in you just being able to jump to error from anywhere else
-        // in the code to exit out early
+        // if the function runs correctly, only the normal instructions are executed
+        // and then the "return" is encountered and the function exits normally. If an
+        // error occurs, the code can jump to one of the error labels, and execute that
+        add(_division_by_zero);
+        add(_invalid_regex);
 
         // compile the function
         _function.compile();
@@ -82,6 +86,25 @@ Bytecode::Bytecode(const Source& source) :
 
     // Set the jit_exception_handler back to the original handler
     jit_exception_set_handler(original_handler);
+}
+
+/**
+ *  Method to initialize an error label
+ *  @param  label
+ */
+void Bytecode::add(ErrorLabel &label)
+{
+    // add the label
+    _function.insn_label(label.label());
+    
+    // we need a constant of the message
+    jit_value buffer = _function.new_constant((void *)label.message(), jit_type_void_ptr);
+
+    // call the mark_failed function
+    _callbacks.mark_failed(_userdata, buffer);
+
+    // completely return out of the function (this is an fatal error code)
+    _function.insn_return();
 }
 
 /**
@@ -478,15 +501,9 @@ void Bytecode::divide(const Expression *left, const Expression *right)
     // First calculate the right value
     jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
-    // we set our error message to the zero division error, because if we jump
-    // to the mark_failed point from here it is due to a zero division, this
-    // is probably not the best solution to set this as it will be set in case
-    // everything goes well as well.
-    // @todo look for a better solution for this
-    _error_msg = _function.new_constant((void*) "Zero division error");
-
     // if it is 0 we branch off to our early exit label
-    _function.insn_branch_if(r == _false, _error);
+    // @todo we have to test this (why no branch_if_not?)
+    _function.insn_branch_if(r == _false, _division_by_zero.label());
 
     // calculate the left one
     jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
@@ -624,6 +641,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         jit_value l_size = pop();
         jit_value l = pop();
 
+        // Right expression is also turned into a string
         right->string(this);
         jit_value r_size = pop();
         jit_value r = pop();
@@ -696,6 +714,44 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 
     // calculate them, and push to stack
     _stack.emplace(l <= r);
+}
+
+/**
+ *  Regular expression operator
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::regex(const Expression *left, const Expression *right)
+{
+    // generate the code to turn the expression on the right hand size into a string (this pushes two instructions to the stack)
+    right->string(this);
+    
+    // pop the last two elements from the stack (the string representation of the expression plus its size)
+    jit_value expressionsize = pop();
+    jit_value expression = pop();
+
+    // now we are going to call the function to turn this into an expression
+    jit_value handle = _callbacks.regex_compile(_userdata, expression, expressionsize);
+
+    // we insert a jump to go to the error handler if the regex compilation fails
+    _function.insn_branch_if_not(handle, _invalid_regex.label());
+
+    // right hand side indeed contains a valid regex, now create the code that turns the left hand size in a string
+    left->string(this);
+
+    // pop the last two instructions from the stack (this is now the string on the left hand side)
+    jit_value messagesize = pop();
+    jit_value message = pop();
+
+    // call the regex match function and push the result to the stack
+    jit_value result = _callbacks.regex_match(_userdata, handle, message, messagesize);
+
+    // and finally we call a method to destruct regex resources
+    _callbacks.regex_release(_userdata, handle);
+    
+    // push the result to the stack
+    _stack.emplace(result != _false);
 }
 
 /**

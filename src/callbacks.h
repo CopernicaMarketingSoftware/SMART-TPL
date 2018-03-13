@@ -6,7 +6,7 @@
  *  function.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -41,6 +41,9 @@ void        smart_tpl_assign_string         (void *userdata, const char *key, si
 void        smart_tpl_assign_double         (void *userdata, const char *key, size_t keysize, double value);
 void        smart_tpl_assign                (void *userdata, const char *key, size_t keysize, const void *variable);
 int         smart_tpl_strcmp                (void *userdata, const char *a, size_t a_len, const char *b, size_t b_len);
+void       *smart_tpl_regex_compile         (void *userdata, const char *regex, size_t size);
+int         smart_tpl_regex_match           (void *userdata, void *handle, const char *message, size_t size);
+void        smart_tpl_regex_release         (void *userdata, void *handle);
 const void *smart_tpl_create_params         (void *userdata, size_t parameters_count);
 const void *smart_tpl_params_append_numeric (void *userdata, const void *parameters, numeric_t value);
 const void *smart_tpl_params_append_double  (void *userdata, const void *parameters, double value);
@@ -180,6 +183,13 @@ private:
      *  Signature of the function to compare 2 strings
      */
     static SignatureCallback _strcmp;
+
+    /**
+     *  Signature of the functions to check if a string matches with a regex
+     */
+    static SignatureCallback _regex_compile;
+    static SignatureCallback _regex_match;
+    static SignatureCallback _regex_release;
 
     /**
      *  Signature of the function to assign a variable to a local variable
@@ -701,6 +711,65 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_strcmp", (void *) smart_tpl_strcmp, _strcmp.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+    
+    /**
+     *  Compile a regular expression
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  regex           The regular expression to compile
+     *  @param  size            Size of the regular expression
+     *  @return jit_value
+     */
+    jit_value regex_compile(const jit_value &userdata, const jit_value &regex, const jit_value &size)
+    {
+        // arguments to compile the the regular expression
+        jit_value_t args[] = {
+            userdata.raw(),
+            regex.raw(),
+            size.raw()
+        };
+        
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_regex_compile", (void *) smart_tpl_regex_compile, _regex_compile.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Match a regular expression
+     *  @param  userdata        Pointer to user-supplied 
+     *  @param  regex           The regular expression (return value of earlier call to regex_compile())
+     *  @param  string          The message
+     *  @param  size            Size of the regular expression
+     *  @return jit_value
+     */
+    jit_value regex_match(const jit_value &userdata, const jit_value &regex, const jit_value &string, const jit_value &size)
+    {
+        // arguments to compile the the regular expression
+        jit_value_t args[] = {
+            userdata.raw(),
+            regex.raw(),
+            string.raw(),
+            size.raw()
+        };
+        
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_regex_match", (void *) smart_tpl_regex_match, _regex_match.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+    
+    /**
+     *  Release a regular expression that was earlier compiled with regex_compile()
+     *  @param  userdata        Pointer to user-supplied 
+     *  @param  regex           The regular expression (return value of earlier call to regex_compile())
+     */
+    void regex_release(const jit_value &userdata, const jit_value &regex)
+    {
+        // arguments to compile the the regular expression
+        jit_value_t args[] = {
+            userdata.raw(),
+            regex.raw()
+        };
+        
+        // create the instruction
+        _function->insn_call_native("smart_tpl_regex_release", (void *) smart_tpl_regex_release, _regex_release.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

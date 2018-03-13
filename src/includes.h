@@ -4,7 +4,7 @@
  *  Header file that includes all header files of the SmartTpl library
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -153,6 +153,7 @@
 #include "operators/binaryboolean.h"
 #include "operators/binaryand.h"
 #include "operators/binaryor.h"
+#include "operators/binaryregex.h"
 #include "signature_callback.h"
 #include "tokenprocessor.h"
 #include "parser.h"
@@ -165,6 +166,7 @@
 #include "handler.h"
 #include "executor.h"
 #include "jit_exception.h"
+#include "errorlabel.h"
 #include "bytecode.h"
 #include "library.h"
 #include "vector_iterator.h"

@@ -6,7 +6,7 @@
  *  tokens. This file can be compiled into a *.c file with the 'flex' command.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2017 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 #include "includes.h"
 
@@ -142,6 +142,7 @@
     "*"                         { return TOKEN_MULTIPLY; }
     "/"                         { return TOKEN_DIVIDE; }
     "%"                         { return TOKEN_MOD; }
+    "=~"                        { return TOKEN_REGEX; }
     "=="                        { return TOKEN_EQ; }
     "eq"                        { return TOKEN_EQ; }
     "!="                        { return TOKEN_NE; }

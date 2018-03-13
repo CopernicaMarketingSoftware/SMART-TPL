@@ -9,7 +9,7 @@
  *  the JIT-compiler.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -136,6 +136,7 @@ public:
     virtual void greaterEquals(const Expression *left, const Expression *right) = 0;
     virtual void lesser(const Expression *left, const Expression *right) = 0;
     virtual void lesserEquals(const Expression *left, const Expression *right) = 0;
+    virtual void regex(const Expression *left, const Expression *right) = 0;
 
     /**
      *  Boolean operators

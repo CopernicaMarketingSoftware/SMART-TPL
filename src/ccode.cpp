@@ -4,7 +4,7 @@
  *  Implementation file for the Ccode class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2017 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 #include "includes.h"
 
@@ -593,6 +593,16 @@ void CCode::lesserEquals(const Expression *left, const Expression *right)
     // Print as a double if it's a double, print as a regular numer otherwise
     if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
     else right->numeric(this);
+}
+
+/**
+ *  Regular expression parsing
+ *  @param  left
+ *  @param  right
+ */
+void CCode::regex(const Expression *left, const Expression *right)
+{
+    _out << "callbacks->regex(userdata,"; left->string(this); _out << ','; right->string(this); _out << ") == 0";
 }
 
 /**
