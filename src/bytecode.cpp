@@ -214,8 +214,8 @@ void Bytecode::output(const Variable *variable)
  */
 void Bytecode::output(const Filter *filter)
 {
-    // Call the string method on the filter which will call the modifiers() on our generator
-    filter->string(this);
+    // Call the pointer method on the filter, so that a pointer to the filtered variable will be added to the stack
+    filter->pointer(this);
 
     // Pop the value that modifiers() left us
     auto var = pop();
