@@ -170,7 +170,7 @@ ${TOKENIZERS}: ${TOKENIZERS:%.cpp=%.flex}
 
 ${PARSER}: ${PARSER:%.cpp=%.lemon}
 	${LEMON} ${LEMON_FLAGS} ${@:%.cpp=%.lemon}
-	${MV} ${PARSER:%.cpp=%.c} $@
+	${MV} ${@:%.cpp=%.c} $@
 
 ${SHARED_LIBRARY_OBJECTS}: ${@:%.o=%.cpp}
 	${COMPILER} ${COMPILER_FLAGS} ${SHARED_COMPILER_FLAGS} -o $@ ${@:%.o=%.cpp}

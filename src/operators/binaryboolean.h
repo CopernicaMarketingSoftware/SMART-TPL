@@ -3,7 +3,7 @@
  *
  *  Base class for boolean operators
  *
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -36,7 +36,8 @@ public:
      */
     virtual void string(Generator *generator) const override
     {
-        // booleans have no output, generate a string right away
+        // this is wrong, because we can send "true" or "false" to the output, but
+        // inside ByteCode.cpp and CCode.cpp we have a special case for boolean output
         generator->string("");
     }
 };

@@ -20,6 +20,7 @@ namespace SmartTpl { namespace Internal {
 void        smart_tpl_write                 (void *userdata, const char *data, size_t size);
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
 void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
+void        smart_tpl_output_boolean        (void *userdata, bool value);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);
@@ -78,6 +79,11 @@ private:
      *  Signature fo the output numeric callback
      */
     static SignatureCallback _output_numeric;
+
+    /**
+     *  Signature fo the output boolean callback
+     */
+    static SignatureCallback _output_boolean;
 
     /**
      *  Signature of the member callback
@@ -288,6 +294,24 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_output_numeric", (void *)smart_tpl_output_numeric, _output_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the output boolean function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  value           Value to output
+     *  @see    smart_tpl_output_numeric
+     */
+    void output_boolean(const jit_value &userdata, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_output_boolean", (void *)smart_tpl_output_boolean, _output_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

@@ -150,6 +150,15 @@ public:
     }
 
     /**
+     *  Output a boolean value
+     *  @param  value   The value to output
+     */
+    void outputBoolean(bool value)
+    {
+        _buffer.append(value ? "true" : "false");
+    }
+
+    /**
      *  Get access to a variable
      *  @param  name
      *  @param  size

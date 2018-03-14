@@ -230,10 +230,20 @@ void Bytecode::output(const Filter *filter)
  */
 void Bytecode::write(const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric) _callbacks.output_numeric(_userdata, numericExpression(expression));
-    else
-    {
-        // convert the expression to a string (this pushes two values on the stack
+    // check the type
+    switch (expression->type()) {
+    case Expression::Type::Numeric:
+        // generate the code that pushes the nummeric value to the stack, and output that
+        _callbacks.output_numeric(_userdata, numericExpression(expression));
+        break;
+    
+    case Expression::Type::Boolean:
+        // generate the code that pushes a boolean value to the stack, and output that
+        _callbacks.output_boolean(_userdata, booleanExpression(expression));
+        break;
+    
+    default:
+        // convert the expression to a string (this pushes two values on the stack)
         expression->string(this);
 
         // pop the buffer and size from the stack (in reverse order)
@@ -242,6 +252,7 @@ void Bytecode::write(const Expression *expression)
 
         // call the write function
         _callbacks.write(_userdata, buffer, size);
+        break;
     }
 }
 
