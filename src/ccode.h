@@ -137,17 +137,12 @@ private:
     virtual void modifiers(const Modifiers *modifiers, const Variable *variable) override;
 
     /**
-     *  Generate the code to apply a set of modifiers on an expression and turn it into a boolean
+     *  Generate the code to apply a set of modifiers on an expression and turn it into a scalar
      *  @param  modifiers          The set of modifiers to apply
      *  @param  variable           The variable to apply to modifers to
      */
+    virtual void modifiersString(const Modifiers *modifiers, const Variable *variable) override;
     virtual void modifiersBoolean(const Modifiers *modifiers, const Variable *variable) override;
-
-    /**
-     *  Generate the code to apply a set of modifiers on an expression and turn it into a double
-     *  @param  modifiers          The set of modifiers to apply
-     *  @param  variable           The variable to apply the modifiers to
-     */
     virtual void modifiersDouble(const Modifiers *modifiers, const Variable *variable) override;
 
     /**

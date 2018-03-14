@@ -582,12 +582,17 @@ void Bytecode::equals(const Expression *left, const Expression *right)
     }
     else
     {
-        // Convert both expressions to strings
+        // ask the left instruction to push the string to the stack
         left->string(this);
+        
+        // and get the string back from the stack
         jit_value l_size = pop();
         jit_value l = pop();
 
+        // ask the right instruction to do the same (push string to the stack)
         right->string(this);
+        
+        // and get it back from the stack
         jit_value r_size = pop();
         jit_value r = pop();
 
@@ -790,7 +795,7 @@ void Bytecode::booleanOr(const Expression *left, const Expression *right)
  *  Generate the code to apply a set of modifiers on an expression
  *  @param  modifiers          The set of modifiers to apply
  *  @param  expression         The expression to apply to modifiers on
- *  @note   +1 on the stack
+ *  @note   +1 on the stack    (pointer to the latest variable)
  */
 void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
 {
@@ -831,6 +836,24 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
         // let's apply the modifier and push the new result of it to the stack
         _stack.push(_callbacks.modify_variable(_userdata, var, mod, jitparams));
     }
+}
+
+/**
+ *  Generate the code to apply a set of modifiers on an expression and turn it into a string
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  variable           The variable to apply to modifers to
+ */
+void Bytecode::modifiersString(const Modifiers *modifiers, const Variable *variable)
+{
+    // first generate the modifiers and all, which adds the output to the stack
+    this->modifiers(modifiers, variable);
+    
+    // get the pointer to the variable from the stack
+    auto lastvar = pop();
+
+    // push the result that is on the stack through to_boolean
+    _stack.push(_callbacks.to_string(_userdata, lastvar));
+    _stack.push(_callbacks.size(_userdata, lastvar));
 }
 
 /**

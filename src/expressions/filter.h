@@ -4,7 +4,7 @@
  *  A filter combines an expression with a number of modifiers
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -54,7 +54,7 @@ public:
      *  Generate the output that leaves a pointer to the variable
      *  @param  generator
      */
-    void pointer(Generator *generator) const override
+    virtual void pointer(Generator *generator) const override
     {
         _modifiers->generate(generator, _variable.get());
     }
@@ -63,16 +63,16 @@ public:
      *  Generate the expression as string value
      *  @param  generator
      */
-    void string(Generator *generator) const override
+    virtual void string(Generator *generator) const override
     {
-        _modifiers->generate(generator, _variable.get());
+        _modifiers->generateString(generator, _variable.get());
     }
 
     /**
      *  Generate the expression as a numeric value
      *  @param  generator
      */
-    void numeric(Generator *generator) const override
+    virtual void numeric(Generator *generator) const override
     {
         throw std::runtime_error("Non-default numeric implementation called");
     };
@@ -81,7 +81,7 @@ public:
      *  Generate the expression as a double value
      *  @param  generator
      */
-    void double_type(Generator *generator) const override
+    virtual void double_type(Generator *generator) const override
     {
         _modifiers->generateDouble(generator, _variable.get());
     };
@@ -90,7 +90,7 @@ public:
      *  Generate the expression as a boolean value
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void boolean(Generator *generator) const override
     {
         _modifiers->generateBoolean(generator, _variable.get());
     };
@@ -116,7 +116,7 @@ public:
      *  Generate the expression to output ourself
      *  @param  generator
      */
-    void output(Generator *generator) const override
+    virtual void output(Generator *generator) const override
     {
         generator->output(this);
     }

@@ -4,7 +4,7 @@
  *  List of modifiers that make up a filter
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 /**
@@ -57,6 +57,8 @@ public:
     /**
      *  Generate the output of these modifiers
      *  @param  generator
+     *  @param  variable
+     *  @note   pointer to a variable is added to the stack
      */
     void generate(Generator *generator, const Variable *variable) const
     {
@@ -64,8 +66,20 @@ public:
     }
 
     /**
+     *  Generate the code for modifiers but turning it into a string
+     *  @param  generator
+     *  @param  variable
+     */
+    void generateString(Generator *generator, const Variable *variable) const
+    {
+        generator->modifiersString(this, variable);
+    }
+
+    /**
      *  Generate the code for modifiers but turning it into a boolean, this
      *  is mostly used for if statements
+     *  @param  generator
+     *  @param  variable
      */
     void generateBoolean(Generator *generator, const Variable *variable) const
     {
@@ -75,6 +89,8 @@ public:
     /**
      *  Generate the code for modifiers but turning it into a double, this is mostly
      *  used for if statements
+     *  @param  generator
+     *  @param  variable
      */
     void generateDouble(Generator *generator, const Variable *variable) const
     {

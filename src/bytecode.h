@@ -4,7 +4,7 @@
  *  A generator class that creates a LLVM representation of a template.
  *
  *  This class overrides from the Generator class to generate the code that
- *  can be passed to a LLVM machine.
+ *  can be passed to a libjit machine.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 - 2018 Copernica BV
@@ -242,16 +242,12 @@ private:
     void modifiers(const Modifiers *modifiers, const Variable *variable) override;
 
     /**
-     *  Generate the code to apply a set of modifiers on an expression and turn it into a boolean
+     *  Generate the code to apply a set of modifiers on an expression and turn it into a specific type
      *  @param  modifiers          The set of modifiers to apply
      *  @param  variable           The variable to apply to modifers to
      */
+    void modifiersString(const Modifiers *modifiers, const Variable *variable) override;
     void modifiersBoolean(const Modifiers *modifiers, const Variable *variable) override;
-    /**
-     *  Generate the code to apply a set of modifiers on an expression and turn it into a double
-     *  @param  modifiers          The set of modifiers to apply
-     *  @param  variable           The variable to apply the modifiers to
-     */
     void modifiersDouble(const Modifiers *modifiers, const Variable *variable) override;
 
     /**

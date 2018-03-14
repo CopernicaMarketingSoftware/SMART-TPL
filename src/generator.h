@@ -152,17 +152,14 @@ public:
      *  @param  variable           The variable to apply to modifers to
      */
     virtual void modifiers(const Modifiers *modifiers, const Variable *variable) = 0;
+
     /**
-     *  Generate the code to apply a set of modifiers on an expression and turn it into a boolean
+     *  Generate the code to apply a set of modifiers on an expression and turn it into a specific type
      *  @param  modifiers          The set of modifiers to apply
      *  @param  variable           The variable to apply the modifers to
      */
+    virtual void modifiersString(const Modifiers *modifers, const Variable *variable) = 0;
     virtual void modifiersBoolean(const Modifiers *modifers, const Variable *variable) = 0;
-    /**
-     *  Generate the code to apply a set of modifiers on an expression and turn it into a double
-     *  @param  modifiers          The set of modifiers to apply
-     *  @param  variable           The variable to apply the modifiers to
-     */
     virtual void modifiersDouble(const Modifiers *modifiers, const Variable *variable) = 0;
 
     /**

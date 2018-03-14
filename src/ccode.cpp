@@ -655,6 +655,23 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
 }
 
 /**
+ *  Generate the code to apply a set of modifiers on an expression and turn it into a string
+ *  @param  modifiers          The set of modifiers to apply
+ *  @param  variable           The variable to apply to modifers to
+ */
+void CCode::modifiersString(const Modifiers *modifiers, const Variable *variable)
+{
+    // write out the to_string function
+    _out << "callbacks->to_string(userdata,";
+
+    // write the modifiers, which return a variable pointer
+    this->modifiers(modifiers, variable);
+
+    // close the function
+    _out << ')';
+}
+
+/**
  *  Generate the code to apply a set of modifiers on an expression and turn it into a boolean
  *  @param  modifiers          The set of modifiers to apply
  *  @param  variable           The variable to apply to modifers to
