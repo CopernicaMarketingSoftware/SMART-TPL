@@ -20,7 +20,7 @@ namespace SmartTpl { namespace Internal {
 void        smart_tpl_write                 (void *userdata, const char *data, size_t size);
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
 void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
-void        smart_tpl_output_boolean        (void *userdata, bool value);
+void        smart_tpl_output_boolean        (void *userdata, int value);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);

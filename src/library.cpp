@@ -4,7 +4,7 @@
  *  Implementation file for the Library class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 #include "includes.h"
 
@@ -21,6 +21,7 @@ static struct smart_tpl_callbacks callbacks = {
     .write                 = smart_tpl_write,
     .output                = smart_tpl_output,
     .output_numeric        = smart_tpl_output_numeric,
+    .output_boolean        = smart_tpl_output_boolean,
     .member                = smart_tpl_member,
     .member_at             = smart_tpl_member_at,
     .create_iterator       = smart_tpl_create_iterator,

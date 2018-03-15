@@ -88,8 +88,8 @@ void CCode::output(const Filter *filter)
     // Now let's actually call the output callback
     _out << "callbacks->output(userdata,";
 
-    // call the string method on our filter, which writes all the filtering code for us
-    filter->string(this);
+    // call the pointer method on our filter, which writes all the filtering code for us
+    filter->pointer(this);
 
     // Let's write the escape flag
     _out << ',' << (filter->escape() ? 1 : 0);
@@ -109,6 +109,14 @@ void CCode::write(const Expression *expression)
         _out << "callbacks->output_numeric(userdata,";
 
         expression->numeric(this);
+
+        _out << ");" << std::endl;
+    }
+    else if (expression->type() == Expression::Type::Boolean)
+    {
+        _out << "callbacks->output_boolean(userdata,";
+
+        expression->boolean(this);
 
         _out << ");" << std::endl;
     }

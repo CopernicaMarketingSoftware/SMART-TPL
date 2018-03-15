@@ -7,7 +7,7 @@
  *  As a library-user, you do not have to use or call these functions.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2018 Copernica BV
  */
 
 #include <stddef.h>
@@ -22,6 +22,7 @@ struct smart_tpl_callbacks {
     void        (*write)                (void *userdata, const char *data, size_t size);
     void        (*output)               (void *userdata, const void *variable, int escape);
     void        (*output_numeric)       (void *userdata, numeric_t number);
+    void        (*output_boolean)       (void *userdata, int value);
     const void *(*member)               (void *userdata, const void *variable, const char *name, size_t size);
     const void *(*member_at)            (void *userdata, const void *variable, size_t position);
     void       *(*create_iterator)      (void *userdata, const void *variable);

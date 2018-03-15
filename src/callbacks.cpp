@@ -108,7 +108,7 @@ void smart_tpl_output_numeric(void *userdata, numeric_t number)
  *  @param  userdata       pointer to user-supplied data
  *  @param  value          the value to output
  */
-void smart_tpl_output_boolean(void *userdata, bool value)
+void smart_tpl_output_boolean(void *userdata, int value)
 {
     // Convert the userdata to our handler object
     auto *handler = (Handler*) userdata;
