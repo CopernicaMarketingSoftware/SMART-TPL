@@ -278,7 +278,7 @@ TEST(Modifier, Strlen)
 
 TEST(Modifier, DateFormat)
 {
-    string input("{$var|date_format}\n{$var|date_format:\"%A, %B %e, %Y\"}\n{$var|date_format:\"%D\"}\n{$var|date_format}");
+    string input("{$var|date_format}\n{$var|date_format:\"%A, %B %e, %Y\"}\n{$var|date_format:\"%D\"}");
     Template tpl((Buffer(input)));
 
     Data data;

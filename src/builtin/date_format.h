@@ -34,8 +34,8 @@ public:
      */
     VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
-        // initialize our timestamp, empty string is 0 therefore current time
-        time_t timestamp(input.toNumeric());
+        // initialize our timestamp, if empty string the current time, epoch start time if invalid input
+        time_t timestamp = input.toString().empty() ? time(0) : input.toNumeric();
 
         // initialize the format
         std::string format = params.size() >= 1 ? params[0].toString() : "%b %e, %Y";
