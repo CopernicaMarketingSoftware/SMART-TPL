@@ -276,6 +276,24 @@ TEST(Modifier, Strlen)
     }
 }
 
+TEST(Modifier, DateFormat)
+{
+    string input("{$var|date_format}\n{$var|date_format:\"%A, %B %e, %Y\"}\n{$var|date_format:\"%D\"}\n{$var|date_format}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "1533081600\n1533081600\n1533081600");
+
+    string expectedOutput("Aug  1, 2018\nWednesday, August  1, 2018\n08/01/18");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
 TEST(Modifier, Count)
 {
     string input("{$var|count}");

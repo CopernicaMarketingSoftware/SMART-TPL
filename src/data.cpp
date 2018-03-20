@@ -11,6 +11,7 @@
  *  Dependencies
  */
 #include "includes.h"
+#include "builtin/date_format.h"
 
 /**
  *  Namespace
@@ -39,6 +40,7 @@ static Internal::RegexReplaceModifier    regex_replace;
 static Internal::SubStrModifier          substr;
 static Internal::StrPosModifier          strpos;
 static Internal::StrStrModifier          strstr;
+static Internal::DateFormatModifier      date_format;
 static Internal::UrlencodeModifier       urlencode;
 static Internal::UrldecodeModifier       urldecode;
 static Internal::Md5Modifier             md5;
@@ -77,6 +79,7 @@ Data::Data()
               {"substr",           &substr},
               {"strstr",           &strstr},
               {"strpos",           &strpos},
+              {"date_format",      &date_format},
               {"urlencode",        &urlencode},
               {"urldecode",        &urldecode},
               {"range",            &range_modifier}}) // register built-in modifiers
