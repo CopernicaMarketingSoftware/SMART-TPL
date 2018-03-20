@@ -1,10 +1,10 @@
 /**
- *  Strlen.h
+ *  date_format.h
  *
- *  Built-in "|strlen" modifier
+ *  Built-in "|date_format" modifier
  *
- *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @author Tamas Elekes <tamas.elekes@copernica.com>
+ *  @copyright 2018 Copernica BV
  */
 
 /**
