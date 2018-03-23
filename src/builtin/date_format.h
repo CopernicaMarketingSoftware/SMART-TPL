@@ -34,12 +34,26 @@ public:
      */
     VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
-        // initialize our timestamp, if empty string the current time, epoch start time if invalid input
-        time_t timestamp = input.toString().empty() ? time(0) : input.toNumeric();
-
+        
         // initialize the format
         std::string format = params.size() >= 1 ? params[0].toString() : "%b %e, %Y";
 
+        // used to determine if the input is a formatted date string or unix timestamp
+        tm input_timeinfo;
+
+        // this timestamp will be formatted to the given format
+        time_t timestamp;
+
+        // try to parse the input as a formatted date string
+        std::istringstream ss(input.toString().c_str());
+        ss >> std::get_time(&input_timeinfo, "%Y-%m-%d %H:%M:%S");
+
+        if (ss.fail())
+            // if empty string the current time, epoch start time if invalid input
+            timestamp = input.toString().empty() || input.toString() == "now" ? time(0) : input.toNumeric();
+        else
+            // make timestamp from time info
+            timestamp = mktime(&input_timeinfo);
 
         char buffer[100];
         tm timeinfo;
