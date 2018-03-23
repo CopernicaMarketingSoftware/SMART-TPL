@@ -42,14 +42,15 @@ public:
 
 
         char buffer[100];
-        tm * timeinfo = localtime(&timestamp);
+        tm timeinfo;
+
+        // get the timestamp in UTC
+        gmtime_r(&timestamp, &timeinfo);
 
         // creating conversion from timestamp to formatted time string
-        strftime(buffer, sizeof(buffer), format.c_str(), timeinfo);
+        strftime(buffer, sizeof(buffer), format.c_str(), &timeinfo);
 
-        std::string time_str(buffer);
-
-        return time_str;
+        return (VariantValue) buffer;
     }
 };
 
