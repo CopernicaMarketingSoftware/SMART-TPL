@@ -10,7 +10,6 @@
 /**
  *  Namespace
  */
-
 #include <ctime>
 
 namespace SmartTpl { namespace Internal {
@@ -34,7 +33,6 @@ public:
      */
     VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
-        
         // initialize the format
         std::string format = params.size() >= 1 ? params[0].toString() : "%b %e, %Y";
 
@@ -46,25 +44,41 @@ public:
 
         // try to parse the input as a formatted date string
         std::istringstream ss(input.toString().c_str());
+        // todo test with different inputs
         ss >> std::get_time(&input_timeinfo, "%Y-%m-%d %H:%M:%S");
 
         if (ss.fail())
+        {
             // if empty string the current time, epoch start time if invalid input
             timestamp = input.toString().empty() || input.toString() == "now" ? time(0) : input.toNumeric();
+        }
         else
+        {
             // make timestamp from time info
             timestamp = mktime(&input_timeinfo);
+        }
 
+        // buffer in which we're going to write the formatted time
         char buffer[100];
+
+        // structure in which the time will be loaded
         tm timeinfo;
 
-        // get the timestamp in UTC
-        gmtime_r(&timestamp, &timeinfo);
+        // get the timestructure in UTC
+        auto result = gmtime_r(&timestamp, &timeinfo);
+        if (!result)
+        {
+            // upon error return the input
+            return VariantValue(input.toString());
+        }
+        else
+        {
+            // creating conversion from timestamp to formatted time string
+            size_t size = strftime(buffer, sizeof(buffer), format.c_str(), &timeinfo);
 
-        // creating conversion from timestamp to formatted time string
-        strftime(buffer, sizeof(buffer), format.c_str(), &timeinfo);
-
-        return (VariantValue) buffer;
+            // expose the buffer
+            return VariantValue(buffer, size);
+        }
     }
 };
 
