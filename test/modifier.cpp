@@ -278,13 +278,21 @@ TEST(Modifier, Strlen)
 
 TEST(Modifier, DateFormat)
 {
-    string input("{$var|date_format}\n{$var|date_format:\"%A, %B %e, %Y\"}\n{$var|date_format:\"%D\"}");
+    string input("{$var1|date_format}\n{$var2|date_format}\n{$var3|date_format}\n"
+                 "{$var1|date_format:\"%A, %B %e, %Y\"}\n{$var2|date_format:\"%A, %B %e, %Y\"}\n{$var3|date_format:\"%A, %B %e, %Y\"}\n"
+                 "{$var1|date_format:\"%D\"}\n{$var2|date_format:\"%D\"}\n{$var3|date_format:\"%D\"}\n"
+                 "{$var4|date_format}");
     Template tpl((Buffer(input)));
 
     Data data;
-    data.assign("var", "1533081600\n1533081600\n1533081600");
+    data.assign("var1", "1533081600")
+        .assign("var2", "1999-02-22 14:44:22")
+        .assign("var3", "1999-02-22")
+        .assign("var4", "invalid string");
 
-    string expectedOutput("Aug  1, 2018\nWednesday, August  1, 2018\n08/01/18");
+    string expectedOutput("Aug  1, 2018\nFeb 22, 1999\nFeb 22, 1999\nWednesday, August  1, 2018\nMonday, February 22, 1999\n"
+                          "Monday, February 22, 1999\n08/01/18\n02/22/99\n02/22/99\nJan  1, 1970");
+
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
     if (compile(tpl)) // This will compile the Template into a shared library
