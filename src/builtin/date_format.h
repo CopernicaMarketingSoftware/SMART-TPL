@@ -25,6 +25,7 @@ private:
      *  @param  timestamp
      *  @param  format
      *  @return VariantValue
+     *  @throws bool
      */
     static VariantValue process(time_t timestamp, const char *format)
     {
@@ -35,7 +36,7 @@ private:
         auto result = gmtime_r(&timestamp, &timeinfo);
         
         // if we failed to get the time we return the format
-        if (result == nullptr) return VariantValue(format);
+        if (result == nullptr) throw false;
 
         // buffer in which we're going to write the formatted time
         char buffer[256];
@@ -44,7 +45,7 @@ private:
         size_t size = strftime(buffer, sizeof(buffer), format, &timeinfo);
         
         // return the original timestamp
-        if (size == 0) return VariantValue(timestamp);
+        if (size == 0) throw false;
         
         // expose the buffer
         return VariantValue(buffer, size);
@@ -55,6 +56,7 @@ private:
      *  @param  timestamp
      *  @param  params
      *  @return VariantValue
+     *  @throws bool
      */
     static VariantValue process(time_t timestamp, const SmartTpl::Parameters &params)
     {
@@ -73,7 +75,8 @@ private:
      *  according to the preferred formatting
      *  @param  time
      *  @param  params
-     *  @return VariantValue'
+     *  @return VariantValue
+     *  @throws false
      */
     static VariantValue process(const char *datetime, const SmartTpl::Parameters &params)
     {
@@ -108,8 +111,8 @@ private:
         // was the current time supplied?
         if (strcasecmp(datetime, "now") == 0) return process(time(nullptr), params);
         
-        // expose the datetime exactly as the user supplied it
-        return VariantValue(datetime);
+        // failed to handle
+        throw false;
     }
     
 public:
@@ -129,21 +132,30 @@ public:
         // get the input value
         std::string value = input.toString();
         
-        // if no input was given, we treat it as the current time
-        if (value.size() == 0) return process(time(nullptr), params);
-        
-        // iterate over the value to see if the input only contains numbers
-        for (size_t i = 0; i < value.size(); ++i)
+        // prevent exceptions if parsing or generating fails
+        try
         {
-            // all is ok if we only see digits
-            if (isdigit(value[i])) continue;
+            // if no input was given, we treat it as the current time
+            if (value.size() == 0) return process(time(nullptr), params);
             
-            // we saw a non-digit character, so we have to parse the date that is given as input
-            return process(value.c_str(), params);
+            // iterate over the value to see if the input only contains numbers
+            for (size_t i = 0; i < value.size(); ++i)
+            {
+                // all is ok if we only see digits
+                if (isdigit(value[i])) continue;
+                
+                // we saw a non-digit character, so we have to parse the date that is given as input
+                return process(value.c_str(), params);
+            }
+            
+            // value only contains numers, so we can treat it as timestamp
+            return process(input.toNumeric(), params);
         }
-        
-        // value only contains numers, so we can treat it as timestamp
-        return process(input.toNumeric(), params);
+        catch (...)
+        {
+            // expose the input given by the user
+            return VariantValue(value);
+        }
     }
 };
 
