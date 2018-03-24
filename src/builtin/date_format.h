@@ -19,11 +19,104 @@ namespace SmartTpl { namespace Internal {
  */
 class DateFormatModifier : public Modifier
 {
+private:
+    /**
+     *  Helper method to turn a timestamp into a VariantValue
+     *  @param  timestamp
+     *  @param  format
+     *  @return VariantValue
+     */
+    static VariantValue process(time_t timestamp, const char *format)
+    {
+        // structure in which the time will be loaded
+        struct tm timeinfo;
+
+        // get the timestructure in UTC
+        auto result = gmtime_r(&timestamp, &timeinfo);
+        
+        // if we failed to get the time we return the format
+        if (result == nullptr) return VariantValue(format);
+
+        // buffer in which we're going to write the formatted time
+        char buffer[256];
+        
+        // write the time into the buffer
+        size_t size = strftime(buffer, sizeof(buffer), format, &timeinfo);
+        
+        // return the original timestamp
+        if (size == 0) return VariantValue(timestamp);
+        
+        // expose the buffer
+        return VariantValue(buffer, size);
+    }
+
+    /**
+     *  Helper method to turn a timestamp into a VariantValue
+     *  @param  timestamp
+     *  @param  params
+     *  @return VariantValue
+     */
+    static VariantValue process(time_t timestamp, const SmartTpl::Parameters &params)
+    {
+        // use default format if nothing was specified
+        if (params.size() == 0) return process(timestamp, "%b %e, %Y");
+        
+        // get the format supplied by the user as string
+        std::string format = params[0].toString();
+        
+        // use this format
+        return process(timestamp, format.c_str());
+    }
+
+    /**
+     *  Helper method to turn a datetime formatted by the user into a variant value
+     *  according to the preferred formatting
+     *  @param  time
+     *  @param  params
+     *  @return VariantValue'
+     */
+    static VariantValue process(const char *datetime, const SmartTpl::Parameters &params)
+    {
+        // possible formats
+        const char *formats[] = {
+            "%Y-%m-%d %H:%M:%S",            // 2013-03-13 12:50:00
+            "%a, %d %b %Y %H:%M:%S GMT",    // Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123
+            "%A, %d-%b-%y %H:%M:%S GMT",    // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
+            "%a %b %e %H:%M:%S %Y",         // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
+            nullptr
+        };
+        
+        // loop through the formats
+        for (int i=0; formats[i]; ++i)
+        {
+            // result variable
+            struct tm tm;
+            
+            // set everything to zero otherwise valgrind complains
+            memset(&tm, 0, sizeof(struct tm));
+
+            // try parsing the string
+            const char *result = strptime(datetime, formats[i], &tm);
+            
+            // proceed
+            if (!result || strlen(result) > 0) continue;
+            
+            // found a match
+            return process(mktime(&tm) - timezone, params);
+        }
+        
+        // was the current time supplied?
+        if (strcasecmp(datetime, "now") == 0) return process(time(nullptr), params);
+        
+        // expose the datetime exactly as the user supplied it
+        return VariantValue(datetime);
+    }
+    
 public:
     /**
      *  Destructor
      */
-    virtual ~DateFormatModifier() {};
+    virtual ~DateFormatModifier() = default;
 
     /**
      *  Modify a value object
@@ -33,52 +126,24 @@ public:
      */
     VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
-        // initialize the format
-        std::string format = params.size() >= 1 ? params[0].toString() : "%b %e, %Y";
-
-        // used to determine if the input is a formatted date string or unix timestamp
-        tm input_timeinfo;
-
-        // this timestamp will be formatted to the given format
-        time_t timestamp;
-
-        // try to parse the input as a formatted date string
-        std::istringstream ss(input.toString().c_str());
-        // todo test with different inputs
-        ss >> std::get_time(&input_timeinfo, "%Y-%m-%d %H:%M:%S");
-
-        if (ss.fail())
+        // get the input value
+        std::string value = input.toString();
+        
+        // if no input was given, we treat it as the current time
+        if (value.size() == 0) return process(time(nullptr), params);
+        
+        // iterate over the value to see if the input only contains numbers
+        for (size_t i = 0; i < value.size(); ++i)
         {
-            // if empty string the current time, epoch start time if invalid input
-            timestamp = input.toString().empty() || input.toString() == "now" ? time(0) : input.toNumeric();
+            // all is ok if we only see digits
+            if (isdigit(value[i])) continue;
+            
+            // we saw a non-digit character, so we have to parse the date that is given as input
+            return process(value.c_str(), params);
         }
-        else
-        {
-            // make timestamp from time info
-            timestamp = mktime(&input_timeinfo);
-        }
-
-        // buffer in which we're going to write the formatted time
-        char buffer[100];
-
-        // structure in which the time will be loaded
-        tm timeinfo;
-
-        // get the timestructure in UTC
-        auto result = gmtime_r(&timestamp, &timeinfo);
-        if (!result)
-        {
-            // upon error return the input
-            return VariantValue(input.toString());
-        }
-        else
-        {
-            // creating conversion from timestamp to formatted time string
-            size_t size = strftime(buffer, sizeof(buffer), format.c_str(), &timeinfo);
-
-            // expose the buffer
-            return VariantValue(buffer, size);
-        }
+        
+        // value only contains numers, so we can treat it as timestamp
+        return process(input.toNumeric(), params);
     }
 };
 
@@ -86,3 +151,4 @@ public:
  *  End namespace
  */
 }}
+
