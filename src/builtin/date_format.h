@@ -86,6 +86,7 @@ private:
             "%a, %d %b %Y %H:%M:%S GMT",    // Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123
             "%A, %d-%b-%y %H:%M:%S GMT",    // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
             "%a %b %e %H:%M:%S %Y",         // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
+            "%Y-%m-%d",                     // 2013-03-13
             nullptr
         };
         

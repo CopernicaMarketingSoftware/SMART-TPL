@@ -291,7 +291,7 @@ TEST(Modifier, DateFormat)
         .assign("var4", "invalid string");
 
     string expectedOutput("Aug  1, 2018\nFeb 22, 1999\nFeb 22, 1999\nWednesday, August  1, 2018\nMonday, February 22, 1999\n"
-                          "Monday, February 22, 1999\n08/01/18\n02/22/99\n02/22/99\nJan  1, 1970");
+                          "Monday, February 22, 1999\n08/01/18\n02/22/99\n02/22/99\ninvalid string");
 
     EXPECT_EQ(expectedOutput, tpl.process(data));
 
