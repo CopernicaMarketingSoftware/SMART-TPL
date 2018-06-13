@@ -50,7 +50,7 @@ public:
     virtual bool toBoolean() const override
     {
         // this is what happens when you call {if $smarty}yes{else}no{/if}
-        return true;
+        return false;
     }
 
     /**
