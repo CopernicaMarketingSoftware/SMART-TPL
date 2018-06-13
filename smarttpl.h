@@ -57,6 +57,7 @@
 #include "smarttpl/parameters.h"
 #include "smarttpl/modifier.h"
 #include "smarttpl/callback.h"
+#include "smarttpl/state.h"
 #include "smarttpl/data.h"
 #include "smarttpl/template.h"
 #include "smarttpl/compileerror.h"

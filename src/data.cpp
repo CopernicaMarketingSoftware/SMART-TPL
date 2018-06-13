@@ -94,6 +94,9 @@ Data::Data()
                            {"base64_encode",    &base64_encode},
                            {"base64_decode",    &base64_decode}});
     }
+    
+    // assign the state, so that variables like "smarty.now" are available
+    _variables.emplace(std::piecewise_construct, std::forward_as_tuple("smarty"), std::forward_as_tuple(&_state));
 }
 
 /**

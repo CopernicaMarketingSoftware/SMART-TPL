@@ -23,6 +23,12 @@ class Data
 {
 private:
     /**
+     *  The state variable, this is the {$smarty} variable that is mainly used to {$smarty.now}
+     *  @var State
+     */
+    State _state;
+
+    /**
      *  All variables, indexed by name
      *  @var    std::map
      */
@@ -47,12 +53,15 @@ public:
 
     /**
      *  Copy constructor
+     *  @param  that        object to copy
      */
     Data(const Data &that)
     : _variables(that._variables),
       _managed_values(that._managed_values),
       _modifiers(that._modifiers)
     {
+        // overwrite the state
+        _variables["smarty"] = &_state;
     }
 
     /**
