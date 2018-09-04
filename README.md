@@ -33,7 +33,21 @@ Templates are stored in *.tpl files, and contain HTML code mixed with special
 
   {if $age > 18}
     You are older than 18.
+  {else}
+    You are not that old.
   {/if}
+  
+  // You can define variables
+  {$text = 'Lorem Ipsum'}
+  {$text}
+  
+  // Modify all characters to lower case
+  {$text|tolower}
+  
+  // And you can calculate
+  {$total = $product_price * $product_qty}
+  {$total}
+  
  </body>
 </html>
 ````
