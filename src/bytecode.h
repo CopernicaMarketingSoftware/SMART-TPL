@@ -284,7 +284,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~Bytecode() {};
+    virtual ~Bytecode();
 
     /**
      *  Execute the template given a certain handler

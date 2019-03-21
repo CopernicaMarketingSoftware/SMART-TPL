@@ -89,6 +89,15 @@ Bytecode::Bytecode(const Source& source) :
 }
 
 /**
+ *  Destructor
+ */
+Bytecode::~Bytecode()
+{
+    // if there is a signature, we need to free it
+    if (_function_signature) jit_type_free(_function_signature);
+}
+
+/**
  *  Method to initialize an error label
  *  @param  label
  */
