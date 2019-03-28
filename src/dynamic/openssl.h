@@ -1,9 +1,11 @@
 /**
  *  Openssl.h
  *
- *  Simple helper class to dynamically load the openssl library.
+ *  Simple helper class to dynamically load the openssl library. See https://www.openssl.org/source/
+ *  for OpenSSL versions.
  *
  *  @author Toon Schoenmakers<toon.schoenmakers@copernica.com>
+ *  @author Michael van der Werve <michael.vanderwerve@mailerq.com>
  *  @copyright 2015 - 2017 Copernica BV
  */
 
@@ -45,6 +47,15 @@ private:
             "libssl.so",
             "libssl.so.1",
             "libssl.so.1.1",
+            
+            // look for an 1.1.1 version
+            "libssl.so.1.1.1b",
+            "libssl.so.1.1.1a",
+            "libssl.so.1.1.1",
+
+            // look for version 1.1.0
+            "libssl.so.1.1.0j",
+            "libssl.so.1.1.0i",
             "libssl.so.1.1.0h",
             "libssl.so.1.1.0g",
             "libssl.so.1.1.0f",
@@ -55,8 +66,13 @@ private:
             "libssl.so.1.1.0a",
             "libssl.so.1.1.0",
 
-            // no symlink versions found, go look for a 1.0.2 version
-            "libssl.so.1.1.0n",
+            // go look for a 1.0.2 version
+            "libssl.so.1.0",
+            "libssl.so.1.0.2r",
+            "libssl.so.1.0.2q",
+            "libssl.so.1.0.2p",
+            "libssl.so.1.0.2o",
+            "libssl.so.1.0.2n",
             "libssl.so.1.0.2m",
             "libssl.so.1.0.2l",
             "libssl.so.1.0.2k",
