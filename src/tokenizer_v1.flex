@@ -270,8 +270,9 @@ bool Tokenizer::process(TokenProcessor *parent, const char *buffer, size_t size)
         // pass token to the parser
         else if (parent->process(id, _token) == false)
         {
-            // Delete our current token, if there is one
-            if (_token) delete _token;
+            // reset the token, it has been deleted by the parser 
+            // because an error was encountered
+            _token = nullptr;
 
             // clean up the buffer
             yy_delete_buffer(state, _scanner);
