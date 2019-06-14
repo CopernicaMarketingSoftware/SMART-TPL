@@ -563,8 +563,8 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
 void Bytecode::modulo(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = numericExpression(left);
+    jit_value r = numericExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l % r);
