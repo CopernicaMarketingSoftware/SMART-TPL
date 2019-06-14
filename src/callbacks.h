@@ -6,7 +6,7 @@
  *  function.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -21,6 +21,7 @@ void        smart_tpl_write                 (void *userdata, const char *data, s
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
 void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
 void        smart_tpl_output_boolean        (void *userdata, int value);
+void        smart_tpl_output_double         (void *userdata, float number);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);
@@ -84,6 +85,11 @@ private:
      *  Signature fo the output boolean callback
      */
     static SignatureCallback _output_boolean;
+
+    /**
+     *  Signature fo the output double callback
+     */
+    static SignatureCallback _output_double;
 
     /**
      *  Signature of the member callback
@@ -312,6 +318,24 @@ public:
 
         // create the instruction
         _function->insn_call_native("smart_tpl_output_boolean", (void *)smart_tpl_output_boolean, _output_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the output double function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  value           Value to output
+     *  @see    smart_tpl_output_double
+     */
+    void output_double(const jit_value &userdata, const jit_value &number)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            number.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_output_double", (void *)smart_tpl_output_double, _output_double.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

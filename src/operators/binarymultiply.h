@@ -4,7 +4,7 @@
  *  Implementation of the binary multiply operator
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -36,6 +36,15 @@ public:
      *  @param  generator
      */
     void numeric(Generator *generator) const override
+    {
+        generator->multiply(_left.get(), _right.get());
+    }
+
+    /**
+     *  Generate the expression as a double value
+     *  @param  generator
+     */
+    void double_type(Generator *generator) const override
     {
         generator->multiply(_left.get(), _right.get());
     }

@@ -4,7 +4,7 @@
  *  Implementation of the callbacks
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
 
@@ -20,6 +20,7 @@ SignatureCallback Callbacks::_write({ jit_type_void_ptr, jit_type_void_ptr, jit_
 SignatureCallback Callbacks::_output({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_output_numeric({ jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_output_boolean({ jit_type_void_ptr, jit_type_sys_longlong });
+SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_float });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -115,6 +116,20 @@ void smart_tpl_output_boolean(void *userdata, int value)
 
     // Call the output boolean method on the handler with our number
     handler->outputBoolean(value);
+}
+
+/**
+ *  Function to output a double value
+ *  @param  userdata       pointer to user-supplied data
+ *  @param  value          the value to output
+ */
+void smart_tpl_output_double(void *userdata, float number)
+{
+    // Convert the userdata to our handler object
+    auto *handler = (Handler*) userdata;
+
+    // Call the output boolean method on the handler with our number
+    handler->outputDouble(number);
 }
 
 /**

@@ -4,7 +4,7 @@
  *  Implementation file of the LLVM code generator.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
 
@@ -249,6 +249,11 @@ void Bytecode::write(const Expression *expression)
     case Expression::Type::Boolean:
         // generate the code that pushes a boolean value to the stack, and output that
         _callbacks.output_boolean(_userdata, booleanExpression(expression));
+        break;
+
+    case Expression::Type::Double:
+        // generate the code that pushes a double value to the stack, and output that
+        _callbacks.output_double(_userdata, doubleExpression(expression));
         break;
     
     default:
@@ -558,8 +563,8 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
 void Bytecode::modulo(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numericExpression(left);
-    jit_value r = numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l % r);
