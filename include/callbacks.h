@@ -23,6 +23,7 @@ struct smart_tpl_callbacks {
     void        (*output)               (void *userdata, const void *variable, int escape);
     void        (*output_numeric)       (void *userdata, numeric_t number);
     void        (*output_boolean)       (void *userdata, int value);
+    void        (*output_double)        (void *userdata, float number);
     const void *(*member)               (void *userdata, const void *variable, const char *name, size_t size);
     const void *(*member_at)            (void *userdata, const void *variable, size_t position);
     void       *(*create_iterator)      (void *userdata, const void *variable);

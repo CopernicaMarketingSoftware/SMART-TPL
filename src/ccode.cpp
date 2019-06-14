@@ -120,6 +120,14 @@ void CCode::write(const Expression *expression)
 
         _out << ");" << std::endl;
     }
+    else if (expression->type() == Expression::Type::Double)
+    {
+        _out << "callbacks->output_double(userdata,";
+
+        expression->double_type(this);
+
+        _out << ");" << std::endl;
+    }
     else
     {
         // we're going to call the write function
