@@ -128,7 +128,7 @@ void smart_tpl_output_double(void *userdata, float number)
     // Convert the userdata to our handler object
     auto *handler = (Handler*) userdata;
 
-    // Call the output boolean method on the handler with our number
+    // Call the output double method on the handler with our number
     handler->outputDouble(number);
 }
 

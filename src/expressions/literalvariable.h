@@ -24,13 +24,20 @@ private:
      */
     std::unique_ptr<Token> _name;
 
+    /**
+     *  The type of the variable
+     *  @var    Expression::Type
+     */
+    Type _type = Type::Value;
+
 public:
     /**
      *  Constructor
      *  @param  token
      */
-    LiteralVariable(Token *token) :
-        _name(token) {}
+    LiteralVariable(Token *token, TypeHandler &handler) :
+        _name(token),
+        _type(handler.get(*_name)) {}
 
     /**
      *  Destructor
@@ -41,7 +48,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const override { return Type::Value; }
+    Type type() const override { return _type; }
 
     /**
      *  Generate the output that leaves a pointer to the variable

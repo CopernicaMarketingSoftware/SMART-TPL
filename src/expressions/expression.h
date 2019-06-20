@@ -4,8 +4,13 @@
  *  Base class for all sorts of expressions
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
+
+/**
+ *  Include guard
+ */
+#pragma once
 
 /**
  *  Set up namespace

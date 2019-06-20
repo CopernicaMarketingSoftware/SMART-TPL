@@ -213,8 +213,28 @@ jit_value Bytecode::doubleExpression(const Expression *expression)
  */
 void Bytecode::output(const Variable *variable)
 {
-    // output the variable using the output callback, we of course use pointer(Variable*) here
-    _callbacks.output(_userdata, pointer(variable), _true);
+    // check the type
+    switch (variable->type()) {
+    case Expression::Type::Numeric:
+        // generate the code that pushes the nummeric value to the stack, and output that
+        _callbacks.output_numeric(_userdata, numericExpression(variable));
+        break;
+    
+    case Expression::Type::Boolean:
+        // generate the code that pushes a boolean value to the stack, and output that
+        _callbacks.output_boolean(_userdata, booleanExpression(variable));
+        break;
+
+    case Expression::Type::Double:
+        // generate the code that pushes a double value to the stack, and output that
+        _callbacks.output_double(_userdata, doubleExpression(variable));
+        break;
+
+    default:
+        // output the variable using the output callback, we of course use pointer(Variable*) here
+        _callbacks.output(_userdata, pointer(variable), _true);
+        break;
+    }
 }
 
 /**

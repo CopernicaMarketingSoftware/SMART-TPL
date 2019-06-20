@@ -35,9 +35,13 @@ public:
      *  @param var                 The variable we would like to assign it to
      *  @throws std::runtime_error In case the variable is not of type LiteralVariable
      */
-    AssignStatement(Expression *expression, Token *var)
+    AssignStatement(Expression *expression, Token *var, TypeHandler &handler)
     : _var(var)
-    , _expression(expression) {}
+    , _expression(expression) {
+
+        // store the type of the expression assigned to this token in the handler
+        handler.store(*_var, _expression->type());
+    }
 
     /**
      *  Destructor

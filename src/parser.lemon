@@ -90,8 +90,8 @@ foreachStatement(A) ::= FOREACH VARIABLE(B) IN variable(C) END_BRACES statements
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) END_BRACES statements(D) FOREACH_ELSE statements(E) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E); }
 foreachStatement(A) ::= FOREACH variable(B) AS VARIABLE(C) ASSIGN_FOREACH VARIABLE(D) END_BRACES statements(E) FOREACH_ELSE statements(F) ENDFOREACH . { A = new SmartTpl::Internal::ForEachStatement(B, C, D, E, F); }
 statement(A)        ::= assignStatement(B) .                                    { A = B; }
-assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) END_BRACES .              { A = new SmartTpl::Internal::AssignStatement(B, C); }
-assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) END_BRACES .          { A = new SmartTpl::Internal::AssignStatement(C, B); }
+assignStatement(A)  ::= ASSIGN expr(B) TO VARIABLE(C) END_BRACES .              { A = new SmartTpl::Internal::AssignStatement(B, C, parent->typehandler()); }
+assignStatement(A)  ::= EXPRESSION VARIABLE(B) IS expr(C) END_BRACES .          { A = new SmartTpl::Internal::AssignStatement(C, B, parent->typehandler()); }
 expr(A)             ::= expr(B) REGEX expr(C) .                                 { A = new SmartTpl::Internal::BinaryRegexOperator(B, C); }
 expr(A)             ::= expr(B) EQ expr(C) .                                    { A = new SmartTpl::Internal::BinaryEqualsOperator(B, C); }
 expr(A)             ::= expr(B) NE expr(C) .                                    { A = new SmartTpl::Internal::BinaryNotEqualsOperator(B, C); }
@@ -117,7 +117,7 @@ literal(A)          ::= MINUS INTEGER(B) . [UMINUS]                             
 literal(A)          ::= DOUBLE(B) .                                             { A = new SmartTpl::Internal::LiteralDouble(B); }
 literal(A)          ::= MINUS DOUBLE(B) . [UMINUS]                              { B->insert(0, 1, '-'); A = new SmartTpl::Internal::LiteralDouble(B); }
 literal(A)          ::= STRING(B) .                                             { A = new SmartTpl::Internal::LiteralString(B); }
-variable(A)         ::= VARIABLE(B) .                                           { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralVariable(B); }
+variable(A)         ::= VARIABLE(B) .                                           { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralVariable(B, parent->typehandler()); }
 variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { parent->setPersonalized(); A = new SmartTpl::Internal::VariableArrayAccess(B,C); }
 variable(A)         ::= variable(B) DOT IDENTIFIER(C) .                         { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralArrayAccess(B,C); }
 variable(A)         ::= variable(B) PIPE modifiers(C) .                         { A = new SmartTpl::Internal::Filter(B, C); }

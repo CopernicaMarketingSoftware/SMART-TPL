@@ -38,6 +38,12 @@ private:
      */
     bool _personalized = false;
 
+    /**
+     *  The handler to keep track of the assigned types to variables
+     *  @var    TypeHandler
+     */
+    TypeHandler _handler;
+
 protected:
     /**
      *  A set of statements that make up the template
@@ -166,6 +172,12 @@ public:
     {
         return *_encoding;
     }
+
+    /**
+     *  Expose the internal type handler
+     *  @return TypeHandler
+     */
+    TypeHandler &typehandler() { return _handler; }
 };
 
 /**

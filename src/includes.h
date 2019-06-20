@@ -77,6 +77,7 @@
 #include "generator.h"
 #include "escaper.h"
 #include "callbackvalue.h"
+#include "typehandler.h"
 #include "dynamic/openssl.h"
 #include "escapers/null.h"
 #include "escapers/html.h"

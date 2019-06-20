@@ -32,19 +32,20 @@ public:
     virtual ~BinaryModuloOperator() {}
 
     /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const override 
+    {
+        // the modulo operator is always numeric
+        return Type::Numeric;
+    }
+
+    /**
      *  Generate the operations
      *  @param  generator
      */
     void numeric(Generator *generator) const override
-    {
-        generator->modulo(_left.get(), _right.get());
-    }
-
-    /**
-     *  Generate the expression as a double value
-     *  @param  generator
-     */
-    void double_type(Generator *generator) const override
     {
         generator->modulo(_left.get(), _right.get());
     }

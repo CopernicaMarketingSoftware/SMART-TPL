@@ -77,17 +77,17 @@ private:
     static SignatureCallback _output;
 
     /**
-     *  Signature fo the output numeric callback
+     *  Signature of the output numeric callback
      */
     static SignatureCallback _output_numeric;
 
     /**
-     *  Signature fo the output boolean callback
+     *  Signature of the output boolean callback
      */
     static SignatureCallback _output_boolean;
 
     /**
-     *  Signature fo the output double callback
+     *  Signature of the output double callback
      */
     static SignatureCallback _output_double;
 

@@ -16,15 +16,6 @@ namespace SmartTpl { namespace Internal {
  */
 class BinaryArithmetricOperator : public BinaryOperator
 {
-private:
-
-    /**
-     *  The type of the operator expression
-     *  @var Type
-     */
-    Type _type = Type::Numeric;
-
-
 public:
     /**
      *  Constructor
@@ -32,14 +23,7 @@ public:
      *  @param  right
      */
     BinaryArithmetricOperator(Expression *left, Expression *right) :
-        BinaryOperator(left, right) 
-    {
-        // if one of the expression is a double, so is the entire expression
-        if (left->type() == Type::Double || right->type() == Type::Double) _type = Type::Double;
-
-        // if one of the expressions is a value, we also treat the expression as a double type
-        if (left->type() == Type::Value || right->type() == Type::Value) _type = Type::Double;
-    }
+        BinaryOperator(left, right) {}
 
     /**
      *  Destructor
@@ -47,10 +31,17 @@ public:
     virtual ~BinaryArithmetricOperator() {}
 
     /**
-     *  The return type of the expression
+     *  The return type of the expression, which depends on the left and right expression
      *  @return Type
      */
-    virtual Type type() const override { return _type; }
+    virtual Type type() const override 
+    {
+        // If one of both expression types is double, so is the complete expression
+        if (_left->type() == Type::Double || _right->type() == Type::Double) return Type::Double;
+
+        // Otherwise, assume numeric (if a boolean or string was provided)
+        return Type::Numeric;
+    }
 };
 
 /**
