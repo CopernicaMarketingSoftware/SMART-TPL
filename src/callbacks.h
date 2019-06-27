@@ -21,7 +21,7 @@ void        smart_tpl_write                 (void *userdata, const char *data, s
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
 void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
 void        smart_tpl_output_boolean        (void *userdata, int value);
-void        smart_tpl_output_double         (void *userdata, float number);
+void        smart_tpl_output_double         (void *userdata, double number);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);

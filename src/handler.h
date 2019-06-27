@@ -162,7 +162,7 @@ public:
      *  Output a double value
      *  @param  number  the double value to output
      */
-    void outputDouble(float number)
+    void outputDouble(double number)
     {
         // create buffer
         char buffer[21];

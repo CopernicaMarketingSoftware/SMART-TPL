@@ -20,7 +20,7 @@ SignatureCallback Callbacks::_write({ jit_type_void_ptr, jit_type_void_ptr, jit_
 SignatureCallback Callbacks::_output({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_output_numeric({ jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_output_boolean({ jit_type_void_ptr, jit_type_sys_longlong });
-SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_float });
+SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_double });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -123,7 +123,7 @@ void smart_tpl_output_boolean(void *userdata, int value)
  *  @param  userdata       pointer to user-supplied data
  *  @param  value          the value to output
  */
-void smart_tpl_output_double(void *userdata, float number)
+void smart_tpl_output_double(void *userdata, double number)
 {
     // Convert the userdata to our handler object
     auto *handler = (Handler*) userdata;
