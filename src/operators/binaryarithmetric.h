@@ -36,11 +36,11 @@ public:
      */
     virtual Type type() const override 
     {
-        // If one of both expression types is double, so is the complete expression
-        if (_left->type() == Type::Double || _right->type() == Type::Double) return Type::Double;
+        // if both expressions are numeric, so is the entire operation
+        if (_left->type() == Type::Numeric && _right->type() == Type::Numeric) return Type::Numeric;
 
-        // Otherwise, assume numeric (if a boolean or string was provided)
-        return Type::Numeric;
+        // For now, we'll assume the operation to be double until we have proper runtime evaluation
+        return Type::Double;
     }
 };
 
