@@ -35,7 +35,7 @@ public:
         std::string output(input.toString());   
     
         // our delimiters, we will capitalize after any of these characters are encountered
-        const std::string delims = " \t\r\n\f\v";
+        const char* delims = " \t\r\n\f\v";
     
         // determine if words with digits will be processed
         bool processDigits = false;
@@ -53,23 +53,24 @@ public:
             if (isdigit(output[i])) containsDigit = true;
             
             // if we have found one of our delimiters in the string
-            if (delims.find(output[i]) != std::string::npos)
+            if (! strchr(delims, output[i])) continue;
+            
+            // Should we skip this word?
+            if (!processDigits && containsDigit) 
             {
-                // Should we skip this word?
-                if (!processDigits && containsDigit) 
-                {
-                    // we set containsDigit to false
-                    containsDigit = false;
-                    
-                    // and we skip
-                    continue;
-                }
-                // Cast the first character of the word to upper case
-                output[i + 1] = toupper(output[i + 1]);
-                
                 // we set containsDigit to false
                 containsDigit = false;
+                    
+                // and we skip
+                continue;
             }
+
+            // check if the first character of the word is valid and cast it to 
+            // upper case      
+            if (output[i + 1]) output[i + 1] = toupper(output[i + 1]);
+                
+            // we set containsDigit to false
+            containsDigit = false;
         }
 
         // if the fist word contains a digit and we do not want to process those,
