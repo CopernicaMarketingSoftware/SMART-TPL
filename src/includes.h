@@ -113,6 +113,7 @@
 #include "builtin/base64encode.h"
 #include "builtin/base64decode.h"
 #include "builtin/range.h"
+#include "builtin/capitalize.h"
 #include "modifiers/parameters.h"
 #include "modifiers/modifierexpression.h"
 #include "modifiers/modifiers.h"

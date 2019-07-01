@@ -20,6 +20,7 @@ namespace SmartTpl {
 
 static Internal::ToUpperModifier         toupper;
 static Internal::ToLowerModifier         tolower;
+static Internal::CapitalizeModifier      capitalize;
 static Internal::CatModifier             cat;
 static Internal::CountWordsModifier      count_words;
 static Internal::CountCharactersModifier count_characters;
@@ -58,6 +59,7 @@ Data::Data()
 : _modifiers({{"toupper",          &toupper},
               {"upper",            &toupper},
               {"tolower",          &tolower},
+              {"capitalize",       &capitalize},
               {"lower",            &tolower},
               {"cat",              &cat},
               {"count_words",      &count_words},

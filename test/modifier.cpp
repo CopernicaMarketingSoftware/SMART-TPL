@@ -33,6 +33,44 @@ TEST(Modifier, ToUpper)
     }
 }
 
+TEST(Modifier, CapitalizeIgnoreDigits)
+{
+    // test capitalize, words that contain numeric values should be ignored
+    string input("{$var|capitalize:false}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "this string s2hould be capitalized ");
+
+    string expectedOutput("This String s2hould Be Capitalized ");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
+TEST(Modifier, CapitalizeProcessDigits)
+{
+    // test capitalize, words that contain numeric values should also be processed
+    string input("{$var|capitalize:true}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", "this string s2hould be capitalized");
+
+    string expectedOutput("This String S2hould Be Capitalized");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
 TEST(Modifier, ToLower)
 {
     string input("{$var|tolower}\n{$var|lower}");
