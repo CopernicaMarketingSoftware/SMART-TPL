@@ -132,6 +132,12 @@ public:
     Iterator *iterator() const override;
 
     /**
+     *  The type this value represents
+     *  @return Type
+     */
+    Type type() const override { return Type::Null; }
+
+    /**
      *  A few rather basic inserters to expand your map later on
      */
     template<typename ...Args>

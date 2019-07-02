@@ -31,16 +31,13 @@ public:
     virtual ~BinaryArithmetricOperator() {}
 
     /**
-     *  The return type of the expression, which depends on the left and right expression
+     *  Get the type of the expression
      *  @return Type
      */
     virtual Type type() const override 
     {
-        // if both expressions are numeric, so is the entire operation
-        if (_left->type() == Type::Numeric && _right->type() == Type::Numeric) return Type::Numeric;
-
-        // For now, we'll assume the operation to be double until we have proper runtime evaluation
-        return Type::Double;
+        // Since arithmetic operations are processed during runtime, the resulting type is always a value
+        return Type::Value;
     }
 };
 

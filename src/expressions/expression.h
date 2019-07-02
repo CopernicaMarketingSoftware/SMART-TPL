@@ -56,6 +56,12 @@ public:
     virtual Type type() const = 0;
 
     /**
+     *  Is this expression atomic (e.g. does it not require any futher processing)?
+     *  @return bool
+     */
+    virtual bool is_atomic() const { return true; }
+
+    /**
      *  Generate the expression as a numeric value
      *  @param  generator
      *  @throws CompileError    This compile error is really just here so the developer

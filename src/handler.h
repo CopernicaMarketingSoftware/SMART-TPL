@@ -130,6 +130,7 @@ public:
      */
     void output(const Value *value, bool escape)
     {
+        std::cout << "tostring" << std::endl;
         // Turn the value into a string
         std::string work = value->toString();
 
@@ -146,6 +147,7 @@ public:
      */
     void outputNumeric(numeric_t number)
     {
+        std::cout << "numeric" << std::endl;
         _buffer.append(std::to_string(number));
     }
 
@@ -155,6 +157,7 @@ public:
      */
     void outputBoolean(bool value)
     {
+        std::cout << "bool" << std::endl;
         _buffer.append(value ? "true" : "false");
     }
 
@@ -164,6 +167,7 @@ public:
      */
     void outputDouble(double number)
     {
+        std::cout << "double" << std::endl;
         // create buffer
         char buffer[21];
 

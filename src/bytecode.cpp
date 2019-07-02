@@ -275,6 +275,11 @@ void Bytecode::write(const Expression *expression)
         // generate the code that pushes a double value to the stack, and output that
         _callbacks.output_double(_userdata, doubleExpression(expression));
         break;
+
+    case Expression::Type::Value:
+
+        _callbacks.output_value(_userdata, numericExpression(expression));
+        break;
     
     default:
         // convert the expression to a string (this pushes two values on the stack)
@@ -511,12 +516,57 @@ void Bytecode::negateBoolean(const Expression *expression)
  */
 void Bytecode::plus(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // placeholders for the jit versions of the expressions
+    jit_value l, r;
 
-    // calculate them, and push to stack
-    _stack.emplace(l + r);
+    // is the left value already atomic or should we traverse down?
+    if (!left->is_atomic()) l = numericExpression(left);
+
+    // are we dealing with a variable?
+    else if (left->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(left);
+
+        // valid?
+        if (variable) l = pointer(variable);
+
+        // otherwise, left is invalid
+        else l = _false;
+    }
+
+    // should we transfer the left expression to runtime space?
+    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
+    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
+
+    // no valid type, assume zero (false)
+    else l = _false;
+
+    // is the right value already atomic? else, we traverse down
+    if (!right->is_atomic()) r = numericExpression(right);
+
+    // are we dealing with a variable?
+    else if (right->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(right);
+
+        // valid?
+        if (variable) r = pointer(variable);
+
+        // otherwise, left is invalid
+        else r = _false;
+    }
+
+    // should we transfer the right expression to runtime space?
+    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
+    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
+
+    // no valid type, assume zero (false)
+    else r = _false;
+
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.plus(_userdata, l, r));
 }
 
 /**
@@ -527,12 +577,57 @@ void Bytecode::plus(const Expression *left, const Expression *right)
  */
 void Bytecode::minus(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // placeholders for the jit versions of the expressions
+    jit_value l, r;
 
-    // calculate them, and push to stack
-    _stack.emplace(l - r);
+    // is the left value already atomic or should we traverse down?
+    if (!left->is_atomic()) l = numericExpression(left);
+
+    // are we dealing with a variable?
+    else if (left->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(left);
+
+        // valid?
+        if (variable) l = pointer(variable);
+
+        // otherwise, left is invalid
+        else l = _false;
+    }
+
+    // should we transfer the left expression to runtime space?
+    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
+    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
+
+    // no valid type, assume zero (false)
+    else l = _false;
+
+    // is the right value already atomic? else, we traverse down
+    if (!right->is_atomic()) r = numericExpression(right);
+
+    // are we dealing with a variable?
+    if (right->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(right);
+
+        // valid?
+        if (variable) r = pointer(variable);
+
+        // otherwise, left is invalid
+        else r = _false;
+    }
+
+    // should we transfer the right expression to runtime space?
+    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
+    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
+
+    // no valid type, assume zero (false)
+    else r = _false;
+
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.minus(_userdata, l, r));
 }
 
 /**
@@ -543,19 +638,57 @@ void Bytecode::minus(const Expression *left, const Expression *right)
  */
 void Bytecode::divide(const Expression *left, const Expression *right)
 {
-    // First calculate the right value
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // placeholders for the jit versions of the expressions
+    jit_value l, r;
 
-    // if it is 0 we branch off to our early exit label
-    // @todo we have to test this (why no branch_if_not?)
-    _function.insn_branch_if(r == _false, _division_by_zero.label());
+    // is the left value already atomic or should we traverse down?
+    if (!left->is_atomic()) l = numericExpression(left);
 
-    // calculate the left one
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    // are we dealing with a variable?
+    else if (left->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(left);
 
-    // calculate them, and push to stack
-    // in the case we branch off to _error this will never actually happen
-    _stack.emplace(l / r);
+        // valid?
+        if (variable) l = pointer(variable);
+
+        // otherwise, left is invalid
+        else l = _false;
+    }
+
+    // should we transfer the left expression to runtime space?
+    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
+    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
+
+    // no valid type, assume zero (false)
+    else l = _false;
+
+    // is the right value already atomic? else, we traverse down
+    if (!right->is_atomic()) r = numericExpression(right);
+
+    // are we dealing with a variable?
+    if (right->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(right);
+
+        // valid?
+        if (variable) r = pointer(variable);
+
+        // otherwise, left is invalid
+        else r = _false;
+    }
+
+    // should we transfer the right expression to runtime space?
+    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
+    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
+
+    // no valid type, assume zero (false)
+    else r = _false;
+
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.divide(_userdata, l, r));
 }
 
 /**
@@ -566,12 +699,57 @@ void Bytecode::divide(const Expression *left, const Expression *right)
  */
 void Bytecode::multiply(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // placeholders for the jit versions of the expressions
+    jit_value l, r;
 
-    // calculate them, and push to stack
-    _stack.emplace(l * r);
+    // is the left value already atomic or should we traverse down?
+    if (!left->is_atomic()) l = numericExpression(left);
+
+    // are we dealing with a variable?
+    else if (left->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(left);
+
+        // valid?
+        if (variable) l = pointer(variable);
+
+        // otherwise, left is invalid
+        else l = _false;
+    }
+
+    // should we transfer the left expression to runtime space?
+    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
+    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
+
+    // no valid type, assume zero (false)
+    else l = _false;
+
+    // is the right value already atomic? else, we traverse down
+    if (!right->is_atomic()) r = numericExpression(right);
+
+    // are we dealing with a variable?
+    if (right->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(right);
+
+        // valid?
+        if (variable) r = pointer(variable);
+
+        // otherwise, left is invalid
+        else r = _false;
+    }
+
+    // should we transfer the right expression to runtime space?
+    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
+    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
+
+    // no valid type, assume zero (false)
+    else r = _false;
+
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.multiply(_userdata, l, r));
 }
 
 /**
@@ -582,12 +760,57 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
  */
 void Bytecode::modulo(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = numericExpression(left);
-    jit_value r = numericExpression(right);
+    // placeholders for the jit versions of the expressions
+    jit_value l, r;
 
-    // calculate them, and push to stack
-    _stack.emplace(l % r);
+    // is the left value already atomic or should we traverse down?
+    if (!left->is_atomic()) l = numericExpression(left);
+
+    // are we dealing with a variable?
+    else if (left->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(left);
+
+        // valid?
+        if (variable) l = pointer(variable);
+
+        // otherwise, left is invalid
+        else l = _false;
+    }
+
+    // should we transfer the left expression to runtime space?
+    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
+    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
+
+    // no valid type, assume zero (false)
+    else l = _false;
+
+    // is the right value already atomic? else, we traverse down
+    if (!right->is_atomic()) r = numericExpression(right);
+
+    // are we dealing with a variable?
+    if (right->type() == Expression::Type::Value) 
+    {
+        // convert to variable
+        const Variable *variable = dynamic_cast<const Variable*>(right);
+
+        // valid?
+        if (variable) r = pointer(variable);
+
+        // otherwise, left is invalid
+        else r = _false;
+    }
+
+    // should we transfer the right expression to runtime space?
+    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
+    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
+
+    // no valid type, assume zero (false)
+    else r = _false;
+
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.modulo(_userdata, l, r));
 }
 
 /**

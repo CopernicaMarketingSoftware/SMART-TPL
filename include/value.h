@@ -31,6 +31,26 @@ class Value
 {
 public:
     /**
+     *  The possible types this value can represent
+     *  @var Type
+     */
+    enum class Type : std::int8_t {
+        Null = 0,               // null type
+        Numeric = 1,            // numeric (integer) type
+        String = 2,             // string type
+        Boolean = 3,            // boolean type
+        Double = 4              // a double type
+    };
+
+protected:
+    /**
+     *  The type this value represents
+     *  @var Type
+     */
+    Type _type;
+
+public:
+    /**
      *  Destructor
      */
     virtual ~Value() {};
@@ -88,6 +108,12 @@ public:
      *  @return Newly allocated Iterator
      */
     virtual Iterator *iterator() const = 0;
+
+    /**
+     *  Get the type of this value
+     *  @return Type
+     */
+    virtual Type type() const = 0;
 };
 
 /**

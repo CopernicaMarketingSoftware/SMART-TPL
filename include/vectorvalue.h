@@ -122,6 +122,16 @@ public:
     Iterator *iterator() const override;
 
     /**
+     *  The type of the array
+     *  @return Type
+     */
+    Type type() const override 
+    {
+        // @todo fix
+        return Type::Null;
+    }
+
+    /**
      *  Regular vector push_back calls to later on expand your vector
      */
     void push_back(const VariantValue& value) { _value.push_back(value); }

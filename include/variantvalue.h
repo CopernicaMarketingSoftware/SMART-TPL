@@ -176,6 +176,12 @@ public:
     }
 
     /**
+     *  This variantvalue represents the same type as the wrapped value
+     *  @return Type
+     */
+    Type type() const override { return _value->type(); }
+
+    /**
      *  Equals and not equals to operators
      */
     bool operator==(const VariantValue &that) const { return _value == that._value; }

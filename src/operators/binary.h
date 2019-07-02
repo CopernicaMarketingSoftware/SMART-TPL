@@ -51,6 +51,12 @@ public:
      *  @return Type
      */
     virtual Type type() const override { return Type::Boolean; }
+
+    /**
+     *  Binary operators are not atomic
+     *  @return bool
+     */
+    virtual bool is_atomic() const override { return false; }
 };
 
 /**

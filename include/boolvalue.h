@@ -113,6 +113,12 @@ public:
     {
         return nullptr;
     }
+
+    /**
+     *  The type this value represents
+     *  @return Type
+     */
+    Type type() const override { return Type::Boolean; }
 };
 
 /**

@@ -21,8 +21,16 @@ SignatureCallback Callbacks::_output({ jit_type_void_ptr, jit_type_void_ptr, jit
 SignatureCallback Callbacks::_output_numeric({ jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_output_boolean({ jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_double });
+SignatureCallback Callbacks::_output_value({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_numeric({jit_type_void_ptr, jit_type_sys_longlong}, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_double({jit_type_void_ptr, jit_type_sys_float}, jit_type_void_ptr);
+SignatureCallback Callbacks::_plus({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
+SignatureCallback Callbacks::_minus({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
+SignatureCallback Callbacks::_multiply({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
+SignatureCallback Callbacks::_divide({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
+SignatureCallback Callbacks::_modulo({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_valid_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
 SignatureCallback Callbacks::_iterator_key({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -133,6 +141,34 @@ void smart_tpl_output_double(void *userdata, double number)
 }
 
 /**
+ *  Function to output a value which type is unknown at compile time
+ *  @param  userdata        pointer to user supplied data
+ *  @param  value           the value to output
+ */
+void smart_tpl_output_value(void *userdata, const void *variable)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Get the value pointer
+    auto *value = (Value *) variable;
+
+    // Behaviour depends on the type of the value
+    switch(value->type()) {
+
+        // Call corresponding functions in the handler for different types
+        case Value::Type::Boolean:  handler->outputBoolean(value->toBoolean()); break;
+        case Value::Type::Double:   handler->outputDouble(value->toDouble()); break;
+        case Value::Type::Numeric:  handler->outputNumeric(value->toNumeric()); break;
+        case Value::Type::String:   handler->output(value, false); break;
+
+        // If the type is Null or something else, do nothing
+        default:                    break;
+    }
+}
+
+
+/**
  *  Retrieve a pointer to a member
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to variable
@@ -182,6 +218,219 @@ const void* smart_tpl_member_at(void* userdata, const void* variable, size_t pos
     handler->manageValue(output);
 
     // return the output
+    return output;
+}
+
+/**
+ *  Store a numeric constant in a runtime space pointer
+ *  @param  userdata    pointer to user supplied data
+ *  @param  numeric_t   the value to store
+ *  @return             pointer to new variable
+ */
+const void *smart_tpl_transfer_numeric(void *userdata, numeric_t data)
+{
+    // Allocate on the heap
+    auto *output = new VariantValue(data);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
+}
+
+/**
+ *  Store a double constant in a runtime space pointer
+ *  @param  userdata    pointer to user supplied data
+ *  @param  double      the value to store
+ *  @return             pointer to new variable
+ */
+const void *smart_tpl_transfer_double(void *userdata, double data)
+{
+    // Allocate on the heap
+    auto *output = new VariantValue(data);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
+}
+
+/**
+ *  Calculate the addition of two values during runtime
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_plus(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;    
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // If one of the values is a double, so is the result
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() + value2->toDouble());
+
+    // If one of the types is numeric, so is the result
+    else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() + value2->toNumeric());
+
+    // @todo can we support string concatenation here?
+
+    // Unsupported types, just return zero
+    else output = new VariantValue(0);
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+
+/**
+ *  Calculate the sutraction of two values during runtime
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_minus(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // If one of the values is a double, so is the result
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() - value2->toDouble());
+
+    // If one of the types is numeric, so is the result
+    else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() - value2->toNumeric());
+
+    // Unsupported types, just return zero
+    else output = new VariantValue(0);
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Calculate the multiplication of two values during runtime
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_multiply(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // If one of the values is a double, so is the result
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() * value2->toDouble());
+
+    // If one of the types is numeric, so is the result
+    else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() * value2->toNumeric());
+
+    // Unsupported types, just return zero
+    else output = new VariantValue(0);
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Calculate the division of two values during runtime
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_divide(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // If one of the values is a double, so is the result
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() / value2->toDouble());
+
+    // If one of the types is numeric, so is the result
+    else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() / value2->toNumeric());
+
+    // @todo IMPORTANT: check if value2 is not zero!!!
+
+    // Unsupported types, just return zero
+    else output = new VariantValue(0);
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+
+/**
+ *  Calculate the remainder of two values during runtime
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_modulo(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // For modulo we (currently) only support numeric operations
+    output = new VariantValue(value1->toNumeric() % value2->toNumeric());
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
     return output;
 }
 
