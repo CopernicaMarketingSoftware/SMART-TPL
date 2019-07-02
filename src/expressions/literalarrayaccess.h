@@ -55,6 +55,16 @@ public:
         // generate the code to access a member
         generator->varPointer(_var.get(), *_key);
     }
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        // this is equal to the pointer function
+        return pointer(generator);
+    }
 };
 
 /**

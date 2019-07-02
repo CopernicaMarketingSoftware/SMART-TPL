@@ -51,6 +51,16 @@ public:
         // create an inverted generator
         generator->negateBoolean(_expression.get());
     }
+
+    /**
+     *  Generate a value pointer to the result
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        // Process as boolean
+        generator->booleanRuntimePointer(this);
+    }
 };
 
 /**

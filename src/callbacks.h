@@ -28,12 +28,20 @@ const void *smart_tpl_member_at             (void *userdata, const void *variabl
 const void *smart_tpl_transfer_numeric      (void *userdata, numeric_t data);
 const void *smart_tpl_transfer_double       (void *userdata, double data);
 const void *smart_tpl_transfer_string       (void *userdata, const char *buffer, size_t length);
-const void *smart_tpl_transfer_boolean      (void *userdata, bool boolean);
+const void *smart_tpl_transfer_boolean      (void *userdata, int boolean);
 const void *smart_tpl_plus                  (void *userdata, const void *variable1, const void *variable2);
 const void *smart_tpl_minus                 (void *userdata, const void *variable1, const void *variable2);
 const void *smart_tpl_multiply              (void *userdata, const void *variable1, const void *variable2);
 const void *smart_tpl_divide                (void *userdata, const void *variable1, const void *variable2);
 const void *smart_tpl_modulo                (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_equals                (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_not_equals            (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_greater               (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_greater_equals        (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_lesser                (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_lesser_equals         (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_and                   (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_or                    (void *userdata, const void *variable1, const void *variable2);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);
 int         smart_tpl_valid_iterator        (void *userdata, void *iterator);
 const void *smart_tpl_iterator_key          (void *userdata, void *iterator);
@@ -44,6 +52,7 @@ const char *smart_tpl_to_string             (void *userdata, const void *variabl
 numeric_t   smart_tpl_to_numeric            (void *userdata, const void *variable);
 double      smart_tpl_to_double             (void *userdata, const void *variable);
 int         smart_tpl_to_boolean            (void *userdata, const void *variable);
+int         smart_tpl_negate_boolean        (void *userdata, const void *variable);
 size_t      smart_tpl_size                  (void *userdata, const void *variable);
 void       *smart_tpl_modifier              (void *userdata, const char *name, size_t size);
 const void *smart_tpl_modify_variable       (void *userdata, const void *variable, void *modifier, const void *parameters);
@@ -134,6 +143,18 @@ private:
     static SignatureCallback _modulo;
 
     /**
+     *  Signature of the runtime compare operations
+     */
+    static SignatureCallback _equals;
+    static SignatureCallback _not_equals;
+    static SignatureCallback _greater;
+    static SignatureCallback _greater_equals;
+    static SignatureCallback _lesser;
+    static SignatureCallback _lesser_equals;
+    static SignatureCallback _and;
+    static SignatureCallback _or;
+
+    /**
      *  Signature of the create-iterator callback
      */
     static SignatureCallback _create_iterator;
@@ -182,6 +203,11 @@ private:
      *  Signature of the function to convert a variable to a boolean value
      */
     static SignatureCallback _toBoolean;
+
+    /**
+     *  Signature of the function to negate the boolean value of a variable
+     */
+    static SignatureCallback _negate_boolean;
 
     /**
      *  Signature of the function to retrieve the size/strlen of a variable
@@ -616,6 +642,174 @@ public:
     }
 
     /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value equals(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_equals", (void *)smart_tpl_equals, _equals.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value not_equals(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_not_equals", (void *)smart_tpl_not_equals, _not_equals.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value greater(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_greater", (void *)smart_tpl_greater, _greater.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value greater_equals(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_greater_equals", (void *)smart_tpl_greater_equals, _greater_equals.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value lesser(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_lesser", (void *)smart_tpl_lesser, _lesser.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value lesser_equals(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_lesser_equals", (void *)smart_tpl_lesser_equals, _lesser_equals.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value binary_and(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_and", (void *)smart_tpl_and, _and.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Compare two values during runtime 
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       Left variable for the equation
+     *  @param  variable2       Right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_equals
+     */
+    jit_value binary_or(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_or", (void *)smart_tpl_or, _or.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
      *  Call the create_iterator function
      *  @param  userdata    Pointer to user supplied data
      *  @param  variable    Variable over which we're iterating
@@ -766,6 +960,25 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_to_boolean", (void *)smart_tpl_to_boolean, _toBoolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Call the negate_boolean function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  variable        Pointer to the variable
+     *  @return jit_value       Boolean representation
+     *  @see    smart_tpl_negate_boolean
+     */
+    jit_value negate_boolean(const jit_value &userdata, const jit_value &variable)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_negate_boolean", (void *)smart_tpl_negate_boolean, _negate_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

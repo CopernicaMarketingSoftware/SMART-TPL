@@ -134,6 +134,13 @@ private:
     jit_value doubleExpression(const Expression *expression);
 
     /**
+     *  Retrieve a value pointer for this expression that can be resolved during runtime
+     *  @param  expression
+     *  @return jit_value
+     */
+    jit_value pointerExpression(const Expression *expression);
+
+    /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */
@@ -201,6 +208,15 @@ private:
      *  @param  expression
      */
     void negateBoolean(const Expression *expression) override;
+
+    /**
+     *  Move an expression to runtime space
+     *  @param  expression
+     */
+    void stringRuntimePointer(const Expression *expression) override;
+    void numericRuntimePointer(const Expression *expression) override;
+    void doubleRuntimePointer(const Expression *expression) override;
+    void booleanRuntimePointer(const Expression *expression) override;
 
     /**
      *  Arithmetric operations

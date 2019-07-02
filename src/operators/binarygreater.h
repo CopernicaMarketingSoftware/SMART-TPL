@@ -48,6 +48,15 @@ public:
     {
         generator->greater(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        generator->greater(_left.get(), _right.get());
+    }
 };
 
 /**

@@ -86,6 +86,16 @@ public:
         // turn out numeric value into a double
         generator->double_type(_value);
     }
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        // let the generator move the variable to runtime space
+        generator->numericRuntimePointer(this);
+    }
 };
 
 /**

@@ -208,6 +208,20 @@ jit_value Bytecode::doubleExpression(const Expression *expression)
 }
 
 /**
+ *  Retrieve a value pointer for this expression that can be resolved during runtime
+ *  @param  expression
+ *  @return jit_value
+ */
+jit_value Bytecode::pointerExpression(const Expression *expression)
+{
+    // create on the stack
+    expression->runtime_pointer(this);
+
+    // remove from the stack
+    return pop();
+}
+
+/**
  *  Generate the code to output a variable
  *  @param  variable           The variable to output
  */
@@ -232,7 +246,7 @@ void Bytecode::output(const Variable *variable)
 
     default:
         // output the variable using the output callback, we of course use pointer(Variable*) here
-        _callbacks.output(_userdata, pointer(variable), _true);
+        _callbacks.output_value(_userdata, pointer(variable));
         break;
     }
 }
@@ -277,8 +291,8 @@ void Bytecode::write(const Expression *expression)
         break;
 
     case Expression::Type::Value:
-
-        _callbacks.output_value(_userdata, numericExpression(expression));
+        // generate code to output a value which value will be determined on runtime
+        _callbacks.output_value(_userdata, pointerExpression(expression));
         break;
     
     default:
@@ -311,8 +325,11 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
         jit_label elselabel = _function.new_label();
         jit_label endlabel = _function.new_label();
 
+        // get the variable pointer container the result of the if-expression
+        jit_value condition = _callbacks.to_boolean(_userdata, pointerExpression(expression));
+
         // branche to the label if the expression is not valid
-        _function.insn_branch_if_not(booleanExpression(expression), elselabel);
+        _function.insn_branch_if_not(condition, elselabel);
 
         // now we should create the if statements
         ifstatements->generate(this);
@@ -335,8 +352,11 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
         // over the if statements if the expression is false
         jit_label endlabel = _function.new_label();
 
+       // get the variable pointer container the result of the if-expression
+        jit_value condition = _callbacks.to_boolean(_userdata, pointerExpression(expression));
+
         // branche to the label if the expression is not valid
-        _function.insn_branch_if_not(booleanExpression(expression), endlabel);
+        _function.insn_branch_if_not(condition, endlabel);
 
         // now we should create the if statements
         ifstatements->generate(this);
@@ -509,6 +529,70 @@ void Bytecode::negateBoolean(const Expression *expression)
 }
 
 /**
+ *  Create a pointer on the stack to a variable containing the string 
+ *  representation of the expression
+ *  @param  expression
+ *  @note   +1 on the stack
+ */
+void Bytecode::stringRuntimePointer(const Expression *expression)
+{
+    // Add two values to the stack to process this string
+    expression->string(this);
+
+    // Get the buffer and the size
+    jit_value size = pop();
+    jit_value buffer = pop();
+
+    // Add callback to store it in runtime space
+    _stack.push(_callbacks.transfer_string(_userdata, buffer, size));
+}
+
+/**
+ *  Create a pointer on the stack to a variable containing the numeric 
+ *  representation of the expression
+ *  @param  expression
+ *  @note   +1 on the stack
+ */
+void Bytecode::numericRuntimePointer(const Expression *expression)
+{
+    // turn the expression into a integer
+    expression->numeric(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_numeric(_userdata, pop()));
+}
+
+/**
+ *  Create a pointer on the stack to a variable containing the double 
+ *  representation of the expression
+ *  @param  expression
+ *  @note   +1 on the stack
+ */
+void Bytecode::doubleRuntimePointer(const Expression *expression)
+{
+    // turn the expression into a boolean
+    expression->double_type(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_double(_userdata, pop()));
+}
+
+/**
+ *  Create a pointer on the stack to a variable containing the boolean 
+ *  representation of the expression
+ *  @param  expression
+ *  @note   +1 on the stack
+ */
+void Bytecode::booleanRuntimePointer(const Expression *expression)
+{
+    // turn the expression into a boolean
+    expression->boolean(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_boolean(_userdata, pop()));
+}
+
+/**
  *  Arithmetric operation
  *  @param  left
  *  @param  right
@@ -516,78 +600,9 @@ void Bytecode::negateBoolean(const Expression *expression)
  */
 void Bytecode::plus(const Expression *left, const Expression *right)
 {
-    // placeholders for the jit versions of the expressions
-    jit_value l, r;
-
-    // is the left value already atomic or should we traverse down?
-    if (!left->is_atomic()) l = numericExpression(left);
-
-    // are we dealing with a variable?
-    else if (left->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(left);
-
-        // valid?
-        if (variable) l = pointer(variable);
-
-        // otherwise, left is invalid
-        else l = _false;
-    }
-
-    // should we transfer the left expression to runtime space?
-    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
-    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
-    else if (left->type() == Expression::Type::String) 
-    {
-        // Add two values to the stack to process this string
-        left->string(this);
-
-        // Get the buffer and the size
-        jit_value size = pop();
-        jit_value buffer = pop();
-
-        // Add callback to store it in runtime space
-        l = _callbacks.transfer_string(_userdata, buffer, size);
-    }  
-
-    // no valid type, assume zero (false)
-    else l = _false;
-
-    // is the right value already atomic? else, we traverse down
-    if (!right->is_atomic()) r = numericExpression(right);
-
-    // are we dealing with a variable?
-    else if (right->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(right);
-
-        // valid?
-        if (variable) r = pointer(variable);
-
-        // otherwise, left is invalid
-        else r = _false;
-    }
-
-    // should we transfer the right expression to runtime space?
-    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
-    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
-    else if (right->type() == Expression::Type::String) 
-    {
-        // Add two values to the stack to process this string
-        right->string(this);
-
-        // Get the buffer and the size
-        jit_value size = pop();
-        jit_value buffer = pop();
-
-        // Add callback to store it in runtime space
-        r = _callbacks.transfer_string(_userdata, buffer, size);
-    } 
-
-    // no valid type, assume zero (false)
-    else r = _false;
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
     // calculate result, and push to stack
     _stack.emplace(_callbacks.plus(_userdata, l, r));
@@ -601,54 +616,9 @@ void Bytecode::plus(const Expression *left, const Expression *right)
  */
 void Bytecode::minus(const Expression *left, const Expression *right)
 {
-    // placeholders for the jit versions of the expressions
-    jit_value l, r;
-
-    // is the left value already atomic or should we traverse down?
-    if (!left->is_atomic()) l = numericExpression(left);
-
-    // are we dealing with a variable?
-    else if (left->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(left);
-
-        // valid?
-        if (variable) l = pointer(variable);
-
-        // otherwise, left is invalid
-        else l = _false;
-    }
-
-    // should we transfer the left expression to runtime space?
-    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
-    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
-
-    // no valid type, assume zero (false)
-    else l = _false;
-
-    // is the right value already atomic? else, we traverse down
-    if (!right->is_atomic()) r = numericExpression(right);
-
-    // are we dealing with a variable?
-    else if (right->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(right);
-
-        // valid?
-        if (variable) r = pointer(variable);
-
-        // otherwise, left is invalid
-        else r = _false;
-    }
-
-    // should we transfer the right expression to runtime space?
-    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
-    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
-
-    // no valid type, assume zero (false)
-    else r = _false;
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
     // calculate result, and push to stack
     _stack.emplace(_callbacks.minus(_userdata, l, r));
@@ -662,54 +632,9 @@ void Bytecode::minus(const Expression *left, const Expression *right)
  */
 void Bytecode::divide(const Expression *left, const Expression *right)
 {
-    // placeholders for the jit versions of the expressions
-    jit_value l, r;
-
-    // is the left value already atomic or should we traverse down?
-    if (!left->is_atomic()) l = numericExpression(left);
-
-    // are we dealing with a variable?
-    else if (left->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(left);
-
-        // valid?
-        if (variable) l = pointer(variable);
-
-        // otherwise, left is invalid
-        else l = _false;
-    }
-
-    // should we transfer the left expression to runtime space?
-    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
-    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
-
-    // no valid type, assume zero (false)
-    else l = _false;
-
-    // is the right value already atomic? else, we traverse down
-    if (!right->is_atomic()) r = numericExpression(right);
-
-    // are we dealing with a variable?
-    else if (right->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(right);
-
-        // valid?
-        if (variable) r = pointer(variable);
-
-        // otherwise, left is invalid
-        else r = _false;
-    }
-
-    // should we transfer the right expression to runtime space?
-    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
-    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
-
-    // no valid type, assume zero (false)
-    else r = _false;
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
     // Get the result pointer from the callbacks
     jit_value result = _callbacks.divide(_userdata, l, r);
@@ -729,54 +654,9 @@ void Bytecode::divide(const Expression *left, const Expression *right)
  */
 void Bytecode::multiply(const Expression *left, const Expression *right)
 {
-    // placeholders for the jit versions of the expressions
-    jit_value l, r;
-
-    // is the left value already atomic or should we traverse down?
-    if (!left->is_atomic()) l = numericExpression(left);
-
-    // are we dealing with a variable?
-    else if (left->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(left);
-
-        // valid?
-        if (variable) l = pointer(variable);
-
-        // otherwise, left is invalid
-        else l = _false;
-    }
-
-    // should we transfer the left expression to runtime space?
-    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
-    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
-
-    // no valid type, assume zero (false)
-    else l = _false;
-
-    // is the right value already atomic? else, we traverse down
-    if (!right->is_atomic()) r = numericExpression(right);
-
-    // are we dealing with a variable?
-    else if (right->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(right);
-
-        // valid?
-        if (variable) r = pointer(variable);
-
-        // otherwise, left is invalid
-        else r = _false;
-    }
-
-    // should we transfer the right expression to runtime space?
-    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
-    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
-
-    // no valid type, assume zero (false)
-    else r = _false;
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
     // calculate result, and push to stack
     _stack.emplace(_callbacks.multiply(_userdata, l, r));
@@ -790,54 +670,9 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
  */
 void Bytecode::modulo(const Expression *left, const Expression *right)
 {
-    // placeholders for the jit versions of the expressions
-    jit_value l, r;
-
-    // is the left value already atomic or should we traverse down?
-    if (!left->is_atomic()) l = numericExpression(left);
-
-    // are we dealing with a variable?
-    else if (left->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(left);
-
-        // valid?
-        if (variable) l = pointer(variable);
-
-        // otherwise, left is invalid
-        else l = _false;
-    }
-
-    // should we transfer the left expression to runtime space?
-    else if (left->type() == Expression::Type::Numeric) l = _callbacks.transfer_numeric(_userdata, numericExpression(left));
-    else if (left->type() == Expression::Type::Double)  l = _callbacks.transfer_double(_userdata, doubleExpression(left));
-
-    // no valid type, assume zero (false)
-    else l = _false;
-
-    // is the right value already atomic? else, we traverse down
-    if (!right->is_atomic()) r = numericExpression(right);
-
-    // are we dealing with a variable?
-    else if (right->type() == Expression::Type::Value) 
-    {
-        // convert to variable
-        const Variable *variable = dynamic_cast<const Variable*>(right);
-
-        // valid?
-        if (variable) r = pointer(variable);
-
-        // otherwise, left is invalid
-        else r = _false;
-    }
-
-    // should we transfer the right expression to runtime space?
-    else if (right->type() == Expression::Type::Numeric) r = _callbacks.transfer_numeric(_userdata, numericExpression(right));
-    else if (right->type() == Expression::Type::Double)  r = _callbacks.transfer_double(_userdata, doubleExpression(right));
-
-    // no valid type, assume zero (false)
-    else r = _false;
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
     // calculate result, and push to stack
     _stack.emplace(_callbacks.modulo(_userdata, l, r));
@@ -851,55 +686,12 @@ void Bytecode::modulo(const Expression *left, const Expression *right)
  */
 void Bytecode::equals(const Expression *left, const Expression *right)
 {
-    if (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double)
-    {
-        // Convert both expressions to floating points
-        jit_value l = doubleExpression(left);
-        jit_value r = doubleExpression(right);
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-        // Compare them and push it to the stack
-        _stack.emplace(l == r);
-    }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
-    {
-        // Convert both expressions to numeric values
-        jit_value l = numericExpression(left);
-        jit_value r = numericExpression(right);
-
-        // Compare them and push it to the stack
-        _stack.emplace(l == r);
-    }
-    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
-    {
-        // Convert both expressions too boolean values
-        jit_value l = booleanExpression(left);
-        jit_value r = booleanExpression(right);
-
-        // Compare them and push it to the stack
-        _stack.emplace(l == r);
-    }
-    else
-    {
-        // ask the left instruction to push the string to the stack
-        left->string(this);
-        
-        // and get the string back from the stack
-        jit_value l_size = pop();
-        jit_value l = pop();
-
-        // ask the right instruction to do the same (push string to the stack)
-        right->string(this);
-        
-        // and get it back from the stack
-        jit_value r_size = pop();
-        jit_value r = pop();
-
-        // Call the strcmp callback and push the result to the stack
-        jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
-
-        // Compare against the constant _false which is just a 0
-        _stack.emplace(cmp == _false);
-    }
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.equals(_userdata, l, r));
 }
 
 /**
@@ -910,49 +702,12 @@ void Bytecode::equals(const Expression *left, const Expression *right)
  */
 void Bytecode::notEquals(const Expression *left, const Expression *right)
 {
-    if (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double)
-    {
-        // Convert both expressions to floating points
-        jit_value l = doubleExpression(left);
-        jit_value r = doubleExpression(right);
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-        // Compare them and push it to the stack
-        _stack.emplace(l != r);
-    }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
-    {
-        // Convert both expressions to numeric values
-        jit_value l = numericExpression(left);
-        jit_value r = numericExpression(right);
-
-        // Compare them and push it to the stack
-        _stack.emplace(l != r);
-    }
-    else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
-    {
-        // Convert both expressions too boolean values
-        jit_value l = booleanExpression(left);
-        jit_value r = booleanExpression(right);
-
-        // Compare them and push it to the stack
-        _stack.emplace(l != r);
-    }
-    else
-    {
-        // Convert both expressions to strings
-        left->string(this);
-        jit_value l_size = pop();
-        jit_value l = pop();
-
-        // Right expression is also turned into a string
-        right->string(this);
-        jit_value r_size = pop();
-        jit_value r = pop();
-
-        // Call the strcmp callback and push the result to the stack
-        jit_value cmp = _callbacks.strcmp(_userdata, l, l_size, r, r_size);
-        _stack.emplace(cmp != _false);
-    }
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.not_equals(_userdata, l, r));
 }
 
 /**
@@ -963,12 +718,12 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
  */
 void Bytecode::greater(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-    // calculate them, and push to stack
-    _stack.emplace(l > r);
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.greater(_userdata, l, r));
 }
 
 /**
@@ -979,12 +734,12 @@ void Bytecode::greater(const Expression *left, const Expression *right)
  */
 void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-    // calculate them, and push to stack
-    _stack.emplace(l >= r);
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.greater_equals(_userdata, l, r));
 }
 
 /**
@@ -995,12 +750,12 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
  */
 void Bytecode::lesser(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-    // calculate them, and push to stack
-    _stack.emplace(l < r);
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.lesser(_userdata, l, r));
 }
 
 /**
@@ -1011,12 +766,12 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
  */
 void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 {
-    // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    // get pointers to values that can be resolved on runtime
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-    // calculate them, and push to stack
-    _stack.emplace(l <= r);
+    // calculate result, and push to stack
+    _stack.emplace(_callbacks.lesser_equals(_userdata, l, r));
 }
 
 /**
@@ -1066,11 +821,11 @@ void Bytecode::regex(const Expression *left, const Expression *right)
 void Bytecode::booleanAnd(const Expression *left, const Expression *right)
 {
     // calculate the values
-    jit_value l = booleanExpression(left);
-    jit_value r = booleanExpression(right);
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
     // insert a boolean and on the left and right expression
-    _stack.push(_function.insn_and(l, r));
+    _stack.push(_callbacks.binary_and(_userdata, l, r));
 }
 
 /**
@@ -1082,11 +837,11 @@ void Bytecode::booleanAnd(const Expression *left, const Expression *right)
 void Bytecode::booleanOr(const Expression *left, const Expression *right)
 {
     // calculate the values
-    jit_value l = booleanExpression(left);
-    jit_value r = booleanExpression(right);
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
 
-    // insert a boolean or on the left and right expression
-    _stack.push(_function.insn_or(l, r));
+    // insert a boolean and on the left and right expression
+    _stack.push(_callbacks.binary_or(_userdata, l, r));
 }
 
 /**
@@ -1347,14 +1102,9 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         break;
     }
     case Expression::Type::Value: {
-        const Variable *variable = dynamic_cast<const Variable*>(expression);
-        if (variable)
-        {
-            // If we are a variable just convert it to a pointer and pass that to the assign callback
-            _callbacks.assign(_userdata, key_str, key_size, pointer(variable));
-            break;
-        }
-        throw CompileError("Unsupported assign");
+        // Convert to a runtime variable and assign that to the key
+        _callbacks.assign(_userdata, key_str, key_size, pointerExpression(expression));
+        break;
     }
     case Expression::Type::Double:
         // Convert to a floating point and use the assign_double callback

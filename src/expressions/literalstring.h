@@ -53,6 +53,16 @@ public:
     }
 
     /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        // let the generator move the variable to runtime space
+        generator->stringRuntimePointer(this);
+    }
+
+    /**
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */

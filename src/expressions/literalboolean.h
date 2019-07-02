@@ -81,6 +81,16 @@ public:
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->double_type(_value ? 1 : 0);
     }
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        // let the generator move the variable to runtime space
+        generator->booleanRuntimePointer(this);
+    }
 };
 
 /**

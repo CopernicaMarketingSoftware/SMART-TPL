@@ -80,6 +80,16 @@ public:
     {
         generator->output(this);
     }
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        // same as the pointer function
+        pointer(generator);
+    }
 };
 
 /**

@@ -56,12 +56,6 @@ public:
     virtual Type type() const = 0;
 
     /**
-     *  Is this expression atomic (e.g. does it not require any futher processing)?
-     *  @return bool
-     */
-    virtual bool is_atomic() const { return true; }
-
-    /**
      *  Generate the expression as a numeric value
      *  @param  generator
      *  @throws CompileError    This compile error is really just here so the developer
@@ -103,6 +97,17 @@ public:
     virtual void string(Generator *generator) const
     {
         throw CompileError("Default internal string implementation called");
+    };
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     *  @throws CompileError    This compile error is really just here so the developer
+     *                          knows they did something wrong.
+     */
+    virtual void runtime_pointer(Generator *generator) const
+    {
+        throw CompileError("Default internal runtime pointer implementation called");
     };
 
     /**

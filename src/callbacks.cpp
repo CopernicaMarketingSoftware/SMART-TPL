@@ -25,7 +25,7 @@ SignatureCallback Callbacks::_output_value({ jit_type_void_ptr, jit_type_void_pt
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_numeric({ jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
-SignatureCallback Callbacks::_transfer_double({ jit_type_void_ptr, jit_type_sys_float }, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_double({ jit_type_void_ptr, jit_type_sys_double }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_boolean({ jit_type_void_ptr, jit_type_sys_int }, jit_type_void_ptr);
 SignatureCallback Callbacks::_plus({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -33,6 +33,14 @@ SignatureCallback Callbacks::_minus({ jit_type_void_ptr, jit_type_void_ptr, jit_
 SignatureCallback Callbacks::_multiply({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_divide({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_modulo({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_equals({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_not_equals({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_greater({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_greater_equals({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_lesser({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_lesser_equals({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_and({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_or({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_valid_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
 SignatureCallback Callbacks::_iterator_key({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -43,6 +51,7 @@ SignatureCallback Callbacks::_toString({ jit_type_void_ptr, jit_type_void_ptr },
 SignatureCallback Callbacks::_toNumeric({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_longlong);
 SignatureCallback Callbacks::_toDouble({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_float64);
 SignatureCallback Callbacks::_toBoolean({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
+SignatureCallback Callbacks::_negate_boolean({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
 SignatureCallback Callbacks::_size({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_ulonglong);
 SignatureCallback Callbacks::_modifier({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_modify_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -162,10 +171,9 @@ void smart_tpl_output_value(void *userdata, const void *variable)
         case Value::Type::Boolean:  handler->outputBoolean(value->toBoolean()); break;
         case Value::Type::Double:   handler->outputDouble(value->toDouble()); break;
         case Value::Type::Numeric:  handler->outputNumeric(value->toNumeric()); break;
-        case Value::Type::String:   handler->output(value, false); break;
 
-        // If the type is Null or something else, do nothing
-        default:                    break;
+        // In other cases, call default 
+        default:                    handler->output(value, 1); break;
     }
 }
 
@@ -286,10 +294,10 @@ const void *smart_tpl_transfer_string(void *userdata, const char *buffer, size_t
  *  @param  int         the value to store
  *  @return             pointer to new variable
  */
-const void *smart_tpl_transfer_boolean(void *userdata, bool value)
+const void *smart_tpl_transfer_boolean(void *userdata, int value)
 {
     // Allocate on the heap
-    auto *output = new VariantValue(value);
+    auto *output = new VariantValue((bool) value);
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;
@@ -313,19 +321,19 @@ const void *smart_tpl_plus(void *userdata, const void *variable1, const void *va
 
     // Fetch our value objects to add 
     auto *value1 = (const Value *) variable1;
-    auto *value2 = (const Value *) variable2;    
+    auto *value2 = (const Value *) variable2;
 
     // This will be a pointer to our new value
     VariantValue *output;
 
-    // If one of the values is a string, we'll do string concatenation
-    if (value1->type() == Value::Type::String || value2->type() == Value::Type::String) output = new VariantValue(value1->toString() + value2->toString());
-
     // If one of the values is a double, so is the result
-    else if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() + value2->toDouble());
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() + value2->toDouble());
 
     // If one of the types is numeric, so is the result
     else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() + value2->toNumeric());
+
+    // Let's also support boolean addition... This will just be another numeric addition
+    else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) output = new VariantValue(value1->toNumeric() + value2->toNumeric());
 
     // Unsupported types, just return zero
     else output = new VariantValue(0);
@@ -336,7 +344,6 @@ const void *smart_tpl_plus(void *userdata, const void *variable1, const void *va
     // Return pointer to the result
     return output;
 }
-
 
 /**
  *  Calculate the sutraction of two values during runtime
@@ -362,6 +369,9 @@ const void *smart_tpl_minus(void *userdata, const void *variable1, const void *v
 
     // If one of the types is numeric, so is the result
     else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() - value2->toNumeric());
+    
+    // Let's also support boolean subtraction... This will just be another numeric subtraction
+    else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) output = new VariantValue(value1->toNumeric() - value2->toNumeric());
 
     // Unsupported types, just return zero
     else output = new VariantValue(0);
@@ -397,6 +407,10 @@ const void *smart_tpl_multiply(void *userdata, const void *variable1, const void
 
     // If one of the types is numeric, so is the result
     else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() * value2->toNumeric());
+    
+    // Let's also support boolean multiplication... This will just be another numeric multiplication
+    // When run with two booleans, this just boils down to a boolean and operation
+    else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) output = new VariantValue(value1->toNumeric() * value2->toNumeric());
 
     // Unsupported types, just return zero
     else output = new VariantValue(0);
@@ -446,6 +460,16 @@ const void *smart_tpl_divide(void *userdata, const void *variable1, const void *
         // Calculate result
         output = new VariantValue(value1->toNumeric() / value2->toNumeric());
     }
+
+    // Let's also support boolean division... This will just be another numeric division
+    else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) 
+    {
+        // Make sure value2 is not zero
+        if (value2->toNumeric() == 0) return nullptr;
+
+        // Calculate result
+        output = new VariantValue(value1->toNumeric() / value2->toNumeric());
+    }
     
     // Unsupported types, just return zero
     else output = new VariantValue(0);
@@ -456,7 +480,6 @@ const void *smart_tpl_divide(void *userdata, const void *variable1, const void *
     // Return pointer to the result
     return output;
 }
-
 
 /**
  *  Calculate the remainder of two values during runtime
@@ -480,6 +503,340 @@ const void *smart_tpl_modulo(void *userdata, const void *variable1, const void *
     // For modulo we (currently) only support numeric operations
     output = new VariantValue(value1->toNumeric() % value2->toNumeric());
 
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Check if two values are equal
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_equals(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // Is one of the values a string?
+    if (value1->type() == Value::Type::String || value2->type() == Value::Type::String)
+    {
+        // Get the strings for both values
+        const std::string &string1 = value1->toString();
+        const std::string &string2 = value2->toString();
+
+        // Compare strings
+        output = new VariantValue(strcmp(string1.data(), string2.data()) == 0);
+    }
+
+    // Are we dealing with doubles?
+    else if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double)
+    {
+        // Get values
+        double left = value1->toDouble();
+        double right = value2->toDouble();
+
+        // Do to the representation of floating point numbers, we do not 
+        // check if they are _exactly_ the same, but if they are withtin a certain
+        // error margin of each other
+        output = new VariantValue(std::abs(left - right) < 1E-6);
+    }
+
+    // Otherwise, just do a numeric comparison
+    else 
+    {
+        // Compare numeric values
+        output = new VariantValue(value1->toNumeric() == value2->toNumeric());
+    }
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Check if two values are *not* equal
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_not_equals(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // Is one of the values a string?
+    if (value1->type() == Value::Type::String || value2->type() == Value::Type::String)
+    {
+        // Get the strings for both values
+        const std::string &string1 = value1->toString();
+        const std::string &string2 = value2->toString();
+
+        // Compare strings
+        output = new VariantValue(strcmp(string1.data(), string2.data()) != 0);
+    }
+
+    // Are we dealing with doubles?
+    else if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double)
+    {
+        // Get values
+        double left = value1->toDouble();
+        double right = value2->toDouble();
+
+        // Do to the representation of floating point numbers, we do not 
+        // check if they are _exactly_ the same, but if they are withtin a certain
+        // error margin of each other
+        output = new VariantValue(std::abs(left - right) > 1E-6);
+    }
+
+    // Otherwise, just do a numeric comparison
+    else 
+    {
+        // Compare numeric values
+        output = new VariantValue(value1->toNumeric() != value2->toNumeric());
+    }
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Check if one value is greater than another
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_greater(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // Are we dealing with doubles?
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double)
+    {
+        // Do to the representation of floating point numbers, we do not 
+        // check if they are _exactly_ the same, but if they are withtin a certain
+        // error margin of each other
+        output = new VariantValue(value1->toDouble() > value2->toDouble());
+    }
+
+    // Otherwise, just do a numeric comparison
+    else 
+    {
+        // Compare numeric values
+        output = new VariantValue(value1->toNumeric() > value2->toNumeric());
+    }
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Check if one value is greater than or equal to another
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_greater_equals(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // Are we dealing with doubles?
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double)
+    {
+        // Do to the representation of floating point numbers, we do not 
+        // check if they are _exactly_ the same, but if they are withtin a certain
+        // error margin of each other
+        output = new VariantValue(value1->toDouble() >= value2->toDouble());
+    }
+
+    // Otherwise, just do a numeric comparison
+    else 
+    {
+        // Compare numeric values
+        output = new VariantValue(value1->toNumeric() >= value2->toNumeric());
+    }
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Check if one value is lesser than another
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_lesser(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // Are we dealing with doubles?
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double)
+    {
+        // Do to the representation of floating point numbers, we do not 
+        // check if they are _exactly_ the same, but if they are withtin a certain
+        // error margin of each other
+        output = new VariantValue(value1->toDouble() < value2->toDouble());
+    }
+
+    // Otherwise, just do a numeric comparison
+    else 
+    {
+        // Compare numeric values
+        output = new VariantValue(value1->toNumeric() < value2->toNumeric());
+    }
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Check if one value is lesser than or equal to another
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_lesser_equals(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output;
+
+    // Are we dealing with doubles?
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double)
+    {
+        // Do to the representation of floating point numbers, we do not 
+        // check if they are _exactly_ the same, but if they are withtin a certain
+        // error margin of each other
+        output = new VariantValue(value1->toDouble() <= value2->toDouble());
+    }
+
+    // Otherwise, just do a numeric comparison
+    else 
+    {
+        // Compare numeric values
+        output = new VariantValue(value1->toNumeric() <= value2->toNumeric());
+    }
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Perform binary and
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_and(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;    
+
+    // This will be a pointer to our new value
+    VariantValue *output = new VariantValue(value1->toBoolean() && value2->toBoolean());
+
+    // Let the handler manage the new object
+    handler->manageValue(output);
+
+    // Return pointer to the result
+    return output;
+}
+
+/**
+ *  Perform binary or
+ *  @param  userdata        pointer to user supplied data
+ *  @param  variable1       left side value of the equation
+ *  @param  variable2       right side value of the equation
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_or(void *userdata, const void *variable1, const void *variable2)
+{
+    // Cast to handler object
+    auto *handler = (Handler *) userdata;
+
+    // Fetch our value objects to add 
+    auto *value1 = (const Value *) variable1;
+    auto *value2 = (const Value *) variable2;
+
+    // This will be a pointer to our new value
+    VariantValue *output = new VariantValue(value1->toBoolean() || value2->toBoolean());
+    
     // Let the handler manage the new object
     handler->manageValue(output);
 
@@ -661,6 +1018,21 @@ int smart_tpl_to_boolean(void *userdata, const void *variable)
 
     // convert to bool
     return var->toBoolean();
+}
+
+/**
+ *  Invert the boolean value of a variable
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  variable        pointer to variable
+ *  @return                 numeric value
+ */
+int smart_tpl_negate_boolean(void *userdata, const void *variable)
+{
+    // convert the variable to a value object
+    auto *var = (const Value *)variable;
+
+    // convert to bool
+    return !var->toBoolean();
 }
 
 /**

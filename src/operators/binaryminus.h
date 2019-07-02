@@ -57,6 +57,15 @@ public:
     {
         generator->minus(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate the expression as a runtime variable pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        generator->minus(_left.get(), _right.get());
+    }
 };
 
 /**

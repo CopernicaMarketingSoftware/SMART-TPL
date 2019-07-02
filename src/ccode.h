@@ -96,6 +96,15 @@ private:
      *  @param  expression
      */
     virtual void negateBoolean(const Expression *expression) override;
+    
+    /**
+     *  Move an expression to runtime space
+     *  @param  expression
+     */
+    virtual void stringRuntimePointer(const Expression *expression) override;
+    virtual void numericRuntimePointer(const Expression *expression) override;
+    virtual void doubleRuntimePointer(const Expression *expression) override;
+    virtual void booleanRuntimePointer(const Expression *expression) override;
 
     /**
      *  Arithmetric operations

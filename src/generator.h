@@ -115,6 +115,15 @@ public:
     virtual void negateBoolean(const Expression *expression) = 0;
 
     /**
+     *  Move an expression to runtime space
+     *  @param  expression
+     */
+    virtual void stringRuntimePointer(const Expression *expression) = 0;
+    virtual void numericRuntimePointer(const Expression *expression) = 0;
+    virtual void doubleRuntimePointer(const Expression *expression) = 0;
+    virtual void booleanRuntimePointer(const Expression *expression) = 0;
+
+    /**
      *  Arithmetric operations
      *  @param  left
      *  @param  right

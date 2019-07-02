@@ -48,6 +48,15 @@ public:
     {
         generator->booleanAnd(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate runtime pointer
+     *  @param  generator
+     */
+    void runtime_pointer(Generator *generator) const override
+    {
+        generator->booleanAnd(_left.get(), _right.get());
+    }
 };
 
 /**

@@ -59,7 +59,6 @@ public:
         // generate the code to get a variable pointer
         generator->varPointer(*_name);
     }
-
 };
 
 /**
