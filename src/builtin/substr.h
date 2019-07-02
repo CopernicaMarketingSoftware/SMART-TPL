@@ -4,7 +4,7 @@
  *  Built-in "|substr:5:5" modifier
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -38,12 +38,12 @@ public:
 
             // Turn the second parameter into the substr len parameter
             size_t len = std::string::npos;
-            if (params.size() >= 2) len = params[1].toNumeric();
+            if (params.size() >= 2) len = params[1].toInteger();
 
             try
             {
                 // Execute the substr method on output and return the output of it
-                return output.substr(params[0].toNumeric(), len);
+                return output.substr(params[0].toInteger(), len);
             }
             catch (const std::out_of_range &error)
             {

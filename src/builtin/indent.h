@@ -4,7 +4,7 @@
  *  Built-in "|indent:1:"\t"" modifier
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -38,7 +38,7 @@ public:
         // if we have any parameters start parsing them
         if (params.size() >= 1)
         {
-            indents = params[0].toNumeric();
+            indents = params[0].toInteger();
 
             // If we have at least 2 parameters use the second one as well
             if (params.size() >= 2) character = params[1].toString();

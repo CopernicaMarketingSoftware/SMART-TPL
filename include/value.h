@@ -43,10 +43,16 @@ public:
     virtual std::string toString() const = 0;
 
     /**
-     *  Convert the variable to a numeric value
-     *  @return numeric
+     *  Convert the variable to a numeric value (this is a deprecated method)
+     *  @return integer_t
      */
     virtual integer_t toNumeric() const = 0;
+    
+    /**
+     *  Alias for the toNumeric() function that is used internally
+     *  @return integer_t
+     */
+    integer_t toInteger() const { return toNumeric(); }
 
     /**
      *  Convert the variable to a boolean value

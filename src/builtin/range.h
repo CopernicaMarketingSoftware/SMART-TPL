@@ -45,11 +45,11 @@ public:
         integer_t end = 0;
 
         // get our limits, if we only have 1 parameter we set that to the end
-        if (params.size() == 1) end = params[0].toNumeric();
+        if (params.size() == 1) end = params[0].toInteger();
         else if (params.size() >= 2)
         {
-            begin = params[0].toNumeric();
-            end = params[1].toNumeric();
+            begin = params[0].toInteger();
+            end = params[1].toInteger();
             end += begin;
         }
 

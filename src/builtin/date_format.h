@@ -4,7 +4,7 @@
  *  Built-in "|date_format" modifier
  *
  *  @author Tamas Elekes <tamas.elekes@copernica.com>
- *  @copyright 2018 Copernica BV
+ *  @copyright 2018 - 2019 Copernica BV
  */
 
 /**
@@ -150,7 +150,7 @@ public:
             }
             
             // value only contains numers, so we can treat it as timestamp
-            return process(input.toNumeric(), params);
+            return process(input.toInteger(), params);
         }
         catch (...)
         {

@@ -313,7 +313,7 @@ integer_t smart_tpl_to_integer(void *userdata, const void *variable)
     auto *var = (const Value *)variable;
 
     // convert to integer
-    return var->toNumeric();
+    return var->toInteger();
 }
 
 /**

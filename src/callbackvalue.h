@@ -75,7 +75,7 @@ public:
      *  Convert the value to a string
      *  @return const char *
      */
-    std::string toString() const override
+    virtual std::string toString() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toString();
@@ -91,23 +91,23 @@ public:
      *  Convert the variable to an integer value
      *  @return integer_t
      */
-    integer_t toNumeric() const override
+    virtual integer_t toNumeric() const override
     {
         // Are we cacheable? Yes return the cached version then
-        if (cache()) return _cache->toNumeric();
+        if (cache()) return _cache->toInteger();
 
         // call the callback to find out the actual value
         VariantValue value(_callback());
 
-        // retrieve the numeric value
-        return value.toNumeric();
+        // retrieve the integer value
+        return value.toInteger();
     }
 
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    bool toBoolean() const override
+    virtual bool toBoolean() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toBoolean();
@@ -123,7 +123,7 @@ public:
      *  Convert the variable to a floating point value
      *  @return double
      */
-    double toDouble() const override
+    virtual double toDouble() const override
     {
         // Are we cacheable? Yes return the cached version then
         if (cache()) return _cache->toDouble();
