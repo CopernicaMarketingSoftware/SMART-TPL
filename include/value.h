@@ -5,7 +5,7 @@
  *  your own custom template variables.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -15,9 +15,10 @@ namespace SmartTpl {
 
 /**
  *  Typedef for a general numeric type, if we ever decide to change it we'll just
- *  have to modify this.
+ *  have to modify this. For backwards compatibility, we also support the numeric_t
  */
-using numeric_t = int64_t;
+using integer_t = int64_t;
+using numeric_t = integer_t;
 
 /**
  *  Forward declaration of VariantValue so we can return VariantValue
@@ -42,10 +43,16 @@ public:
     virtual std::string toString() const = 0;
 
     /**
-     *  Convert the variable to a numeric value
-     *  @return numeric
+     *  Convert the variable to a numeric value (this is a deprecated method)
+     *  @return integer_t
      */
-    virtual numeric_t toNumeric() const = 0;
+    virtual integer_t toNumeric() const = 0;
+    
+    /**
+     *  Alias for the toNumeric() function that is used internally
+     *  @return integer_t
+     */
+    integer_t toInteger() const { return toNumeric(); }
 
     /**
      *  Convert the variable to a boolean value

@@ -4,7 +4,7 @@
  *  Implementation file for the Ccode class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
 
@@ -104,11 +104,11 @@ void CCode::output(const Filter *filter)
  */
 void CCode::write(const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric)
+    if (expression->type() == Expression::Type::Integer)
     {
-        _out << "callbacks->output_numeric(userdata,";
+        _out << "callbacks->output_integer(userdata,";
 
-        expression->numeric(this);
+        expression->toInteger(this);
 
         _out << ");" << std::endl;
     }
@@ -116,7 +116,7 @@ void CCode::write(const Expression *expression)
     {
         _out << "callbacks->output_boolean(userdata,";
 
-        expression->boolean(this);
+        expression->toBoolean(this);
 
         _out << ");" << std::endl;
     }
@@ -126,7 +126,7 @@ void CCode::write(const Expression *expression)
         _out << "callbacks->write(userdata,";
 
         // convert the expression to a string
-        expression->string(this);
+        expression->toString(this);
 
         // end of the function
         _out << ");" << std::endl;
@@ -145,7 +145,7 @@ void CCode::condition(const Expression *expression, const Statements *ifstatemen
     _out << "if (";
 
     // and now we generate the code that turns the expression into a boolean
-    expression->boolean(this);
+    expression->toBoolean(this);
 
     // close the if condition and open a curly brace to start a new code block
     _out << "){" << std::endl;
@@ -209,7 +209,7 @@ void CCode::varPointer(const Variable *parent, const std::string &name)
  */
 void CCode::varPointer(const Variable *parent, const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric)
+    if (expression->type() == Expression::Type::Integer)
     {
         // call the member_at() function
         _out << "callbacks->member_at(userdata,";
@@ -218,8 +218,8 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
         parent->pointer(this);
         _out << ',';
 
-        // generate the expression as a numeric value
-        expression->numeric(this);
+        // generate the expression as a integer value
+        expression->toInteger(this);
 
         // end the member_at call
         _out << ')';
@@ -236,7 +236,7 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
         _out << ',';
 
         // and now we should generate a string value for the expression
-        expression->string(this);
+        expression->toString(this);
 
         // end expression
         _out << ')';
@@ -247,7 +247,7 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
  *  Create a string literal
  *  @param  value
  */
-void CCode::string(const std::string &value)
+void CCode::stringValue(const std::string &value)
 {
     if (value.empty())
     {
@@ -266,10 +266,10 @@ void CCode::string(const std::string &value)
 }
 
 /**
- *  Create a numeric literal
+ *  Create a integer literal
  *  @param  value
  */
-void CCode::numeric(numeric_t value)
+void CCode::integerValue(integer_t value)
 {
     // output number
     _out << value;
@@ -279,7 +279,7 @@ void CCode::numeric(numeric_t value)
  *  Create a double literal
  *  @param  value
  */
-void CCode::double_type(double value)
+void CCode::doubleValue(double value)
 {
     // output number
     _out.precision(std::numeric_limits<double>::digits10);
@@ -309,13 +309,13 @@ void CCode::stringVariable(const Variable *variable)
 }
 
 /**
- *  Create a string or numeric constant for a variable
+ *  Create a string or integer constant for a variable
  *  @param  variable
  */
-void CCode::numericVariable(const Variable *variable)
+void CCode::integerVariable(const Variable *variable)
 {
-    // call the to_numeric method
-    _out << "callbacks->to_numeric(userdata,";
+    // call the to_integer method
+    _out << "callbacks->to_integer(userdata,";
 
     // generate pointer to the variable
     variable->pointer(this);
@@ -330,7 +330,7 @@ void CCode::numericVariable(const Variable *variable)
  */
 void CCode::booleanVariable(const Variable *variable)
 {
-    // call the to_numeric method
+    // call the to_boolean method
     _out << "callbacks->to_boolean(userdata,";
 
     // generate pointer to the variable
@@ -382,7 +382,7 @@ void CCode::negateBoolean(const Expression *expression)
     _out << "!";
 
     // then actually start printing the boolean expression
-    expression->boolean(this);
+    expression->toBoolean(this);
 }
 
 /**
@@ -396,15 +396,15 @@ void CCode::plus(const Expression *left, const Expression *right)
     _out << '(';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // print the operator
     _out << '+';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 
     // close the parenthese
     _out << ')';
@@ -416,15 +416,15 @@ void CCode::minus(const Expression *left, const Expression *right)
     _out << '(';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // print the operator
     _out << '-';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 
     // close the parenthese
     _out << ')';
@@ -436,15 +436,15 @@ void CCode::divide(const Expression *left, const Expression *right)
     _out << '(';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // print the operator and start a new block for our zero division check
     _out << "/((";
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 
     // compare it to 0 using an inline if statement. If this is true we will call throw_exception
     // which will throw a C++ exception out of everything
@@ -452,8 +452,8 @@ void CCode::divide(const Expression *left, const Expression *right)
 
     // but if we are false we'll need the original value of course, so we print that expression yet again
     // this seems inefficient, although it probably doesn't mattter as C compiler are 'smart' ;)
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 
     // And end the actual blocks for the inline if statement
     _out << ")))";
@@ -465,15 +465,15 @@ void CCode::multiply(const Expression *left, const Expression *right)
     _out << '(';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // print the operator
     _out << '*';
 
     // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 
     // close the parenthese
     _out << ')';
@@ -484,14 +484,14 @@ void CCode::modulo(const Expression *left, const Expression *right)
     // open a parenthese
     _out << '(';
 
-    // modulo only works with numeric values so print the left numeric value
-    left->numeric(this);
+    // modulo only works with integer values so print the left integer value
+    left->toInteger(this);
 
     // print the modulo character
     _out << '%';
 
-    // print the right numeric value
-    right->numeric(this);
+    // print the right integer value
+    right->toInteger(this);
 
     // close the parenthese
     _out << ')';
@@ -511,19 +511,19 @@ void CCode::equals(const Expression *left, const Expression *right)
 {
     if (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double)
     {
-        left->double_type(this); _out << "=="; right->double_type(this);
+        left->toDouble(this); _out << "=="; right->toDouble(this);
     }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
-        left->numeric(this); _out << "=="; right->numeric(this);
+        left->toInteger(this); _out << "=="; right->toInteger(this);
     }
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
-        left->boolean(this); _out << "=="; right->boolean(this);
+        left->toBoolean(this); _out << "=="; right->toBoolean(this);
     }
     else
     {
-        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ','; right->string(this); _out << ") == 0";
+        _out << "callbacks->strcmp(userdata,"; left->toString(this); _out << ','; right->toString(this); _out << ") == 0";
     }
 }
 
@@ -531,76 +531,76 @@ void CCode::notEquals(const Expression *left, const Expression *right)
 {
     if (left->type() == Expression::Type::Double || right->type() == Expression::Type::Double)
     {
-        left->double_type(this); _out << "!="; right->double_type(this);
+        left->toDouble(this); _out << "!="; right->toDouble(this);
     }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
-        left->numeric(this); _out << "!="; right->numeric(this);
+        left->toInteger(this); _out << "!="; right->toInteger(this);
     }
     else if (left->type() == Expression::Type::Boolean || right->type() == Expression::Type::Boolean)
     {
-        left->boolean(this); _out << "!="; right->boolean(this);
+        left->toBoolean(this); _out << "!="; right->toBoolean(this);
     }
     else
     {
-        _out << "callbacks->strcmp(userdata,"; left->string(this); _out << ','; right->string(this); _out << ") != 0";
+        _out << "callbacks->strcmp(userdata,"; left->toString(this); _out << ','; right->toString(this); _out << ") != 0";
     }
 }
 
 void CCode::greater(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // Print the actual operator
     _out << '>';
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 }
 
 void CCode::greaterEquals(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // Print the actual operator
     _out << ">=";
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 }
 
 void CCode::lesser(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // Print the actual operator
     _out << '<';
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 }
 
 void CCode::lesserEquals(const Expression *left, const Expression *right)
 {
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->double_type(this);
-    else left->numeric(this);
+    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
+    else left->toInteger(this);
 
     // Print the actual operator
     _out << "<=";
 
     // Print as a double if it's a double, print as a regular numer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->double_type(this);
-    else right->numeric(this);
+    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
+    else right->toInteger(this);
 }
 
 /**
@@ -610,7 +610,7 @@ void CCode::lesserEquals(const Expression *left, const Expression *right)
  */
 void CCode::regex(const Expression *left, const Expression *right)
 {
-    _out << "callbacks->regex(userdata,"; left->string(this); _out << ','; right->string(this); _out << ") == 0";
+    _out << "callbacks->regex(userdata,"; left->toString(this); _out << ','; right->toString(this); _out << ") == 0";
 }
 
 /**
@@ -618,8 +618,8 @@ void CCode::regex(const Expression *left, const Expression *right)
  *  @param  left
  *  @param  right
  */
-void CCode::booleanAnd(const Expression *left, const Expression *right) { left->boolean(this); _out << "&&"; right->boolean(this); }
-void CCode::booleanOr(const Expression *left, const Expression *right)  { left->boolean(this); _out << "||"; right->boolean(this); }
+void CCode::booleanAnd(const Expression *left, const Expression *right) { left->toBoolean(this); _out << "&&"; right->toBoolean(this); }
+void CCode::booleanOr(const Expression *left, const Expression *right)  { left->toBoolean(this); _out << "||"; right->toBoolean(this); }
 
 /**
  *  Generate the code to apply a set of modifiers on an expression
@@ -645,7 +645,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
     {
         const auto &modifier = *iter;
         _out << "callbacks->modifier(userdata,";
-        string(modifier->token());
+        stringValue(modifier->token());
         _out << "),";
 
         const Parameters *params = modifier->parameters();
@@ -731,8 +731,8 @@ void CCode::parameters(const Parameters *parameters)
         case Expression::Type::Boolean:
             _out << "callbacks->params_append_boolean(userdata,";
             break;
-        case Expression::Type::Numeric:
-            _out << "callbacks->params_append_numeric(userdata,";
+        case Expression::Type::Integer:
+            _out << "callbacks->params_append_integer(userdata,";
             break;
         case Expression::Type::String:
             _out << "callbacks->params_append_string(userdata,";
@@ -757,16 +757,16 @@ void CCode::parameters(const Parameters *parameters)
         _out << ',';
         switch (param->type()) {
         case Expression::Type::Boolean:
-            param->boolean(this);
+            param->toBoolean(this);
             break;
-        case Expression::Type::Numeric:
-            param->numeric(this);
+        case Expression::Type::Integer:
+            param->toInteger(this);
             break;
         case Expression::Type::String:
-            param->string(this);
+            param->toString(this);
             break;
         case Expression::Type::Double:
-            param->double_type(this);
+            param->toDouble(this);
             break;
         default:
             // should not be reachable as we probably already threw at this point
@@ -813,8 +813,8 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
     _out << "while (callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
 
     // assign the key and value
-    if (!key.empty()) { _out << "callbacks->assign(userdata,"; string(key); _out << ",callbacks->iterator_key(userdata,iterator));" << std::endl; }
-    if (!value.empty()) { _out << "callbacks->assign(userdata,"; string(value); _out << ",callbacks->iterator_value(userdata,iterator));" << std::endl; }
+    if (!key.empty()) { _out << "callbacks->assign(userdata,"; stringValue(key); _out << ",callbacks->iterator_key(userdata,iterator));" << std::endl; }
+    if (!value.empty()) { _out << "callbacks->assign(userdata,"; stringValue(value); _out << ",callbacks->iterator_value(userdata,iterator));" << std::endl; }
 
     // generate the actual statements
     statements->generate(this);
@@ -840,23 +840,23 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
 void CCode::assign(const std::string &key, const Expression *expression)
 {
     switch (expression->type()) {
-    case Expression::Type::Numeric:
-        // Convert to a numeric type and use the assign_numeric callback
-        _out << "callbacks->assign_numeric(userdata,";
-        string(key); _out << ',';
-        expression->numeric(this);
+    case Expression::Type::Integer:
+        // Convert to a integer type and use the assign_integer callback
+        _out << "callbacks->assign_integer(userdata,";
+        stringValue(key); _out << ',';
+        expression->toInteger(this);
         break;
     case Expression::Type::String:
         // Convert to a string and use the assign_string callback
         _out << "callbacks->assign_string(userdata,";
-        string(key); _out << ',';
-        expression->string(this);
+        stringValue(key); _out << ',';
+        expression->toString(this);
         break;
     case Expression::Type::Boolean:
         // Convert to a boolean and use the assign_boolean callback
         _out << "callbacks->assign_boolean(userdata,";
-        string(key); _out << ',';
-        expression->boolean(this);
+        stringValue(key); _out << ',';
+        expression->toBoolean(this);
         break;
     case Expression::Type::Value: {
         const Variable *variable = dynamic_cast<const Variable*>(expression);
@@ -864,7 +864,7 @@ void CCode::assign(const std::string &key, const Expression *expression)
         {
             // If we are a variable just convert it to a pointer and pass that to the assign callback
             _out << "callbacks->assign(userdata,";
-            string(key); _out << ',';
+            stringValue(key); _out << ',';
             variable->pointer(this);
             break;
         }
@@ -873,8 +873,8 @@ void CCode::assign(const std::string &key, const Expression *expression)
     case Expression::Type::Double:
         // Convert to a floating point value and use the assign_double callback
         _out << "callbacks->assign_double(userdata,";
-        string(key); _out << ',';
-        expression->double_type(this);
+        stringValue(key); _out << ',';
+        expression->toDouble(this);
         break;
     }
     // Finish this statement

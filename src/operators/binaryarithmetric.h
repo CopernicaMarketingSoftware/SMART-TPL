@@ -3,7 +3,7 @@
  *
  *  Class for arithmetric operators
  *
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -34,7 +34,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const override { return Type::Numeric; }
+    virtual Type type() const override { return Type::Integer; }
 };
 
 /**

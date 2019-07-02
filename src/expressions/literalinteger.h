@@ -1,10 +1,10 @@
 /**
- *  LiteralNumeric.h
+ *  LiteralInteger.h
  *
  *  Implementation of a literal numeric value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -15,21 +15,21 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class LiteralNumeric : public Literal
+class LiteralInteger : public Literal
 {
 private:
     /**
      *  The actual value
-     *  @var    numeric_t
+     *  @var    integer_t
      */
-    const numeric_t _value;
+    const integer_t _value;
 
 public:
     /**
      *  Constructor
      *  @param  token
      */
-    LiteralNumeric(Token *token)
+    LiteralInteger(Token *token)
     : _value(std::strtoll(token->c_str(), nullptr, 10))
     {
         // we no longer need the token
@@ -39,52 +39,52 @@ public:
     /**
      *  Destructor
      */
-    virtual ~LiteralNumeric() {}
+    virtual ~LiteralInteger() {}
 
     /**
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const override { return Type::Numeric; }
+    Type type() const override { return Type::Integer; }
 
     /**
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         // create string literal
-        generator->string(std::to_string(_value));
+        generator->stringValue(std::to_string(_value));
     }
 
     /**
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         // create numeric literal
-        generator->numeric(_value ? 1 : 0);
+        generator->integerValue(_value ? 1 : 0);
     }
 
     /**
      *  Generate the code to get the numeric value of the expression
      *  @param  generator
      */
-    void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         // create numeric literal
-        generator->numeric(_value);
+        generator->integerValue(_value);
     }
 
     /**
      *  Generate the expression as a double value
      *  @param  generator
      */
-    void double_type(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
         // turn out numeric value into a double
-        generator->double_type(_value);
+        generator->doubleValue(_value);
     }
 };
 

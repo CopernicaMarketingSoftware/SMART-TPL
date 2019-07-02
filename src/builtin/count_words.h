@@ -4,7 +4,7 @@
  *  Built-in "|count_words" modifier
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -39,7 +39,7 @@ public:
         boost::sregex_token_iterator iter(str.begin(), str.end(), rgx, -1);
 
         // Init our output value
-        numeric_t output = 0;
+        integer_t output = 0;
 
         // Count matches that contain alphanumerics
         boost::regex word("[a-zA-Z0-9\\x80-\\xff]");

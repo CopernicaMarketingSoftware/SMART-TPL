@@ -4,7 +4,7 @@
  *  Built-in "|truncate:80:"..."" modifier
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -40,7 +40,7 @@ public:
         if (params.size() >= 1)
         {
             // Turn the first parameter into a numeric value
-            length = params[0].toNumeric();
+            length = params[0].toInteger();
 
             // If they requested a length of 0 the output will be "" no matter what
             if (length == 0) return "";

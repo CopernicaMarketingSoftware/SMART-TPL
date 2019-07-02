@@ -4,7 +4,7 @@
  *  Header file that includes all header files of the SmartTpl library
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -125,7 +125,7 @@
 #include "expressions/variablearrayaccess.h"
 #include "expressions/literal.h"
 #include "expressions/literalboolean.h"
-#include "expressions/literalnumeric.h"
+#include "expressions/literalinteger.h"
 #include "expressions/literaldouble.h"
 #include "expressions/literalstring.h"
 #include "expressions/filter.h"

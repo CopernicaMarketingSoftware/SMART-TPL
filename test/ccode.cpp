@@ -358,8 +358,8 @@ TEST(CCode, ModifierParameters)
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
     "callbacks->output(userdata,callbacks->modify_variable(userdata,"
     "callbacks->variable(userdata,\"var\",3),callbacks->modifier(userdata,\"substring\",9),"
-    "callbacks->params_append_numeric(userdata,"
-    "callbacks->params_append_numeric(userdata,"
+    "callbacks->params_append_integer(userdata,"
+    "callbacks->params_append_integer(userdata,"
     "callbacks->create_params(userdata,2),1),5)),1);\n}\n"
     "int personalized = 1;\n"
     "const char *mode = \"raw\";\n");
@@ -457,8 +457,8 @@ TEST(CCode, OutputMath)
 
     string expectedOutput("#include <smarttpl/callbacks.h>\n"
     "void show_template(struct smart_tpl_callbacks *callbacks, void *userdata) {\n"
-    "callbacks->write(userdata,\"1+3-2*10=\",9);\ncallbacks->output_numeric(userdata,((1+3)-(2*10)));\n"
-    "callbacks->write(userdata,\"\\n(1+3-2)*10=\",12);\ncallbacks->output_numeric(userdata,(((1+3)-2)*10));\n}\n"
+    "callbacks->write(userdata,\"1+3-2*10=\",9);\ncallbacks->output_integer(userdata,((1+3)-(2*10)));\n"
+    "callbacks->write(userdata,\"\\n(1+3-2)*10=\",12);\ncallbacks->output_integer(userdata,(((1+3)-2)*10));\n}\n"
     "int personalized = 0;\n"
     "const char *mode = \"raw\";\n");
     EXPECT_EQ(expectedOutput, tpl.compile());

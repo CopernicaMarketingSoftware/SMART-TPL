@@ -7,7 +7,7 @@
  *  can be passed to a libjit machine.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -113,11 +113,11 @@ private:
     jit_value pointer(const Variable *variable);
 
     /**
-     *  Retrieve the numeric representation of an expression
+     *  Retrieve the integer representation of an expression
      *  @param  expression
      *  @return jit_value
      */
-    jit_value numericExpression(const Expression *expression);
+    jit_value integerExpression(const Expression *expression);
 
     /**
      *  Retrieve the boolean representation of an expression
@@ -179,19 +179,19 @@ private:
     void varPointer(const std::string &name) override;
 
     /**
-     *  Create a string or numeric literal
+     *  Create a string or integer literal
      *  @param  value
      */
-    void string(const std::string &value) override;
-    void numeric(numeric_t value) override;
-    void double_type(double value) override;
+    void stringValue(const std::string &value) override;
+    void integerValue(integer_t value) override;
+    void doubleValue(double value) override;
 
     /**
-     *  Create a string or numeric constant for a variable
+     *  Create a string or integer constant for a variable
      *  @param  variable
      */
     void stringVariable(const Variable *variable) override;
-    void numericVariable(const Variable *variable) override;
+    void integerVariable(const Variable *variable) override;
     void booleanVariable(const Variable *variable) override;
     void doubleVariable(const Variable *variable) override;
     void variable(const Variable *variable) override;

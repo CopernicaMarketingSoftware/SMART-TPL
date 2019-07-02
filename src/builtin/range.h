@@ -4,7 +4,7 @@
  *  Built-in "|range" modifier, which truncates a list to a certain amount of items
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -41,15 +41,15 @@ public:
         if (!rawIter) throw NoModification();
 
         // get our limits
-        numeric_t begin = 0;
-        numeric_t end = 0;
+        integer_t begin = 0;
+        integer_t end = 0;
 
         // get our limits, if we only have 1 parameter we set that to the end
-        if (params.size() == 1) end = params[0].toNumeric();
+        if (params.size() == 1) end = params[0].toInteger();
         else if (params.size() >= 2)
         {
-            begin = params[0].toNumeric();
-            end = params[1].toNumeric();
+            begin = params[0].toInteger();
+            end = params[1].toInteger();
             end += begin;
         }
 
@@ -57,7 +57,7 @@ public:
         std::map<std::string, VariantValue> output;
 
         // let's keep a simple counter
-        numeric_t current = 1;
+        integer_t current = 1;
 
         // loop over all our values
         for (std::unique_ptr<Iterator> iter(rawIter); iter->valid(); iter->next(), ++current)

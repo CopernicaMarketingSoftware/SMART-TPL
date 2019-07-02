@@ -4,7 +4,7 @@
  *  A wrapper around SmartTpl::Value which has constructors for most scalar types
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -99,9 +99,9 @@ public:
 
     /**
      *  Convert the variable to a numeric value
-     *  @return numeric
+     *  @return integer_t
      */
-    numeric_t toNumeric() const override
+    integer_t toNumeric() const override
     {
         // return the toNumeric of the underlying Value
         return _value->toNumeric();

@@ -8,7 +8,7 @@
  *  of the generators of the SmartTpl library (the template-to-c-code generator)
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -77,16 +77,16 @@ private:
      *  Create a string or numeric literal
      *  @param  value
      */
-    virtual void string(const std::string &value) override;
-    virtual void numeric(numeric_t value) override;
-    virtual void double_type(double value) override;
+    virtual void stringValue(const std::string &value) override;
+    virtual void integerValue(integer_t value) override;
+    virtual void doubleValue(double value) override;
 
     /**
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
     virtual void stringVariable(const Variable *variable) override;
-    virtual void numericVariable(const Variable *variable) override;
+    virtual void integerVariable(const Variable *variable) override;
     virtual void booleanVariable(const Variable *variable) override;
     virtual void doubleVariable(const Variable *variable) override;
     virtual void variable(const Variable *variable) override;

@@ -4,7 +4,7 @@
  *  Base class for all sorts of expressions
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -22,7 +22,7 @@ public:
      *  The supported expression types
      */
     enum class Type : std::int8_t {
-        Numeric = 0,            // numeric type
+        Integer = 0,            // numeric type
         String = 1,             // string type
         Boolean = 2,            // boolean type
         Double = 3,             // a double type
@@ -56,9 +56,9 @@ public:
      *  @throws CompileError    This compile error is really just here so the developer
      *                          knows they did something wrong.
      */
-    virtual void numeric(Generator *generator) const
+    virtual void toInteger(Generator *generator) const
     {
-        throw CompileError("Default internal numeric implementation called");
+        throw CompileError("Default internal toInteger implementation called");
     };
 
     /**
@@ -67,9 +67,9 @@ public:
      *  @throws CompileError    This compile error is really just here so the developer
      *                          knows they did something wrong.
      */
-    virtual void double_type(Generator *generator) const
+    virtual void toDouble(Generator *generator) const
     {
-        throw CompileError("Default internal double_type implementation called");
+        throw CompileError("Default internal toDouble implementation called");
     };
 
     /**
@@ -78,9 +78,9 @@ public:
      *  @throws CompileError    This compile error is really just here so the developer
      *                          knows they did something wrong.
      */
-    virtual void boolean(Generator *generator) const
+    virtual void toBoolean(Generator *generator) const
     {
-        throw CompileError("Default internal boolean implementation called");
+        throw CompileError("Default internal toBoolean implementation called");
     };
 
     /**
@@ -89,9 +89,9 @@ public:
      *  @throws CompileError    This compile error is really just here so the developer
      *                          knows they did something wrong.
      */
-    virtual void string(Generator *generator) const
+    virtual void toString(Generator *generator) const
     {
-        throw CompileError("Default internal string implementation called");
+        throw CompileError("Default internal toString implementation called");
     };
 
     /**

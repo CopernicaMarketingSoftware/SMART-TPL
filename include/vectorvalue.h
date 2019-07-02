@@ -4,7 +4,7 @@
  *  A SmartTpl::Value which represents a vector with VariantValues
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -50,7 +50,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    numeric_t toNumeric() const override
+    integer_t toNumeric() const override
     {
         return 0;
     };

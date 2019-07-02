@@ -4,7 +4,7 @@
  *  Implementation of a literal string value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -46,37 +46,37 @@ public:
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         // generate our actual value
-        generator->string(*_value);
+        generator->stringValue(*_value);
     }
 
     /**
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         // call the numeric generator with wether we're empty or not
-        generator->numeric(!_value->empty());
+        generator->integerValue(!_value->empty());
     }
 
     /**
      *  Generate the code to get the integer value of the expression
      *  @param  generator
      */
-    void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         try
         {
             // try to parse the string
-            generator->numeric(std::strtoll(_value->c_str(), nullptr, 10));
+            generator->integerValue(std::strtoll(_value->c_str(), nullptr, 10));
         }
         catch (...)
         {
             // if that doesn't work just return 0
-            generator->numeric(0);
+            generator->integerValue(0);
         }
     }
 
@@ -84,17 +84,17 @@ public:
      *  Generate the expression as a double value
      *  @param  generator
      */
-    void double_type(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
         try
         {
             // try to parse the string
-            generator->double_type(std::strtod(_value->c_str(), nullptr));
+            generator->doubleValue(std::strtod(_value->c_str(), nullptr));
         }
         catch (...)
         {
             // if that doesn't work just return 0
-            generator->double_type(0);
+            generator->doubleValue(0);
         }
     }
 };

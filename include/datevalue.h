@@ -4,7 +4,7 @@
  *  Class that represents a date variable
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -118,9 +118,9 @@ public:
 
     /**
      *  Returns the current unix timestamp
-     *  @return numeric
+     *  @return integer_t
      */
-    numeric_t toNumeric() const override
+    integer_t toNumeric() const override
     {
         // Get the current timestamp
         std::time_t time = _timestamp;

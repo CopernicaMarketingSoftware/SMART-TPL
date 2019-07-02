@@ -1,10 +1,10 @@
 /**
  *  NumericValue.h
  *
- *  A SmartTpl::Value which represents a numeric type (numeric_t)
+ *  A SmartTpl::Value which represents a numeric type (integer_t)
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -20,8 +20,9 @@ class NumericValue : public Value
 private:
     /**
      *  The actual numeric value
+     *  @var integer_t
      */
-    const numeric_t _value;
+    const integer_t _value;
 
 public:
     /**
@@ -47,9 +48,9 @@ public:
 
     /**
      *  Convert the variable to a numeric value
-     *  @return numeric
+     *  @return integer_t
      */
-    numeric_t toNumeric() const override
+    integer_t toNumeric() const override
     {
         return _value;
     };

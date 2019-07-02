@@ -6,7 +6,7 @@
  *  function.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -19,7 +19,7 @@ namespace SmartTpl { namespace Internal {
  */
 void        smart_tpl_write                 (void *userdata, const char *data, size_t size);
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
-void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
+void        smart_tpl_output_integer        (void *userdata, integer_t number);
 void        smart_tpl_output_boolean        (void *userdata, int value);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
@@ -30,13 +30,13 @@ const void *smart_tpl_iterator_value        (void *userdata, void *iterator);
 void        smart_tpl_iterator_next         (void *userdata, void *iterator);
 const void *smart_tpl_variable              (void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string             (void *userdata, const void *variable);
-numeric_t   smart_tpl_to_numeric            (void *userdata, const void *variable);
+integer_t   smart_tpl_to_integer            (void *userdata, const void *variable);
 double      smart_tpl_to_double             (void *userdata, const void *variable);
 int         smart_tpl_to_boolean            (void *userdata, const void *variable);
 size_t      smart_tpl_size                  (void *userdata, const void *variable);
 void       *smart_tpl_modifier              (void *userdata, const char *name, size_t size);
 const void *smart_tpl_modify_variable       (void *userdata, const void *variable, void *modifier, const void *parameters);
-void        smart_tpl_assign_numeric        (void *userdata, const char *key, size_t keysize, numeric_t value);
+void        smart_tpl_assign_integer        (void *userdata, const char *key, size_t keysize, integer_t value);
 void        smart_tpl_assign_boolean        (void *userdata, const char *key, size_t keysize, int boolean);
 void        smart_tpl_assign_string         (void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
 void        smart_tpl_assign_double         (void *userdata, const char *key, size_t keysize, double value);
@@ -46,7 +46,7 @@ void       *smart_tpl_regex_compile         (void *userdata, const char *regex, 
 int         smart_tpl_regex_match           (void *userdata, void *handle, const char *message, size_t size);
 void        smart_tpl_regex_release         (void *userdata, void *handle);
 const void *smart_tpl_create_params         (void *userdata, size_t parameters_count);
-const void *smart_tpl_params_append_numeric (void *userdata, const void *parameters, numeric_t value);
+const void *smart_tpl_params_append_integer (void *userdata, const void *parameters, integer_t value);
 const void *smart_tpl_params_append_double  (void *userdata, const void *parameters, double value);
 const void *smart_tpl_params_append_string  (void *userdata, const void *parameters, const char *buf, size_t len);
 const void *smart_tpl_params_append_boolean (void *userdata, const void *parameters, int boolean);
@@ -76,9 +76,9 @@ private:
     static SignatureCallback _output;
 
     /**
-     *  Signature fo the output numeric callback
+     *  Signature fo the output integer callback
      */
-    static SignatureCallback _output_numeric;
+    static SignatureCallback _output_integer;
 
     /**
      *  Signature fo the output boolean callback
@@ -131,9 +131,9 @@ private:
     static SignatureCallback _toString;
 
     /**
-     *  Signature of the function to convert a variable to a numeric value
+     *  Signature of the function to convert a variable to a integer value
      */
-    static SignatureCallback _toNumeric;
+    static SignatureCallback _toInteger;
 
     /**
      *  Signature of the function to convert a variable to a floating point value
@@ -166,9 +166,9 @@ private:
     static SignatureCallback _create_params;
 
     /**
-     *  Signature of the function to append a numeric value to parameters
+     *  Signature of the function to append a integer value to parameters
      */
-    static SignatureCallback _params_append_numeric;
+    static SignatureCallback _params_append_integer;
 
     /**
      *  Signature of the function to append a floating point value to parameters
@@ -208,9 +208,9 @@ private:
     static SignatureCallback _assign_boolean;
 
     /**
-     *  Signature of the function to assign a numeric value to a local variable
+     *  Signature of the function to assign a integer value to a local variable
      */
-    static SignatureCallback _assign_numeric;
+    static SignatureCallback _assign_integer;
 
     /**
      *  Signature of the function to assign a double value to a local variable
@@ -279,12 +279,12 @@ public:
     }
 
     /**
-     *  Call the output numeric function
+     *  Call the output integer function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  number          Number to output
-     *  @see    smart_tpl_output_numeric
+     *  @see    smart_tpl_output_integer
      */
-    void output_numeric(const jit_value &userdata, const jit_value &number)
+    void output_integer(const jit_value &userdata, const jit_value &number)
     {
         // construct the arguments
         jit_value_t args[] = {
@@ -293,14 +293,14 @@ public:
         };
 
         // create the instruction
-        _function->insn_call_native("smart_tpl_output_numeric", (void *)smart_tpl_output_numeric, _output_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        _function->insn_call_native("smart_tpl_output_integer", (void *)smart_tpl_output_integer, _output_integer.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
      *  Call the output boolean function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  value           Value to output
-     *  @see    smart_tpl_output_numeric
+     *  @see    smart_tpl_output_integer
      */
     void output_boolean(const jit_value &userdata, const jit_value &value)
     {
@@ -474,13 +474,13 @@ public:
     }
 
     /**
-     *  Call the to_numeric function
+     *  Call the to_integer function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  variable        Pointer to the variable
-     *  @return jit_value       Numeric representation
-     *  @see    smart_tpl_to_numeric
+     *  @return jit_value       Integer representation
+     *  @see    smart_tpl_to_integer
      */
-    jit_value to_numeric(const jit_value &userdata, const jit_value &variable)
+    jit_value to_integer(const jit_value &userdata, const jit_value &variable)
     {
         // construct the arguments
         jit_value_t args[] = {
@@ -489,7 +489,7 @@ public:
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_to_numeric", (void *)smart_tpl_to_numeric, _toNumeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        return _function->insn_call_native("smart_tpl_to_integer", (void *)smart_tpl_to_integer, _toInteger.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -607,13 +607,13 @@ public:
     }
 
     /**
-     *  Call the params_append_numeric function
+     *  Call the params_append_integer function
      *  @param  userdata       Pointer to user-supplied data
      *  @param  parameters     Pointer to the parameters we would like to append to
-     *  @param  value          The numeric value we would like to append
-     *  @see    smart_tpl_params_append_numeric
+     *  @param  value          The integer value we would like to append
+     *  @see    smart_tpl_params_append_integer
      */
-    void params_append_numeric(const jit_value &userdata, const jit_value &parameters, const jit_value &value)
+    void params_append_integer(const jit_value &userdata, const jit_value &parameters, const jit_value &value)
     {
         // construct the arguments
         jit_value_t args[] = {
@@ -623,7 +623,7 @@ public:
         };
 
         // create the instruction
-        _function->insn_call_native("smart_tpl_params_append_numeric", (void *) smart_tpl_params_append_numeric, _params_append_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        _function->insn_call_native("smart_tpl_params_append_integer", (void *) smart_tpl_params_append_integer, _params_append_integer.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**
@@ -819,14 +819,14 @@ public:
     }
 
     /**
-     *  Call the assign_numeric function
+     *  Call the assign_integer function
      *  @param  userdata       Pointer to user-supplied data
-     *  @param  value          The numeric value to assign
+     *  @param  value          The integer value to assign
      *  @param  key            The key to assign value to
      *  @param  key_size       The length of key
-     *  @see    smart_tpl_assign_numeric
+     *  @see    smart_tpl_assign_integer
      */
-    void assign_numeric(const jit_value &userdata, const jit_value &key, const jit_value &key_size, const jit_value &value)
+    void assign_integer(const jit_value &userdata, const jit_value &key, const jit_value &key_size, const jit_value &value)
     {
         // construct the arguments
         jit_value_t args[] = {
@@ -837,7 +837,7 @@ public:
         };
 
         // create the instruction
-        _function->insn_call_native("smart_tpl_assign_numeric", (void *) smart_tpl_assign_numeric, _assign_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        _function->insn_call_native("smart_tpl_assign_integer", (void *) smart_tpl_assign_integer, _assign_integer.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

@@ -4,7 +4,7 @@
  *  Iterator for VectorValues
  *
  *  @author Toon Schoenmakers <toon.schonemakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -20,23 +20,27 @@ class VectorIterator : public SmartTpl::Iterator
 private:
     /**
      *  The vector we're iterating over
+     *  @var std::vector
      */
     const std::vector<VariantValue> _vector;
 
     /**
      *  Iterator to the current position in our vector
+     *  @var const_iterator
      */
     std::vector<VariantValue>::const_iterator _iter;
 
     /**
      *  End iterator which indicates where we should stop
+     *  @var const_iterator
      */
     const std::vector<VariantValue>::const_iterator _end;
 
     /**
      *  A simple counter so we can at least return some kind of key
+     *  @var integer_t
      */
-    numeric_t _count;
+    integer_t _count;
 
 public:
     /**

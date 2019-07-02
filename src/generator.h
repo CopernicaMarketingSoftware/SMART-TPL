@@ -9,7 +9,7 @@
  *  the JIT-compiler.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -91,19 +91,19 @@ public:
     virtual void varPointer(const std::string &name) = 0;
 
     /**
-     *  Create a string, numeric or boolean literal
+     *  Create a string, integer or boolean literal
      *  @param  value
      */
-    virtual void string(const std::string &value) = 0;
-    virtual void numeric(numeric_t value) = 0;
-    virtual void double_type(double value) = 0;
+    virtual void stringValue(const std::string &value) = 0;
+    virtual void integerValue(integer_t value) = 0;
+    virtual void doubleValue(double value) = 0;
 
     /**
      *  Create a string, numeric or boolean constant for a variable
      *  @param  variable
      */
     virtual void stringVariable(const Variable *variable) = 0;
-    virtual void numericVariable(const Variable *variable) = 0;
+    virtual void integerVariable(const Variable *variable) = 0;
     virtual void booleanVariable(const Variable *variable) = 0;
     virtual void doubleVariable(const Variable *variable) = 0;
     virtual void variable(const Variable *variable) = 0;
