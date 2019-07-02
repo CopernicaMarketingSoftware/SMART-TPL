@@ -4,7 +4,7 @@
  *  The class that implements the "{$smarty} variable that holds the
  *  current time (and in the future maybe other meta-properties)
  *
- *  @copyright 2018 Copernica BV
+ *  @copyright 2018 - 2019 Copernica BV
  */
 
 /**
@@ -35,9 +35,9 @@ public:
 
     /**
      *  Convert the variable to a numeric value
-     *  @return numeric
+     *  @return integer_t
      */
-    virtual numeric_t toNumeric() const override
+    virtual integer_t toNumeric() const override
     {
         // this is the output of {$smarty|intval}
         return 0;

@@ -46,7 +46,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return numeric
      */
-    virtual numeric_t toNumeric() const = 0;
+    virtual integer_t toNumeric() const = 0;
 
     /**
      *  Convert the variable to a boolean value
