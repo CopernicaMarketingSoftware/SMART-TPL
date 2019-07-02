@@ -95,7 +95,7 @@ public:
      *  @param  value
      */
     virtual void string(const std::string &value) = 0;
-    virtual void numeric(numeric_t value) = 0;
+    virtual void numeric(integer_t value) = 0;
     virtual void double_type(double value) = 0;
 
     /**

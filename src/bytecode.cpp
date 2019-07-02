@@ -394,7 +394,7 @@ void Bytecode::string(const std::string &value)
  *  @param  value
  *  @note   +1 on the stack
  */
-void Bytecode::numeric(numeric_t value)
+void Bytecode::numeric(integer_t value)
 {
     // push value
     _stack.push(_function.new_constant(value, jit_type_sys_longlong));

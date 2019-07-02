@@ -6,7 +6,7 @@
  *  function.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -19,7 +19,7 @@ namespace SmartTpl { namespace Internal {
  */
 void        smart_tpl_write                 (void *userdata, const char *data, size_t size);
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
-void        smart_tpl_output_numeric        (void *userdata, numeric_t number);
+void        smart_tpl_output_numeric        (void *userdata, integer_t number);
 void        smart_tpl_output_boolean        (void *userdata, int value);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
@@ -30,13 +30,13 @@ const void *smart_tpl_iterator_value        (void *userdata, void *iterator);
 void        smart_tpl_iterator_next         (void *userdata, void *iterator);
 const void *smart_tpl_variable              (void *userdata, const char *name, size_t size);
 const char *smart_tpl_to_string             (void *userdata, const void *variable);
-numeric_t   smart_tpl_to_numeric            (void *userdata, const void *variable);
+integer_t   smart_tpl_to_numeric            (void *userdata, const void *variable);
 double      smart_tpl_to_double             (void *userdata, const void *variable);
 int         smart_tpl_to_boolean            (void *userdata, const void *variable);
 size_t      smart_tpl_size                  (void *userdata, const void *variable);
 void       *smart_tpl_modifier              (void *userdata, const char *name, size_t size);
 const void *smart_tpl_modify_variable       (void *userdata, const void *variable, void *modifier, const void *parameters);
-void        smart_tpl_assign_numeric        (void *userdata, const char *key, size_t keysize, numeric_t value);
+void        smart_tpl_assign_numeric        (void *userdata, const char *key, size_t keysize, integer_t value);
 void        smart_tpl_assign_boolean        (void *userdata, const char *key, size_t keysize, int boolean);
 void        smart_tpl_assign_string         (void *userdata, const char *key, size_t keysize, const char *buf, size_t buf_size);
 void        smart_tpl_assign_double         (void *userdata, const char *key, size_t keysize, double value);
@@ -46,7 +46,7 @@ void       *smart_tpl_regex_compile         (void *userdata, const char *regex, 
 int         smart_tpl_regex_match           (void *userdata, void *handle, const char *message, size_t size);
 void        smart_tpl_regex_release         (void *userdata, void *handle);
 const void *smart_tpl_create_params         (void *userdata, size_t parameters_count);
-const void *smart_tpl_params_append_numeric (void *userdata, const void *parameters, numeric_t value);
+const void *smart_tpl_params_append_numeric (void *userdata, const void *parameters, integer_t value);
 const void *smart_tpl_params_append_double  (void *userdata, const void *parameters, double value);
 const void *smart_tpl_params_append_string  (void *userdata, const void *parameters, const char *buf, size_t len);
 const void *smart_tpl_params_append_boolean (void *userdata, const void *parameters, int boolean);

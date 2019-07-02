@@ -4,7 +4,7 @@
  *  Implementation of a literal integer value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -20,7 +20,7 @@ class LiteralDouble : public Literal
 private:
     /**
      *  The actual value
-     *  @var    numeric_t
+     *  @var    double
      */
     const double _value;
 

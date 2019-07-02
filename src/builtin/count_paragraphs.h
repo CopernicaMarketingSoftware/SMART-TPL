@@ -4,7 +4,7 @@
  *  Built-in "|count_paragraphs" modifier
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -35,7 +35,7 @@ public:
         std::string str = input.toString();
 
         // Init our output value
-        numeric_t output = 0;
+        integer_t output = 0;
         for (auto c : str)
         {
             // We're really just counting the \n and \r's

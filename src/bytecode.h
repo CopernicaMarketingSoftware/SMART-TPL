@@ -7,7 +7,7 @@
  *  can be passed to a libjit machine.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -183,7 +183,7 @@ private:
      *  @param  value
      */
     void string(const std::string &value) override;
-    void numeric(numeric_t value) override;
+    void numeric(integer_t value) override;
     void double_type(double value) override;
 
     /**
