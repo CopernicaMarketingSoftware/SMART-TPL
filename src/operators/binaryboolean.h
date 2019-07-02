@@ -3,7 +3,7 @@
  *
  *  Base class for boolean operators
  *
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -38,7 +38,7 @@ public:
     {
         // this is wrong, because we can send "true" or "false" to the output, but
         // inside ByteCode.cpp and CCode.cpp we have a special case for boolean output
-        generator->string("");
+        generator->stringValue("");
     }
 };
 

@@ -4,7 +4,7 @@
  *  Expression that contains one variable.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -41,7 +41,7 @@ public:
      */
     virtual void numeric(Generator *generator) const override
     {
-        generator->numericVariable(this);
+        generator->integerVariable(this);
     }
 
     /**

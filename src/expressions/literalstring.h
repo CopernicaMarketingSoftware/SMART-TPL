@@ -4,7 +4,7 @@
  *  Implementation of a literal string value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -49,7 +49,7 @@ public:
     void string(Generator *generator) const override
     {
         // generate our actual value
-        generator->string(*_value);
+        generator->stringValue(*_value);
     }
 
     /**
@@ -59,7 +59,7 @@ public:
     void boolean(Generator *generator) const override
     {
         // call the numeric generator with wether we're empty or not
-        generator->numeric(!_value->empty());
+        generator->integerValue(!_value->empty());
     }
 
     /**
@@ -71,12 +71,12 @@ public:
         try
         {
             // try to parse the string
-            generator->numeric(std::strtoll(_value->c_str(), nullptr, 10));
+            generator->integerValue(std::strtoll(_value->c_str(), nullptr, 10));
         }
         catch (...)
         {
             // if that doesn't work just return 0
-            generator->numeric(0);
+            generator->integerValue(0);
         }
     }
 
@@ -89,12 +89,12 @@ public:
         try
         {
             // try to parse the string
-            generator->double_type(std::strtod(_value->c_str(), nullptr));
+            generator->doubleValue(std::strtod(_value->c_str(), nullptr));
         }
         catch (...)
         {
             // if that doesn't work just return 0
-            generator->double_type(0);
+            generator->doubleValue(0);
         }
     }
 };

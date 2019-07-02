@@ -54,7 +54,7 @@ public:
     void string(Generator *generator) const override
     {
         // create string literal
-        generator->string(std::to_string(_value));
+        generator->stringValue(std::to_string(_value));
     }
 
     /**
@@ -64,7 +64,7 @@ public:
     void boolean(Generator *generator) const override
     {
         // create numeric literal
-        generator->numeric(_value ? 1 : 0);
+        generator->integerValue(_value ? 1 : 0);
     }
 
     /**
@@ -74,7 +74,7 @@ public:
     void numeric(Generator *generator) const override
     {
         // create numeric literal (We actually don't really want to reach this I think)
-        generator->numeric(_value);
+        generator->integerValue(_value);
     }
 
     /**
@@ -84,7 +84,7 @@ public:
     void double_type(Generator *generator) const override
     {
         // create a double type
-        generator->double_type(_value);
+        generator->doubleValue(_value);
     }
 };
 

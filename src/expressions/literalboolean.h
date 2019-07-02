@@ -4,7 +4,7 @@
  *  Implementation of a literal boolean value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -49,7 +49,7 @@ public:
     void string(Generator *generator) const override
     {
         // create an empty string, booleans have no output
-        generator->string("");
+        generator->stringValue("");
     }
 
     /**
@@ -59,7 +59,7 @@ public:
     void boolean(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
-        generator->numeric(_value ? 1 : 0);
+        generator->integerValue(_value ? 1 : 0);
     }
 
     /**
@@ -69,7 +69,7 @@ public:
     void numeric(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
-        generator->numeric(_value ? 1 : 0);
+        generator->integerValue(_value ? 1 : 0);
     }
 
     /**
@@ -79,7 +79,7 @@ public:
     void double_type(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
-        generator->double_type(_value ? 1 : 0);
+        generator->doubleValue(_value ? 1 : 0);
     }
 };
 

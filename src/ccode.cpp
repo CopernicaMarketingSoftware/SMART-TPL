@@ -247,7 +247,7 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
  *  Create a string literal
  *  @param  value
  */
-void CCode::string(const std::string &value)
+void CCode::stringValue(const std::string &value)
 {
     if (value.empty())
     {
@@ -269,7 +269,7 @@ void CCode::string(const std::string &value)
  *  Create a numeric literal
  *  @param  value
  */
-void CCode::numeric(integer_t value)
+void CCode::integerValue(integer_t value)
 {
     // output number
     _out << value;
@@ -279,7 +279,7 @@ void CCode::numeric(integer_t value)
  *  Create a double literal
  *  @param  value
  */
-void CCode::double_type(double value)
+void CCode::doubleValue(double value)
 {
     // output number
     _out.precision(std::numeric_limits<double>::digits10);
@@ -312,7 +312,7 @@ void CCode::stringVariable(const Variable *variable)
  *  Create a string or numeric constant for a variable
  *  @param  variable
  */
-void CCode::numericVariable(const Variable *variable)
+void CCode::integerVariable(const Variable *variable)
 {
     // call the to_numeric method
     _out << "callbacks->to_numeric(userdata,";
@@ -645,7 +645,7 @@ void CCode::modifiers(const Modifiers *modifiers, const Variable *variable)
     {
         const auto &modifier = *iter;
         _out << "callbacks->modifier(userdata,";
-        string(modifier->token());
+        stringValue(modifier->token());
         _out << "),";
 
         const Parameters *params = modifier->parameters();
@@ -813,8 +813,8 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
     _out << "while (callbacks->valid_iterator(userdata,iterator)) {" << std::endl;
 
     // assign the key and value
-    if (!key.empty()) { _out << "callbacks->assign(userdata,"; string(key); _out << ",callbacks->iterator_key(userdata,iterator));" << std::endl; }
-    if (!value.empty()) { _out << "callbacks->assign(userdata,"; string(value); _out << ",callbacks->iterator_value(userdata,iterator));" << std::endl; }
+    if (!key.empty()) { _out << "callbacks->assign(userdata,"; stringValue(key); _out << ",callbacks->iterator_key(userdata,iterator));" << std::endl; }
+    if (!value.empty()) { _out << "callbacks->assign(userdata,"; stringValue(value); _out << ",callbacks->iterator_value(userdata,iterator));" << std::endl; }
 
     // generate the actual statements
     statements->generate(this);
@@ -843,19 +843,19 @@ void CCode::assign(const std::string &key, const Expression *expression)
     case Expression::Type::Integer:
         // Convert to a numeric type and use the assign_numeric callback
         _out << "callbacks->assign_numeric(userdata,";
-        string(key); _out << ',';
+        stringValue(key); _out << ',';
         expression->numeric(this);
         break;
     case Expression::Type::String:
         // Convert to a string and use the assign_string callback
         _out << "callbacks->assign_string(userdata,";
-        string(key); _out << ',';
+        stringValue(key); _out << ',';
         expression->string(this);
         break;
     case Expression::Type::Boolean:
         // Convert to a boolean and use the assign_boolean callback
         _out << "callbacks->assign_boolean(userdata,";
-        string(key); _out << ',';
+        stringValue(key); _out << ',';
         expression->boolean(this);
         break;
     case Expression::Type::Value: {
@@ -864,7 +864,7 @@ void CCode::assign(const std::string &key, const Expression *expression)
         {
             // If we are a variable just convert it to a pointer and pass that to the assign callback
             _out << "callbacks->assign(userdata,";
-            string(key); _out << ',';
+            stringValue(key); _out << ',';
             variable->pointer(this);
             break;
         }
@@ -873,7 +873,7 @@ void CCode::assign(const std::string &key, const Expression *expression)
     case Expression::Type::Double:
         // Convert to a floating point value and use the assign_double callback
         _out << "callbacks->assign_double(userdata,";
-        string(key); _out << ',';
+        stringValue(key); _out << ',';
         expression->double_type(this);
         break;
     }

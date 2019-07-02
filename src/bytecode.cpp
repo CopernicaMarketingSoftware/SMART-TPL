@@ -382,7 +382,7 @@ void Bytecode::varPointer(const std::string &name)
  *  @param  value
  *  @note   +2 on the stack
  */
-void Bytecode::string(const std::string &value)
+void Bytecode::stringValue(const std::string &value)
 {
     // push buffer and size
     _stack.push(_function.new_constant((void *)value.data(), jit_type_void_ptr));
@@ -394,7 +394,7 @@ void Bytecode::string(const std::string &value)
  *  @param  value
  *  @note   +1 on the stack
  */
-void Bytecode::numeric(integer_t value)
+void Bytecode::integerValue(integer_t value)
 {
     // push value
     _stack.push(_function.new_constant(value, jit_type_sys_longlong));
@@ -405,7 +405,7 @@ void Bytecode::numeric(integer_t value)
  *  @param  value
  *  @note   +1 on the stack
  */
-void Bytecode::double_type(double value)
+void Bytecode::doubleValue(double value)
 {
     // push value
     _stack.push(_function.new_constant(value, jit_type_float64));
@@ -431,7 +431,7 @@ void Bytecode::stringVariable(const Variable *variable)
  *  @param  variable
  *  @note   +1 on the stack
  */
-void Bytecode::numericVariable(const Variable *variable)
+void Bytecode::integerVariable(const Variable *variable)
 {
     // call the function to convert a variable to a numeric value
     _stack.push(_callbacks.to_numeric(_userdata, pointer(variable)));
@@ -826,7 +826,7 @@ void Bytecode::modifiers(const Modifiers *modifiers, const Variable *variable)
     for (const auto &modifier : *modifiers)
     {
         // Push the token of the modifier (so the name of it) to the stack
-        string(modifier.get()->token());
+        stringValue(modifier.get()->token());
 
         // the stack currently contains { size, buffer, variable }
 
@@ -998,7 +998,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
     if (!key.empty())
     {
         // construct jit values for the key name
-        string(key);
+        stringValue(key);
         auto key_size = pop();
         auto key_buf = pop();
 
@@ -1013,7 +1013,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
     if (!value.empty())
     {
         // convert our magic key to jit_values for the callback
-        string(value);
+        stringValue(value);
         auto value_size = pop();
         auto value_buf = pop();
 
@@ -1045,7 +1045,7 @@ void Bytecode::foreach(const Variable *variable, const std::string &key, const s
 void Bytecode::assign(const std::string &key, const Expression *expression)
 {
     // Convert the key to jit_values
-    string(key);
+    stringValue(key);
     auto key_size = pop();
     auto key_str = pop();
 

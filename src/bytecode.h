@@ -182,16 +182,16 @@ private:
      *  Create a string or numeric literal
      *  @param  value
      */
-    void string(const std::string &value) override;
-    void numeric(integer_t value) override;
-    void double_type(double value) override;
+    void stringValue(const std::string &value) override;
+    void integerValue(integer_t value) override;
+    void doubleValue(double value) override;
 
     /**
      *  Create a string or numeric constant for a variable
      *  @param  variable
      */
     void stringVariable(const Variable *variable) override;
-    void numericVariable(const Variable *variable) override;
+    void integerVariable(const Variable *variable) override;
     void booleanVariable(const Variable *variable) override;
     void doubleVariable(const Variable *variable) override;
     void variable(const Variable *variable) override;
