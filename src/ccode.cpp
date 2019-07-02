@@ -106,7 +106,7 @@ void CCode::write(const Expression *expression)
 {
     if (expression->type() == Expression::Type::Integer)
     {
-        _out << "callbacks->output_numeric(userdata,";
+        _out << "callbacks->output_integer(userdata,";
 
         expression->toInteger(this);
 
@@ -218,7 +218,7 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
         parent->pointer(this);
         _out << ',';
 
-        // generate the expression as a numeric value
+        // generate the expression as a integer value
         expression->toInteger(this);
 
         // end the member_at call
@@ -266,7 +266,7 @@ void CCode::stringValue(const std::string &value)
 }
 
 /**
- *  Create a numeric literal
+ *  Create a integer literal
  *  @param  value
  */
 void CCode::integerValue(integer_t value)
@@ -309,13 +309,13 @@ void CCode::stringVariable(const Variable *variable)
 }
 
 /**
- *  Create a string or numeric constant for a variable
+ *  Create a string or integer constant for a variable
  *  @param  variable
  */
 void CCode::integerVariable(const Variable *variable)
 {
-    // call the to_numeric method
-    _out << "callbacks->to_numeric(userdata,";
+    // call the to_integer method
+    _out << "callbacks->to_integer(userdata,";
 
     // generate pointer to the variable
     variable->pointer(this);
@@ -330,7 +330,7 @@ void CCode::integerVariable(const Variable *variable)
  */
 void CCode::booleanVariable(const Variable *variable)
 {
-    // call the to_numeric method
+    // call the to_boolean method
     _out << "callbacks->to_boolean(userdata,";
 
     // generate pointer to the variable
@@ -484,13 +484,13 @@ void CCode::modulo(const Expression *left, const Expression *right)
     // open a parenthese
     _out << '(';
 
-    // modulo only works with numeric values so print the left numeric value
+    // modulo only works with integer values so print the left integer value
     left->toInteger(this);
 
     // print the modulo character
     _out << '%';
 
-    // print the right numeric value
+    // print the right integer value
     right->toInteger(this);
 
     // close the parenthese
@@ -732,7 +732,7 @@ void CCode::parameters(const Parameters *parameters)
             _out << "callbacks->params_append_boolean(userdata,";
             break;
         case Expression::Type::Integer:
-            _out << "callbacks->params_append_numeric(userdata,";
+            _out << "callbacks->params_append_integer(userdata,";
             break;
         case Expression::Type::String:
             _out << "callbacks->params_append_string(userdata,";
@@ -841,8 +841,8 @@ void CCode::assign(const std::string &key, const Expression *expression)
 {
     switch (expression->type()) {
     case Expression::Type::Integer:
-        // Convert to a numeric type and use the assign_numeric callback
-        _out << "callbacks->assign_numeric(userdata,";
+        // Convert to a integer type and use the assign_integer callback
+        _out << "callbacks->assign_integer(userdata,";
         stringValue(key); _out << ',';
         expression->toInteger(this);
         break;
