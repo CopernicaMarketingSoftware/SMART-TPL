@@ -22,7 +22,7 @@ public:
      *  The supported expression types
      */
     enum class Type : std::int8_t {
-        Numeric = 0,            // numeric type
+        Integer = 0,            // numeric type
         String = 1,             // string type
         Boolean = 2,            // boolean type
         Double = 3,             // a double type

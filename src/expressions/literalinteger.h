@@ -1,10 +1,10 @@
 /**
- *  LiteralNumeric.h
+ *  LiteralInteger.h
  *
  *  Implementation of a literal numeric value
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -15,21 +15,21 @@ namespace SmartTpl { namespace Internal {
 /**
  *  Class definition
  */
-class LiteralNumeric : public Literal
+class LiteralInteger : public Literal
 {
 private:
     /**
      *  The actual value
-     *  @var    numeric_t
+     *  @var    integer_t
      */
-    const numeric_t _value;
+    const integer_t _value;
 
 public:
     /**
      *  Constructor
      *  @param  token
      */
-    LiteralNumeric(Token *token)
+    LiteralInteger(Token *token)
     : _value(std::strtoll(token->c_str(), nullptr, 10))
     {
         // we no longer need the token
@@ -39,13 +39,13 @@ public:
     /**
      *  Destructor
      */
-    virtual ~LiteralNumeric() {}
+    virtual ~LiteralInteger() {}
 
     /**
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const override { return Type::Numeric; }
+    Type type() const override { return Type::Integer; }
 
     /**
      *  Generate the code to get the const char * to the expression

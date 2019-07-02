@@ -4,7 +4,7 @@
  *  Implementation file of the LLVM code generator.
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
 
@@ -241,7 +241,7 @@ void Bytecode::write(const Expression *expression)
 {
     // check the type
     switch (expression->type()) {
-    case Expression::Type::Numeric:
+    case Expression::Type::Integer:
         // generate the code that pushes the nummeric value to the stack, and output that
         _callbacks.output_numeric(_userdata, numericExpression(expression));
         break;
@@ -341,7 +341,7 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
  */
 void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric)
+    if (expression->type() == Expression::Type::Integer)
     {
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
@@ -582,7 +582,7 @@ void Bytecode::equals(const Expression *left, const Expression *right)
         // Compare them and push it to the stack
         _stack.emplace(l == r);
     }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
         // Convert both expressions to numeric values
         jit_value l = numericExpression(left);
@@ -641,7 +641,7 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
         // Compare them and push it to the stack
         _stack.emplace(l != r);
     }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
         // Convert both expressions to numeric values
         jit_value l = numericExpression(left);
@@ -923,7 +923,7 @@ void Bytecode::parameters(const Parameters *parameters)
             // Convert the expression to a boolean value and append it using params_append_boolean
             _callbacks.params_append_boolean(_userdata, params, booleanExpression(param.get()));
             break;
-        case Expression::Type::Numeric:
+        case Expression::Type::Integer:
             // Convert the expression to a numeric value and append it using params_append_numeric
             _callbacks.params_append_numeric(_userdata, params, numericExpression(param.get()));
             break;
@@ -1050,7 +1050,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
     auto key_str = pop();
 
     switch (expression->type()) {
-    case Expression::Type::Numeric: {
+    case Expression::Type::Integer: {
         // Convert to a numeric type and use the assign_numeric callback
         _callbacks.assign_numeric(_userdata, key_str, key_size, numericExpression(expression));
         break;

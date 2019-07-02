@@ -4,7 +4,7 @@
  *  Implementation file for the Ccode class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
 
@@ -104,7 +104,7 @@ void CCode::output(const Filter *filter)
  */
 void CCode::write(const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric)
+    if (expression->type() == Expression::Type::Integer)
     {
         _out << "callbacks->output_numeric(userdata,";
 
@@ -209,7 +209,7 @@ void CCode::varPointer(const Variable *parent, const std::string &name)
  */
 void CCode::varPointer(const Variable *parent, const Expression *expression)
 {
-    if (expression->type() == Expression::Type::Numeric)
+    if (expression->type() == Expression::Type::Integer)
     {
         // call the member_at() function
         _out << "callbacks->member_at(userdata,";
@@ -513,7 +513,7 @@ void CCode::equals(const Expression *left, const Expression *right)
     {
         left->double_type(this); _out << "=="; right->double_type(this);
     }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
         left->numeric(this); _out << "=="; right->numeric(this);
     }
@@ -533,7 +533,7 @@ void CCode::notEquals(const Expression *left, const Expression *right)
     {
         left->double_type(this); _out << "!="; right->double_type(this);
     }
-    else if (left->type() == Expression::Type::Numeric || right->type() == Expression::Type::Numeric)
+    else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
         left->numeric(this); _out << "!="; right->numeric(this);
     }
@@ -731,7 +731,7 @@ void CCode::parameters(const Parameters *parameters)
         case Expression::Type::Boolean:
             _out << "callbacks->params_append_boolean(userdata,";
             break;
-        case Expression::Type::Numeric:
+        case Expression::Type::Integer:
             _out << "callbacks->params_append_numeric(userdata,";
             break;
         case Expression::Type::String:
@@ -759,7 +759,7 @@ void CCode::parameters(const Parameters *parameters)
         case Expression::Type::Boolean:
             param->boolean(this);
             break;
-        case Expression::Type::Numeric:
+        case Expression::Type::Integer:
             param->numeric(this);
             break;
         case Expression::Type::String:
@@ -840,7 +840,7 @@ void CCode::foreach(const Variable *variable, const std::string &key, const std:
 void CCode::assign(const std::string &key, const Expression *expression)
 {
     switch (expression->type()) {
-    case Expression::Type::Numeric:
+    case Expression::Type::Integer:
         // Convert to a numeric type and use the assign_numeric callback
         _out << "callbacks->assign_numeric(userdata,";
         string(key); _out << ',';
