@@ -4,7 +4,7 @@
  *  A filter combines an expression with a number of modifiers
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -63,7 +63,7 @@ public:
      *  Generate the expression as string value
      *  @param  generator
      */
-    virtual void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         _modifiers->generateString(generator, _variable.get());
     }
@@ -72,16 +72,16 @@ public:
      *  Generate the expression as a numeric value
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
-        throw std::runtime_error("Non-default numeric implementation called");
+        throw std::runtime_error("Non-default integer implementation called");
     };
 
     /**
      *  Generate the expression as a double value
      *  @param  generator
      */
-    virtual void double_type(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
         _modifiers->generateDouble(generator, _variable.get());
     };
@@ -90,7 +90,7 @@ public:
      *  Generate the expression as a boolean value
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         _modifiers->generateBoolean(generator, _variable.get());
     };

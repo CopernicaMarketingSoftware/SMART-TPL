@@ -173,7 +173,7 @@ jit_value Bytecode::pointer(const Variable *variable)
 jit_value Bytecode::numericExpression(const Expression *expression)
 {
     // create on the stack
-    expression->numeric(this);
+    expression->toInteger(this);
 
     // remove it from the stack
     return pop();
@@ -187,7 +187,7 @@ jit_value Bytecode::numericExpression(const Expression *expression)
 jit_value Bytecode::booleanExpression(const Expression *expression)
 {
     // create on the stack
-    expression->boolean(this);
+    expression->toBoolean(this);
 
     // remove from the stack
     return pop();
@@ -201,7 +201,7 @@ jit_value Bytecode::booleanExpression(const Expression *expression)
 jit_value Bytecode::doubleExpression(const Expression *expression)
 {
     // create on the stack
-    expression->double_type(this);
+    expression->toDouble(this);
 
     // remove from the stack
     return pop();
@@ -253,7 +253,7 @@ void Bytecode::write(const Expression *expression)
     
     default:
         // convert the expression to a string (this pushes two values on the stack)
-        expression->string(this);
+        expression->toString(this);
 
         // pop the buffer and size from the stack (in reverse order)
         auto size = pop();
@@ -350,7 +350,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
     else
     {
         // convert the expression to a string (this pushes two values on the stack
-        expression->string(this);
+        expression->toString(this);
 
         // pop the buffer and size from the stack (in reverse order)
         auto size = pop();
@@ -472,7 +472,7 @@ void Bytecode::variable(const Variable* variable)
 void Bytecode::negateBoolean(const Expression *expression)
 {
     // turn the expression into a boolean
-    expression->boolean(this);
+    expression->toBoolean(this);
 
     // pop the result, negate it and push it back to the stack
     _stack.push(_function.insn_to_not_bool(pop()));
@@ -603,14 +603,14 @@ void Bytecode::equals(const Expression *left, const Expression *right)
     else
     {
         // ask the left instruction to push the string to the stack
-        left->string(this);
+        left->toString(this);
         
         // and get the string back from the stack
         jit_value l_size = pop();
         jit_value l = pop();
 
         // ask the right instruction to do the same (push string to the stack)
-        right->string(this);
+        right->toString(this);
         
         // and get it back from the stack
         jit_value r_size = pop();
@@ -662,12 +662,12 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
     else
     {
         // Convert both expressions to strings
-        left->string(this);
+        left->toString(this);
         jit_value l_size = pop();
         jit_value l = pop();
 
         // Right expression is also turned into a string
-        right->string(this);
+        right->toString(this);
         jit_value r_size = pop();
         jit_value r = pop();
 
@@ -750,7 +750,7 @@ void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 void Bytecode::regex(const Expression *left, const Expression *right)
 {
     // generate the code to turn the expression on the right hand size into a string (this pushes two instructions to the stack)
-    right->string(this);
+    right->toString(this);
     
     // pop the last two elements from the stack (the string representation of the expression plus its size)
     jit_value expressionsize = pop();
@@ -763,7 +763,7 @@ void Bytecode::regex(const Expression *left, const Expression *right)
     _function.insn_branch_if_not(handle, _invalid_regex.label());
 
     // right hand side indeed contains a valid regex, now create the code that turns the left hand size in a string
-    left->string(this);
+    left->toString(this);
 
     // pop the last two instructions from the stack (this is now the string on the left hand side)
     jit_value messagesize = pop();
@@ -929,7 +929,7 @@ void Bytecode::parameters(const Parameters *parameters)
             break;
         case Expression::Type::String: {
             // Convert the expression to a string value and append it using params_append_string
-            param->string(this);
+            param->toString(this);
 
             // pop the buffer and size from the stack (in reverse order) to get output of the expression
             auto size = pop();
@@ -1057,7 +1057,7 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
     }
     case Expression::Type::String: {
         // Convert to a string and use the assign_string callback
-        expression->string(this);
+        expression->toString(this);
         auto size = pop();
         auto str = pop();
         _callbacks.assign_string(_userdata, key_str, key_size, str, size);

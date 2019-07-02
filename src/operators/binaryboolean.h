@@ -34,7 +34,7 @@ public:
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    virtual void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         // this is wrong, because we can send "true" or "false" to the output, but
         // inside ByteCode.cpp and CCode.cpp we have a special case for boolean output

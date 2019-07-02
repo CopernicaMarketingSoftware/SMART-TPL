@@ -51,7 +51,7 @@ public:
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         // create string literal
         generator->stringValue(std::to_string(_value));
@@ -61,7 +61,7 @@ public:
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         // create numeric literal
         generator->integerValue(_value ? 1 : 0);
@@ -71,7 +71,7 @@ public:
      *  Generate the code to get the numeric value of the expression
      *  @param  generator
      */
-    void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         // create numeric literal (We actually don't really want to reach this I think)
         generator->integerValue(_value);
@@ -81,7 +81,7 @@ public:
      *  Generate the expression as a double value
      *  @param  generator
      */
-    void double_type(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
         // create a double type
         generator->doubleValue(_value);

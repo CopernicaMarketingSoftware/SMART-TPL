@@ -46,7 +46,7 @@ public:
      *  Generate the code to get the const char * to the expression
      *  @param  generator
      */
-    void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         // create an empty string, booleans have no output
         generator->stringValue("");
@@ -56,7 +56,7 @@ public:
      *  Generate the code to get the boolean value of the expression
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->integerValue(_value ? 1 : 0);
@@ -66,7 +66,7 @@ public:
      *  Generate the code to get the integer value of the expression
      *  @param  generator
      */
-    void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->integerValue(_value ? 1 : 0);
@@ -76,7 +76,7 @@ public:
      *  Generate the expression as a double value
      *  @param  generator
      */
-    void double_type(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->doubleValue(_value ? 1 : 0);

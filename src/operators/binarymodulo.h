@@ -4,7 +4,7 @@
  *  Implementation of the binary modulo operator
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -35,7 +35,7 @@ public:
      *  Generate the operations
      *  @param  generator
      */
-    void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         generator->modulo(_left.get(), _right.get());
     }
@@ -44,7 +44,7 @@ public:
      *  Generate the instruction
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         generator->modulo(_left.get(), _right.get());
     }

@@ -39,7 +39,7 @@ public:
      *  Generate a numeric code for the variable
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         generator->integerVariable(this);
     }
@@ -48,7 +48,7 @@ public:
      *  Generate the expression as a double value
      *  @param  generator
      */
-    virtual void double_type(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
         // turn out numeric value into a double
         generator->doubleVariable(this);
@@ -58,7 +58,7 @@ public:
      *  Generate a boolean code for the variable
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         generator->booleanVariable(this);
     }
@@ -67,7 +67,7 @@ public:
      *  Generate a string for the variable
      *  @param  generator
      */
-    virtual void string(Generator *generator) const override
+    virtual void toString(Generator *generator) const override
     {
         generator->stringVariable(this);
     }

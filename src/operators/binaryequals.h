@@ -4,7 +4,7 @@
  *  Implementation of the binary equals operator
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -35,7 +35,7 @@ public:
      *  Generate the instruction
      *  @param  generator
      */
-    virtual void numeric(Generator *generator) const override
+    virtual void toInteger(Generator *generator) const override
     {
         generator->equals(_left.get(), _right.get());
     }
@@ -44,7 +44,7 @@ public:
      *  Generate the instruction
      *  @param  generator
      */
-    virtual void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         generator->equals(_left.get(), _right.get());
     }

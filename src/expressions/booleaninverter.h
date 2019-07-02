@@ -4,7 +4,7 @@
  *  Implementation of the boolean inverter, used to implement the not and !
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 
 /**
@@ -46,7 +46,7 @@ public:
      *  Generate the instruction
      *  @param  generator
      */
-    void boolean(Generator *generator) const override
+    virtual void toBoolean(Generator *generator) const override
     {
         // create an inverted generator
         generator->negateBoolean(_expression.get());
