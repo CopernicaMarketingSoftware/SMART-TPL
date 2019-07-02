@@ -166,11 +166,11 @@ jit_value Bytecode::pointer(const Variable *variable)
 }
 
 /**
- *  Retrieve the numeric representation of an expression
+ *  Retrieve the integer representation of an expression
  *  @param  expression
  *  @return jit_value
  */
-jit_value Bytecode::numericExpression(const Expression *expression)
+jit_value Bytecode::integerExpression(const Expression *expression)
 {
     // create on the stack
     expression->toInteger(this);
@@ -243,7 +243,7 @@ void Bytecode::write(const Expression *expression)
     switch (expression->type()) {
     case Expression::Type::Integer:
         // generate the code that pushes the nummeric value to the stack, and output that
-        _callbacks.output_numeric(_userdata, numericExpression(expression));
+        _callbacks.output_integer(_userdata, integerExpression(expression));
         break;
     
     case Expression::Type::Boolean:
@@ -345,7 +345,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
     {
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
-        _stack.push(_callbacks.member_at(_userdata, pointer(parent), numericExpression(expression)));
+        _stack.push(_callbacks.member_at(_userdata, pointer(parent), integerExpression(expression)));
     }
     else
     {
@@ -390,7 +390,7 @@ void Bytecode::stringValue(const std::string &value)
 }
 
 /**
- *  Create a numeric literal
+ *  Create a integer literal
  *  @param  value
  *  @note   +1 on the stack
  */
@@ -412,7 +412,7 @@ void Bytecode::doubleValue(double value)
 }
 
 /**
- *  Create a string or numeric constant for a variable
+ *  Create a string or integer constant for a variable
  *  @param  variable
  *  @note   +2 on the stack
  */
@@ -427,14 +427,14 @@ void Bytecode::stringVariable(const Variable *variable)
 }
 
 /**
- *  Create a string or numeric constant for a variable
+ *  Create a string or integer constant for a variable
  *  @param  variable
  *  @note   +1 on the stack
  */
 void Bytecode::integerVariable(const Variable *variable)
 {
-    // call the function to convert a variable to a numeric value
-    _stack.push(_callbacks.to_numeric(_userdata, pointer(variable)));
+    // call the function to convert a variable to a pointer address
+    _stack.push(_callbacks.to_integer(_userdata, pointer(variable)));
 }
 
 /**
@@ -444,7 +444,7 @@ void Bytecode::integerVariable(const Variable *variable)
  */
 void Bytecode::booleanVariable(const Variable *variable)
 {
-    // call the function to convert a variable to a numeric value
+    // call the function to convert a variable to a integer value
     _stack.push(_callbacks.to_boolean(_userdata, pointer(variable)));
 }
 
@@ -487,8 +487,8 @@ void Bytecode::negateBoolean(const Expression *expression)
 void Bytecode::plus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l + r);
@@ -503,8 +503,8 @@ void Bytecode::plus(const Expression *left, const Expression *right)
 void Bytecode::minus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l - r);
@@ -519,14 +519,14 @@ void Bytecode::minus(const Expression *left, const Expression *right)
 void Bytecode::divide(const Expression *left, const Expression *right)
 {
     // First calculate the right value
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // if it is 0 we branch off to our early exit label
     // @todo we have to test this (why no branch_if_not?)
     _function.insn_branch_if(r == _false, _division_by_zero.label());
 
     // calculate the left one
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
 
     // calculate them, and push to stack
     // in the case we branch off to _error this will never actually happen
@@ -542,8 +542,8 @@ void Bytecode::divide(const Expression *left, const Expression *right)
 void Bytecode::multiply(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l * r);
@@ -558,8 +558,8 @@ void Bytecode::multiply(const Expression *left, const Expression *right)
 void Bytecode::modulo(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = numericExpression(left);
-    jit_value r = numericExpression(right);
+    jit_value l = integerExpression(left);
+    jit_value r = integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l % r);
@@ -584,9 +584,9 @@ void Bytecode::equals(const Expression *left, const Expression *right)
     }
     else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
-        // Convert both expressions to numeric values
-        jit_value l = numericExpression(left);
-        jit_value r = numericExpression(right);
+        // Convert both expressions to integer values
+        jit_value l = integerExpression(left);
+        jit_value r = integerExpression(right);
 
         // Compare them and push it to the stack
         _stack.emplace(l == r);
@@ -643,9 +643,9 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
     }
     else if (left->type() == Expression::Type::Integer || right->type() == Expression::Type::Integer)
     {
-        // Convert both expressions to numeric values
-        jit_value l = numericExpression(left);
-        jit_value r = numericExpression(right);
+        // Convert both expressions to integer values
+        jit_value l = integerExpression(left);
+        jit_value r = integerExpression(right);
 
         // Compare them and push it to the stack
         _stack.emplace(l != r);
@@ -686,8 +686,8 @@ void Bytecode::notEquals(const Expression *left, const Expression *right)
 void Bytecode::greater(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l > r);
@@ -702,8 +702,8 @@ void Bytecode::greater(const Expression *left, const Expression *right)
 void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l >= r);
@@ -718,8 +718,8 @@ void Bytecode::greaterEquals(const Expression *left, const Expression *right)
 void Bytecode::lesser(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l < r);
@@ -734,8 +734,8 @@ void Bytecode::lesser(const Expression *left, const Expression *right)
 void Bytecode::lesserEquals(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : numericExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : numericExpression(right);
+    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l <= r);
@@ -924,8 +924,8 @@ void Bytecode::parameters(const Parameters *parameters)
             _callbacks.params_append_boolean(_userdata, params, booleanExpression(param.get()));
             break;
         case Expression::Type::Integer:
-            // Convert the expression to a numeric value and append it using params_append_numeric
-            _callbacks.params_append_numeric(_userdata, params, numericExpression(param.get()));
+            // Convert the expression to a integer value and append it using params_append_integer
+            _callbacks.params_append_integer(_userdata, params, integerExpression(param.get()));
             break;
         case Expression::Type::String: {
             // Convert the expression to a string value and append it using params_append_string
@@ -940,7 +940,7 @@ void Bytecode::parameters(const Parameters *parameters)
             break;
         }
         case Expression::Type::Double:
-            // Convert the expression to a floating point value and append it using params_append_numeric
+            // Convert the expression to a floating point value and append it using params_append_integer
             _callbacks.params_append_double(_userdata, params, doubleExpression(param.get()));
             break;
         default:
@@ -1051,8 +1051,8 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
 
     switch (expression->type()) {
     case Expression::Type::Integer: {
-        // Convert to a numeric type and use the assign_numeric callback
-        _callbacks.assign_numeric(_userdata, key_str, key_size, numericExpression(expression));
+        // Convert to a integer type and use the assign_integer callback
+        _callbacks.assign_integer(_userdata, key_str, key_size, integerExpression(expression));
         break;
     }
     case Expression::Type::String: {

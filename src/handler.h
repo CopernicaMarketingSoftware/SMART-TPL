@@ -141,10 +141,10 @@ public:
     }
 
     /**
-     *  Output a numeric value
+     *  Output a integer value
      *  @param  number   The integer value to output
      */
-    void outputNumeric(integer_t number)
+    void outputInteger(integer_t number)
     {
         _buffer.append(std::to_string(number));
     }
@@ -233,10 +233,10 @@ public:
     }
 
     /**
-     *  Assign a numeric value to a local variable
-     *  @param value        The numeric value we want to assign
+     *  Assign a integer value to a local variable
      *  @param key          The name of our local variable
      *  @param key_size     The size of key
+     *  @param value        The integer value we want to assign
      */
     void assign(const char *key, size_t key_size, integer_t value)
     {

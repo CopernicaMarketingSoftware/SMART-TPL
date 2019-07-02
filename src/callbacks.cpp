@@ -4,7 +4,7 @@
  *  Implementation of the callbacks
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 - 2018 Copernica BV
+ *  @copyright 2014 - 2019 Copernica BV
  */
 #include "includes.h"
 
@@ -18,7 +18,7 @@ namespace SmartTpl { namespace Internal {
  */
 SignatureCallback Callbacks::_write({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_output({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
-SignatureCallback Callbacks::_output_numeric({ jit_type_void_ptr, jit_type_sys_longlong });
+SignatureCallback Callbacks::_output_integer({ jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_output_boolean({ jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
@@ -29,14 +29,14 @@ SignatureCallback Callbacks::_iterator_value({ jit_type_void_ptr, jit_type_void_
 SignatureCallback Callbacks::_iterator_next({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_toString({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
-SignatureCallback Callbacks::_toNumeric({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_longlong);
+SignatureCallback Callbacks::_toInteger({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_longlong);
 SignatureCallback Callbacks::_toDouble({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_float64);
 SignatureCallback Callbacks::_toBoolean({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
 SignatureCallback Callbacks::_size({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_ulonglong);
 SignatureCallback Callbacks::_modifier({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_modify_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_params({ jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
-SignatureCallback Callbacks::_params_append_numeric({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong });
+SignatureCallback Callbacks::_params_append_integer({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong });
 SignatureCallback Callbacks::_params_append_double({ jit_type_void_ptr, jit_type_void_ptr, jit_type_float64 });
 SignatureCallback Callbacks::_params_append_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_params_append_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_bool });
@@ -46,7 +46,7 @@ SignatureCallback Callbacks::_regex_match({ jit_type_void_ptr, jit_type_void_ptr
 SignatureCallback Callbacks::_regex_release({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_assign({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr });
 SignatureCallback Callbacks::_assign_boolean({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_bool });
-SignatureCallback Callbacks::_assign_numeric({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_longlong });
+SignatureCallback Callbacks::_assign_integer({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_sys_longlong });
 SignatureCallback Callbacks::_assign_double({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_float64 });
 SignatureCallback Callbacks::_assign_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong, jit_type_void_ptr, jit_type_sys_ulonglong });
 SignatureCallback Callbacks::_mark_failed({ jit_type_void_ptr, jit_type_void_ptr });
@@ -90,17 +90,17 @@ void smart_tpl_output(void *userdata, const void *variable, int escape)
 }
 
 /**
- *  Function to output a numeric value
+ *  Function to output a integer value
  *  @param  userdata       pointer to user-supplied data
  *  @param  number         the number to output
  */
-void smart_tpl_output_numeric(void *userdata, integer_t number)
+void smart_tpl_output_integer(void *userdata, integer_t number)
 {
     // Convert the userdata to our handler object
     auto *handler = (Handler*) userdata;
 
-    // Call the output numeric method on the handler with our number
-    handler->outputNumeric(number);
+    // Call the output integer method on the handler with our number
+    handler->outputInteger(number);
 }
 
 /**
@@ -302,17 +302,17 @@ const char *smart_tpl_to_string(void *userdata, const void *variable)
 }
 
 /**
- *  Retrieve the numeric representation of a variable
+ *  Retrieve the integer representation of a variable
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to variable
- *  @return                 numeric value
+ *  @return                 integer value
  */
-integer_t smart_tpl_to_numeric(void *userdata, const void *variable)
+integer_t smart_tpl_to_integer(void *userdata, const void *variable)
 {
     // convert the variable to a value object
     auto *var = (const Value *)variable;
 
-    // convert to numeric
+    // convert to integer
     return var->toNumeric();
 }
 
@@ -335,7 +335,7 @@ double smart_tpl_to_double(void *userdata, const void *variable)
  *  Retrieve the boolean representation of a variable
  *  @param  userdata        pointer to user-supplied data
  *  @param  variable        pointer to variable
- *  @return                 numeric value
+ *  @return                 integer value
  */
 int smart_tpl_to_boolean(void *userdata, const void *variable)
 {
@@ -429,18 +429,18 @@ const void* smart_tpl_modify_variable(void *userdata, const void *variable, void
 }
 
 /**
- *  Assign a numeric value to a local variable
+ *  Assign a integer value to a local variable
  *  @param userdata        pointer to user-supplied data
  *  @param key             the key we would like to assign it to
  *  @param keysize         the size of key
- *  @param value           the numeric value we would like to assign
+ *  @param value           the integer value we would like to assign
  */
-void smart_tpl_assign_numeric(void *userdata, const char *key, size_t keysize, integer_t value)
+void smart_tpl_assign_integer(void *userdata, const char *key, size_t keysize, integer_t value)
 {
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
 
-    // Assign numeric value to key
+    // Assign integer value to key
     handler->assign(key, keysize, value);
 }
 
@@ -456,7 +456,7 @@ void smart_tpl_assign_double(void *userdata, const char *key, size_t keysize, do
     // Convert userdata to our Handler
     auto handler = (Handler *) userdata;
 
-    // Assign numeric value to key
+    // Assign value to key
     handler->assign(key, keysize, value);
 }
 
@@ -618,17 +618,17 @@ const void *smart_tpl_create_params(void *userdata, size_t parameters_count)
 }
 
 /**
- *  Append a numeric value to the parameters
+ *  Append a integer value to the parameters
  *  @param  userdata       Pointer to user-supplied data
  *  @param  parameters     Pointer to a SmartTpl::Parameters object
- *  @param  value          The numeric value to append
+ *  @param  value          The integer value to append
  */
-const void *smart_tpl_params_append_numeric(void *userdata, const void *parameters, integer_t value)
+const void *smart_tpl_params_append_integer(void *userdata, const void *parameters, integer_t value)
 {
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
 
-    // Add the numeric value
+    // Add the integer value
     params->emplace_back(value);
 
     // allow chaining
@@ -646,7 +646,7 @@ const void *smart_tpl_params_append_double(void *userdata, const void *parameter
     // Convert to a Parameters object
     auto *params = (SmartTpl::Parameters *) parameters;
 
-    // Add the numeric value
+    // Add the double value
     params->emplace_back(value);
 
     // allow chaining
