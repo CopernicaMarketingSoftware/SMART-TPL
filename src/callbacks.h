@@ -27,6 +27,8 @@ const void *smart_tpl_member                (void *userdata, const void *variabl
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
 const void *smart_tpl_transfer_numeric      (void *userdata, numeric_t data);
 const void *smart_tpl_transfer_double       (void *userdata, double data);
+const void *smart_tpl_transfer_string       (void *userdata, const char *buffer, size_t length);
+const void *smart_tpl_transfer_boolean      (void *userdata, bool boolean);
 const void *smart_tpl_plus                  (void *userdata, const void *variable1, const void *variable2);
 const void *smart_tpl_minus                 (void *userdata, const void *variable1, const void *variable2);
 const void *smart_tpl_multiply              (void *userdata, const void *variable1, const void *variable2);
@@ -119,6 +121,8 @@ private:
      */
     static SignatureCallback _transfer_numeric;
     static SignatureCallback _transfer_double;
+    static SignatureCallback _transfer_string;
+    static SignatureCallback _transfer_boolean;
 
     /**
      *  Signatures of the runtime arithmetic operations
@@ -430,7 +434,7 @@ public:
 
     /**
      *  Transfer a numeric value to runtime space
-     *  @param  userdata    Poiter to user supplied data
+     *  @param  userdata    Pointer to user supplied data
      *  @param  jit_value   The data to move to the runtime space
      *  @return jit_value
      *  @see    smart_tpl_transfer_numeric
@@ -447,12 +451,12 @@ public:
         return _function->insn_call_native("smart_tpl_transfer_numeric", (void *)smart_tpl_transfer_numeric, _transfer_numeric.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
-     /**
+    /**
      *  Transfer a double value to runtime space
-     *  @param  userdata    Poiter to user supplied data
+     *  @param  userdata    Pointer to user supplied data
      *  @param  jit_value   The data to move to the runtime space
      *  @return jit_value
-     *  @see    smart_tpl_transfer_numeric
+     *  @see    smart_tpl_transfer_double
      */
     jit_value transfer_double(const jit_value &userdata, const jit_value &value)
     {
@@ -464,6 +468,46 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_transfer_double", (void *)smart_tpl_transfer_double, _transfer_double.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Transfer a double value to runtime space
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  jit_value   Pointer to data to move to the runtime space
+     *  @param  jit_value   Size of the buffer
+     *  @return jit_value
+     *  @see    smart_tpl_transfer_string
+     */
+    jit_value transfer_string(const jit_value &userdata, const jit_value &buffer, const jit_value &size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            buffer.raw(),
+            size.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_transfer_string", (void *)smart_tpl_transfer_string, _transfer_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Transfer a boolean value to runtime space
+     *  @param  userdata    Poiter to user supplied data
+     *  @param  jit_value   The data to move to the runtime space
+     *  @return jit_value
+     *  @see    smart_tpl_transfer_boolean
+     */
+    jit_value transfer_boolean(const jit_value &userdata, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_transfer_boolean", (void *)smart_tpl_transfer_boolean, _transfer_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

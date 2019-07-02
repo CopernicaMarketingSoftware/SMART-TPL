@@ -24,13 +24,15 @@ SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_do
 SignatureCallback Callbacks::_output_value({ jit_type_void_ptr, jit_type_void_ptr });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
-SignatureCallback Callbacks::_transfer_numeric({jit_type_void_ptr, jit_type_sys_longlong}, jit_type_void_ptr);
-SignatureCallback Callbacks::_transfer_double({jit_type_void_ptr, jit_type_sys_float}, jit_type_void_ptr);
-SignatureCallback Callbacks::_plus({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
-SignatureCallback Callbacks::_minus({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
-SignatureCallback Callbacks::_multiply({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
-SignatureCallback Callbacks::_divide({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
-SignatureCallback Callbacks::_modulo({jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr}, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_numeric({ jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_double({ jit_type_void_ptr, jit_type_sys_float }, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_transfer_boolean({ jit_type_void_ptr, jit_type_sys_int }, jit_type_void_ptr);
+SignatureCallback Callbacks::_plus({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_minus({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_multiply({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_divide({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_modulo({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_create_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_valid_iterator({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_sys_bool);
 SignatureCallback Callbacks::_iterator_key({ jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
@@ -167,7 +169,6 @@ void smart_tpl_output_value(void *userdata, const void *variable)
     }
 }
 
-
 /**
  *  Retrieve a pointer to a member
  *  @param  userdata        pointer to user-supplied data
@@ -260,6 +261,45 @@ const void *smart_tpl_transfer_double(void *userdata, double data)
 }
 
 /**
+ *  Store a string constant in a runtime space pointer
+ *  @param  userdata        pointer to user supplied data
+ *  @param  const char *    pointer to the value to store
+ *  @param  size_t          length of the buffer
+ *  @return                 pointer to new variable
+ */
+const void *smart_tpl_transfer_string(void *userdata, const char *buffer, size_t length)
+{
+    // Allocate on the heap
+    auto *output = new VariantValue(buffer, length);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
+}
+
+/**
+ *  Store a boolean constant in a runtime space pointer
+ *  @param  userdata    pointer to user supplied data
+ *  @param  int         the value to store
+ *  @return             pointer to new variable
+ */
+const void *smart_tpl_transfer_boolean(void *userdata, bool value)
+{
+    // Allocate on the heap
+    auto *output = new VariantValue(value);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
+}
+
+/**
  *  Calculate the addition of two values during runtime
  *  @param  userdata        pointer to user supplied data
  *  @param  variable1       left side value of the equation
@@ -278,13 +318,14 @@ const void *smart_tpl_plus(void *userdata, const void *variable1, const void *va
     // This will be a pointer to our new value
     VariantValue *output;
 
+    // If one of the values is a string, we'll do string concatenation
+    if (value1->type() == Value::Type::String || value2->type() == Value::Type::String) output = new VariantValue(value1->toString() + value2->toString());
+
     // If one of the values is a double, so is the result
-    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() + value2->toDouble());
+    else if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() + value2->toDouble());
 
     // If one of the types is numeric, so is the result
     else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() + value2->toNumeric());
-
-    // @todo can we support string concatenation here?
 
     // Unsupported types, just return zero
     else output = new VariantValue(0);
@@ -372,7 +413,7 @@ const void *smart_tpl_multiply(void *userdata, const void *variable1, const void
  *  @param  userdata        pointer to user supplied data
  *  @param  variable1       left side value of the equation
  *  @param  variable2       right side value of the equation
- *  @return                 pointer to new variable
+ *  @return                 pointer to new variable (or nullptr on divide by zero)
  */
 const void *smart_tpl_divide(void *userdata, const void *variable1, const void *variable2)
 {
@@ -387,13 +428,25 @@ const void *smart_tpl_divide(void *userdata, const void *variable1, const void *
     VariantValue *output;
 
     // If one of the values is a double, so is the result
-    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() / value2->toDouble());
+    if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) 
+    {
+        // Make sure value2 is not zero
+        if (value2->toDouble() == 0.0) return nullptr;
+        
+        // Calculate result
+        output = new VariantValue(value1->toDouble() / value2->toDouble());
+    }
 
     // If one of the types is numeric, so is the result
-    else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() / value2->toNumeric());
+    else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) 
+    {
+        // Make sure value2 is not zero
+        if (value2->toNumeric() == 0) return nullptr;
 
-    // @todo IMPORTANT: check if value2 is not zero!!!
-
+        // Calculate result
+        output = new VariantValue(value1->toNumeric() / value2->toNumeric());
+    }
+    
     // Unsupported types, just return zero
     else output = new VariantValue(0);
 
