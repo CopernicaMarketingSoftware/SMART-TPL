@@ -360,4 +360,4 @@ void example()
 
 By overriding from SmartTpl::Value, you can create all sorts of variables
 that behave like arrays or objects. The SmartTpl library already has built-in
-types for a number of types.
+types for a number of types..
