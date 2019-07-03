@@ -41,7 +41,20 @@ public:
      */
     std::string toString() const override
     {
-        return std::to_string(_value);
+        // create buffer
+        char buffer[21];
+
+        // format string
+        size_t written = snprintf(buffer, 20, "%.5f", _value);
+
+        // Remove trailing zeroes
+        while (buffer[written - 1] == '0') written--;
+
+        // Round number?
+        if (buffer[written - 1] == '.') written--;
+
+        // Create string object
+        return std::string(buffer, written);
     };
 
     /**

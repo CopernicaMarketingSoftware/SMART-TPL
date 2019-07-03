@@ -159,6 +159,28 @@ public:
     }
 
     /**
+     *  Output a double value
+     *  @param  number  the double value to output
+     */
+    void outputDouble(double number)
+    {
+        // create buffer
+        char buffer[21];
+
+        // format string
+        size_t written = snprintf(buffer, 20, "%.5f", number);
+
+        // Remove trailing zeroes
+        while (buffer[written - 1] == '0') written--;
+
+        // Round number?
+        if (buffer[written - 1] == '.') written--;
+
+        // Add to total buffer
+        _buffer.append(buffer, written);
+    }
+
+    /**
      *  Get access to a variable
      *  @param  name
      *  @param  size

@@ -86,6 +86,16 @@ public:
         // turn out numeric value into a double
         generator->doubleValue(_value);
     }
+
+    /**
+     *  Generate expression as a pointer to the runtime space
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        // call the appropriate function in the generator
+        generator->pointerInteger(this);
+    }
 };
 
 /**

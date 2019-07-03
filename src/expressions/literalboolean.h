@@ -81,6 +81,16 @@ public:
         // turn the value into 1 or 0 (in C there are no booleans)
         generator->doubleValue(_value ? 1 : 0);
     }
+
+    /**
+     *  Generate expression as a pointer to the runtime space
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        // call the appropriate function in the generator
+        generator->pointerBoolean(this);
+    }
 };
 
 /**

@@ -21,8 +21,18 @@ void        smart_tpl_write                 (void *userdata, const char *data, s
 void        smart_tpl_output                (void *userdata, const void *variable, int escape);
 void        smart_tpl_output_integer        (void *userdata, integer_t number);
 void        smart_tpl_output_boolean        (void *userdata, int value);
+void        smart_tpl_output_double         (void *userdata, double value);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
+const void *smart_tpl_transfer_integer      (void *userdata, integer_t data);
+const void *smart_tpl_transfer_double       (void *userdata, double data);
+const void *smart_tpl_transfer_string       (void *userdata, const char *buffer, size_t length);
+const void *smart_tpl_transfer_boolean      (void *userdata, int boolean);
+const void *smart_tpl_plus                  (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_minus                 (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_multiply              (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_divide                (void *userdata, const void *variable1, const void *variable2);
+const void *smart_tpl_modulo                (void *userdata, const void *variable1, const void *variable2);
 void       *smart_tpl_create_iterator       (void *userdata, const void *variable);
 int         smart_tpl_valid_iterator        (void *userdata, void *iterator);
 const void *smart_tpl_iterator_key          (void *userdata, void *iterator);
@@ -86,6 +96,11 @@ private:
     static SignatureCallback _output_boolean;
 
     /**
+     *  Signature fo the output double callback
+     */
+    static SignatureCallback _output_double;
+
+    /**
      *  Signature of the member callback
      */
     static SignatureCallback _member;
@@ -94,6 +109,23 @@ private:
      *  Signature of the member_at callback
      */
     static SignatureCallback _member_at;
+
+    /**
+     *  Signature of the callbacks to transfer constants to runtime space
+     */
+    static SignatureCallback _transfer_integer;
+    static SignatureCallback _transfer_double;
+    static SignatureCallback _transfer_string;
+    static SignatureCallback _transfer_boolean;
+
+    /**
+     *  Signatures of the runtime arithmetic operations
+     */
+    static SignatureCallback _plus;
+    static SignatureCallback _minus;
+    static SignatureCallback _multiply;
+    static SignatureCallback _divide;
+    static SignatureCallback _modulo;
 
     /**
      *  Signature of the create-iterator callback
@@ -315,6 +347,24 @@ public:
     }
 
     /**
+     *  Call the output double function
+     *  @param  userdata        Pointer to user-supplied data
+     *  @param  value           Value to output
+     *  @see    smart_tpl_output_integer
+     */
+    void output_double(const jit_value &userdata, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw(),
+        };
+
+        // create the instruction
+        _function->insn_call_native("smart_tpl_output_double", (void *)smart_tpl_output_double, _output_double.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
      *  Call the member function
      *  @param  userdata        Pointer to user-supplied data
      *  @param  variable        Pointer to the variable
@@ -356,6 +406,189 @@ public:
 
         // create the instruction
         return _function->insn_call_native("smart_tpl_member_at", (void *)smart_tpl_member_at, _member_at.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Transfer a numeric value to runtime space
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  jit_value   The data to move to the runtime space
+     *  @return jit_value
+     *  @see    smart_tpl_transfer_numeric
+     */
+    jit_value transfer_integer(const jit_value &userdata, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_transfer_integer", (void *)smart_tpl_transfer_integer, _transfer_integer.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Transfer a double value to runtime space
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  jit_value   The data to move to the runtime space
+     *  @return jit_value
+     *  @see    smart_tpl_transfer_double
+     */
+    jit_value transfer_double(const jit_value &userdata, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_transfer_double", (void *)smart_tpl_transfer_double, _transfer_double.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Transfer a double value to runtime space
+     *  @param  userdata    Pointer to user supplied data
+     *  @param  jit_value   Pointer to data to move to the runtime space
+     *  @param  jit_value   Size of the buffer
+     *  @return jit_value
+     *  @see    smart_tpl_transfer_string
+     */
+    jit_value transfer_string(const jit_value &userdata, const jit_value &buffer, const jit_value &size)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            buffer.raw(),
+            size.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_transfer_string", (void *)smart_tpl_transfer_string, _transfer_string.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Transfer a boolean value to runtime space
+     *  @param  userdata    Poiter to user supplied data
+     *  @param  jit_value   The data to move to the runtime space
+     *  @return jit_value
+     *  @see    smart_tpl_transfer_boolean
+     */
+    jit_value transfer_boolean(const jit_value &userdata, const jit_value &value)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            value.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_transfer_boolean", (void *)smart_tpl_transfer_boolean, _transfer_boolean.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Run a plus operation during runtime
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       The left variable to add
+     *  @param  variable2       The right variable to add
+     *  @return jit_value
+     *  @see    smart_tpl_plus
+     */
+    jit_value plus(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_plus", (void *)smart_tpl_plus, _plus.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Run a minus operation during runtime
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       The left variable to subtract
+     *  @param  variable2       The right variable to subtract
+     *  @return jit_value
+     *  @see    smart_tpl_minus
+     */
+    jit_value minus(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_minus", (void *)smart_tpl_minus, _minus.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Run a multiply operation during runtime
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       The left variable to multiply
+     *  @param  variable2       The right variable to multiply
+     *  @return jit_value
+     *  @see    smart_tpl_multiply
+     */
+    jit_value multiply(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_multiply", (void *)smart_tpl_multiply, _multiply.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Run a divide operation during runtime
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       The left variable to divide
+     *  @param  variable2       The right variable to divide
+     *  @return jit_value
+     *  @see    smart_tpl_divide
+     */
+    jit_value divide(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_divide", (void *)smart_tpl_divide, _divide.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+    }
+
+    /**
+     *  Run a modulo operation during runtime
+     *  @param  userdata        Pointer to user supplied data
+     *  @param  variable1       The left variable for the equation
+     *  @param  variable2       The right variable for the equation
+     *  @return jit_value
+     *  @see    smart_tpl_modulo
+     */
+    jit_value modulo(const jit_value &userdata, const jit_value &variable1, const jit_value &variable2)
+    {
+        // construct the arguments
+        jit_value_t args[] = {
+            userdata.raw(),
+            variable1.raw(),
+            variable2.raw()
+        };
+
+        // create the instruction
+        return _function->insn_call_native("smart_tpl_modulo", (void *)smart_tpl_modulo, _modulo.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

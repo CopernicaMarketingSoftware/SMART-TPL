@@ -208,6 +208,20 @@ jit_value Bytecode::doubleExpression(const Expression *expression)
 }
 
 /**
+ *  Retrieve the pointer to the variable that holds the result of an expression
+ * 	@param	expression
+ * 	@return jit_value
+ */
+jit_value Bytecode::pointerExpression(const Expression *expression)
+{
+    // create on the stack
+    expression->toPointer(this);
+
+    // remove from the stack
+    return pop();
+}
+
+/**
  *  Generate the code to output a variable
  *  @param  variable           The variable to output
  */
@@ -249,6 +263,16 @@ void Bytecode::write(const Expression *expression)
     case Expression::Type::Boolean:
         // generate the code that pushes a boolean value to the stack, and output that
         _callbacks.output_boolean(_userdata, booleanExpression(expression));
+        break;
+
+    case Expression::Type::Double:
+        // generate the code that pushes a boolean value to the stack, and output that
+        _callbacks.output_double(_userdata, doubleExpression(expression));
+        break;
+
+    case Expression::Type::Value:
+        // generate the code that pushes a value pointer to the stack, and output that
+        _callbacks.output(_userdata, pointerExpression(expression), _true); // @todo escape?
         break;
     
     default:
@@ -465,6 +489,62 @@ void Bytecode::variable(const Variable* variable)
 }
 
 /**
+ *  Move an expression to the runtime space
+ *  @param  expression
+ */
+void Bytecode::pointerString(const Expression *expression) 
+{
+    // get the string representation of the expression 
+    expression->toString(this);
+
+    // get the size and buffer from the stack
+    jit_value size = pop();
+    jit_value buffer = pop();
+
+    // add to runtime space and push the pointer
+    _stack.push(_callbacks.transfer_string(_userdata, buffer, size));
+}
+
+/**
+ *  Move an expression to the runtime space
+ *  @param  expression
+ */
+void Bytecode::pointerInteger(const Expression *expression) 
+{
+    // turn the expression into a integer
+    expression->toInteger(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_integer(_userdata, pop()));
+}
+
+/**
+ *  Move an expression to the runtime space
+ *  @param  expression
+ */
+void Bytecode::pointerDouble(const Expression *expression) 
+{
+    // turn the expression into a boolean
+    expression->toDouble(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_double(_userdata, pop()));
+}
+
+/**
+ *  Move an expression to the runtime space
+ *  @param  expression
+ */
+void Bytecode::pointerBoolean(const Expression *expression) 
+{
+    // turn the expression into a boolean
+    expression->toBoolean(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_boolean(_userdata, pop()));
+}
+
+/**
  *  Negate the boolean expression
  *  @param  expression
  *  @note   +1 on the stack
@@ -479,83 +559,224 @@ void Bytecode::negateBoolean(const Expression *expression)
 }
 
 /**
- *  Arithmetric operation
+ *  Arithmetric operation that turns a plus operation into an integer
  *  @param  left
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::plus(const Expression *left, const Expression *right)
+void Bytecode::integerPlus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
+    jit_value l = integerExpression(left);
+    jit_value r = integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l + r);
 }
 
 /**
- *  Arithmetric operation
+ *  Arithmetric operation that turns a plus operation into an double
  *  @param  left
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::minus(const Expression *left, const Expression *right)
+void Bytecode::doublePlus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
+    jit_value l = doubleExpression(left);
+    jit_value r = doubleExpression(right);
+
+    // calculate them, and push to stack
+    _stack.emplace(l + r);
+}
+
+/**
+ *  Arithmetric operation that turns a plus operation into an pointer to a variable
+ * 	This is useful if the types of the operands are not yet known at compile-time
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::pointerPlus(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
+
+    // calculate them, and push to stack
+    _stack.push(_callbacks.plus(_userdata, l, r));
+}
+
+/**
+ *  Arithmetric operation that turns a minus operation into an integer
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::integerMinus(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = integerExpression(left);
+    jit_value r = integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l - r);
 }
 
 /**
- *  Arithmetric operation
+ *  Arithmetric operation that turns a minus operation into an double
  *  @param  left
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::divide(const Expression *left, const Expression *right)
+void Bytecode::doubleMinus(const Expression *left, const Expression *right)
 {
-    // First calculate the right value
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
-
-    // if it is 0 we branch off to our early exit label
-    // @todo we have to test this (why no branch_if_not?)
-    _function.insn_branch_if(r == _false, _division_by_zero.label());
-
-    // calculate the left one
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
+    // calculate left and right values
+    jit_value l = doubleExpression(left);
+    jit_value r = doubleExpression(right);
 
     // calculate them, and push to stack
-    // in the case we branch off to _error this will never actually happen
-    _stack.emplace(l / r);
+    _stack.emplace(l - r);
 }
 
 /**
- *  Arithmetric operation
+ *  Arithmetric operation that turns a minus operation into an pointer to a variable
+ * 	This is useful if the types of the operands are not yet known at compile-time
  *  @param  left
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::multiply(const Expression *left, const Expression *right)
+void Bytecode::pointerMinus(const Expression *left, const Expression *right)
 {
     // calculate left and right values
-    jit_value l = (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) ? doubleExpression(left) : integerExpression(left);
-    jit_value r = (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) ? doubleExpression(right) : integerExpression(right);
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
+
+    // calculate them, and push to stack
+    _stack.push(_callbacks.minus(_userdata, l, r));
+}
+
+/**
+ *  Arithmetric operation that turns a multiply operation into an integer
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::integerMultiply(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = integerExpression(left);
+    jit_value r = integerExpression(right);
 
     // calculate them, and push to stack
     _stack.emplace(l * r);
 }
 
 /**
+ *  Arithmetric operation that turns a multiply operation into an double
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::doubleMultiply(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = doubleExpression(left);
+    jit_value r = doubleExpression(right);
+
+    // calculate them, and push to stack
+    _stack.emplace(l * r);
+}
+
+/**
+ *  Arithmetric operation that turns a multiply operation into an pointer to a variable
+ * 	This is useful if the types of the operands are not yet known at compile-time
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::pointerMultiply(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
+
+    // calculate them, and push to stack
+    _stack.push(_callbacks.multiply(_userdata, l, r));
+}
+
+/**
+ *  Arithmetric operation that turns a divide operation into an integer
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::integerDivide(const Expression *left, const Expression *right)
+{
+    // calculate right value
+    jit_value r = integerExpression(right);
+
+    // if it is 0 we branch off to our early exit label
+    _function.insn_branch_if(r == _false, _division_by_zero.label());
+
+    // calculate left value
+    jit_value l = integerExpression(left);
+
+    // calculate them, and push to stack
+    _stack.emplace(l / r);
+}
+
+/**
+ *  Arithmetric operation that turns a divide operation into an double
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::doubleDivide(const Expression *left, const Expression *right)
+{
+    // calculate right value
+    jit_value r = doubleExpression(right);
+
+    // if it is 0 we branch off to our early exit label
+    _function.insn_branch_if(r == _false, _division_by_zero.label());
+
+    // calculate left value
+    jit_value l = doubleExpression(left);
+
+    // calculate them, and push to stack
+    _stack.emplace(l / r);
+}
+
+/**
+ *  Arithmetric operation that turns a divide operation into an pointer to a variable
+ * 	This is useful if the types of the operands are not yet known at compile-time
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::pointerDivide(const Expression *left, const Expression *right)
+{
+    // calculate left and right values
+    jit_value l = pointerExpression(left);
+    jit_value r = pointerExpression(right);
+
+    // get the result
+    jit_value result = _callbacks.divide(_userdata, l, r);
+
+    // If the resulting pointer is a nullpointer, we have a division by zero error
+    _function.insn_branch_if(result == _false, _division_by_zero.label());
+
+    // calculate them, and push to stack
+    _stack.push(result);
+}
+
+/**
  *  Arithmetric operation
  *  @param  left
  *  @param  right
  *  @note   +1 on the stack
  */
-void Bytecode::modulo(const Expression *left, const Expression *right)
+void Bytecode::integerModulo(const Expression *left, const Expression *right)
 {
     // calculate left and right values
     jit_value l = integerExpression(left);
@@ -563,6 +784,21 @@ void Bytecode::modulo(const Expression *left, const Expression *right)
 
     // calculate them, and push to stack
     _stack.emplace(l % r);
+}
+
+/**
+ *  Arithmetric operation
+ *  @param  left
+ *  @param  right
+ *  @note   +1 on the stack
+ */
+void Bytecode::pointerModulo(const Expression *left, const Expression *right)
+{
+    // calculate the result
+    integerModulo(left, right);
+
+    // transfer result to runtime space and add pointer to stack
+    _stack.push(_callbacks.transfer_integer(_userdata, pop()));
 }
 
 /**
@@ -1069,14 +1305,9 @@ void Bytecode::assign(const std::string &key, const Expression *expression)
         break;
     }
     case Expression::Type::Value: {
-        const Variable *variable = dynamic_cast<const Variable*>(expression);
-        if (variable)
-        {
-            // If we are a variable just convert it to a pointer and pass that to the assign callback
-            _callbacks.assign(_userdata, key_str, key_size, pointer(variable));
-            break;
-        }
-        throw CompileError("Unsupported assign");
+        // If we are a variable just convert it to a pointer and pass that to the assign callback
+        _callbacks.assign(_userdata, key_str, key_size, pointerExpression(expression));
+        break;
     }
     case Expression::Type::Double:
         // Convert to a floating point and use the assign_double callback

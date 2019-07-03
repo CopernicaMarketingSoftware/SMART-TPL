@@ -373,6 +373,43 @@ void CCode::variable(const Variable* variable)
 }
 
 /**
+ *  Move a constant to runtime space
+ *  @param  expression
+ */
+void CCode::pointerString(const Expression *expression) 
+{
+    // @todo implement
+}
+
+/**
+ *  Move a constant to runtime space
+ *  @param  expression
+ */
+void CCode::pointerInteger(const Expression *expression) 
+{
+    // @todo implement
+}
+
+/**
+ *  Move a constant to runtime space
+ *  @param  expression
+ */
+void CCode::pointerDouble(const Expression *expression) 
+{
+    // @todo implement
+}
+
+/**
+ *  Move a constant to runtime space
+ *  @param  expression
+ */
+void CCode::pointerBoolean(const Expression *expression) 
+{
+    // @todo implement
+}
+
+
+/**
  *  Negate the boolean expression
  *  @param  expression
  */
@@ -390,112 +427,76 @@ void CCode::negateBoolean(const Expression *expression)
  *  @param  left
  *  @param  right
  */
-void CCode::plus(const Expression *left, const Expression *right)
+void CCode::integerPlus(const Expression *left, const Expression *right) 
 {
-    // open a parenthese
-    _out << '(';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
-    else left->toInteger(this);
-
-    // print the operator
-    _out << '+';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
-    else right->toInteger(this);
-
-    // close the parenthese
-    _out << ')';
+    // @todo implement
 }
 
-void CCode::minus(const Expression *left, const Expression *right)
+void CCode::doublePlus(const Expression *left, const Expression *right) 
 {
-    // open a parenthese
-    _out << '(';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
-    else left->toInteger(this);
-
-    // print the operator
-    _out << '-';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
-    else right->toInteger(this);
-
-    // close the parenthese
-    _out << ')';
+    // @todo implement
 }
 
-void CCode::divide(const Expression *left, const Expression *right)
+void CCode::pointerPlus(const Expression *left, const Expression *right) 
 {
-    // open a parenthese
-    _out << '(';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
-    else left->toInteger(this);
-
-    // print the operator and start a new block for our zero division check
-    _out << "/((";
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
-    else right->toInteger(this);
-
-    // compare it to 0 using an inline if statement. If this is true we will call throw_exception
-    // which will throw a C++ exception out of everything
-    _out << ") == 0 ? callbacks->throw_exception(userdata, \"Zero division error\") : (";
-
-    // but if we are false we'll need the original value of course, so we print that expression yet again
-    // this seems inefficient, although it probably doesn't mattter as C compiler are 'smart' ;)
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
-    else right->toInteger(this);
-
-    // And end the actual blocks for the inline if statement
-    _out << ")))";
+    // @todo implement
 }
 
-void CCode::multiply(const Expression *left, const Expression *right)
+void CCode::integerMinus(const Expression *left, const Expression *right) 
 {
-    // open a parenthese
-    _out << '(';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (left->type() == Expression::Type::Double || left->type() == Expression::Type::Value) left->toDouble(this);
-    else left->toInteger(this);
-
-    // print the operator
-    _out << '*';
-
-    // Print a floating point if we are a floating point or something unknown, a regular integer otherwise
-    if (right->type() == Expression::Type::Double || right->type() == Expression::Type::Value) right->toDouble(this);
-    else right->toInteger(this);
-
-    // close the parenthese
-    _out << ')';
+    // @todo implement
 }
 
-void CCode::modulo(const Expression *left, const Expression *right)
+void CCode::doubleMinus(const Expression *left, const Expression *right) 
 {
-    // open a parenthese
-    _out << '(';
-
-    // modulo only works with integer values so print the left integer value
-    left->toInteger(this);
-
-    // print the modulo character
-    _out << '%';
-
-    // print the right integer value
-    right->toInteger(this);
-
-    // close the parenthese
-    _out << ')';
+    // @todo implement
 }
+
+void CCode::pointerMinus(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::integerMultiply(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::doubleMultiply(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::pointerMultiply(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::integerDivide(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::doubleDivide(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::pointerDivide(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::integerModulo(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
+void CCode::pointerModulo(const Expression *left, const Expression *right) 
+{
+    // @todo implement
+}
+
 
 /**
  *  Comparison operators

@@ -132,6 +132,13 @@ private:
      *  @return jit_value
      */
     jit_value doubleExpression(const Expression *expression);
+    
+    /**
+     *  Retrieve the pointer to the variable that holds the result of an expression
+     * 	@param	expression
+     * 	@return jit_value
+     */
+    jit_value pointerExpression(const Expression *expression);
 
     /**
      *  Generate code to output raw data
@@ -197,6 +204,15 @@ private:
     void variable(const Variable *variable) override;
 
     /**
+     *  Move an expression to the runtime space
+     *  @param  expression
+     */
+    void pointerString(const Expression *expression) override;
+    void pointerInteger(const Expression *expression) override;
+    void pointerDouble(const Expression *expression) override;
+    void pointerBoolean(const Expression *expression) override;
+
+    /**
      *  Negate the boolean expression
      *  @param  expression
      */
@@ -207,11 +223,20 @@ private:
      *  @param  left
      *  @param  right
      */
-    void plus(const Expression *left, const Expression *right) override;
-    void minus(const Expression *left, const Expression *right) override;
-    void divide(const Expression *left, const Expression *right) override;
-    void multiply(const Expression *left, const Expression *right) override;
-    void modulo(const Expression *left, const Expression *right) override;
+    void integerPlus(const Expression *left, const Expression *right) override;
+    void doublePlus(const Expression *left, const Expression *right) override;
+    void pointerPlus(const Expression *left, const Expression *right) override;
+    void integerMinus(const Expression *left, const Expression *right) override;
+    void doubleMinus(const Expression *left, const Expression *right) override;
+    void pointerMinus(const Expression *left, const Expression *right) override;
+    void integerMultiply(const Expression *left, const Expression *right) override;
+    void doubleMultiply(const Expression *left, const Expression *right) override;
+    void pointerMultiply(const Expression *left, const Expression *right) override;
+    void integerDivide(const Expression *left, const Expression *right) override;
+    void doubleDivide(const Expression *left, const Expression *right) override;
+    void pointerDivide(const Expression *left, const Expression *right) override;
+    void integerModulo(const Expression *left, const Expression *right) override;
+    void pointerModulo(const Expression *left, const Expression *right) override;
 
     /**
      *  Comparison operators

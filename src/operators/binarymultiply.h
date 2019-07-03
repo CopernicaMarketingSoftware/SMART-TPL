@@ -32,21 +32,30 @@ public:
     virtual ~BinaryMultiplyOperator() {}
 
     /**
-     *  Generate the operations
+     *  Generate the operator to a numeric value
      *  @param  generator
      */
     virtual void toInteger(Generator *generator) const override
     {
-        generator->multiply(_left.get(), _right.get());
+        generator->integerMultiply(_left.get(), _right.get());
     }
 
     /**
-     *  Generate the instruction
+     *  Generate the operator to a double value
      *  @param  generator
      */
-    virtual void toBoolean(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
-        generator->multiply(_left.get(), _right.get());
+        generator->doubleMultiply(_left.get(), _right.get());
+    }
+
+    /**
+     *  Generate the operator to a pointer value
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        generator->pointerMultiply(_left.get(), _right.get());
     }
 };
 

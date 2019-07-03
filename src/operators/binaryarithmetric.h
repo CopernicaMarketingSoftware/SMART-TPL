@@ -34,7 +34,17 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    virtual Type type() const override { return Type::Integer; }
+    virtual Type type() const override 
+    { 
+        // if both types are integer, so is the result of the operation
+        if (_left->type() == Type::Integer && _right->type() == Type::Integer) return Type::Integer;
+
+        // if one of the types is double, so is the entire operation
+        if (_left->type() == Type::Double || _right->type() == Type::Double) return Type::Double;
+
+        // otherwise, we have to determine at runtime
+        return Type::Value;
+    }
 };
 
 /**

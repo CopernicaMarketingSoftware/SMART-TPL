@@ -97,6 +97,16 @@ public:
             generator->doubleValue(0);
         }
     }
+
+    /**
+     *  Generate expression as a pointer to the runtime space
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        // call the appropriate function in the generator
+        generator->pointerString(this);
+    }
 };
 
 /**
