@@ -25,6 +25,15 @@ struct smart_tpl_callbacks {
     void        (*output_boolean)       (void *userdata, int value);
     const void *(*member)               (void *userdata, const void *variable, const char *name, size_t size);
     const void *(*member_at)            (void *userdata, const void *variable, size_t position);
+    const void *(*transfer_integer)     (void *userdata, integer_t data);
+    const void *(*transfer_double)      (void *userdata, double data);
+    const void *(*transfer_string)      (void *userdata, const char *buffer, size_t length);
+    const void *(*transfer_boolean)     (void *userdata, int boolean);
+    const void *(*plus)                 (void *userdata, const void *variable1, const void *variable2);
+    const void *(*minus)                (void *userdata, const void *variable1, const void *variable2);
+    const void *(*multiply)             (void *userdata, const void *variable1, const void *variable2);
+    const void *(*divide)               (void *userdata, const void *variable1, const void *variable2);
+    const void *(*modulo)               (void *userdata, const void *variable1, const void *variable2);
     void       *(*create_iterator)      (void *userdata, const void *variable);
     int         (*valid_iterator)       (void *userdata, void *iterator);
     const void *(*iterator_key)         (void *userdata, void *iterator);

@@ -120,6 +120,22 @@ void CCode::write(const Expression *expression)
 
         _out << ");" << std::endl;
     }
+    else if (expression->type() == Expression::Type::Double)
+    {
+        _out << "callbacks->output_double(userdata,";
+
+        expression->toDouble(this);
+
+        _out << ");" << std::endl;
+    }
+    else if (expression->type() == Expression::Type::Value)
+    {
+        _out << "callbacks->output(userdata,";
+
+        expression->toPointer(this);
+
+        _out << ",1);" << std::endl;
+    }
     else
     {
         // we're going to call the write function
@@ -378,7 +394,14 @@ void CCode::variable(const Variable* variable)
  */
 void CCode::pointerString(const Expression *expression) 
 {
-    // @todo implement
+    // open command
+    _out << "callbacks->transfer_string(userdata,";
+
+    // turn the expression into a boolean
+    expression->toString(this);    
+    
+    // finalize command
+    _out << ")";
 }
 
 /**
@@ -387,7 +410,14 @@ void CCode::pointerString(const Expression *expression)
  */
 void CCode::pointerInteger(const Expression *expression) 
 {
-    // @todo implement
+    // open command
+    _out << "callbacks->transfer_integer(userdata,";
+
+    // turn the expression into a boolean
+    expression->toInteger(this);    
+    
+    // finalize command
+    _out << ")";
 }
 
 /**
@@ -396,7 +426,14 @@ void CCode::pointerInteger(const Expression *expression)
  */
 void CCode::pointerDouble(const Expression *expression) 
 {
-    // @todo implement
+    // open command
+    _out << "callbacks->transfer_double(userdata,";
+
+    // turn the expression into a boolean
+    expression->toDouble(this);    
+    
+    // finalize command
+    _out << ")";
 }
 
 /**
@@ -405,7 +442,14 @@ void CCode::pointerDouble(const Expression *expression)
  */
 void CCode::pointerBoolean(const Expression *expression) 
 {
-    // @todo implement
+    // open command
+    _out << "callbacks->transfer_boolean(userdata,";
+
+    // turn the expression into a boolean
+    expression->toBoolean(this);    
+    
+    // finalize command
+    _out << ")";
 }
 
 
@@ -423,78 +467,333 @@ void CCode::negateBoolean(const Expression *expression)
 }
 
 /**
- *  Arithmetric operations
+ *  Arithmetic operations
  *  @param  left
  *  @param  right
  */
 void CCode::integerPlus(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toInteger(this);
+
+    // print the operator
+    _out << '+';
+
+    // print the right integer
+    right->toInteger(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::doublePlus(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toDouble(this);
+
+    // print the operator
+    _out << '+';
+
+    // print the right integer
+    right->toDouble(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::pointerPlus(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // start the command
+    _out << "callbacks->plus(userdata,";
+
+    // add left expression
+    left->toPointer(this);
+
+    // comma
+    _out << ",";
+
+    // add right expression
+    right->toPointer(this);
+
+    // finalize command
+    _out << ")";
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::integerMinus(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toInteger(this);
+
+    // print the operator
+    _out << '-';
+
+    // print the right integer
+    right->toInteger(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::doubleMinus(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toDouble(this);
+
+    // print the operator
+    _out << '-';
+
+    // print the right integer
+    right->toDouble(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::pointerMinus(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // start the command
+    _out << "callbacks->minus(userdata,";
+
+    // add left expression
+    left->toPointer(this);
+
+    // comma
+    _out << ",";
+
+    // add right expression
+    right->toPointer(this);
+
+    // finalize command
+    _out << ")";
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::integerMultiply(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toInteger(this);
+
+    // print the operator
+    _out << '*';
+
+    // print the right integer
+    right->toInteger(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::doubleMultiply(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toDouble(this);
+
+    // print the operator
+    _out << '*';
+
+    // print the right integer
+    right->toDouble(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::pointerMultiply(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // start the command
+    _out << "callbacks->multiply(userdata,";
+
+    // add left expression
+    left->toPointer(this);
+
+    // comma
+    _out << ",";
+
+    // add right expression
+    right->toPointer(this);
+
+    // finalize command
+    _out << ")";
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::integerDivide(const Expression *left, const Expression *right) 
-{
-    // @todo implement
+{    
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toInteger(this);
+
+    // print the operator and start a new block for our zero division check
+    _out << "/((";
+
+    // print the right integer
+    right->toInteger(this);
+
+    // compare it to 0 using an inline if statement. If this is true we will call throw_exception
+    // which will throw a C++ exception out of everything
+    _out << ") == 0 ? callbacks->throw_exception(userdata, \"Zero division error\") : (";
+
+    // but if we are false we'll need the original value of course, so we print that expression yet again
+    // this seems inefficient, although it probably doesn't mattter as C compiler are 'smart' ;)
+    right->toInteger(this);
+
+    // And end the actual blocks for the inline if statement
+    _out << ")))";
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::doubleDivide(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toDouble(this);
+
+    // print the operator
+    _out << '/';
+
+    // print the right integer
+    right->toDouble(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::pointerDivide(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // start the command
+    _out << "callbacks->divide(userdata,";
+
+    // add left expression
+    left->toPointer(this);
+
+    // comma
+    _out << ",";
+
+    // add right expression
+    right->toPointer(this);
+
+    // finalize command
+    _out << ")";
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::integerModulo(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // open a parenthese
+    _out << '(';
+
+    // print the left integer
+    left->toInteger(this);
+
+    // print the operator
+    _out << '%';
+
+    // print the right integer
+    right->toInteger(this);
+
+    // close the parenthese
+    _out << ')';
 }
 
+/**
+ *  Arithmetic operations
+ *  @param  left
+ *  @param  right
+ */
 void CCode::pointerModulo(const Expression *left, const Expression *right) 
 {
-    // @todo implement
+    // start the command
+    _out << "callbacks->modulo(userdata,";
+
+    // add left expression
+    left->toPointer(this);
+
+    // comma
+    _out << ",";
+
+    // add right expression
+    right->toPointer(this);
+
+    // finalize command
+    _out << ")";
 }
 
 
@@ -860,16 +1159,11 @@ void CCode::assign(const std::string &key, const Expression *expression)
         expression->toBoolean(this);
         break;
     case Expression::Type::Value: {
-        const Variable *variable = dynamic_cast<const Variable*>(expression);
-        if (variable)
-        {
-            // If we are a variable just convert it to a pointer and pass that to the assign callback
-            _out << "callbacks->assign(userdata,";
-            stringValue(key); _out << ',';
-            variable->pointer(this);
-            break;
-        }
-        throw CompileError("Unsupported assign");
+        // If we are a value just convert it to a pointer and pass that to the assign callback
+        _out << "callbacks->assign(userdata,";
+        stringValue(key); _out << ',';
+        expression->toPointer(this);
+        break;
     }
     case Expression::Type::Double:
         // Convert to a floating point value and use the assign_double callback

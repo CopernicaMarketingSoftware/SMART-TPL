@@ -340,7 +340,8 @@ const void *smart_tpl_minus(void *userdata, const void *variable1, const void *v
 
     // Unsupported types, just return zero
     // else 
-    output = new VariantValue(0);
+    // output = new VariantValue(0);
+    output = new VariantValue(value1->toDouble() - value2->toDouble());
 
     // Let the handler manage the new object
     handler->manageValue(output);
@@ -380,7 +381,9 @@ const void *smart_tpl_multiply(void *userdata, const void *variable1, const void
 
     // // Unsupported types, just return zero
     // else 
-    output = new VariantValue(0);
+    // output = new VariantValue(0);
+
+    output = new VariantValue(value1->toDouble() * value2->toDouble());
 
     // Let the handler manage the new object
     handler->manageValue(output);
@@ -411,11 +414,11 @@ const void *smart_tpl_divide(void *userdata, const void *variable1, const void *
     // If one of the values is a double, so is the result
     // if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) 
     // {
-    //     // Make sure value2 is not zero
-    //     if (value2->toDouble() == 0.0) return nullptr;
+        // Make sure value2 is not zero
+        if (value2->toDouble() == 0.0) return nullptr;
         
-    //     // Calculate result
-    //     output = new VariantValue(value1->toDouble() / value2->toDouble());
+        // Calculate result
+        output = new VariantValue(value1->toDouble() / value2->toDouble());
     // }
 
     // // If one of the types is numeric, so is the result
@@ -440,7 +443,7 @@ const void *smart_tpl_divide(void *userdata, const void *variable1, const void *
     
     // // Unsupported types, just return zero
     // else 
-    output = new VariantValue(0);
+    // output = new VariantValue(0);
 
     // Let the handler manage the new object
     handler->manageValue(output);

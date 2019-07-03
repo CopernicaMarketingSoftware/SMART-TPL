@@ -41,6 +41,7 @@ public:
      */
     std::string toString() const override
     {
+        return std::to_string(_value);
         // create buffer
         char buffer[21];
 
