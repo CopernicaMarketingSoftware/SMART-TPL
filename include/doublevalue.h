@@ -49,10 +49,10 @@ public:
     std::string toString() const override
     {
         // create buffer
-        char buffer[21];
+        char buffer[512];
 
         // format string
-        size_t written = snprintf(buffer, 20, "%.5f", _value);
+        size_t written = snprintf(buffer, 512, "%.5f", _value);
 
         // Remove trailing zeroes
         while (buffer[written - 1] == '0') written--;
