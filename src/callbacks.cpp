@@ -290,19 +290,10 @@ const void *smart_tpl_plus(void *userdata, const void *variable1, const void *va
     // This will be a pointer to our new value
     VariantValue *output;
 
-    // If one of the values is a double, so is the result
-    // if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() + value2->toDouble());
+    // Should we apply floating point logic?
+    if (value1->arithmeticFloat() || value2->arithmeticFloat()) output = new VariantValue(value1->toDouble() + value2->toDouble());
+    else output = new VariantValue(value1->toInteger() + value2->toInteger());
 
-    // // If one of the types is numeric, so is the result
-    // else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() + value2->toNumeric());
-
-    // // Let's also support boolean addition... This will just be another numeric addition
-    // else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) output = new VariantValue(value1->toNumeric() + value2->toNumeric());
-
-    // Unsupported types, just return zero
-    // else 
-    // output = new VariantValue(0);
-    output = new VariantValue(value1->toDouble() + value2->toDouble());
     // Let the handler manage the new object
     handler->manageValue(output);
 
@@ -329,19 +320,9 @@ const void *smart_tpl_minus(void *userdata, const void *variable1, const void *v
     // This will be a pointer to our new value
     VariantValue *output;
 
-    // If one of the values is a double, so is the result
-    // if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() - value2->toDouble());
-
-    // // If one of the types is numeric, so is the result
-    // else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() - value2->toNumeric());
-    
-    // // Let's also support boolean subtraction... This will just be another numeric subtraction
-    // else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) output = new VariantValue(value1->toNumeric() - value2->toNumeric());
-
-    // Unsupported types, just return zero
-    // else 
-    // output = new VariantValue(0);
-    output = new VariantValue(value1->toDouble() - value2->toDouble());
+    // Should we apply floating point logic?
+    if (value1->arithmeticFloat() || value2->arithmeticFloat()) output = new VariantValue(value1->toDouble() - value2->toDouble());
+    else output = new VariantValue(value1->toInteger() - value2->toInteger());
 
     // Let the handler manage the new object
     handler->manageValue(output);
@@ -369,21 +350,9 @@ const void *smart_tpl_multiply(void *userdata, const void *variable1, const void
     // This will be a pointer to our new value
     VariantValue *output;
 
-    // If one of the values is a double, so is the result
-    // if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) output = new VariantValue(value1->toDouble() * value2->toDouble());
-
-    // // If one of the types is numeric, so is the result
-    // else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) output = new VariantValue(value1->toNumeric() * value2->toNumeric());
-    
-    // // Let's also support boolean multiplication... This will just be another numeric multiplication
-    // // When run with two booleans, this just boils down to a boolean and operation
-    // else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) output = new VariantValue(value1->toNumeric() * value2->toNumeric());
-
-    // // Unsupported types, just return zero
-    // else 
-    // output = new VariantValue(0);
-
-    output = new VariantValue(value1->toDouble() * value2->toDouble());
+    // Should we apply floating point logic?
+    if (value1->arithmeticFloat() || value2->arithmeticFloat()) output = new VariantValue(value1->toDouble() * value2->toDouble());
+    else output = new VariantValue(value1->toInteger() * value2->toInteger());
 
     // Let the handler manage the new object
     handler->manageValue(output);
@@ -411,39 +380,25 @@ const void *smart_tpl_divide(void *userdata, const void *variable1, const void *
     // This will be a pointer to our new value
     VariantValue *output;
 
-    // If one of the values is a double, so is the result
-    // if (value1->type() == Value::Type::Double || value2->type() == Value::Type::Double) 
-    // {
+    // Should we apply floating point logic?
+    if (value1->arithmeticFloat() || value2->arithmeticFloat())
+    {
         // Make sure value2 is not zero
         if (value2->toDouble() == 0.0) return nullptr;
         
         // Calculate result
         output = new VariantValue(value1->toDouble() / value2->toDouble());
-    // }
+    }
 
-    // // If one of the types is numeric, so is the result
-    // else if (value1->type() == Value::Type::Numeric || value2->type() == Value::Type::Numeric) 
-    // {
-    //     // Make sure value2 is not zero
-    //     if (value2->toNumeric() == 0) return nullptr;
+    // Otherwise, apply interger logic
+    else 
+    {
+        // Make sure value2 is not zero
+        if (value2->toNumeric() == 0) return nullptr;
 
-    //     // Calculate result
-    //     output = new VariantValue(value1->toNumeric() / value2->toNumeric());
-    // }
-
-    // // Let's also support boolean division... This will just be another numeric division
-    // else if (value1->type() == Value::Type::Boolean || value2->type() == Value::Type::Boolean) 
-    // {
-    //     // Make sure value2 is not zero
-    //     if (value2->toNumeric() == 0) return nullptr;
-
-    //     // Calculate result
-    //     output = new VariantValue(value1->toNumeric() / value2->toNumeric());
-    // }
-    
-    // // Unsupported types, just return zero
-    // else 
-    // output = new VariantValue(0);
+        // Calculate result
+        output = new VariantValue(value1->toNumeric() / value2->toNumeric());
+    }
 
     // Let the handler manage the new object
     handler->manageValue(output);

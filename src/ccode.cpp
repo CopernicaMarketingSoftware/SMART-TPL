@@ -715,16 +715,24 @@ void CCode::doubleDivide(const Expression *left, const Expression *right)
     _out << '(';
 
     // print the left integer
-    left->toDouble(this);
+    left->toInteger(this);
 
-    // print the operator
-    _out << '/';
+    // print the operator and start a new block for our zero division check
+    _out << "/((";
 
     // print the right integer
-    right->toDouble(this);
+    right->toInteger(this);
 
-    // close the parenthese
-    _out << ')';
+    // compare it to 0 using an inline if statement. If this is true we will call throw_exception
+    // which will throw a C++ exception out of everything
+    _out << ") == 0 ? callbacks->throw_exception(userdata, \"Zero division error\") : (";
+
+    // but if we are false we'll need the original value of course, so we print that expression yet again
+    // this seems inefficient, although it probably doesn't mattter as C compiler are 'smart' ;)
+    right->toInteger(this);
+
+    // And end the actual blocks for the inline if statement
+    _out << ")))";
 }
 
 /**
@@ -734,6 +742,21 @@ void CCode::doubleDivide(const Expression *left, const Expression *right)
  */
 void CCode::pointerDivide(const Expression *left, const Expression *right) 
 {
+    // start the command
+    _out << "(callbacks->divide(userdata,";
+
+    // add left expression
+    left->toPointer(this);
+
+    // comma
+    _out << ",";
+
+    // add right expression
+    right->toPointer(this);
+
+    // finalize command
+    _out << ")) == NULL ? callbacks->throw_exception(userdata, \"Zero division error\") : (" ;
+
     // start the command
     _out << "callbacks->divide(userdata,";
 
@@ -747,7 +770,7 @@ void CCode::pointerDivide(const Expression *left, const Expression *right)
     right->toPointer(this);
 
     // finalize command
-    _out << ")";
+    _out << "))";
 }
 
 /**

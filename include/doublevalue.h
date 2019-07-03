@@ -36,6 +36,13 @@ public:
     virtual ~DoubleValue() {};
 
     /**
+     *  If this type was used in an arithmetric operation, should it then be
+     *  treated as a floating point number, or as a regular integer?
+     *  @return bool
+     */
+    virtual bool arithmeticFloat() const { return true; }
+
+    /**
      *  Convert the value to a string
      *  @return std::string
      */
