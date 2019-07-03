@@ -755,7 +755,7 @@ void CCode::pointerDivide(const Expression *left, const Expression *right)
     right->toPointer(this);
 
     // finalize command
-    _out << ")) == NULL ? callbacks->throw_exception(userdata, \"Zero division error\") : (" ;
+    _out << ") == NULL ? callbacks->transfer_integer(userdata, callbacks->throw_exception(userdata, \"Zero division error\")) : " ;
 
     // start the command
     _out << "callbacks->divide(userdata,";

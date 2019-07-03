@@ -67,6 +67,13 @@ public:
     virtual ~VariantValue() {};
 
     /**
+     *  If this type was used in an arithmetric operation, should it then be
+     *  treated as a floating point number, or as a regular integer?
+     *  @return bool
+     */
+    virtual bool arithmeticFloat() const { return _value->arithmeticFloat(); }
+
+    /**
      *  Assignment operators
      */
     VariantValue& operator=(std::nullptr_t value);
