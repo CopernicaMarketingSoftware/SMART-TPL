@@ -22,6 +22,7 @@ static struct smart_tpl_callbacks callbacks = {
     .output                = smart_tpl_output,
     .output_integer        = smart_tpl_output_integer,
     .output_boolean        = smart_tpl_output_boolean,
+    .output_double         = smart_tpl_output_double,
     .member                = smart_tpl_member,
     .member_at             = smart_tpl_member_at,
     .transfer_integer      = smart_tpl_transfer_integer,
