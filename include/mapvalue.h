@@ -41,7 +41,7 @@ public:
      *  Convert the value to a string
      *  @return std::string
      */
-    std::string toString() const override
+    virtual std::string toString() const override
     {
         return "";
     };
@@ -50,7 +50,7 @@ public:
      *  Convert the variable to an integer value
      *  @return numeric
      */
-    integer_t toNumeric() const override
+    virtual integer_t toNumeric() const override
     {
         return 0;
     };
@@ -59,7 +59,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    bool toBoolean() const override
+    virtual bool toBoolean() const override
     {
         return !_value.empty();
     };
@@ -68,7 +68,7 @@ public:
      *  Convert the variable to a floating point value
      *  @return double
      */
-    double toDouble() const override
+    virtual double toDouble() const override
     {
         return 0.0;
     };
@@ -81,7 +81,7 @@ public:
      *  @return Variant
      *
      */
-    VariantValue member(const char *name, size_t size) const override
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         // look for a value with name
         auto iter = _value.find(std::string(name, size));
@@ -97,7 +97,7 @@ public:
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    size_t memberCount() const override
+    virtual size_t memberCount() const override
     {
         return _value.size();
     }
@@ -107,7 +107,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    VariantValue member(size_t position) const override
+    virtual VariantValue member(size_t position) const override
     {
         // if position is higher than the amount of items in the map we just return nullptr
         if (position >= memberCount()) return nullptr;
@@ -129,7 +129,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    Iterator *iterator() const override;
+    virtual Iterator *iterator() const override;
 
     /**
      *  A few rather basic inserters to expand your map later on
