@@ -32,21 +32,30 @@ public:
     virtual ~BinaryDivideOperator() {}
 
     /**
-     *  Generate the operations
+     *  Generate the operator to a numeric value
      *  @param  generator
      */
     virtual void toInteger(Generator *generator) const override
     {
-        generator->divide(_left.get(), _right.get());
+        generator->integerDivide(_left.get(), _right.get());
     }
 
     /**
-     *  Generate the instruction
+     *  Generate the operator to a double value
      *  @param  generator
      */
-    virtual void toBoolean(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
-        generator->divide(_left.get(), _right.get());
+        generator->doubleDivide(_left.get(), _right.get());
+    }
+
+    /**
+     *  Generate the operator to a pointer value
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        generator->pointerDivide(_left.get(), _right.get());
     }
 };
 

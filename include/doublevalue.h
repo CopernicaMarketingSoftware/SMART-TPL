@@ -36,19 +36,39 @@ public:
     virtual ~DoubleValue() {};
 
     /**
+     *  If this type was used in an arithmetric operation, should it then be
+     *  treated as a floating point number, or as a regular integer?
+     *  @return bool
+     */
+    virtual bool arithmeticFloat() const override { return true; }
+
+    /**
      *  Convert the value to a string
      *  @return std::string
      */
-    std::string toString() const override
+    virtual std::string toString() const override
     {
-        return std::to_string(_value);
+        // create buffer
+        char buffer[512];
+
+        // format string
+        size_t written = snprintf(buffer, 512, "%.5f", _value);
+
+        // Remove trailing zeroes
+        while (buffer[written - 1] == '0') written--;
+
+        // Round number?
+        if (buffer[written - 1] == '.') written--;
+
+        // Create string object
+        return std::string(buffer, written);
     };
 
     /**
      *  Convert the variable to an integer value
      *  @return integer_t
      */
-    integer_t toNumeric() const override
+    virtual integer_t toNumeric() const override
     {
         return _value;
     };
@@ -57,7 +77,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    bool toBoolean() const override
+    virtual bool toBoolean() const override
     {
         return _value;
     };
@@ -66,7 +86,7 @@ public:
      *  Convert the variable to a floating point value
      *  @return double
      */
-    double toDouble() const override
+    virtual double toDouble() const override
     {
         return _value;
     };
@@ -79,7 +99,7 @@ public:
      *  @return Variant
      *
      */
-    VariantValue member(const char *name, size_t size) const override
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         return nullptr;
     }
@@ -88,7 +108,7 @@ public:
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    size_t memberCount() const override
+    virtual size_t memberCount() const override
     {
         return 0;
     }
@@ -98,7 +118,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    VariantValue member(size_t position) const override
+    virtual VariantValue member(size_t position) const override
     {
         return nullptr;
     }
@@ -110,7 +130,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    Iterator *iterator() const override
+    virtual Iterator *iterator() const override
     {
         return nullptr;
     }

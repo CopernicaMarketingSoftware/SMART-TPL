@@ -677,7 +677,7 @@ TEST(RunTime, AssignDouble)
 
     EXPECT_TRUE(tpl.personalized());
 
-    string expectedOutput("150000000000000000.000000");
+    string expectedOutput("150000000000000000");
     EXPECT_EQ(expectedOutput, tpl.process());
 
     if (compile(tpl)) // This will compile the Template into a shared library

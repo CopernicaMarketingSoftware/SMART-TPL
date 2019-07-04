@@ -92,6 +92,15 @@ private:
     virtual void variable(const Variable *variable) override;
 
     /**
+     *  Move a expression to the runtime space
+     *  @param  expression
+     */
+    virtual void pointerString(const Expression *expression) override;
+    virtual void pointerInteger(const Expression *expression) override;
+    virtual void pointerDouble(const Expression *expression) override;
+    virtual void pointerBoolean(const Expression *expression) override;
+
+    /**
      *  Negate the boolean expression
      *  @param  expression
      */
@@ -102,11 +111,20 @@ private:
      *  @param  left
      *  @param  right
      */
-    virtual void plus(const Expression *left, const Expression *right) override;
-    virtual void minus(const Expression *left, const Expression *right) override;
-    virtual void divide(const Expression *left, const Expression *right) override;
-    virtual void multiply(const Expression *left, const Expression *right) override;
-    virtual void modulo(const Expression *left, const Expression *right) override;
+    virtual void integerPlus(const Expression *left, const Expression *right) override;
+    virtual void doublePlus(const Expression *left, const Expression *right) override;
+    virtual void pointerPlus(const Expression *left, const Expression *right) override;
+    virtual void integerMinus(const Expression *left, const Expression *right) override;
+    virtual void doubleMinus(const Expression *left, const Expression *right) override;
+    virtual void pointerMinus(const Expression *left, const Expression *right) override;
+    virtual void integerMultiply(const Expression *left, const Expression *right) override;
+    virtual void doubleMultiply(const Expression *left, const Expression *right) override;
+    virtual void pointerMultiply(const Expression *left, const Expression *right) override;
+    virtual void integerDivide(const Expression *left, const Expression *right) override;
+    virtual void doubleDivide(const Expression *left, const Expression *right) override;
+    virtual void pointerDivide(const Expression *left, const Expression *right) override;
+    virtual void integerModulo(const Expression *left, const Expression *right) override;
+    virtual void pointerModulo(const Expression *left, const Expression *right) override;
 
     /**
      *  Comparison operators

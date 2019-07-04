@@ -132,30 +132,37 @@ private:
      *  @return jit_value
      */
     jit_value doubleExpression(const Expression *expression);
+    
+    /**
+     *  Retrieve the pointer to the variable that holds the result of an expression
+     * 	@param	expression
+     * 	@return jit_value
+     */
+    jit_value pointerExpression(const Expression *expression);
 
     /**
      *  Generate code to output raw data
      *  @param  data                data to output
      */
-    void raw(const std::string &data) override;
+    virtual void raw(const std::string &data) override;
 
     /**
      *  Generate the code to output a variable
      *  @param  variable           The variable to output
      */
-    void output(const Variable *variable) override;
+    virtual void output(const Variable *variable) override;
 
     /**
      *  Generate the code to output the output of a filter
      *  @param  filter             The filter to eventually output
      */
-    void output(const Filter *filter) override;
+    virtual void output(const Filter *filter) override;
 
     /**
      *  Generate the code to write an expression as a string
      *  @param  expression          the expression to write as a string
      */
-    void write(const Expression *expression) override;
+    virtual void write(const Expression *expression) override;
 
     /**
      *  Generate a conditional statement
@@ -163,7 +170,7 @@ private:
      *  @param  ifstatements        the statements in the 'if' part
      *  @param  elsestatements      the statements in the 'else' part
      */
-    void condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements) override;
+    virtual void condition(const Expression *expression, const Statements *ifstatements, const Statements *elsestatements) override;
 
     /**
      *  Generate the code to get a pointer to a variable
@@ -174,88 +181,106 @@ private:
      *  @param  name                name of the variable
      *  @param  expression          Expression that evaluates to a var name
      */
-    void varPointer(const Variable *parent, const std::string &name) override;
-    void varPointer(const Variable *parent, const Expression *expression) override;
-    void varPointer(const std::string &name) override;
+    virtual void varPointer(const Variable *parent, const std::string &name) override;
+    virtual void varPointer(const Variable *parent, const Expression *expression) override;
+    virtual void varPointer(const std::string &name) override;
 
     /**
      *  Create a string or integer literal
      *  @param  value
      */
-    void stringValue(const std::string &value) override;
-    void integerValue(integer_t value) override;
-    void doubleValue(double value) override;
+    virtual void stringValue(const std::string &value) override;
+    virtual void integerValue(integer_t value) override;
+    virtual void doubleValue(double value) override;
 
     /**
      *  Create a string or integer constant for a variable
      *  @param  variable
      */
-    void stringVariable(const Variable *variable) override;
-    void integerVariable(const Variable *variable) override;
-    void booleanVariable(const Variable *variable) override;
-    void doubleVariable(const Variable *variable) override;
-    void variable(const Variable *variable) override;
+    virtual void stringVariable(const Variable *variable) override;
+    virtual void integerVariable(const Variable *variable) override;
+    virtual void booleanVariable(const Variable *variable) override;
+    virtual void doubleVariable(const Variable *variable) override;
+    virtual void variable(const Variable *variable) override;
+
+    /**
+     *  Move an expression to the runtime space
+     *  @param  expression
+     */
+    virtual void pointerString(const Expression *expression) override;
+    virtual void pointerInteger(const Expression *expression) override;
+    virtual void pointerDouble(const Expression *expression) override;
+    virtual void pointerBoolean(const Expression *expression) override;
 
     /**
      *  Negate the boolean expression
      *  @param  expression
      */
-    void negateBoolean(const Expression *expression) override;
+    virtual void negateBoolean(const Expression *expression) override;
 
     /**
      *  Arithmetric operations
      *  @param  left
      *  @param  right
      */
-    void plus(const Expression *left, const Expression *right) override;
-    void minus(const Expression *left, const Expression *right) override;
-    void divide(const Expression *left, const Expression *right) override;
-    void multiply(const Expression *left, const Expression *right) override;
-    void modulo(const Expression *left, const Expression *right) override;
+    virtual void integerPlus(const Expression *left, const Expression *right) override;
+    virtual void doublePlus(const Expression *left, const Expression *right) override;
+    virtual void pointerPlus(const Expression *left, const Expression *right) override;
+    virtual void integerMinus(const Expression *left, const Expression *right) override;
+    virtual void doubleMinus(const Expression *left, const Expression *right) override;
+    virtual void pointerMinus(const Expression *left, const Expression *right) override;
+    virtual void integerMultiply(const Expression *left, const Expression *right) override;
+    virtual void doubleMultiply(const Expression *left, const Expression *right) override;
+    virtual void pointerMultiply(const Expression *left, const Expression *right) override;
+    virtual void integerDivide(const Expression *left, const Expression *right) override;
+    virtual void doubleDivide(const Expression *left, const Expression *right) override;
+    virtual void pointerDivide(const Expression *left, const Expression *right) override;
+    virtual void integerModulo(const Expression *left, const Expression *right) override;
+    virtual void pointerModulo(const Expression *left, const Expression *right) override;
 
     /**
      *  Comparison operators
      *  @param  left
      *  @param  right
      */
-    void equals(const Expression *left, const Expression *right) override;
-    void notEquals(const Expression *left, const Expression *right) override;
-    void greater(const Expression *left, const Expression *right) override;
-    void greaterEquals(const Expression *left, const Expression *right) override;
-    void lesser(const Expression *left, const Expression *right) override;
-    void lesserEquals(const Expression *left, const Expression *right) override;
-    void regex(const Expression *left, const Expression *right) override;
+    virtual void equals(const Expression *left, const Expression *right) override;
+    virtual void notEquals(const Expression *left, const Expression *right) override;
+    virtual void greater(const Expression *left, const Expression *right) override;
+    virtual void greaterEquals(const Expression *left, const Expression *right) override;
+    virtual void lesser(const Expression *left, const Expression *right) override;
+    virtual void lesserEquals(const Expression *left, const Expression *right) override;
+    virtual void regex(const Expression *left, const Expression *right) override;
 
     /**
      *  Boolean operators
      *  @param  left
      *  @param  right
      */
-    void booleanAnd(const Expression *left, const Expression *right) override;
-    void booleanOr(const Expression *left, const Expression *right) override;
+    virtual void booleanAnd(const Expression *left, const Expression *right) override;
+    virtual void booleanOr(const Expression *left, const Expression *right) override;
 
     /**
      *  Generate the code to apply a set of modifiers on an expression
      *  @param  modifiers          The set of modifiers to apply
      *  @param  expression         The expression to apply to modifiers on
      */
-    void modifiers(const Modifiers *modifiers, const Variable *variable) override;
+    virtual void modifiers(const Modifiers *modifiers, const Variable *variable) override;
 
     /**
      *  Generate the code to apply a set of modifiers on an expression and turn it into a specific type
      *  @param  modifiers          The set of modifiers to apply
      *  @param  variable           The variable to apply to modifers to
      */
-    void modifiersString(const Modifiers *modifiers, const Variable *variable) override;
-    void modifiersBoolean(const Modifiers *modifiers, const Variable *variable) override;
-    void modifiersDouble(const Modifiers *modifiers, const Variable *variable) override;
+    virtual void modifiersString(const Modifiers *modifiers, const Variable *variable) override;
+    virtual void modifiersBoolean(const Modifiers *modifiers, const Variable *variable) override;
+    virtual void modifiersDouble(const Modifiers *modifiers, const Variable *variable) override;
 
     /**
      *  Generate the code to construct the following parameters
      *  @param  parameters         The parameters to construct
      *  @note Construct as in, generate the code so the runtime can construct them
      */
-    void parameters(const Parameters *parameters) override;
+    virtual void parameters(const Parameters *parameters) override;
 
     /**
      *  Generate the code to do a foreach loop over variable
@@ -265,14 +290,14 @@ private:
      *  @param statements       The statements to execute on each iteration
      *  @param else_statements  The statements to execute if there was nothing to loop through
      */
-    void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements) override;
+    virtual void foreach(const Variable *variable, const std::string &key, const std::string &value, const Statements *statements, const Statements *else_statements) override;
 
     /**
      *  Generate the code to assign the output of an expression to a key
      *  @param key                  The key to assign the output to
      *  @param expression           The expression to evaluate
      */
-    void assign(const std::string &key, const Expression *expression) override;
+    virtual void assign(const std::string &key, const Expression *expression) override;
 
 public:
     /**

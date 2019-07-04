@@ -31,23 +31,43 @@ public:
      */
     virtual ~BinaryModuloOperator() {}
 
-    /**
-     *  Generate the operations
+        /**
+     *  Generate the operator to a numeric value
      *  @param  generator
      */
     virtual void toInteger(Generator *generator) const override
     {
-        generator->modulo(_left.get(), _right.get());
+        generator->integerModulo(_left.get(), _right.get());
     }
 
     /**
-     *  Generate the instruction
+     *  Generate the operator to a double value
      *  @param  generator
      */
-    virtual void toBoolean(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
-        generator->modulo(_left.get(), _right.get());
+        generator->integerModulo(_left.get(), _right.get());
     }
+
+    /**
+     *  Generate the operator to a pointer value
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        generator->pointerModulo(_left.get(), _right.get());
+    }
+
+    /**
+     *  The return type of the expression
+     *  @return Type
+     */
+    virtual Type type() const override 
+    {
+        // Modulo operations are always integer
+        return Type::Integer;
+    }
+
 };
 
 /**

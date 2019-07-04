@@ -67,6 +67,13 @@ public:
     virtual ~VariantValue() {};
 
     /**
+     *  If this type was used in an arithmetric operation, should it then be
+     *  treated as a floating point number, or as a regular integer?
+     *  @return bool
+     */
+    virtual bool arithmeticFloat() const override { return _value->arithmeticFloat(); }
+
+    /**
      *  Assignment operators
      */
     VariantValue& operator=(std::nullptr_t value);
@@ -91,7 +98,7 @@ public:
      *  Convert the value to a string
      *  @return std::string
      */
-    std::string toString() const override
+    virtual std::string toString() const override
     {
         // return the toString of the underlying Value
         return _value->toString();
@@ -101,7 +108,7 @@ public:
      *  Convert the variable to a numeric value
      *  @return integer_t
      */
-    integer_t toNumeric() const override
+    virtual integer_t toNumeric() const override
     {
         // return the toNumeric of the underlying Value
         return _value->toNumeric();
@@ -111,7 +118,7 @@ public:
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    bool toBoolean() const override
+    virtual bool toBoolean() const override
     {
         // return the toBoolean of the underlying Value
         return _value->toBoolean();
@@ -121,7 +128,7 @@ public:
      *  Convert the variable to a floating point value
      *  @return double
      */
-    double toDouble() const override
+    virtual double toDouble() const override
     {
         // return the toDoubleO of the underlying Value
         return _value->toDouble();
@@ -135,7 +142,7 @@ public:
      *  @return Variant
      *
      */
-    VariantValue member(const char *name, size_t size) const override
+    virtual VariantValue member(const char *name, size_t size) const override
     {
         // return the member(const char*, size_t) of the underlying Value
         return _value->member(name, size);
@@ -145,7 +152,7 @@ public:
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    size_t memberCount() const override
+    virtual size_t memberCount() const override
     {
         // return the memberCount() of the underlying Value
         return _value->memberCount();
@@ -156,7 +163,7 @@ public:
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
-    VariantValue member(size_t position) const override
+    virtual VariantValue member(size_t position) const override
     {
         // return the member(size_t) of the underlying Value
         return _value->member(position);
@@ -169,7 +176,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    Iterator *iterator() const override
+    virtual Iterator *iterator() const override
     {
         // return the iterator of the underlying Value
         return _value->iterator();

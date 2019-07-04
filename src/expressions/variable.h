@@ -73,6 +73,16 @@ public:
     }
 
     /**
+     *  Generate a pointer for this variable
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        // equal to the other pointer method
+        this->pointer(generator);
+    }
+
+    /**
      *  Generate the expression to output ourself
      *  @param  generator
      */

@@ -109,6 +109,15 @@ public:
     virtual void variable(const Variable *variable) = 0;
 
     /**
+     *  Move a expression to the runtime space
+     *  @param  expression
+     */
+    virtual void pointerString(const Expression *expression) = 0;
+    virtual void pointerInteger(const Expression *expression) = 0;
+    virtual void pointerDouble(const Expression *expression) = 0;
+    virtual void pointerBoolean(const Expression *expression) = 0;
+
+    /**
      *  Negate the boolean expression
      *  @param  expression
      */
@@ -119,11 +128,20 @@ public:
      *  @param  left
      *  @param  right
      */
-    virtual void plus(const Expression *left, const Expression *right) = 0;
-    virtual void minus(const Expression *left, const Expression *right) = 0;
-    virtual void divide(const Expression *left, const Expression *right) = 0;
-    virtual void multiply(const Expression *left, const Expression *right) = 0;
-    virtual void modulo(const Expression *left, const Expression *right) = 0;
+    virtual void integerPlus(const Expression *left, const Expression *right) = 0;
+    virtual void doublePlus(const Expression *left, const Expression *right) = 0;
+    virtual void pointerPlus(const Expression *left, const Expression *right) = 0;
+    virtual void integerMinus(const Expression *left, const Expression *right) = 0;
+    virtual void doubleMinus(const Expression *left, const Expression *right) = 0;
+    virtual void pointerMinus(const Expression *left, const Expression *right) = 0;
+    virtual void integerMultiply(const Expression *left, const Expression *right) = 0;
+    virtual void doubleMultiply(const Expression *left, const Expression *right) = 0;
+    virtual void pointerMultiply(const Expression *left, const Expression *right) = 0;
+    virtual void integerDivide(const Expression *left, const Expression *right) = 0;
+    virtual void doubleDivide(const Expression *left, const Expression *right) = 0;
+    virtual void pointerDivide(const Expression *left, const Expression *right) = 0;
+    virtual void integerModulo(const Expression *left, const Expression *right) = 0;
+    virtual void pointerModulo(const Expression *left, const Expression *right) = 0;
 
     /**
      *  Comparison operators

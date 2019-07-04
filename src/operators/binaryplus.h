@@ -33,20 +33,29 @@ public:
 
     /**
      *  Generate the operator to a numeric value
-     *  @param  Generator *generator
+     *  @param  generator
      */
     virtual void toInteger(Generator *generator) const override
     {
-        generator->plus(_left.get(), _right.get());
+        generator->integerPlus(_left.get(), _right.get());
     }
 
     /**
-     *  Generate the instruction
+     *  Generate the operator to a double value
      *  @param  generator
      */
-    virtual void toBoolean(Generator *generator) const override
+    virtual void toDouble(Generator *generator) const override
     {
-        generator->plus(_left.get(), _right.get());
+        generator->doublePlus(_left.get(), _right.get());
+    }
+
+    /**
+     *  Generate the operator to a pointer value
+     *  @param  generator
+     */
+    virtual void toPointer(Generator *generator) const override
+    {
+        generator->pointerPlus(_left.get(), _right.get());
     }
 };
 

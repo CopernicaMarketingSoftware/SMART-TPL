@@ -93,6 +93,17 @@ public:
     {
         throw CompileError("Default internal toString implementation called");
     };
+    
+    /**
+     *  Generate the expression as pointer value (put the result in a variable)
+     * 	@param	generator
+     *  @throws CompileError    This compile error is really just here so the developer
+     *                          knows they did something wrong.
+     */
+    virtual void toPointer(Generator *generator) const
+    {
+        throw CompileError("Default internal toPointer implementation called");
+    };
 
     /**
      *  Generate the expression to output ourself
