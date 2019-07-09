@@ -13,8 +13,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef int64_t integer_t;
-
 /**
  *  Structure with all the callbacks
  */
