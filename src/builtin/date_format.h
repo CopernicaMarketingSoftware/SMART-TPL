@@ -212,7 +212,7 @@ private:
             if (strcasecmp(timeunit, "year") == 0)
             {
                 // set new value in tm struct, make sure we're within boundaries
-                time_tm->tm_year = std::min(0, time_tm->tm_year + shift);
+                time_tm->tm_year = std::max(0, time_tm->tm_year + shift);
             }
 
             // Recreate a timestamp from the structure and process it
