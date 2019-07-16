@@ -3,8 +3,9 @@
  *
  *  Built-in "|date_format" modifier
  *
- *  @author Tamas Elekes <tamas.elekes@copernica.com>
- *  @copyright 2018 - 2019 Copernica BV
+ *  @author     Tamas Elekes <tamas.elekes@copernica.com>
+ *  @author     David van Erkelens <david.vanerkelens@copernica.com>
+ *  @copyright  2018 - 2019 Copernica BV
  */
 
 /**
@@ -139,7 +140,7 @@ private:
         std::string input(datetime);
         
         // we need a regex to match our interval
-        std::regex interval("^(\\+|\\-)(\\d+)\\s+(second|minute|hour|day|week|month|year)[s]{0,1}$");
+        std::regex interval("^(\\+|\\-)(\\d+)\\s+(second|minute|hour|day|week|month|year)[s]{0,1}$", std::regex_constants::icase);
 
         // store matches
         std::smatch matches;
@@ -150,38 +151,38 @@ private:
             // Get the current timestamp
             time_t current = time(nullptr);
 
-            // Get the amount of days / weeks / months / whatever to move
-            int amount = std::stoi(matches[2].str());
+            // Get the amount of time units to shift
+            int shift = std::stoi(matches[2].str());
 
-            // If we have a decrease, re-calculate the amount to change
-            if (strcasecmp(matches[1].str().data(), "-") == 0) amount *= -1;
+            // If we have a decrement, negate the shift
+            if (strcasecmp(matches[1].str().data(), "-") == 0) shift *= -1;
 
-            // Get the time amount to change
-            const char *unit = matches[3].str().data(); 
+            // Get the time unit to change
+            const char *timeunit = matches[3].str().data(); 
             
             // Should we move seconds?
-            if (strcasecmp(unit, "second") == 0) return process(current + amount, params);
+            if (strcasecmp(timeunit, "second") == 0) return process(current + shift, params);
 
             // Should we change minutes?
-            if (strcasecmp(unit, "minute") == 0) return process(current + (amount * 60), params);
+            if (strcasecmp(timeunit, "minute") == 0) return process(current + (shift * 60), params);
 
             // Should we add/remove hours?
-            if (strcasecmp(unit, "hour") == 0) return process(current + (amount * 60 * 60), params);
+            if (strcasecmp(timeunit, "hour") == 0) return process(current + (shift * 60 * 60), params);
 
             // Should we add / remove days?
-            if (strcasecmp(unit, "day") == 0) return process(current + (amount * 60 * 60 * 24), params);
+            if (strcasecmp(timeunit, "day") == 0) return process(current + (shift * 60 * 60 * 24), params);
 
             // Should we add / remove weeks?
-            if (strcasecmp(unit, "week") == 0) return process(current + (amount * 60 * 60 * 24 * 7), params);
+            if (strcasecmp(timeunit, "week") == 0) return process(current + (shift * 60 * 60 * 24 * 7), params);
 
             // If we are adding / removing months or years, we need a tm structure to calculate
             tm *time_tm = gmtime(&current);
 
             // Should we add / remove months?
-            if (strcasecmp(unit, "month") == 0)
+            if (strcasecmp(timeunit, "month") == 0)
             {
                 // calculate the new month value
-                int month = time_tm->tm_mon + amount;
+                int month = time_tm->tm_mon + shift;
                 int year = time_tm->tm_year;
 
                 // make sure we're within boundaries
@@ -208,10 +209,10 @@ private:
             }
 
             // Should we add / remove years
-            if (strcasecmp(unit, "year") == 0)
+            if (strcasecmp(timeunit, "year") == 0)
             {
                 // set new value in tm struct, make sure we're within boundaries
-                time_tm->tm_year = std::min(0, time_tm->tm_year + amount);
+                time_tm->tm_year = std::min(0, time_tm->tm_year + shift);
             }
 
             // Recreate a timestamp from the structure and process it
