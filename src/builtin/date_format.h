@@ -8,10 +8,14 @@
  */
 
 /**
- *  Namespace
+ *  Dependencies
  */
 #include <ctime>
+#include <regex>
 
+/**
+ *  Set up namespace
+ */
 namespace SmartTpl { namespace Internal {
 
 /**
@@ -128,7 +132,93 @@ private:
         // is it tomorrow?
         if (strcasecmp(datetime, "tomorrow") == 0) return process(time(nullptr) + (24 * 60 * 60), params);
 
-        // nothing matches
+        // is it yesterday?
+        if (strcasecmp(datetime, "yesterday") == 0) return process(time(nullptr) - (24 * 60 * 60), params);
+
+        // convert our buffer into a string
+        std::string input(datetime);
+        
+        // we need a regex to match our interval
+        std::regex interval("^(\\+|\\-)(\\d+)\\s+(second|minute|hour|day|week|month|year)[s]{0,1}$");
+
+        // store matches
+        std::smatch matches;
+
+        // do we have a match?
+        if (std::regex_search(input, matches, interval))
+        {
+            // Get the current timestamp
+            time_t current = time(nullptr);
+
+            // Get the amount of days / weeks / months / whatever to move
+            int amount = std::stoi(matches[2].str());
+
+            // If we have a decrease, re-calculate the amount to change
+            if (strcasecmp(matches[1].str().data(), "-") == 0) amount *= -1;
+
+            // Get the time amount to change
+            const char *unit = matches[3].str().data(); 
+            
+            // Should we move seconds?
+            if (strcasecmp(unit, "second") == 0) return process(current + amount, params);
+
+            // Should we change minutes?
+            if (strcasecmp(unit, "minute") == 0) return process(current + (amount * 60), params);
+
+            // Should we add/remove hours?
+            if (strcasecmp(unit, "hour") == 0) return process(current + (amount * 60 * 60), params);
+
+            // Should we add / remove days?
+            if (strcasecmp(unit, "day") == 0) return process(current + (amount * 60 * 60 * 24), params);
+
+            // Should we add / remove weeks?
+            if (strcasecmp(unit, "week") == 0) return process(current + (amount * 60 * 60 * 24 * 7), params);
+
+            // If we are adding / removing months or years, we need a tm structure to calculate
+            tm *time_tm = gmtime(&current);
+
+            // Should we add / remove months?
+            if (strcasecmp(unit, "month") == 0)
+            {
+                // calculate the new month value
+                int month = time_tm->tm_mon + amount;
+                int year = time_tm->tm_year;
+
+                // make sure we're within boundaries
+                if (std::abs(month) > 11)
+                {
+                    // since we're working with ints, the increment in years
+                    // is the division of the months by 12, and the new month value
+                    // is the remainder of that division
+                    year += month / 12;
+                    month = month % 12;
+                }
+
+                // make sure the number is positive
+                if (month < 0)
+                {
+                    // add 12 months, and remove one year
+                    year -= 1; 
+                    month += 12;
+                }
+
+                // set the new values
+                time_tm->tm_mon = month;
+                time_tm->tm_year = year;
+            }
+
+            // Should we add / remove years
+            if (strcasecmp(unit, "year") == 0)
+            {
+                // set new value in tm struct, make sure we're within boundaries
+                time_tm->tm_year = std::min(0, time_tm->tm_year + amount);
+            }
+
+            // Recreate a timestamp from the structure and process it
+            return process(mktime(time_tm), params);
+        }
+
+        // no match
         throw false;
     }
 
