@@ -111,10 +111,27 @@ private:
         
         // was the current time supplied?
         if (strcasecmp(datetime, "now") == 0) return process(time(nullptr), params);
-        
-        // failed to handle
+
+        // try to parse the datetime as a relative interval
+        return processRelative(datetime, params);
+    }
+
+    /**
+     *  Helper function to process relative date intervals (like '+1 days')
+     *  @param  time
+     *  @param  params
+     *  @return VariantValue
+     *  @throws false
+     */
+    static VariantValue processRelative(const char *datetime, const SmartTpl::Parameters &params)
+    {
+        // is it tomorrow?
+        if (strcasecmp(datetime, "tomorrow") == 0) return process(time(nullptr) + (24 * 60 * 60), params);
+
+        // nothing matches
         throw false;
     }
+
     
 public:
     /**
