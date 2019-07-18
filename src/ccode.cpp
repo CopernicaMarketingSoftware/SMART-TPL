@@ -467,7 +467,13 @@ void CCode::pointerBoolean(const Expression *expression)
 void CCode::pointerString(const std::string &value) 
 {
     // create command
-    _out << "callbacks->transfer_string(userdata," << value << ")";
+    _out << "callbacks->transfer_string(userdata,";
+    
+    // add string and length
+    stringValue(value);
+
+    // finalize command
+    _out << ")";
 }
 
 /**
@@ -487,7 +493,13 @@ void CCode::pointerInteger(integer_t value)
 void CCode::pointerDouble(double value)
 {
     // create command
-    _out << "callbacks->transfer_double(userdata," << value << ")";
+    _out << "callbacks->transfer_double(userdata,";
+    
+    // add double value
+    doubleValue(value);
+
+    // finalize command
+    _out << ")";
 }
 
 /**
@@ -497,7 +509,13 @@ void CCode::pointerDouble(double value)
 void CCode::pointerBoolean(bool value)
 {
     // create command
-    _out << "callbacks->transfer_boolean(userdata," << value << ")";
+    _out << "callbacks->transfer_boolean(userdata,";
+    
+    // add boolean value
+    booleanValue(value);
+
+    // finalize command
+    _out << ")";
 }
 
 /**
