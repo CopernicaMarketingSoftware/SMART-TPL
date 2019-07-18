@@ -96,7 +96,9 @@ private:
      *  @param  expression
      */
     virtual void pointerString(const Expression *expression) override;
+    virtual void pointerString(const std::string &string) override {}
     virtual void pointerInteger(const Expression *expression) override;
+    virtual void pointerInteger(integer_t value) override {}
     virtual void pointerDouble(const Expression *expression) override;
     virtual void pointerBoolean(const Expression *expression) override;
 

@@ -506,6 +506,23 @@ void Bytecode::pointerString(const Expression *expression)
 }
 
 /**
+ *  Convert a literal string to a runtime pointer 
+ *  @param std::string
+ */
+void Bytecode::pointerString(const std::string &string)
+{
+    // add to stack
+    stringValue(string);
+
+    // get the size and buffer from the stack
+    jit_value size = pop();
+    jit_value buffer = pop();
+
+    // add to runtime space and push the pointer
+    _stack.push(_callbacks.transfer_string(_userdata, buffer, size));
+}
+
+/**
  *  Move an expression to the runtime space
  *  @param  expression
  */
@@ -513,6 +530,19 @@ void Bytecode::pointerInteger(const Expression *expression)
 {
     // turn the expression into a integer
     expression->toInteger(this);
+
+    // pop the result and add its generated pointer to the stack
+    _stack.push(_callbacks.transfer_integer(_userdata, pop()));
+}
+
+/**
+ *  Move an expression to the runtime space
+ *  @param  expression
+ */
+void Bytecode::pointerInteger(integer_t value) 
+{
+    // add to stack
+    integerValue(value);
 
     // pop the result and add its generated pointer to the stack
     _stack.push(_callbacks.transfer_integer(_userdata, pop()));

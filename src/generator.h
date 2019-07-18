@@ -113,7 +113,9 @@ public:
      *  @param  expression
      */
     virtual void pointerString(const Expression *expression) = 0;
+    virtual void pointerString(const std::string &string) = 0;
     virtual void pointerInteger(const Expression *expression) = 0;
+    virtual void pointerInteger(integer_t value) = 0;
     virtual void pointerDouble(const Expression *expression) = 0;
     virtual void pointerBoolean(const Expression *expression) = 0;
 
