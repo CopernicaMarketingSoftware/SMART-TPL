@@ -192,6 +192,7 @@ private:
     virtual void stringValue(const std::string &value) override;
     virtual void integerValue(integer_t value) override;
     virtual void doubleValue(double value) override;
+    virtual void booleanValue(bool value) override;
 
     /**
      *  Create a string or integer constant for a variable
@@ -204,15 +205,22 @@ private:
     virtual void variable(const Variable *variable) override;
 
     /**
-     *  Move an expression to the runtime space
+     *  Move a typed expression to the runtime space
      *  @param  expression
      */
     virtual void pointerString(const Expression *expression) override;
-    virtual void pointerString(const std::string &string) override;
     virtual void pointerInteger(const Expression *expression) override;
-    virtual void pointerInteger(integer_t value) override;
     virtual void pointerDouble(const Expression *expression) override;
     virtual void pointerBoolean(const Expression *expression) override;
+
+    /**
+     *  Transfer a constant to runtime space
+     *  @param value
+     */
+    virtual void pointerString(const std::string &value) override;
+    virtual void pointerInteger(integer_t value) override;
+    virtual void pointerDouble(double value) override;
+    virtual void pointerBoolean(bool value) override;
 
     /**
      *  Negate the boolean expression

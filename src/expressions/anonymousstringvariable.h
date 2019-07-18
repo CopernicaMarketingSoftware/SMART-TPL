@@ -1,7 +1,7 @@
 /**
- *  AnonymousVariable.h
+ *  AnonymousStringVariable.h
  * 
- *  Class that holds a variable that does not have a name but rather is based
+ *  Class that holds a string variable that does not have a name but rather is based
  *  on a literal, so that literals can be treated as variables (e.g. for usage
  *  with modifiers)
  * 
@@ -24,14 +24,14 @@ private:
      *  The actual value
      *  @var    std::string
      */
-    std::unique_ptr<const Token> _value;
+    std::unique_ptr<Token> _value;
 
 public:
     /**
      *  Constructor
      *  @param  Token*      the value of the anonymous variable
      */
-    AnonymousStringVariable(const Token *contents) :
+    AnonymousStringVariable(Token *contents) :
         AnonymousVariable(Type::String),
         _value(contents) {}
 
@@ -44,7 +44,7 @@ public:
      *  Generate the output that leaves a pointer to the variable
      *  @param  generator
      */
-    void pointer(Generator *generator) const override
+    virtual void pointer(Generator *generator) const override
     {
         // generate the code to get a variable pointer
         generator->pointerString(*_value);

@@ -44,19 +44,7 @@ public:
      *  The return type of the expression
      *  @return Type
      */
-    Type type() const override { return _type; }
- 
-    /**
-     *  Generate the output that leaves a pointer to the variable
-     *  @param  generator
-     */
-    // void pointer(Generator *generator) const override
-    // {
-    //     // generate the code to get a variable pointer
-    //     generator->pointerString(*_contents);
-    // }
-
-
+    virtual Type type() const override { return _type; }
 };
 
 /**
