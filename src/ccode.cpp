@@ -303,6 +303,14 @@ void CCode::doubleValue(double value)
 }
 
 /**
+ *  Create a boolean literal
+ */
+void CCode::booleanValue(bool value)
+{
+    _out << (value ? 1 : 0);
+}
+
+/**
  *  Create a string constant for a variable
  *  @param  variable
  */
@@ -397,7 +405,7 @@ void CCode::pointerString(const Expression *expression)
     // open command
     _out << "callbacks->transfer_string(userdata,";
 
-    // turn the expression into a boolean
+    // turn the expression into a string
     expression->toString(this);    
     
     // finalize command
@@ -413,7 +421,7 @@ void CCode::pointerInteger(const Expression *expression)
     // open command
     _out << "callbacks->transfer_integer(userdata,";
 
-    // turn the expression into a boolean
+    // turn the expression into an integer
     expression->toInteger(this);    
     
     // finalize command
@@ -429,7 +437,7 @@ void CCode::pointerDouble(const Expression *expression)
     // open command
     _out << "callbacks->transfer_double(userdata,";
 
-    // turn the expression into a boolean
+    // turn the expression into a double
     expression->toDouble(this);    
     
     // finalize command
@@ -452,6 +460,45 @@ void CCode::pointerBoolean(const Expression *expression)
     _out << ")";
 }
 
+/**
+ *  Transform a literal into a runtime space pointer
+ *  @param  value
+ */
+void CCode::pointerString(const std::string &value) 
+{
+    // create command
+    _out << "callbacks->transfer_string(userdata," << value << ")";
+}
+
+/**
+ *  Transform a literal into a runtime space pointer
+ *  @param  value
+ */
+void CCode::pointerInteger(integer_t value)
+{
+    // create command
+    _out << "callbacks->transfer_integer(userdata," << value << ")";
+}
+
+/**
+ *  Transform a literal into a runtime space pointer
+ *  @param  value
+ */
+void CCode::pointerDouble(double value)
+{
+    // create command
+    _out << "callbacks->transfer_double(userdata," << value << ")";
+}
+
+/**
+ *  Transform a literal into a runtime space pointer
+ *  @param  value
+ */
+void CCode::pointerBoolean(bool value)
+{
+    // create command
+    _out << "callbacks->transfer_boolean(userdata," << value << ")";
+}
 
 /**
  *  Negate the boolean expression

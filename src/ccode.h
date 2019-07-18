@@ -80,7 +80,7 @@ private:
     virtual void stringValue(const std::string &value) override;
     virtual void integerValue(integer_t value) override;
     virtual void doubleValue(double value) override;
-    virtual void booleanValue(bool value) override {}
+    virtual void booleanValue(bool value) override;
 
     /**
      *  Create a string, numeric or boolean constant for a variable
@@ -105,10 +105,10 @@ private:
      *  Transfer a constant to runtime space
      *  @param value
      */
-    virtual void pointerString(const std::string &value) override {}
-    virtual void pointerInteger(integer_t value) override {}
-    virtual void pointerDouble(double value) override {}
-    virtual void pointerBoolean(bool value) override {}
+    virtual void pointerString(const std::string &value) override;
+    virtual void pointerInteger(integer_t value) override;
+    virtual void pointerDouble(double value) override;
+    virtual void pointerBoolean(bool value) override;
 
     /**
      *  Negate the boolean expression
