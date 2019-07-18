@@ -161,16 +161,3 @@ TEST(Modifiers, ParametersDouble)
 
     compile(tpl);
 }
-
-TEST(Modifiers, ParametersLiteralInput)
-{
-    string input("{'teststring'|md5}");
-    Template tpl((Buffer(input)));
-
-    Data data;
-
-    string expectedOutput("d67c5cbf5b01c9f91932e3b8def5e5f8");
-    EXPECT_EQ(expectedOutput, tpl.process(data));
-
-    compile(tpl);
-}

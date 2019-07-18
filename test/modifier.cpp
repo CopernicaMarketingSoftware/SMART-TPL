@@ -725,3 +725,20 @@ TEST(Modifer, RangeNoArray)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, LiteralInput)
+{
+    string input("{'teststring'|md5}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+
+    string expectedOutput("d67c5cbf5b01c9f91932e3b8def5e5f8");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
