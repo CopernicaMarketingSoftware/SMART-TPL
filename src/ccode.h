@@ -80,7 +80,6 @@ private:
     virtual void stringValue(const std::string &value) override;
     virtual void integerValue(integer_t value) override;
     virtual void doubleValue(double value) override;
-    virtual void booleanValue(bool value) override;
 
     /**
      *  Create a string, numeric or boolean constant for a variable

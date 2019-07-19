@@ -436,17 +436,6 @@ void Bytecode::doubleValue(double value)
 }
 
 /**
- *  Create a boolean literal
- *  @param  value
- *  @note   +1 on the stack
- */
-void Bytecode::booleanValue(bool value)
-{
-    // push value
-    _stack.push(_function.new_constant(value, jit_type_sys_bool));
-}
-
-/**
  *  Create a string or integer constant for a variable
  *  @param  variable
  *  @note   +2 on the stack

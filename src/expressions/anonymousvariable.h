@@ -22,7 +22,7 @@ class AnonymousVariable : public Variable
 private:
     /**
      *  The actual value
-     *  @var    std::string
+     *  @var    std::unique_ptr
      */
     std::unique_ptr<Literal> _value;
 

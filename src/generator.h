@@ -97,7 +97,6 @@ public:
     virtual void stringValue(const std::string &value) = 0;
     virtual void integerValue(integer_t value) = 0;
     virtual void doubleValue(double value) = 0;
-    virtual void booleanValue(bool value) = 0;
 
     /**
      *  Create a string, numeric or boolean constant for a variable

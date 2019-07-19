@@ -303,14 +303,6 @@ void CCode::doubleValue(double value)
 }
 
 /**
- *  Create a boolean literal
- */
-void CCode::booleanValue(bool value)
-{
-    _out << (value ? 1 : 0);
-}
-
-/**
  *  Create a string constant for a variable
  *  @param  variable
  */
