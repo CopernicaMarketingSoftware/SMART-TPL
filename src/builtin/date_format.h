@@ -123,6 +123,7 @@ private:
 
     /**
      *  Helper function to process relative date intervals (like '+1 days')
+     *  For this functionality, we invoke timelib (https://github.com/derickr/timelib)
      *  @param  time
      *  @param  params
      *  @return VariantValue
@@ -130,97 +131,59 @@ private:
      */
     static VariantValue processRelative(const char *datetime, const SmartTpl::Parameters &params)
     {
-        // is it tomorrow?
-        if (strcasecmp(datetime, "tomorrow") == 0) return process(time(nullptr) + (24 * 60 * 60), params);
-
-        // is it yesterday?
-        if (strcasecmp(datetime, "yesterday") == 0) return process(time(nullptr) - (24 * 60 * 60), params);
-
-        // convert our buffer into a string
-        std::string input(datetime);
+        // create storage variables
+        timelib_time *parsed, *current;
+        timelib_error_container *errors;
         
-        // we need a regex to match our interval
-        std::regex interval("^(\\+|\\-)(\\d+)\\s+(second|minute|hour|day|week|month|year)[s]{0,1}$", std::regex_constants::icase);
+        // store information about utc timezone
+        timelib_tzinfo *tzi_utc;
 
-        // store matches
-        std::smatch matches;
+        // try to parse the provided time
+	    parsed = timelib_strtotime((char *)datetime, std::strlen(datetime), &errors, timelib_builtin_db(), timelib_parse_tzfile);
 
-        // do we have a match?
-        if (std::regex_search(input, matches, interval))
+        // if we have warnings or errors, parsing the date was not succesful
+	    if (errors->warning_count || errors->error_count) 
         {
-            // Get the current timestamp
-            time_t current = time(nullptr);
+            // clean up timelib variables
+            timelib_time_dtor(parsed);
+            timelib_error_container_dtor(errors);
 
-            // Get the amount of time units to shift
-            int shift = std::stoi(matches[2].str());
-
-            // If we have a decrement, negate the shift
-            if (strcasecmp(matches[1].str().data(), "-") == 0) shift *= -1;
-
-            // Get the time unit to change
-            const char *timeunit = matches[3].str().data(); 
-            
-            // Should we move seconds?
-            if (strcasecmp(timeunit, "second") == 0) return process(current + shift, params);
-
-            // Should we change minutes?
-            if (strcasecmp(timeunit, "minute") == 0) return process(current + (shift * 60), params);
-
-            // Should we add/remove hours?
-            if (strcasecmp(timeunit, "hour") == 0) return process(current + (shift * 60 * 60), params);
-
-            // Should we add / remove days?
-            if (strcasecmp(timeunit, "day") == 0) return process(current + (shift * 60 * 60 * 24), params);
-
-            // Should we add / remove weeks?
-            if (strcasecmp(timeunit, "week") == 0) return process(current + (shift * 60 * 60 * 24 * 7), params);
-
-            // If we are adding / removing months or years, we need a tm structure to calculate
-            tm *time_tm = gmtime(&current);
-
-            // Should we add / remove months?
-            if (strcasecmp(timeunit, "month") == 0)
-            {
-                // calculate the new month value
-                int month = time_tm->tm_mon + shift;
-                int year = time_tm->tm_year;
-
-                // make sure we're within boundaries
-                if (std::abs(month) > 11)
-                {
-                    // since we're working with ints, the increment in years
-                    // is the division of the months by 12, and the new month value
-                    // is the remainder of that division
-                    year += month / 12;
-                    month = month % 12;
-                }
-
-                // make sure the number is positive
-                if (month < 0)
-                {
-                    // add 12 months, and remove one year
-                    year -= 1; 
-                    month += 12;
-                }
-
-                // set the new values
-                time_tm->tm_mon = month;
-                time_tm->tm_year = year;
-            }
-
-            // Should we add / remove years
-            if (strcasecmp(timeunit, "year") == 0)
-            {
-                // set new value in tm struct, make sure we're within boundaries
-                time_tm->tm_year = std::max(0, time_tm->tm_year + shift);
-            }
-
-            // Recreate a timestamp from the structure and process it
-            return process(mktime(time_tm), params);
+            // no success
+            throw false;
         }
 
-        // no match
-        throw false;
+        // dummy error code storage
+        int tz_error;
+
+        // get utc timezone information
+        tzi_utc = timelib_parse_tzfile((char *) "UTC", timelib_builtin_db(), &tz_error);
+
+        // construct object for the current time
+        current = timelib_time_ctor();
+        
+        // set timezone 
+        timelib_set_timezone(current, tzi_utc);
+
+        // create unix timestamp from current time
+        timelib_unixtime2gmt(current, time(NULL));
+    
+        // to allow relative times, fill in the blanks in the parsed time
+        timelib_fill_holes(parsed, current, TIMELIB_NO_CLONE);
+
+        // update the utc timestamp in the parsed time object
+        timelib_update_ts(parsed, tzi_utc);
+
+        // get the timestamp
+        time_t timestamp = parsed->sse;
+
+        // clean up timelib variables
+        timelib_time_dtor(parsed);
+        timelib_time_dtor(current);
+        timelib_error_container_dtor(errors);
+        timelib_tzinfo_dtor(tzi_utc);
+
+        // process the timestamp
+        return process(timestamp, params);
     }
 
     

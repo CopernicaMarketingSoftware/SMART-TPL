@@ -34,6 +34,12 @@
 #include <openssl/evp.h>
 
 /**
+ *  Third party dependencies
+ */
+
+#include "../3rd-party/timelib/timelib.h"
+
+/**
  *  Public includes
  */
 
