@@ -102,15 +102,6 @@ private:
     virtual void pointerBoolean(const Expression *expression) override;
 
     /**
-     *  Transfer a constant to runtime space
-     *  @param value
-     */
-    virtual void pointerString(const std::string &value) override;
-    virtual void pointerInteger(integer_t value) override;
-    virtual void pointerDouble(double value) override;
-    virtual void pointerBoolean(bool value) override;
-
-    /**
      *  Negate the boolean expression
      *  @param  expression
      */

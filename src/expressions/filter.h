@@ -1,7 +1,7 @@
 /**
  *  Filter.h
  *
- *  A filter combines an expression with a number of modifiers
+ *  A filter combines a variable with a number of modifiers
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
  *  @copyright 2014 - 2019 Copernica BV

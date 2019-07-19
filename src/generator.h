@@ -119,15 +119,6 @@ public:
     virtual void pointerBoolean(const Expression *expression) = 0;
 
     /**
-     *  Transfer a constant to runtime space
-     *  @param value
-     */
-    virtual void pointerString(const std::string &value) = 0;
-    virtual void pointerInteger(integer_t value) = 0;
-    virtual void pointerDouble(double value) = 0;
-    virtual void pointerBoolean(bool value) = 0;
-
-    /**
      *  Negate the boolean expression
      *  @param  expression
      */

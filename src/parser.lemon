@@ -117,13 +117,7 @@ literal(A)          ::= MINUS INTEGER(B) . [UMINUS]                             
 literal(A)          ::= DOUBLE(B) .                                             { A = new SmartTpl::Internal::LiteralDouble(B); }
 literal(A)          ::= MINUS DOUBLE(B) . [UMINUS]                              { B->insert(0, 1, '-'); A = new SmartTpl::Internal::LiteralDouble(B); }
 literal(A)          ::= STRING(B) .                                             { A = new SmartTpl::Internal::LiteralString(B); }
-variable(A)         ::= STRING(B) PIPE modifiers(C) .                           { A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousStringVariable(B), C); }
-variable(A)         ::= INTEGER(B) PIPE modifiers(C) .                          { A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousIntegerVariable(B), C); }
-variable(A)         ::= MINUS INTEGER(B) PIPE modifiers(C) . [UMINUS]           { B->insert(0, 1, '-'); A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousIntegerVariable(B), C); }
-variable(A)         ::= DOUBLE(B) PIPE modifiers(C) .                           { A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousDoubleVariable(B), C); }
-variable(A)         ::= MINUS DOUBLE(B) PIPE modifiers(C) . [UMINUS]            { B->insert(0, 1, '-'); A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousDoubleVariable(B), C); }
-variable(A)         ::= TRUE PIPE modifiers(C) .                                { A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousBooleanVariable(true), C); }
-variable(A)         ::= FALSE PIPE modifiers(C) .                               { A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousBooleanVariable(false), C); }
+variable(A)         ::= literal(B) PIPE modifiers(C) .                          { A = new SmartTpl::Internal::Filter(new SmartTpl::Internal::AnonymousVariable(B), C); }
 variable(A)         ::= VARIABLE(B) .                                           { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralVariable(B); }
 variable(A)         ::= variable(B) LBRACK expr(C) RBRACK .                     { parent->setPersonalized(); A = new SmartTpl::Internal::VariableArrayAccess(B,C); }
 variable(A)         ::= variable(B) DOT IDENTIFIER(C) .                         { parent->setPersonalized(); A = new SmartTpl::Internal::LiteralArrayAccess(B,C); }

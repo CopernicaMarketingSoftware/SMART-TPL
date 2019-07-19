@@ -556,62 +556,6 @@ void Bytecode::pointerBoolean(const Expression *expression)
 }
 
 /**
- *  Convert a literal string to a pointer 
- *  @param value
- */
-void Bytecode::pointerString(const std::string &value)
-{
-    // add to stack
-    stringValue(value);
-
-    // get the size and buffer from the stack
-    jit_value size = pop();
-    jit_value buffer = pop();
-
-    // add to runtime space and push the pointer
-    _stack.push(_callbacks.transfer_string(_userdata, buffer, size));
-}
-
-/**
- *  Convert an integer value to a pointer
- *  @param  integer_t
- */
-void Bytecode::pointerInteger(integer_t value) 
-{
-    // add to stack
-    integerValue(value);
-
-    // pop the result and add its generated pointer to the stack
-    _stack.push(_callbacks.transfer_integer(_userdata, pop()));
-}
-
-/**
- *  Convert an integer value to a pointer
- *  @param  expression
- */
-void Bytecode::pointerDouble(double value)
-{
-    // add to stack
-    doubleValue(value);
-
-    // pop the result and add its generated pointer to the stack
-    _stack.push(_callbacks.transfer_double(_userdata, pop()));
-}
-
-/**
- *  Convert an integer value to a pointer
- *  @param  expression
- */
-void Bytecode::pointerBoolean(bool value)
-{
-    // add to stack
-    booleanValue(value);
-
-    // pop the result and add its generated pointer to the stack
-    _stack.push(_callbacks.transfer_boolean(_userdata, pop()));
-}
-
-/**
  *  Negate the boolean expression
  *  @param  expression
  *  @note   +1 on the stack

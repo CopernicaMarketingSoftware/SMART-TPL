@@ -21,19 +21,17 @@ class AnonymousVariable : public Variable
 {
 private:
     /**
-     *  The type of this anonymous variable
-     *  @var Type
+     *  The actual value
+     *  @var    std::string
      */
-    Type _type = Type::Value;
-
-protected:
-    /**
-     *  Protected constructor, since this class should only be constructed by
-     *  its (typed) children
-     */
-    AnonymousVariable(Type type): _type(type) {}
+    std::unique_ptr<Literal> _value;
 
 public:
+    /**
+     *  Create a anonymous variable from a literal
+     *  @param  literal
+     */
+    AnonymousVariable(Literal *contents) : _value(contents) {}
 
     /**
      *  Destructor
@@ -41,10 +39,20 @@ public:
     virtual ~AnonymousVariable() {}
 
     /**
-     *  The return type of the expression
+     *  The return type of the expression (we force a string for the modifiers)
      *  @return Type
      */
-    virtual Type type() const override { return _type; }
+    virtual Type type() const override { return Type::String; }
+
+     /**
+     *  Generate the output that leaves a pointer to the variable
+     *  @param  generator
+     */
+    virtual void pointer(Generator *generator) const override
+    {
+        // generate the code to get a variable pointer to a string
+        generator->pointerString(_value.get());
+    }
 };
 
 /**
