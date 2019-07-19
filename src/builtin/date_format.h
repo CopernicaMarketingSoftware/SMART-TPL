@@ -12,7 +12,6 @@
  *  Dependencies
  */
 #include <ctime>
-#include <regex>
 
 /**
  *  Set up namespace
