@@ -1,5 +1,4 @@
-FLAGS=-O0 -ggdb3 \
-	-Wall -Werror -Wextra -fPIC \
+FLAGS=-Wall -Werror -Wextra -fPIC \
 	-Wmaybe-uninitialized -Wmissing-field-initializers -Wshadow -Wno-unused-parameter \
 	-pedantic -Wno-implicit-fallthrough \
 	-DHAVE_STDINT_H -DHAVE_GETTIMEOFDAY -DHAVE_UNISTD_H -DHAVE_DIRENT_H -I.# -DDEBUG_PARSER
