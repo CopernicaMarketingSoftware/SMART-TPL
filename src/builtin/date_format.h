@@ -92,10 +92,10 @@ private:
         timelib_tzinfo *tzi_utc;
 
         // try to parse the provided time
-	    parsed = timelib_strtotime((char *)datetime, std::strlen(datetime), &errors, timelib_builtin_db(), timelib_parse_tzfile);
+        parsed = timelib_strtotime((char *)datetime, std::strlen(datetime), &errors, timelib_builtin_db(), timelib_parse_tzfile);
 
         // if we have warnings or errors, parsing the date was not succesful
-	    if (errors->warning_count || errors->error_count) 
+        if (errors->warning_count || errors->error_count) 
         {
             // clean up timelib variables
             timelib_time_dtor(parsed);
