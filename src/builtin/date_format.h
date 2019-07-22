@@ -75,60 +75,14 @@ private:
     }
 
     /**
-     *  Helper method to turn a datetime formatted by the user into a variant value
-     *  according to the preferred formatting
-     *  @param  time
-     *  @param  params
-     *  @return VariantValue
-     *  @throws false
-     */
-    static VariantValue process(const char *datetime, const SmartTpl::Parameters &params)
-    {
-        // possible formats
-        const char *formats[] = {
-            "%Y-%m-%d %H:%M:%S",            // 2013-03-13 12:50:00
-            "%a, %d %b %Y %H:%M:%S GMT",    // Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123
-            "%A, %d-%b-%y %H:%M:%S GMT",    // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
-            "%a %b %e %H:%M:%S %Y",         // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
-            "%Y-%m-%d",                     // 2013-03-13
-            nullptr
-        };
-        
-        // loop through the formats
-        for (int i=0; formats[i]; ++i)
-        {
-            // result variable
-            struct tm tm;
-            
-            // set everything to zero otherwise valgrind complains
-            memset(&tm, 0, sizeof(struct tm));
-
-            // try parsing the string
-            const char *result = strptime(datetime, formats[i], &tm);
-            
-            // proceed
-            if (!result || strlen(result) > 0) continue;
-            
-            // found a match
-            return process(mktime(&tm) - timezone, params);
-        }
-        
-        // was the current time supplied?
-        if (strcasecmp(datetime, "now") == 0) return process(time(nullptr), params);
-
-        // try to parse the datetime as a relative interval
-        return processRelative(datetime, params);
-    }
-
-    /**
-     *  Helper function to process relative date intervals (like '+1 days')
+     *  Helper function to process absolute and relative dates (like '+1 days')
      *  For this functionality, we invoke timelib (https://github.com/derickr/timelib)
      *  @param  time
      *  @param  params
      *  @return VariantValue
      *  @throws false
      */
-    static VariantValue processRelative(const char *datetime, const SmartTpl::Parameters &params)
+    static VariantValue process(const char *datetime, const SmartTpl::Parameters &params)
     {
         // create storage variables
         timelib_time *parsed, *current;
