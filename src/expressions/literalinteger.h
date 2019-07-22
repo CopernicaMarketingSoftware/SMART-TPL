@@ -24,17 +24,19 @@ private:
      */
     const integer_t _value;
 
+    /**
+     *  The provided string representation of the literal
+     *  @var    std::string
+     */
+    std::unique_ptr<const Token> _token;
+
 public:
     /**
      *  Constructor
      *  @param  token
      */
     LiteralInteger(Token *token)
-    : _value(std::strtoll(token->c_str(), nullptr, 10))
-    {
-        // we no longer need the token
-        delete token;
-    }
+    : _value(std::strtoll(token->c_str(), nullptr, 10)), _token(token) {}
 
     /**
      *  Destructor
@@ -54,7 +56,7 @@ public:
     virtual void toString(Generator *generator) const override
     {
         // create string literal
-        generator->stringValue(std::to_string(_value));
+        generator->stringValue(*_token);
     }
 
     /**
