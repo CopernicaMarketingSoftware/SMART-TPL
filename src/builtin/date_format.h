@@ -3,15 +3,19 @@
  *
  *  Built-in "|date_format" modifier
  *
- *  @author Tamas Elekes <tamas.elekes@copernica.com>
- *  @copyright 2018 - 2019 Copernica BV
+ *  @author     Tamas Elekes <tamas.elekes@copernica.com>
+ *  @author     David van Erkelens <david.vanerkelens@copernica.com>
+ *  @copyright  2018 - 2019 Copernica BV
  */
 
 /**
- *  Namespace
+ *  Dependencies
  */
 #include <ctime>
 
+/**
+ *  Set up namespace
+ */
 namespace SmartTpl { namespace Internal {
 
 /**
@@ -71,8 +75,8 @@ private:
     }
 
     /**
-     *  Helper method to turn a datetime formatted by the user into a variant value
-     *  according to the preferred formatting
+     *  Helper function to process absolute and relative dates (like '+1 days')
+     *  For this functionality, we invoke timelib (https://github.com/derickr/timelib)
      *  @param  time
      *  @param  params
      *  @return VariantValue
@@ -80,41 +84,61 @@ private:
      */
     static VariantValue process(const char *datetime, const SmartTpl::Parameters &params)
     {
-        // possible formats
-        const char *formats[] = {
-            "%Y-%m-%d %H:%M:%S",            // 2013-03-13 12:50:00
-            "%a, %d %b %Y %H:%M:%S GMT",    // Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123
-            "%A, %d-%b-%y %H:%M:%S GMT",    // Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, obsoleted by RFC 1036
-            "%a %b %e %H:%M:%S %Y",         // Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
-            "%Y-%m-%d",                     // 2013-03-13
-            nullptr
-        };
+        // create storage variables
+        timelib_time *parsed, *current;
+        timelib_error_container *errors;
         
-        // loop through the formats
-        for (int i=0; formats[i]; ++i)
-        {
-            // result variable
-            struct tm tm;
-            
-            // set everything to zero otherwise valgrind complains
-            memset(&tm, 0, sizeof(struct tm));
+        // store information about utc timezone
+        timelib_tzinfo *tzi_utc;
 
-            // try parsing the string
-            const char *result = strptime(datetime, formats[i], &tm);
-            
-            // proceed
-            if (!result || strlen(result) > 0) continue;
-            
-            // found a match
-            return process(mktime(&tm) - timezone, params);
+        // try to parse the provided time
+        parsed = timelib_strtotime((char *)datetime, std::strlen(datetime), &errors, timelib_builtin_db(), timelib_parse_tzfile);
+
+        // if we have warnings or errors, parsing the date was not succesful
+        if (errors->warning_count || errors->error_count) 
+        {
+            // clean up timelib variables
+            timelib_time_dtor(parsed);
+            timelib_error_container_dtor(errors);
+
+            // no success
+            throw false;
         }
+
+        // dummy error code storage
+        int tz_error;
+
+        // get utc timezone information
+        tzi_utc = timelib_parse_tzfile((char *) "UTC", timelib_builtin_db(), &tz_error);
+
+        // construct object for the current time
+        current = timelib_time_ctor();
         
-        // was the current time supplied?
-        if (strcasecmp(datetime, "now") == 0) return process(time(nullptr), params);
-        
-        // failed to handle
-        throw false;
+        // set timezone 
+        timelib_set_timezone(current, tzi_utc);
+
+        // create unix timestamp from current time
+        timelib_unixtime2gmt(current, time(NULL));
+    
+        // to allow relative times, fill in the blanks in the parsed time
+        timelib_fill_holes(parsed, current, TIMELIB_NO_CLONE);
+
+        // update the utc timestamp in the parsed time object
+        timelib_update_ts(parsed, tzi_utc);
+
+        // get the timestamp
+        time_t timestamp = parsed->sse;
+
+        // clean up timelib variables
+        timelib_time_dtor(parsed);
+        timelib_time_dtor(current);
+        timelib_error_container_dtor(errors);
+        timelib_tzinfo_dtor(tzi_utc);
+
+        // process the timestamp
+        return process(timestamp, params);
     }
+
     
 public:
     /**

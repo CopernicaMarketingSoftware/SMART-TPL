@@ -32,6 +32,7 @@
 #include <openssl/sha.h>
 #include <openssl/bio.h>
 #include <openssl/evp.h>
+#include <timelib.h>
 
 /**
  *  Public includes
