@@ -1,5 +1,5 @@
 COMPILER_FLAGS    = -Wall -g -O0 -pipe -std=c++11 -Wno-sign-compare
-LINKER_FLAGS      =
+LINKER_FLAGS      = 
 INC               = -I../ -I. -Igoogletest-release-1.8.0/googletest/include
 COMPILER          = g++
 LINKER            = g++
@@ -16,7 +16,7 @@ all: ${BINARY}
 	${COMPILER} ${COMPILER_FLAGS} ${INC} -c $< -o $@
 
 ${BINARY}: ${DEPS} main.cpp
-	${LINKER} ${LINKER_FLAGS} ${INC} -o ${BINARY} ${DEPS} libgtest.a -pthread ../libsmarttpl.so
+	${LINKER} ${LINKER_FLAGS} ${INC} -o ${BINARY} ${DEPS} libgtest.a -pthread ../libsmarttpl.so -ltimelib
 
 libgtest.a:
 	wget -q https://github.com/google/googletest/archive/release-1.8.0.tar.gz
