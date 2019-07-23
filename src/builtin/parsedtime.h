@@ -61,13 +61,13 @@ private:
 
         /**
          *  Get the internal representation
-         *  @return timelib_time *
+         *  @return timelib_tzinfo *
          */
         const timelib_tzinfo *internal() const { return _info; }
         
         /**
-         *  Cast to the internal structur
-         *  @return timelib_tzinfo
+         *  Cast to the internal structure
+         *  @return timelib_tzinfo *
          */
         operator const timelib_tzinfo * () const { return _info; }
     };
