@@ -177,6 +177,9 @@ public:
      */
     operator bool () const 
     {
+        // do we have an errors object?
+        if (_errors == nullptr) return true;
+
         // if there are no errors or warnings
         return _errors->warning_count == 0 && _errors->error_count == 0;
     }
@@ -187,6 +190,9 @@ public:
      */
     bool operator! () const 
     {
+        // do we have an errors object?
+        if (_errors == nullptr) return false;
+
         // if there are errors or warnings
         return _errors->warning_count > 0 || _errors->error_count > 0;
     }
