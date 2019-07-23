@@ -12,6 +12,7 @@
  *  Dependencies
  */
 #include <ctime>
+#include "parsedtime.h"
 
 /**
  *  Set up namespace
@@ -84,59 +85,11 @@ private:
      */
     static VariantValue process(const char *datetime, const SmartTpl::Parameters &params)
     {
-        // create storage variables
-        timelib_time *parsed, *current;
-        timelib_error_container *errors;
+        // parse the time
+        ParsedTime parsed(datetime);
         
-        // store information about utc timezone
-        timelib_tzinfo *tzi_utc;
-
-        // try to parse the provided time
-        parsed = timelib_strtotime((char *)datetime, std::strlen(datetime), &errors, timelib_builtin_db(), timelib_parse_tzfile);
-
-        // if we have warnings or errors, parsing the date was not succesful
-        if (errors->warning_count || errors->error_count) 
-        {
-            // clean up timelib variables
-            timelib_time_dtor(parsed);
-            timelib_error_container_dtor(errors);
-
-            // no success
-            throw false;
-        }
-
-        // dummy error code storage
-        int tz_error;
-
-        // get utc timezone information
-        tzi_utc = timelib_parse_tzfile((char *) "UTC", timelib_builtin_db(), &tz_error);
-
-        // construct object for the current time
-        current = timelib_time_ctor();
-        
-        // set timezone 
-        timelib_set_timezone(current, tzi_utc);
-
-        // create unix timestamp from current time
-        timelib_unixtime2gmt(current, time(NULL));
-    
-        // to allow relative times, fill in the blanks in the parsed time
-        timelib_fill_holes(parsed, current, TIMELIB_NO_CLONE);
-
-        // update the utc timestamp in the parsed time object
-        timelib_update_ts(parsed, tzi_utc);
-
-        // get the timestamp
-        time_t timestamp = parsed->sse;
-
-        // clean up timelib variables
-        timelib_time_dtor(parsed);
-        timelib_time_dtor(current);
-        timelib_error_container_dtor(errors);
-        timelib_tzinfo_dtor(tzi_utc);
-
-        // process the timestamp
-        return process(timestamp, params);
+        // was this a success? if not we use the current time
+        return process(parsed ? parsed : time(nullptr), params);
     }
 
     
