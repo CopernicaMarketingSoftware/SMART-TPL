@@ -77,7 +77,7 @@ COMPILER_FLAGS        = -Wall -c -I. -O2 -MD -pipe -std=c++11 -Wno-sign-compare 
 SHARED_COMPILER_FLAGS = -fPIC
 STATIC_COMPILER_FLAGS =
 LINKER_FLAGS          = -L.
-LIBRARIES             = -ljitplus -ljit -ldl -lboost_regex 3rd-party/timelib/timelib.a
+LIBRARIES             = -ljitplus -ljit -ldl -lboost_regex
 FLEX_FLAGS            =
 LEMON_FLAGS           =
 
@@ -153,21 +153,17 @@ all: ${SHARED_LIBRARY} ${STATIC_LIBRARY} ${PROGRAM}
 
 -include ${DEPENDENCIES}
 
-${SHARED_LIBRARY}: ${PARSER} ${TOKENIZERS} ${SHARED_LIBRARY_OBJECTS} | timelib
+${SHARED_LIBRARY}: ${PARSER} ${TOKENIZERS} ${SHARED_LIBRARY_OBJECTS}
 	${LINKER} ${LINKER_FLAGS} -Wl,-soname,libsmarttpl.so.${SONAME} -shared -o $@ ${SHARED_LIBRARY_OBJECTS} ${LIBRARIES}
 
-${STATIC_LIBRARY}: ${PARSER} ${TOKENIZERS} ${STATIC_LIBRARY_OBJECTS} | timelib
+${STATIC_LIBRARY}: ${PARSER} ${TOKENIZERS} ${STATIC_LIBRARY_OBJECTS}
 	${ARCHIVER} ${STATIC_LIBRARY} ${STATIC_LIBRARY_OBJECTS}
 
 ${PROGRAM}: ${PROGRAM_OBJECTS} ${SHARED_LIBRARY} 
-	${LINKER} ${LINKER_FLAGS} -o $@ ${PROGRAM_OBJECTS} -lsmarttpl
-
-timelib:
-	cd 3rd-party/timelib && $(MAKE)
+	${LINKER} ${LINKER_FLAGS} -o $@ ${PROGRAM_OBJECTS} -lsmarttpl -ltimelib
 
 clean:
 	${RM} ${GENERATED} ${SHARED_LIBRARY_OBJECTS} ${STATIC_LIBRARY_OBJECTS} ${PROGRAM_OBJECTS} ${LIBRARY} ${PROGRAM}
-	cd 3rd-party/timelib && $(MAKE) clean
 
 ${TOKENIZERS}: ${TOKENIZERS:%.cpp=%.flex}
 	${FLEX} ${FLEX_FLAGS} ${@:%.cpp=%.flex}
