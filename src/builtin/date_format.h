@@ -87,9 +87,12 @@ private:
     {
         // parse the time
         ParsedTime parsed(datetime);
+
+        // If parsing was unsuccessful, throw so that the original string is kept
+        if (!parsed) throw false;
         
         // was this a success? if not we use the current time
-        return process(parsed ? parsed : time(nullptr), params);
+        return process(parsed, params);
     }
 
     

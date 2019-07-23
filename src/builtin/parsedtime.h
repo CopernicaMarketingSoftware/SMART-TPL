@@ -71,12 +71,6 @@ private:
          */
         operator const timelib_tzinfo * () const { return _info; }
     };
-
-    /**
-     *  The actual time that was parsed
-     *  @var timelib_time
-     */
-    timelib_time *_time = nullptr;
     
     /**
      *  Errors that accured while parsing
@@ -84,6 +78,12 @@ private:
      */
     timelib_error_container *_errors = nullptr;
     
+    /**
+     *  The actual time that was parsed
+     *  @var timelib_time
+     */
+    timelib_time *_time = nullptr;
+
     /**
      *  Get the internal representation
      *  @return timelib_time *
@@ -95,9 +95,8 @@ private:
      *  @return timelib_time *
      */
     operator const timelib_time * () const { return _time; }
-    
-    
-private:
+
+
     /**
      *  Constructor to get the current time
      *  @param  timezone        Timezone info
