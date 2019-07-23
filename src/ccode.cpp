@@ -397,7 +397,7 @@ void CCode::pointerString(const Expression *expression)
     // open command
     _out << "callbacks->transfer_string(userdata,";
 
-    // turn the expression into a boolean
+    // turn the expression into a string
     expression->toString(this);    
     
     // finalize command
@@ -413,7 +413,7 @@ void CCode::pointerInteger(const Expression *expression)
     // open command
     _out << "callbacks->transfer_integer(userdata,";
 
-    // turn the expression into a boolean
+    // turn the expression into an integer
     expression->toInteger(this);    
     
     // finalize command
@@ -429,7 +429,7 @@ void CCode::pointerDouble(const Expression *expression)
     // open command
     _out << "callbacks->transfer_double(userdata,";
 
-    // turn the expression into a boolean
+    // turn the expression into a double
     expression->toDouble(this);    
     
     // finalize command
@@ -451,7 +451,6 @@ void CCode::pointerBoolean(const Expression *expression)
     // finalize command
     _out << ")";
 }
-
 
 /**
  *  Negate the boolean expression

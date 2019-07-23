@@ -109,7 +109,7 @@ public:
     virtual void variable(const Variable *variable) = 0;
 
     /**
-     *  Move a expression to the runtime space
+     *  Move a typed expression to the runtime space
      *  @param  expression
      */
     virtual void pointerString(const Expression *expression) = 0;

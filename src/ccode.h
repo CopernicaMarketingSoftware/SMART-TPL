@@ -92,7 +92,7 @@ private:
     virtual void variable(const Variable *variable) override;
 
     /**
-     *  Move a expression to the runtime space
+     *  Move a typed expression to the runtime space
      *  @param  expression
      */
     virtual void pointerString(const Expression *expression) override;

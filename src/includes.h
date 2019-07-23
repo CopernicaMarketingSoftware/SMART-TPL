@@ -129,6 +129,7 @@
 #include "expressions/literalinteger.h"
 #include "expressions/literaldouble.h"
 #include "expressions/literalstring.h"
+#include "expressions/anonymousvariable.h"
 #include "expressions/filter.h"
 #include "expressions/booleaninverter.h"
 #include "statements/statement.h"
