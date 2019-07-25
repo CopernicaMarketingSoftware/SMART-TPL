@@ -105,6 +105,7 @@
 #include "builtin/substr.h"
 #include "builtin/strstr.h"
 #include "builtin/strpos.h"
+#include "builtin/number_format.h"
 #include "builtin/urlencode.h"
 #include "builtin/urldecode.h"
 #include "builtin/md5.h"

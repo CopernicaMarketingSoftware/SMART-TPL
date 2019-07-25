@@ -41,6 +41,7 @@ static Internal::RegexReplaceModifier    regex_replace;
 static Internal::SubStrModifier          substr;
 static Internal::StrPosModifier          strpos;
 static Internal::StrStrModifier          strstr;
+static Internal::NumberFormatModifier    number_format;
 static Internal::DateFormatModifier      date_format;
 static Internal::UrlencodeModifier       urlencode;
 static Internal::UrldecodeModifier       urldecode;
@@ -81,6 +82,7 @@ Data::Data()
               {"substr",           &substr},
               {"strstr",           &strstr},
               {"strpos",           &strpos},
+              {"number_format",    &number_format},
               {"date_format",      &date_format},
               {"urlencode",        &urlencode},
               {"urldecode",        &urldecode},
