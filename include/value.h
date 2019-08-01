@@ -51,15 +51,15 @@ public:
 
     /**
      *  Convert the variable to a numeric value (this is a deprecated method)
-     *  @return integer_t
+     *  @return numeric_t
      */
-    virtual integer_t toNumeric() const = 0;
+    virtual numeric_t toNumeric() const { return 0; };
     
     /**
      *  Alias for the toNumeric() function that is used internally
      *  @return integer_t
      */
-    integer_t toInteger() const { return toNumeric(); }
+    virtual integer_t toInteger() const { return toNumeric(); }
 
     /**
      *  Convert the variable to a boolean value
