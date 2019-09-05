@@ -408,7 +408,11 @@ public:
 
     /**
      *  Access a member of an array based on an variable index
-     *  @param ....
+     *  @param  userdata    Pointer to user-supplied data
+     *  @param  parent      Pointer to array we're getting a member of
+     *  @param  index       Pointer to variable we're using as index
+     *  @return jit_value   The new variable pointer
+     *  @see    smart_tpl_member_at_variable
      */
     jit_value member_at_variable(const jit_value &userdata, const jit_value &parent, const jit_value &index)
     {
