@@ -155,12 +155,8 @@ const void *smart_tpl_member(void *userdata, const void *variable, const char *n
     // convert the variable to a variable object
     auto *var = (const Value *)variable;
 
-    std::cout << "Getting member: " << name << std::endl;
-
     // fetch the member
     auto member = var->member(name, size);
-
-    // std::cout << "That is member" << member << std::endl;
 
     // Allocate it on the heap so we can return the pointer to it
     auto *output = new VariantValue(member);
@@ -201,7 +197,10 @@ const void* smart_tpl_member_at(void* userdata, const void* variable, size_t pos
 
 /**
  *  Retrieve a pointer to a member at a position indicated by a variable
- *  @aram .....
+ *  @param  userdata        pointer to user-supplied data
+ *  @param  parent          pointer to the array we're accessing
+ *  @param  index           pointer to variable describing the index
+ *  @return                 pointer to a new variable
  */
 const void* smart_tpl_member_at_variable(void *userdata, const void *parent, const void *index)
 {
@@ -209,16 +208,34 @@ const void* smart_tpl_member_at_variable(void *userdata, const void *parent, con
     auto *var = (const Value *)parent;
     auto *idx = (const Value *)index;
 
-    // @todo string support
+    // container for the output
+    VariantValue *output;
 
-    // get the integer representation of the value
-    integer_t position = idx->toInteger();
+    // Can we use the index in an integer way?
+    if (idx->integerIndex()) 
+    {
+        // Get the position
+        integer_t position = idx->toInteger();
 
-    // fetch the member
-    auto member = var->member(position);
+        // fetch the member
+        auto member = var->member(position);
 
-    // Allocate it on the heap so we can return the pointer to it
-    auto *output = new VariantValue(member);
+        // Allocate it on the heap so we can return the pointer to it
+        output = new VariantValue(member);
+    }
+
+    // We are going to use a string index
+    else
+    {
+        // Convert to string
+        std::string key = idx->toString();
+
+        // fetch the member
+        auto member = var->member(key.data(), key.size());
+
+        // Allocate it on the heap so we can return the pointer to it
+        output = new VariantValue(member);
+    }
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;

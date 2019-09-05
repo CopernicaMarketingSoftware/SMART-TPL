@@ -44,6 +44,13 @@ public:
     virtual bool arithmeticFloat() const { return false; }
 
     /**
+     *  If this value is used as the index to access an element in another variable,
+     *  can we then treat it as an integer index?
+     *  @return bool
+     */
+    virtual bool integerIndex() const { return false; }
+
+    /**
      *  Convert the value to a string
      *  @return std::string
      */

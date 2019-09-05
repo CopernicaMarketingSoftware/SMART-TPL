@@ -348,7 +348,6 @@ void Bytecode::condition(const Expression *expression, const Statements *ifstate
  */
 void Bytecode::varPointer(const Variable *parent, const std::string &name)
 {
-    std::cout << "Deze toch niet?" << std::endl;
     // we need a constant of the name, and the name size
     jit_value namevalue = _function.new_constant((void *)name.data(), jit_type_void_ptr);
     jit_value namesize = _function.new_constant(name.size(), jit_type_sys_ulonglong);
@@ -369,7 +368,6 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
     // If the expression if an integer, it's easy to get the member at that position
     if (expression->type() == Expression::Type::Integer)
     {
-        std::cout << "Expression type int" << std::endl;
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
         _stack.push(_callbacks.member_at(_userdata, pointer(parent), integerExpression(expression)));
