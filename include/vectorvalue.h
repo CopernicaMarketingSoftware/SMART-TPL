@@ -83,6 +83,7 @@ public:
      */
     virtual VariantValue member(const char *name, size_t size) const override
     {
+        std::cout << "deze?" << std::endl;
         return nullptr;
     }
 

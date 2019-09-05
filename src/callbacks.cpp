@@ -23,6 +23,7 @@ SignatureCallback Callbacks::_output_boolean({ jit_type_void_ptr, jit_type_sys_l
 SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_double });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
+SignatureCallback Callbacks::_member_at_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_integer({ jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_double({ jit_type_void_ptr, jit_type_sys_double }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
@@ -154,8 +155,12 @@ const void *smart_tpl_member(void *userdata, const void *variable, const char *n
     // convert the variable to a variable object
     auto *var = (const Value *)variable;
 
+    std::cout << "Getting member: " << name << std::endl;
+
     // fetch the member
     auto member = var->member(name, size);
+
+    // std::cout << "That is member" << member << std::endl;
 
     // Allocate it on the heap so we can return the pointer to it
     auto *output = new VariantValue(member);
@@ -179,6 +184,35 @@ const void* smart_tpl_member_at(void* userdata, const void* variable, size_t pos
 {
     // convert the variable to a value object
     auto *var = (const Value *)variable;
+
+    // fetch the member
+    auto member = var->member(position);
+
+    // Allocate it on the heap so we can return the pointer to it
+    auto *output = new VariantValue(member);
+
+    // Give the pointer to our handler so he can manage the Variant pointer
+    auto *handler = (Handler *) userdata;
+    handler->manageValue(output);
+
+    // return the output
+    return output;
+}
+
+/**
+ *  Retrieve a pointer to a member at a position indicated by a variable
+ *  @aram .....
+ */
+const void* smart_tpl_member_at_variable(void *userdata, const void *parent, const void *index)
+{
+    // convert both variables to value objects
+    auto *var = (const Value *)parent;
+    auto *idx = (const Value *)index;
+
+    // @todo string support
+
+    // get the integer representation of the value
+    integer_t position = idx->toInteger();
 
     // fetch the member
     auto member = var->member(position);

@@ -33,7 +33,9 @@ public:
      */
     VariableArrayAccess(Variable *variable, Expression *key) :
         ArrayAccess(variable),
-        _key(key) {}
+        _key(key) {
+            std::cout << "VariableArrayAccess" << std::endl;
+        }
 
     /**
      *  Destructor
