@@ -26,7 +26,7 @@ public:
     /**
      *  Destructor
      */
-    virtual ~NullValue() {};
+    virtual ~NullValue() {}
 
     /**
      *  Convert the value to a string
@@ -35,7 +35,7 @@ public:
     virtual std::string toString() const override
     {
         return "";
-    };
+    }
 
     /**
      *  Convert the variable to a numeric value
@@ -44,7 +44,7 @@ public:
     virtual integer_t toNumeric() const override
     {
         return 0;
-    };
+    }
 
     /**
      *  Convert the variable to a boolean value
@@ -53,7 +53,7 @@ public:
     virtual bool toBoolean() const override
     {
         return false;
-    };
+    }
 
     /**
      *  Convert the variable to a floating point value
@@ -62,7 +62,16 @@ public:
     virtual double toDouble() const override
     {
         return 0.0;
-    };
+    }
+
+    /**
+     *  Get access to the amount of members this value has
+     *  @return size_t
+     */
+    virtual size_t memberCount() const override
+    {
+        return 0;
+    }
 
     /**
      *  Get access to a member value
@@ -78,21 +87,33 @@ public:
     }
 
     /**
-     *  Get access to the amount of members this value has
-     *  @return size_t
-     */
-    virtual size_t memberCount() const override
-    {
-        return 0;
-    }
-
-    /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
     virtual VariantValue member(size_t position) const override
     {
+        return nullptr;
+    }
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param  position    Position of the item we want to retrieve
+     *  @return VariantValue
+     */
+    virtual VariantValue member(const Value &position) const override
+    {
+        return nullptr;
+    }
+
+    /**
+     *  Use this value as index of another parent value
+     *  @param  value       the value in which to look for this key
+     *  @return VariantValue
+     */
+    virtual VariantValue lookupIn(const Value &value) const override
+    {
+        // it makes no sense to use null to lookup inside another value
         return nullptr;
     }
 

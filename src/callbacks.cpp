@@ -208,34 +208,11 @@ const void* smart_tpl_member_at_variable(void *userdata, const void *parent, con
     auto *var = (const Value *)parent;
     auto *idx = (const Value *)index;
 
-    // container for the output
-    VariantValue *output;
-
-    // Can we use the index in an integer way?
-    if (idx->integerIndex()) 
-    {
-        // Get the position
-        integer_t position = idx->toInteger();
-
-        // fetch the member
-        auto member = var->member(position);
-
-        // Allocate it on the heap so we can return the pointer to it
-        output = new VariantValue(member);
-    }
-
-    // We are going to use a string index
-    else
-    {
-        // Convert to string
-        std::string key = idx->toString();
-
-        // fetch the member
-        auto member = var->member(key.data(), key.size());
-
-        // Allocate it on the heap so we can return the pointer to it
-        output = new VariantValue(member);
-    }
+    // fetch the member
+    auto member = var->member(*idx);
+      
+    // Allocate it on the heap so we can return the pointer to it
+    auto *output = new VariantValue(member);
 
     // Give the pointer to our handler so he can manage the Variant pointer
     auto *handler = (Handler *) userdata;

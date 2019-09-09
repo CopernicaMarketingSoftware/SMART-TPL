@@ -136,6 +136,15 @@ public:
     }
 
     /**
+     *  Get access to the amount of members this value has
+     */
+    size_t memberCount() const override
+    {
+        // callbacks only return scalar variables without members
+        return 0;
+    }
+
+    /**
      *  Get access to a member value
      *
      *  @param  name        name of the member
@@ -149,15 +158,6 @@ public:
     }
 
     /**
-     *  Get access to the amount of members this value has
-     */
-    size_t memberCount() const override
-    {
-        // callbacks only return scalar variables without members
-        return 0;
-    }
-
-    /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return VariantValue
@@ -167,6 +167,28 @@ public:
         // callbacks can only return scalar values, members will never
         // be retrieved
         return nullptr;
+    }
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param  position    Position of the item we want to retrieve
+     *  @return VariantValue
+     */
+    virtual VariantValue member(const Value &position) const override
+    {
+        // callbacks only return scalar values without members
+        return nullptr;
+    }
+
+    /**
+     *  Use this value as index of another parent value
+     *  @param  value       the value in which to look for this key
+     *  @return VariantValue
+     */
+    virtual VariantValue lookupIn(const Value &value) const override
+    {
+        // get member via integer
+        return value.member(this->toInteger());
     }
 
     /**

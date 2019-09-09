@@ -44,13 +44,6 @@ public:
     virtual bool arithmeticFloat() const { return false; }
 
     /**
-     *  If this value is used as the index to access an element in another variable,
-     *  can we then treat it as an integer index?
-     *  @return bool
-     */
-    virtual bool integerIndex() const { return false; }
-
-    /**
      *  Convert the value to a string
      *  @return std::string
      */
@@ -81,6 +74,12 @@ public:
     virtual double toDouble() const = 0;
 
     /**
+     *  Get access to the amount of members this value has
+     *  @return size_t
+     */
+    virtual size_t memberCount() const = 0;
+
+    /**
      *  Get access to a member value
      *  @param  name        name of the member
      *  @param  size        size of the name
@@ -89,17 +88,25 @@ public:
     virtual VariantValue member(const char *name, size_t size) const = 0;
 
     /**
-     *  Get access to the amount of members this value has
-     *  @return size_t
+     *  Get access to a member at a certain position
+     *  @param  position    Position of the item we want to retrieve
+     *  @return VariantValue
      */
-    virtual size_t memberCount() const = 0;
+    virtual VariantValue member(size_t position) const = 0;
 
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return VariantValue
      */
-    virtual VariantValue member(size_t position) const = 0;
+    virtual VariantValue member(const Value &position) const = 0;
+
+    /**
+     *  Use this value as index of another parent value
+     *  @param  value       the value in which to look for this key
+     *  @return VariantValue
+     */
+    virtual VariantValue lookupIn(const Value &value) const = 0;
 
     /**
      *  Create a new iterator that allows you to iterate over the subvalues
