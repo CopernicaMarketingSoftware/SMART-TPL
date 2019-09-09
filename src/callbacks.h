@@ -24,7 +24,7 @@ void        smart_tpl_output_boolean        (void *userdata, int value);
 void        smart_tpl_output_double         (void *userdata, double value);
 const void *smart_tpl_member                (void *userdata, const void *variable, const char *name, size_t size);
 const void *smart_tpl_member_at             (void *userdata, const void *variable, size_t position);
-const void *smart_tpl_member_at_variable    (void *userdata, const void *parent, const void *index);
+const void *smart_tpl_member_at_value       (void *userdata, const void *parent, const void *index);
 const void *smart_tpl_transfer_integer      (void *userdata, integer_t data);
 const void *smart_tpl_transfer_double       (void *userdata, double data);
 const void *smart_tpl_transfer_string       (void *userdata, const char *buffer, size_t length);
@@ -104,9 +104,9 @@ private:
     /**
      *  Signatures to access an array
      */
-    static SignatureCallback _member;
-    static SignatureCallback _member_at_variable;
-    static SignatureCallback _member_at;
+    static SignatureCallback _member;           // $variable["member"]
+    static SignatureCallback _member_at;        // $variable[3]
+    static SignatureCallback _member_at_value;  // $variable[$x]
 
     /**
      *  Signature of the callbacks to transfer constants to runtime space
@@ -412,9 +412,9 @@ public:
      *  @param  parent      Pointer to array we're getting a member of
      *  @param  index       Pointer to variable we're using as index
      *  @return jit_value   The new variable pointer
-     *  @see    smart_tpl_member_at_variable
+     *  @see    smart_tpl_member_at_value
      */
-    jit_value member_at_variable(const jit_value &userdata, const jit_value &parent, const jit_value &index)
+    jit_value member_at_value(const jit_value &userdata, const jit_value &parent, const jit_value &index)
     {
         // Construct the arguments
         jit_value_t args[] = {
@@ -424,7 +424,7 @@ public:
         };
 
         // create the instruction
-        return _function->insn_call_native("smart_tpl_member_at_variable", (void *)smart_tpl_member_at_variable, _member_at_variable.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
+        return _function->insn_call_native("smart_tpl_member_at_value", (void *)smart_tpl_member_at_value, _member_at_value.signature(), args, sizeof(args)/sizeof(jit_value_t), 0);
     }
 
     /**

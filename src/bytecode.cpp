@@ -384,7 +384,7 @@ void Bytecode::varPointer(const Variable *parent, const Expression *expression)
         auto variable = pop();
 
         // Get the variable from runtime space
-        _stack.push(_callbacks.member_at_variable(_userdata, pointer(parent), variable));
+        _stack.push(_callbacks.member_at_value(_userdata, pointer(parent), variable));
     }
 
     // Otherwise, treat the expression as a string (which it might be, actually)

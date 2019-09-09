@@ -242,8 +242,8 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
     }
     else if (expression->type() == Expression::Type::Value)
     {
-        // call the member_at_variable() function
-        _out << "callbacks->member_at_variable(userdata,";
+        // call the member_at_value() function
+        _out << "callbacks->member_at_value(userdata,";
 
         // generate var pointer to the array
         parent->pointer(this);
@@ -252,7 +252,7 @@ void CCode::varPointer(const Variable *parent, const Expression *expression)
         // generate a pointer to the index variable
         expression->toPointer(this);
 
-        // end the member_at_variable call
+        // end the member_at_value call
         _out << ')';
 
     }

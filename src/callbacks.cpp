@@ -23,7 +23,7 @@ SignatureCallback Callbacks::_output_boolean({ jit_type_void_ptr, jit_type_sys_l
 SignatureCallback Callbacks::_output_double({ jit_type_void_ptr, jit_type_sys_double });
 SignatureCallback Callbacks::_member({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_member_at({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
-SignatureCallback Callbacks::_member_at_variable({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
+SignatureCallback Callbacks::_member_at_value({ jit_type_void_ptr, jit_type_void_ptr, jit_type_void_ptr }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_integer({ jit_type_void_ptr, jit_type_sys_longlong }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_double({ jit_type_void_ptr, jit_type_sys_double }, jit_type_void_ptr);
 SignatureCallback Callbacks::_transfer_string({ jit_type_void_ptr, jit_type_void_ptr, jit_type_sys_ulonglong }, jit_type_void_ptr);
@@ -202,7 +202,7 @@ const void* smart_tpl_member_at(void* userdata, const void* variable, size_t pos
  *  @param  index           pointer to variable describing the index
  *  @return                 pointer to a new variable
  */
-const void* smart_tpl_member_at_variable(void *userdata, const void *parent, const void *index)
+const void* smart_tpl_member_at_value(void *userdata, const void *parent, const void *index)
 {
     // convert both variables to value objects
     auto *var = (const Value *)parent;
