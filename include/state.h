@@ -31,7 +31,6 @@ public:
      */
     virtual VariantValue member(const char *name, size_t size) const override
     {
-        std::cout << "state member" << std::endl;
         // check the member
         if (size == 3 && strncmp(name, "now", 3) == 0) return int64_t(time(nullptr));
         
