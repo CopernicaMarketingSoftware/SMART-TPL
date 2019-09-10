@@ -74,48 +74,6 @@ public:
     }
 
     /**
-     *  Get access to the amount of members this value has
-     *  @return size_t
-     */
-    virtual size_t memberCount() const override
-    {
-        return 0;
-    }
-
-    /**
-     *  Get access to a member value
-     *
-     *  @param  name        name of the member
-     *  @param  size        size of the name
-     *  @return Variant
-     *
-     */
-    virtual VariantValue member(const char *name, size_t size) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  Get access to a member at a certain position
-     *  @param  position    Position of the item we want to retrieve
-     *  @return Variant
-     */
-    virtual VariantValue member(size_t position) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  Get access to a member at a certain position
-     *  @param  position    Position of the item we want to retrieve
-     *  @return VariantValue
-     */
-    virtual VariantValue member(const Value &position) const override
-    {
-        return nullptr;
-    }
-
-    /**
      *  Use this value as index of another parent value
      *  @param  value       the value in which to look for this key
      *  @return VariantValue
@@ -124,18 +82,6 @@ public:
     {
         // get member via integer
         return value.member(this->toInteger());
-    }
-
-    /**
-     *  Create a new iterator that allows you to iterate over the subvalues
-     *  feel free to return nullptr if you don't want to be able to iterate
-     *  over your type
-     *
-     *  @return Newly allocated Iterator
-     */
-    virtual Iterator *iterator() const override
-    {
-        return nullptr;
     }
 };
 

@@ -30,6 +30,13 @@ class VariantValue;
  */
 class Value
 {
+private:
+    /**
+     *  Empty string object to return
+     *  @var std::string
+     */
+    std::string _empty;
+
 public:
     /**
      *  Destructor
@@ -41,43 +48,43 @@ public:
      *  treated as a floating point number, or as a regular integer?
      *  @return bool
      */
-    virtual bool arithmeticFloat() const { return false; }
+    virtual bool arithmeticFloat() const;
 
     /**
      *  Convert the value to a string
      *  @return std::string
      */
-    virtual std::string toString() const = 0;
+    virtual std::string toString() const;
 
     /**
      *  Convert the variable to a numeric value (this is a deprecated method)
      *  @return numeric_t
      */
-    virtual numeric_t toNumeric() const { return 0; };
+    virtual numeric_t toNumeric() const;
     
     /**
-     *  Alias for the toNumeric() function that is used internally
+     *  Convert the variable to an integer value
      *  @return integer_t
      */
-    virtual integer_t toInteger() const { return toNumeric(); }
+    virtual integer_t toInteger() const;
 
     /**
      *  Convert the variable to a boolean value
      *  @return bool
      */
-    virtual bool toBoolean() const = 0;
+    virtual bool toBoolean() const;
 
     /**
      *  Convert the variable to a floating point value
      *  @return double
      */
-    virtual double toDouble() const = 0;
+    virtual double toDouble() const;
 
     /**
      *  Get access to the amount of members this value has
      *  @return size_t
      */
-    virtual size_t memberCount() const = 0;
+    virtual size_t memberCount() const;
 
     /**
      *  Get access to a member value
@@ -85,28 +92,28 @@ public:
      *  @param  size        size of the name
      *  @return VariantValue
      */
-    virtual VariantValue member(const char *name, size_t size) const = 0;
+    virtual VariantValue member(const char *name, size_t size) const;
 
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return VariantValue
      */
-    virtual VariantValue member(size_t position) const = 0;
+    virtual VariantValue member(size_t position) const;
 
     /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return VariantValue
      */
-    virtual VariantValue member(const Value &position) const = 0;
+    virtual VariantValue member(const Value &position) const;
 
     /**
      *  Use this value as index of another parent value
      *  @param  value       the value in which to look for this key
      *  @return VariantValue
      */
-    virtual VariantValue lookupIn(const Value &value) const = 0;
+    virtual VariantValue lookupIn(const Value &value) const;
 
     /**
      *  Create a new iterator that allows you to iterate over the subvalues
@@ -115,7 +122,7 @@ public:
      *
      *  @return Newly allocated Iterator
      */
-    virtual Iterator *iterator() const = 0;
+    virtual Iterator *iterator() const;
 };
 
 /**
