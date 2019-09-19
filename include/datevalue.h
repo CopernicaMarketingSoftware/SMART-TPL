@@ -137,57 +137,6 @@ public:
      *  @return double
      */
     double toDouble() const override { return toNumeric(); };
-
-    /**
-     *  Convert the variable to a boolean value
-     *  @return bool
-     */
-    bool toBoolean() const override
-    {
-        return false;
-    }
-
-    /**
-     *  Get access to a member variable
-     *
-     *  @param  name        name of the member
-     *  @param  size        size of the name
-     *  @return VariantValue
-     */
-    VariantValue member(const char *name, size_t size) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  Get access to the amount of members this value has
-     */
-    size_t memberCount() const override
-    {
-        return 0;
-    }
-
-    /**
-     *  Get access to a member at a certain position
-     *  @param  position    Position of the item we want to retrieve
-     *  @return VariantValue
-     */
-    VariantValue member(size_t position) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  Create a new iterator that allows you to iterate over the subvalues
-     *  feel free to return nullptr if you don't want to be able to iterate
-     *  over your type
-     *
-     *  @return Newly allocated Iterator
-     */
-    Iterator *iterator() const override
-    {
-        return nullptr;
-    }
 };
 
 /**

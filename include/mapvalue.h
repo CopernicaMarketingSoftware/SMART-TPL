@@ -44,7 +44,7 @@ public:
     virtual std::string toString() const override
     {
         return "";
-    };
+    }
 
     /**
      *  Convert the variable to an integer value
@@ -53,7 +53,7 @@ public:
     virtual integer_t toNumeric() const override
     {
         return 0;
-    };
+    }
 
     /**
      *  Convert the variable to a boolean value
@@ -62,7 +62,7 @@ public:
     virtual bool toBoolean() const override
     {
         return !_value.empty();
-    };
+    }
 
     /**
      *  Convert the variable to a floating point value
@@ -71,7 +71,16 @@ public:
     virtual double toDouble() const override
     {
         return 0.0;
-    };
+    }
+
+    /**
+     *  Get access to the amount of members this value has
+     *  @return size_t
+     */
+    virtual size_t memberCount() const override
+    {
+        return _value.size();
+    }
 
     /**
      *  Get access to a member value
@@ -94,32 +103,42 @@ public:
     }
 
     /**
-     *  Get access to the amount of members this value has
-     *  @return size_t
-     */
-    virtual size_t memberCount() const override
-    {
-        return _value.size();
-    }
-
-    /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
      */
     virtual VariantValue member(size_t position) const override
     {
-        // if position is higher than the amount of items in the map we just return nullptr
-        if (position >= memberCount()) return nullptr;
+        // create string from position
+        std::string key(std::to_string(position));
 
-        // get an iterator to the begin of the map
-        auto iter = _value.begin();
+        // pass on
+        return member(key.data(), key.size());
+    }
 
-        // advance it by position
-        std::advance(iter, position);
+    /**
+     *  Get access to a member at a certain position
+     *  @param  position    Position of the item we want to retrieve
+     *  @return VariantValue
+     */
+    virtual VariantValue member(const Value &position) const override
+    {
+        // get string representation of the position
+        auto key = position.toString();
 
-        // return the value
-        return iter->second;
+        // pass on
+        return member(key.data(), key.size());
+    }
+
+    /**
+     *  Use this value as index of another parent value
+     *  @param  value       the value in which to look for this key
+     *  @return VariantValue
+     */
+    virtual VariantValue lookupIn(const Value &value) const override
+    {
+        // we can not use a map to access another variable
+        return nullptr;
     }
 
     /**

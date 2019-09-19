@@ -28,19 +28,23 @@ public:
      *  Constructors
      */
     DoubleValue(double value) : _value(value) {}
-    DoubleValue(float value) : _value(value) {};
+    DoubleValue(float value) : _value(value) {}
 
     /**
      *  Destructor
      */
-    virtual ~DoubleValue() {};
+    virtual ~DoubleValue() {}
 
     /**
      *  If this type was used in an arithmetric operation, should it then be
      *  treated as a floating point number, or as a regular integer?
      *  @return bool
      */
-    virtual bool arithmeticFloat() const override { return true; }
+    virtual bool arithmeticFloat() const override 
+    {
+        // of course double values should be treated as floating point numbers
+        return true;
+    }
 
     /**
      *  Convert the value to a string
@@ -62,7 +66,7 @@ public:
 
         // Create string object
         return std::string(buffer, written);
-    };
+    }
 
     /**
      *  Convert the variable to an integer value
@@ -71,7 +75,7 @@ public:
     virtual integer_t toNumeric() const override
     {
         return _value;
-    };
+    }
 
     /**
      *  Convert the variable to a boolean value
@@ -80,7 +84,7 @@ public:
     virtual bool toBoolean() const override
     {
         return _value;
-    };
+    }
 
     /**
      *  Convert the variable to a floating point value
@@ -89,50 +93,6 @@ public:
     virtual double toDouble() const override
     {
         return _value;
-    };
-
-    /**
-     *  Get access to a member value
-     *
-     *  @param  name        name of the member
-     *  @param  size        size of the name
-     *  @return Variant
-     *
-     */
-    virtual VariantValue member(const char *name, size_t size) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  Get access to the amount of members this value has
-     *  @return size_t
-     */
-    virtual size_t memberCount() const override
-    {
-        return 0;
-    }
-
-    /**
-     *  Get access to a member at a certain position
-     *  @param  position    Position of the item we want to retrieve
-     *  @return Variant
-     */
-    virtual VariantValue member(size_t position) const override
-    {
-        return nullptr;
-    }
-
-    /**
-     *  Create a new iterator that allows you to iterate over the subvalues
-     *  feel free to return nullptr if you don't want to be able to iterate
-     *  over your type
-     *
-     *  @return Newly allocated Iterator
-     */
-    virtual Iterator *iterator() const override
-    {
-        return nullptr;
     }
 };
 

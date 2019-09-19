@@ -102,7 +102,7 @@ public:
     {
         // return the toString of the underlying Value
         return _value->toString();
-    };
+    }
 
     /**
      *  Convert the variable to a numeric value
@@ -112,7 +112,7 @@ public:
     {
         // return the toNumeric of the underlying Value
         return _value->toNumeric();
-    };
+    }
 
     /**
      *  Convert the variable to a boolean value
@@ -122,7 +122,7 @@ public:
     {
         // return the toBoolean of the underlying Value
         return _value->toBoolean();
-    };
+    }
 
     /**
      *  Convert the variable to a floating point value
@@ -132,7 +132,17 @@ public:
     {
         // return the toDoubleO of the underlying Value
         return _value->toDouble();
-    };
+    }
+
+    /**
+     *  Get access to the amount of members this value has
+     *  @return size_t
+     */
+    virtual size_t memberCount() const override
+    {
+        // return the memberCount() of the underlying Value
+        return _value->memberCount();
+    }
 
     /**
      *  Get access to a member value
@@ -149,16 +159,6 @@ public:
     }
 
     /**
-     *  Get access to the amount of members this value has
-     *  @return size_t
-     */
-    virtual size_t memberCount() const override
-    {
-        // return the memberCount() of the underlying Value
-        return _value->memberCount();
-    }
-
-    /**
      *  Get access to a member at a certain position
      *  @param  position    Position of the item we want to retrieve
      *  @return Variant
@@ -167,6 +167,28 @@ public:
     {
         // return the member(size_t) of the underlying Value
         return _value->member(position);
+    }
+
+    /**
+     *  Get access to a member at a certain position
+     *  @param  position    Position of the item we want to retrieve
+     *  @return VariantValue
+     */
+    virtual VariantValue member(const Value &position) const override
+    {
+        // return the member(Value) of the underlying Value
+        return _value->member(position);
+    }
+
+    /**
+     *  Use this value as index of another parent value
+     *  @param  value       the value in which to look for this key
+     *  @return VariantValue
+     */
+    virtual VariantValue lookupIn(const Value &value) const override
+    {
+        // pass on to lookupIn method of underlying value
+        return _value->lookupIn(value);
     }
 
     /**

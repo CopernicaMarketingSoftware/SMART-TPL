@@ -365,15 +365,32 @@ void Bytecode::varPointer(const Variable *parent, const std::string &name)
  */
 void Bytecode::varPointer(const Variable *parent, const Expression *expression)
 {
+    // If the expression if an integer, it's easy to get the member at that position
     if (expression->type() == Expression::Type::Integer)
     {
         // call the native function to retrieve the member of the variable and
         // push the variable to the stack
         _stack.push(_callbacks.member_at(_userdata, pointer(parent), integerExpression(expression)));
     }
+
+    // If the expression is of unknown / variable type, we have to determine at
+    // runtime what implementation to call
+    else if (expression->type() == Expression::Type::Value)
+    {
+        // Get variable pointer
+        expression->toPointer(this);
+
+        // Get the pointer
+        auto variable = pop();
+
+        // Get the variable from runtime space
+        _stack.push(_callbacks.member_at_value(_userdata, pointer(parent), variable));
+    }
+
+    // Otherwise, treat the expression as a string (which it might be, actually)
     else
     {
-        // convert the expression to a string (this pushes two values on the stack
+        // convert the expression to a string (this pushes two values on the stack)
         expression->toString(this);
 
         // pop the buffer and size from the stack (in reverse order)

@@ -368,6 +368,52 @@ TEST(RunTime, KeyArrayAccess)
     }
 }
 
+TEST(RunTime, VariableArrayAccess)
+{
+    string input("{$a = 3}{$list[$a - 1]}");
+    Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
+
+    std::vector<VariantValue> list;
+    for (int i = 0; i < 5; ++i) list.push_back(i);
+
+    Data data;
+    data.assign("list", list);
+
+    string expectedOutput("2");
+    EXPECT_EQ(tpl.process(data), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
+        EXPECT_EQ(library.process(data), expectedOutput);
+    }
+}
+
+TEST(RunTime, VariableKeyArrayAccess)
+{
+    string input("{$key = \"index\"}{$map[$key]}");
+    Template tpl((Buffer(input)));
+
+    EXPECT_TRUE(tpl.personalized());
+
+    std::map<std::string, VariantValue> map({{"index", "test"}});
+    Data data;
+    data.assign("map", map);
+
+    string expectedOutput("test");
+    EXPECT_EQ(tpl.process(data), expectedOutput);
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
+        EXPECT_EQ(library.process(data), expectedOutput);
+    }
+}
+
 TEST(RunTime, CompareVarConstantNumeric)
 {
     string input("{if $var == 1}true{else}false{/if}");
