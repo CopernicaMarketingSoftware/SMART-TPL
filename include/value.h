@@ -30,13 +30,6 @@ class VariantValue;
  */
 class Value
 {
-private:
-    /**
-     *  Empty string object to return
-     *  @var std::string
-     */
-    std::string _empty;
-
 public:
     /**
      *  Destructor

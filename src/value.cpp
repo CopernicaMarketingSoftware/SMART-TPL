@@ -36,8 +36,11 @@ bool Value::arithmeticFloat() const
  */
 std::string Value::toString() const 
 {
+    // create a reusable empty string
+    static std::string empty;
+
     // return empty string
-    return _empty;
+    return empty;
 }
 
 /**
