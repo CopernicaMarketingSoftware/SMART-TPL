@@ -22,7 +22,7 @@ private:
      *  The actual value
      *  @var    double
      */
-    double _value;
+    const double _value;
 
     /**
      *  The provided string representation of the literal

@@ -3,7 +3,8 @@
  * 
  *  Helper class that is capable of parsing dot-based double values, no matter
  *  the current locale of the system SMART-TPL is running on. This is to ensure
- *  that floating point numbers are always parsed correctly.
+ *  that floating point numbers are always parsed correctly - that being according
+ *  to the SMART-TPL defintion (1.0) instead of the current locale (1.0 or 1,0).
  * 
  *  @author         David van Erkelens <david.vanerkelens@copernica.com>
  *  @copyright      2019 Copernica BV
