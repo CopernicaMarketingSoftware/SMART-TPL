@@ -833,3 +833,55 @@ TEST(RunTime, IfWithModifierNumberComparison)
         EXPECT_EQ(expectedOutput2, library.process(data2));
     }
 }
+
+TEST(RunTime, LocaleIndependentDoubleParsing)
+{
+    string input("{$a = 1.23}{$a}");
+
+    string expectedOutput_en_US("1.23");
+    string expectedOutput_nl_NL("1,23");
+
+    // save locale
+    std::string current(setlocale(LC_NUMERIC, NULL));
+
+    // set en_US locale
+    setlocale(LC_NUMERIC, "en_US");
+
+    // format template
+    Template tpl1((Buffer(input)));
+    EXPECT_TRUE(tpl1.personalized());
+
+    // check en_US
+    EXPECT_EQ(expectedOutput_en_US, tpl1.process());
+
+    if (compile(tpl1)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
+
+        // check en_US
+        EXPECT_EQ(expectedOutput_en_US, library.process());
+    }
+
+    // set nl_NL locale
+    setlocale(LC_NUMERIC, "nl_NL");
+
+    // format template
+    Template tpl2((Buffer(input)));
+    EXPECT_TRUE(tpl2.personalized());
+
+    // check nl_NL
+    EXPECT_EQ(expectedOutput_nl_NL, tpl2.process());
+
+    if (compile(tpl2)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_TRUE(library.personalized());
+
+        // check nl_NL
+        EXPECT_EQ(expectedOutput_nl_NL, library.process());
+    }
+
+    // reset locale
+    setlocale(LC_NUMERIC, current.data());
+}

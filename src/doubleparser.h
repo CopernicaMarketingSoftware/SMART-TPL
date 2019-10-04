@@ -41,17 +41,18 @@ public:
         // The current system we're running on might be set to another locale, 
         // which has comma separators instead of dots. To ensure correct
         // parsing of the floating point number, we temporarily reset the locale
-        // First, get the current locale setting
-        auto current = setlocale(LC_NUMERIC, NULL);
+        // First, get the current locale setting. We store this in a string copy,
+        // since the buffer might turn into garbage when changing the locale
+        std::string current(std::setlocale(LC_NUMERIC, NULL));
 
         // force en_US locale for numeric values
-        setlocale(LC_NUMERIC, "en_US");
+        std::setlocale(LC_NUMERIC, "en_US");
 
         // parse the token
         _value = std::strtod(buffer, nullptr);
 
         // reset locale
-        setlocale(LC_NUMERIC, current);
+        std::setlocale(LC_NUMERIC, current.data());
     }
 
     /**
