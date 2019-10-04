@@ -8,11 +8,6 @@
  */
 
 /**
- *  Dependencies
- */
-#include <locale>
-
-/**
  *  Namespace
  */
 namespace SmartTpl { namespace Internal {
@@ -40,23 +35,7 @@ public:
      *  Constructor
      *  @param  token
      */
-    LiteralDouble(Token *token): _token(token) 
-    {
-        // The current system we're running on might be set to another locale, 
-        // which has comma separators instead of dots. To ensure correct
-        // parsing of the floating point number, we temporarily reset the locale
-        // First, get the current locale setting
-        auto current = setlocale(LC_NUMERIC, NULL);
-
-        // force en_US locale for numeric values
-        setlocale(LC_NUMERIC, "en_US");
-
-        // parse the token
-        _value = std::strtod(token->c_str(), nullptr);
-
-        // reset locale
-        setlocale(LC_NUMERIC, current);
-    }
+    LiteralDouble(Token *token): _value(DoubleParser(token->data())), _token(token) {}
 
     /**
      *  Destructor
