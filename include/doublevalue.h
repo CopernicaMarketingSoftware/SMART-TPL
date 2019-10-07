@@ -62,7 +62,7 @@ public:
         while (buffer[written - 1] == '0') written--;
 
         // Round number?
-        if (buffer[written - 1] == '.') written--;
+        if (buffer[written - 1] == '.' || buffer[written - 1] == ',') written--;
 
         // Create string object
         return std::string(buffer, written);
