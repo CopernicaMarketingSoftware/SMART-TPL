@@ -14,6 +14,7 @@
  *  Dependencies
  */
 #include <locale>
+#include <sstream>
 
 /**
  *  Set up namespace
@@ -38,21 +39,14 @@ public:
      */
     DoubleParser(const char *buffer)
     {
-        // The current system we're running on might be set to another locale, 
-        // which has comma separators instead of dots. To ensure correct
-        // parsing of the floating point number, we temporarily reset the locale
-        // First, get the current locale setting. We store this in a string copy,
-        // since the buffer might turn into garbage when changing the locale
-        std::string current(std::setlocale(LC_NUMERIC, NULL));
+        // create stream based on the buffer
+        std::istringstream stream(buffer);
 
-        // force en_US locale for numeric values
-        std::setlocale(LC_NUMERIC, "en_US");
+        // set stream locale
+        stream.imbue(std::locale("en_US"));
 
-        // parse the token
-        _value = std::strtod(buffer, nullptr);
-
-        // reset locale
-        std::setlocale(LC_NUMERIC, current.data());
+        // stream to the value
+        stream >> _value;
     }
 
     /**
