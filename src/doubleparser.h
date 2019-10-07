@@ -5,6 +5,13 @@
  *  the current locale of the system SMART-TPL is running on. This is to ensure
  *  that floating point numbers are always parsed correctly - that being according
  *  to the SMART-TPL defintion (1.0) instead of the current locale (1.0 or 1,0).
+ *  Therefore, this class is basically a locale-independent variant of the 
+ *  default strtod function.
+ * 
+ *  This parser uses a istringstream with a locale setting, since we don't want to
+ *  change the global locale due to possible undefined behaviours in multithreaded
+ *  applications. Therefore, a locale setting is applied to the stream only, so
+ *  parsing doubles does not interfere with other threads.
  * 
  *  @author         David van Erkelens <david.vanerkelens@copernica.com>
  *  @copyright      2019 Copernica BV
