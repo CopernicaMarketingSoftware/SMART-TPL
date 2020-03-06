@@ -359,6 +359,25 @@ TEST(Modifier, NumberFormat)
     }
 }
 
+TEST(Modifier, NumberFormatWithSeparators)
+{
+    string input("{$var1|number_format:2:'.':','}\n{$var1|number_format:2:',':'|'}\n{$var1|number_format:0:'.':','}\n{$var1|number_format:2:'x'}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var1", "123123.45");
+
+    string expectedOutput("123,123.45\n123|123,45\n123,123\n123123x45");
+
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
 TEST(Modifier, Count)
 {
     string input("{$var|count}");
