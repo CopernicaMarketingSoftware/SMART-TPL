@@ -4,7 +4,7 @@
  *  Built-in "|number_format" modifier
  *
  *  @author         David van Erkelens <david.vanerkelens@copernica.com>
- *  @copyright      2019 Copernica BV
+ *  @copyright      2019 - 2020 Copernica BV
  */
 
 /**
