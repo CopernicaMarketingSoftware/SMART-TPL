@@ -61,9 +61,28 @@ public:
         // get the amount of decimals to output
         int decimals = params[0].toInteger();
 
-        // get separators for decimals and thousands
-        char decimal_separator = params.size() > 1 ? params[1].toString()[0] : '.';
-        char thousand_separator = params.size() > 2 ? params[2].toString()[0] : (char) 0;
+        // get separator variables for decimals and thousands
+        char decimal_separator = '.'; char thousand_separator = (char) 0;
+
+        // if we have a valid parameter, overwrite decimal separator
+        if (params.size() > 1)
+        {
+            // convert to string
+            auto param = params[1].toString();
+
+            // make sure that we have a character (we could throw if the param is too long?)
+            if (param.size() > 0) decimal_separator = param[0]; 
+        }
+
+        // if we have a valid parameter, overwrite thousands separator
+        if (params.size() > 2)
+        {
+            // convert to string
+            auto param = params[2].toString();
+
+            // make sure that we have a character (we could throw if the param is too long?)
+            if (param.size() > 0) thousand_separator = param[0]; 
+        }
 
         // create stringstream to store formatted number
         std::stringstream stream;
