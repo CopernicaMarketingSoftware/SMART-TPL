@@ -8,6 +8,11 @@
  */
 
 /**
+ *  Dependencies
+ */
+#include <locale>
+
+/**
  *  Namespace
  */
 namespace SmartTpl { namespace Internal {
@@ -17,6 +22,25 @@ namespace SmartTpl { namespace Internal {
  */
 class NumberFormatModifier : public Modifier
 {
+private:
+    /**
+     *  Struct that works with the std::numpunct facet and can be
+     *  constructed with a char for the decimal and thousands separators 
+     */
+    struct formatter : std::numpunct<char> {
+
+        // chars for the separators
+        char decimal; char thousand;
+
+        // constructor
+        formatter(char decimal, char thousand) : decimal(decimal), thousand(thousand) {}
+
+        // build in functions for separator formatting
+        char do_thousands_sep()   const { return thousand; } // thousands separator
+        std::string do_grouping() const { return (int) thousand == 0 ? "" : "\3"; } // separate every 3 digits, if we have a separator
+        char do_decimal_point()   const { return decimal; }  // decimal separator
+    };
+
 public:
     /**
      *  Destructor
@@ -31,32 +55,31 @@ public:
      */
     VariantValue modify(const Value &input, const SmartTpl::Parameters &params) override
     {
-        // Convert input to double
-        double original(input.toDouble());
-
-        // make sure we have a parameter containing the format
+        // make sure we have a parameter containing the number of decimals
         if (params.size() < 1) throw NoModification();
 
-        // get the amound of decimals to output
+        // get the amount of decimals to output
         int decimals = params[0].toInteger();
 
-        // buffer to create the printf format
-        char format[10];
+        // get separators for decimals and thousands
+        char decimal_separator = params.size() > 1 ? params[1].toString()[0] : '.';
+        char thousand_separator = params.size() > 2 ? params[2].toString()[0] : (char) 0;
 
-        // format the format
-        sprintf(format, "%%.%if", decimals);
+        // create stringstream to store formatted number
+        std::stringstream stream;
 
-        // calculate size of new string
-        size_t size = snprintf(nullptr, 0, format, original);
+        // create custom locale for our formatting options
+        std::locale formatting_locale(stream.getloc(), new NumberFormatModifier::formatter(decimal_separator, thousand_separator));
 
-        // create buffer
-        char buffer[size + 1];
+        // set formatting options
+        stream.precision(decimals);
+        stream.imbue(formatting_locale);
 
-        // create new string
-        sprintf(buffer, format, original);
+        // stream the value (never in scientific format)
+        stream << std::fixed << input.toDouble();
 
         // create object
-        return VariantValue(buffer);
+        return VariantValue(stream.str());
     }
 };
 
