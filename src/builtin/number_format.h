@@ -27,8 +27,8 @@ private:
      *  Struct that works with the std::numpunct facet and can be
      *  constructed with a char for the decimal and thousands separators 
      */
-    struct formatter : std::numpunct<char> {
-
+    struct formatter : std::numpunct<char>
+    {
         // chars for the separators
         char decimal; char thousand;
 
