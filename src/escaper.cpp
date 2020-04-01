@@ -4,7 +4,7 @@
  *  Implementation of the Escaper class
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2020 Copernica BV
  */
 
 #include "includes.h"
@@ -34,6 +34,7 @@ Escaper::Escaper(const char *name)
  */
 static NullEscaper _null;
 static HtmlEscaper _html;
+static JsonEscaper _json;
 static UrlEscaper _url;
 static Base64Escaper _base64;
 

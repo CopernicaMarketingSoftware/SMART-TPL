@@ -4,7 +4,8 @@
  *  Test the built-in modifiers
  *
  *  @author Toon Schoenmakers <toon.schoenmakers@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @author Michael van der Werve <michael.vanderwerve@mailerq.com>
+ *  @copyright 2014-2020 Copernica BV
  */
 
 #include <gtest/gtest.h>
@@ -163,7 +164,7 @@ TEST(Modifier, Default)
     }
 }
 
-TEST(Modifier, Escape)
+TEST(Modifier, EscapeHtml)
 {
     string input("{$var|escape:\"html\"}");
     Template tpl((Buffer(input)));
@@ -180,6 +181,61 @@ TEST(Modifier, Escape)
         EXPECT_EQ(expectedOutput, library.process(data));
     }
 }
+
+TEST(Modifier, EscapeJson)
+{
+    string input("{$var|escape:\"json\"}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", std::string("\t\nSome string\0after", 19));
+
+    string expectedOutput("\\t\\nSome string\\x00after");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
+TEST(Modifier, JsonEncode)
+{
+    string input("{$var|0:jsonencode}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", std::string("\t\nSome string\0after", 19));
+
+    string expectedOutput("\\t\\nSome string\\x00after");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
+TEST(Modifier, JsonDecode)
+{
+    string input("{$var|0:jsondecode}");
+    Template tpl((Buffer(input)));
+
+    Data data;
+    data.assign("var", std::string("\\t\\nSome string\\x00after", 19));
+
+    string expectedOutput("\t\nSome string\0after");
+    EXPECT_EQ(expectedOutput, tpl.process(data));
+
+    if (compile(tpl)) // This will compile the Template into a shared library
+    {
+        Template library(File(SHARED_LIBRARY)); // Here we load that shared library
+        EXPECT_EQ(expectedOutput, library.process(data));
+    }
+}
+
 
 TEST(Modifier, Indent)
 {

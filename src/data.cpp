@@ -4,7 +4,7 @@
  *  Implementation file for the Data class
  *
  *  @author Emiel Bruijntjes <emiel.bruijntjes@copernica.com>
- *  @copyright 2014 Copernica BV
+ *  @copyright 2014 - 2020 Copernica BV
  */
 
 /**
@@ -43,6 +43,8 @@ static Internal::StrPosModifier          strpos;
 static Internal::StrStrModifier          strstr;
 static Internal::NumberFormatModifier    number_format;
 static Internal::DateFormatModifier      date_format;
+static Internal::JsonencodeModifier      jsonencode;
+static Internal::JsondecodeModifier      jsondecode;
 static Internal::UrlencodeModifier       urlencode;
 static Internal::UrldecodeModifier       urldecode;
 static Internal::Md5Modifier             md5;
@@ -84,6 +86,8 @@ Data::Data()
               {"strpos",           &strpos},
               {"number_format",    &number_format},
               {"date_format",      &date_format},
+              {"jsonencode",       &jsonencode},
+              {"jsondecode",       &jsondecode},
               {"urlencode",        &urlencode},
               {"urldecode",        &urldecode},
               {"range",            &range_modifier}}) // register built-in modifiers
