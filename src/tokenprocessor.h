@@ -88,25 +88,10 @@ public:
     /**
      *  This will get called by lemon in case of a syntax error
      */
-    void syntaxError(const std::vector<std::string> &expectedTokens)
+    void syntaxError()
     {
+        // remember that we're in syntax error state
         _error.append("Syntax error");
-
-        // If we have any expected tokens append them to the error
-        if (expectedTokens.empty() == false)
-        {
-            _error.append(", expected one of the following tokens [");
-
-            for (auto iter = expectedTokens.begin(); iter != expectedTokens.end(); ++iter)
-            {
-                _error.append(*iter);
-
-                // for every token that is not our last token (end iter - 1) we append a space for readability
-                if (iter != expectedTokens.end() - 1) _error.push_back(' ');
-            }
-
-            _error.push_back(']');
-        }
     }
 
     /**

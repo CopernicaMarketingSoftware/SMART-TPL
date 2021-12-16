@@ -50,18 +50,7 @@
 
 %syntax_error
 {
-    // Build up a vector of expected tokens
-    // Mostly based on the following SO post, but we instead put it in a std::vector
-    // https://stackoverflow.com/questions/11705737/expected-token-using-lemon-parser-generator/13010096#13010096
-    std::vector<std::string> expectedTokens;
-
-    // we loop over all known tokens, if we exceed our defined tokens we exit
-    // our last defined token is TOKEN_STRING, so we halt when we go past it
-    for (int i = 0; i <= TOKEN_STRING; ++i) {
-        int a = yy_find_shift_action(yypParser, (YYCODETYPE)i);
-        if (a < YYNSTATE + YYNRULE) expectedTokens.emplace_back(yyTokenName[i]);
-    }
-    parent->syntaxError(expectedTokens);
+    parent->syntaxError();
 }
 
 %stack_overflow
