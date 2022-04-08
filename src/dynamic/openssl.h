@@ -49,6 +49,18 @@ private:
             "libssl.so.1.1",
             
             // look for an 1.1.1 version
+            "libssl.so.1.1.1n",
+            "libssl.so.1.1.1m",
+            "libssl.so.1.1.1l",
+            "libssl.so.1.1.1k",
+            "libssl.so.1.1.1j",
+            "libssl.so.1.1.1i",
+            "libssl.so.1.1.1h",
+            "libssl.so.1.1.1g",
+            "libssl.so.1.1.1f",
+            "libssl.so.1.1.1e",
+            "libssl.so.1.1.1d",
+            "libssl.so.1.1.1c",
             "libssl.so.1.1.1b",
             "libssl.so.1.1.1a",
             "libssl.so.1.1.1",
