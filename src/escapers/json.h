@@ -71,7 +71,7 @@ public:
         output.reserve(input.size());
 
         // iterate over the characters
-        for (const uint8_t &c : input)
+        for (const char &c : input)
         {
             // in the first 32 bits we always have to escape
             if (c < 32 || c == '"' || c == '\\')
