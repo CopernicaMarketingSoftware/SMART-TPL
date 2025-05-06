@@ -186,14 +186,23 @@ public:
      *  @param  size
      *  @return Value
      */
-    const Value *variable(const char *name, size_t size) const
+    const Value *variable(const char *name, size_t size)
     {
         // look through our local values first
         auto iter = _local_values.find(name);
         if (iter != _local_values.end()) return iter->second;
 
         // didn't find it? get the variable from the data object
-        return _data->value(name, size);
+        auto *result = _data->value(name, size);
+        if (result != nullptr) return result;
+        
+        // construct a new empty value, and remember it (this situation is especially
+        // needed for {$x = $y} assignments, when $y does not yet exist
+        auto *newvar = new VariantValue();
+        assign(name, size, newvar);
+        
+        // done
+        return newvar;
     }
 
     /**
@@ -225,9 +234,7 @@ public:
      */
     void assign(const char *key, size_t key_size, VariantValue value)
     {
-        VariantValue *copy = new VariantValue(std::move(value));
-        manageValue(copy);
-        _local_values[key] = copy;
+        assign(key, key_size, new VariantValue(std::move(value)));
     }
 
     /**
